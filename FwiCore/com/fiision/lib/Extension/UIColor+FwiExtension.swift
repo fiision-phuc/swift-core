@@ -1,11 +1,12 @@
 //  Project name: FwiCore
-//  File name   : NSURL+FwiExtension.swift
+//  File name   : UIColor+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/22/14
+//  Created date: 6/13/16
 //  Version     : 1.00
 //  --------------------------------------------------------------
-//  Copyright (c) 2014 Monster Group. All rights reserved.
+//  Copyright © 2012, 2016 Fiision Studio.
+//  All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -31,18 +32,27 @@
 //  __________
 //  Although reasonable care has been taken to  ensure  the  correctness  of  this
 //  software, this software should never be used in any application without proper
-//  testing. Monster Group  disclaim  all  liability  and  responsibility  to  any
+//  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
+import UIKit
 import Foundation
 
 
-public extension NSURL {
-    
-    /** URL to main document folder. */
-    public class func documentDirectory() -> NSURL? {
-        var array = NSFileManager.defaultManager().URLsForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask) as? [NSURL]
-        return array?.first
+public extension UIColor {
+
+    /** Convert hex to color. */
+    public class func rgb(rgb: UInt32) -> UIColor {
+        return UIColor(red: CGFloat((rgb & 0xff0000) >> 16) / 255.0,
+                       green: CGFloat((rgb & 0x00ff00) >> 8) / 255.0,
+                       blue: CGFloat(rgb & 0x0000ff) / 255.0,
+                       alpha: CGFloat(1.0))
+    }
+    public class func rgba(rgba: UInt32) -> UIColor {
+        return UIColor(red: CGFloat((rgba & 0xff000000) >> 24) / 255.0,
+                       green: CGFloat((rgba & 0x00ff0000) >> 16) / 255.0,
+                       blue: CGFloat((rgba & 0x0000ff00) >> 8) / 255.0,
+                       alpha: CGFloat(rgba & 0x000000ff) / 255.0)
     }
 }

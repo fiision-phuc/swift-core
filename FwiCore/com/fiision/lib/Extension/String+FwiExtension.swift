@@ -1,11 +1,12 @@
 //  Project name: FwiCore
-//  File name   : NSString+FwiExtension.swift
+//  File name   : String+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/26/14
+//  Created date: 11/22/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
-//  Copyright (c) 2014 Monster Group. All rights reserved.
+//  Copyright © 2012, 2016 Fiision Studio.
+//  All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -31,63 +32,106 @@
 //  __________
 //  Although reasonable care has been taken to  ensure  the  correctness  of  this
 //  software, this software should never be used in any application without proper
-//  testing. Monster Group  disclaim  all  liability  and  responsibility  to  any
+//  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
 
 
-public extension NSString {
-    
+public extension String {
+
     /** Generate random identifier base on uuid. */
-    public class func randomIdentifier() -> String? {
-        return String.randomIdentifier()
+    public static func randomIdentifier() -> String {
+        let uuidRef = CFUUIDCreate(nil)
+        let cfString = CFUUIDCreateString(nil, uuidRef)
+
+        return cfString as String
     }
-    
+
     /** Generate timestamp string. */
-    public class func timestamp() -> String? {
-        return String.timestamp()
+    public static func timestamp() -> String? {
+        return "\(time(nil))"
     }
-    
-    
+
+
     /** Compare 2 string regardless case sensitive. */
     public func isEqualToStringIgnoreCase(otherString: String?) -> Bool {
-        return (self as String).isEqualToStringIgnoreCase(otherString)
+        /* Condition validation */
+        if otherString == nil {
+            return false
+        }
+
+        if let
+            text1 = self.lowercaseString.trim(),
+            text2 = otherString?.lowercaseString.trim() {
+            return (text1 == text2)
+        }
+        return false
     }
-    
+
     /** Validate string. */
     public func matchPattern(pattern: String) -> Bool {
-        return (self as String).matchPattern(pattern)
+        /* Condition validation */
+        if pattern.length() <= 0 {
+            return false
+        }
+        return matchPattern(pattern, expressionOption: .CaseInsensitive)
     }
     public func matchPattern(pattern: String, expressionOption option: NSRegularExpressionOptions) -> Bool {
-        return (self as String).matchPattern(pattern, expressionOption: option)
+        /* Condition validation */
+        if pattern.length() <= 0 {
+            return false
+        }
+
+        let regex: NSRegularExpression?
+        do {
+            regex = try NSRegularExpression(pattern: pattern, options: option)
+
+            if let matches = regex?.numberOfMatchesInString(self, options: .Anchored, range: NSMakeRange(0, self.length())) {
+                return (matches == 1)
+            }
+            return false
+        } catch _ {
+            return false
+        }
     }
-    
+
+    /** Calculate string length. */
+    public func length() -> Int {
+        return characters.count
+    }
+
     /** Convert string to data. */
     public func toData() -> NSData? {
-        return (self as String).toData()
+        return toDataWithEncoding(NSUTF8StringEncoding)
     }
     public func toDataWithEncoding(encoding: NSStringEncoding) -> NSData? {
-        return (self as String).toDataWithEncoding(encoding)
+        return dataUsingEncoding(encoding, allowLossyConversion: false)
     }
-    
+
     /** Convert html string compatible to string. */
     public func decodeHTML() -> String? {
-        return (self as String).decodeHTML()
+        return CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, self, "") as String
     }
     /** Convert string to html string compatible. */
     public func encodeHTML() -> String? {
-        return (self as String).encodeHTML()
+        return stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet(charactersInString: ":/=,!$&'()*+[]@#?"))
     }
-    
+
     /** Split string into components. */
-    public func splitWithSeparator(separator: String) -> [String]? {
-        return (self as String).splitWithSeparator(separator)
+    public func split(separator: String) -> [String]? {
+        return componentsSeparatedByString(separator)
     }
-    
+
+    /** Sub string from index to reverse index. */
+    func substring(startIndex strIndex: Int, reverseIndex endIndex: Int) -> String {
+        let range = self.startIndex.advancedBy(strIndex) ..< self.endIndex.advancedBy(endIndex)
+        return substringWithRange(range)
+    }
+
     /** Trim all spaces before and after a string. */
     public func trim() -> String? {
-        return (self as String).trim()
+        return stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
     }
 }

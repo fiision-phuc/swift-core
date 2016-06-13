@@ -1,11 +1,12 @@
 //  Project name: FwiCore
-//  File name   : String+FwiBase64.swift
+//  File name   : NSData+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/20/14
+//  Created date: 11/22/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
-//  Copyright (c) 2014 Monster Group. All rights reserved.
+//  Copyright © 2012, 2016 Fiision Studio.
+//  All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -31,69 +32,69 @@
 //  __________
 //  Although reasonable care has been taken to  ensure  the  correctness  of  this
 //  software, this software should never be used in any application without proper
-//  testing. Monster Group  disclaim  all  liability  and  responsibility  to  any
+//  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
 
 
-public extension String {
-    
-    // MARK: Validate base64
-    public func isBase64() -> Bool {
-        /* Condition validation */
-        if (count(self) <= 0) {
-            return false
-        }
-        
-        var data = self.toData()
-        return (data != nil ? self.toData()!.isBase64() : false)
+public extension NSData {
+
+    /** Convert data to UTF8 string. */
+    public func toString() -> String? {
+        return toStringWithEncoding(NSUTF8StringEncoding)
     }
-    
-    
-    // MARK: Decode base64
-    public func decodeBase64Data() -> NSData? {
+
+    /** Convert data to string base on string encoding type. */
+    public func toStringWithEncoding(encoding: NSStringEncoding) -> String? {
         /* Condition validation */
-        if (count(self) <= 0) {
-            println("[FwiBase64] Decode Error: Invalid base64 string length.")
+        if length <= 0 {
             return nil
         }
-        
-        var data = self.toData()
-        return data?.decodeBase64Data()
+        return NSString(data: self, encoding: encoding) as? String
     }
-    public func decodeBase64String() -> String? {
+
+    /** Clear all bytes data. */
+    public func clearBytes() {
         /* Condition validation */
-        if (count(self) <= 0) {
-            println("[FwiBase64] Decode Error: Invalid base64 string length.")
-            return nil
+        if length <= 0 {
+            return
         }
-        
-        var data = self.toData()
-        return data?.decodeBase64String()
+
+        let bytes = UnsafeMutablePointer<UInt8>(self.bytes)
+        let step = length >> 1
+        var end = length - 1
+
+        for i in 0 ..< step {
+            bytes[end] = 0
+            bytes[i] = 0
+            end -= 1
+        }
+
+        // Handle the last stand alone byte
+        if (length % 2) == 1 {
+            bytes[step] = 0
+        }
     }
-    
-    
-    // MARK: Encode base64
-    public func encodeBase64Data() -> NSData? {
+
+    /** Reverse the order of bytes. */
+    public func reverseBytes() {
         /* Condition validation */
-        if (count(self) <= 0) {
-            println("[FwiBase64] Encode Error: String length must be greater than zero.")
-            return nil
+        if length <= 0 {
+            return
         }
-        
-        var data = self.toData()
-        return data?.encodeBase64Data()
-    }
-    public func encodeBase64String() -> String? {
-        /* Condition validation */
-        if (count(self) <= 0) {
-            println("[FwiBase64] Encode Error: String length must be greater than zero.")
-            return nil
+
+        let bytes = UnsafeMutablePointer<UInt8>(self.bytes)
+        let step = length >> 1
+        var end = length - 1
+
+        for i in 0 ..< step {
+            let temp = bytes[i]
+
+            bytes[i] = bytes[end]
+            bytes[end] = temp
+            end -= 1
         }
-        
-        var data = self.toData()
-        return data?.encodeBase64String()
     }
 }

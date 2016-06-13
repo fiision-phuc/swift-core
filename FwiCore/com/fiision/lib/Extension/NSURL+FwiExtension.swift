@@ -1,11 +1,12 @@
 //  Project name: FwiCore
-//  File name   : NSString+FwiBase64.swift
+//  File name   : NSURL+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/26/14
+//  Created date: 11/22/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
-//  Copyright (c) 2014 Monster Group. All rights reserved.
+//  Copyright © 2012, 2016 Fiision Studio.
+//  All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -31,35 +32,24 @@
 //  __________
 //  Although reasonable care has been taken to  ensure  the  correctness  of  this
 //  software, this software should never be used in any application without proper
-//  testing. Monster Group  disclaim  all  liability  and  responsibility  to  any
+//  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
 
 
-public extension NSString {
-    
-    // MARK: Validate base64
-    public func isBase64() -> Bool {
-        return (self as String).isBase64()
+public extension NSURL {
+
+    /** URL to main cache folder. */
+    public class func cacheDirectory() -> NSURL? {
+        let array = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
+        return array.last
     }
-    
-    
-    // MARK: Decode base64
-    public func decodeBase64Data() -> NSData? {
-        return (self as String).decodeBase64Data()
-    }
-    public func decodeBase64String() -> String? {
-        return (self as String).decodeBase64String()
-    }
-    
-    
-    // MARK: Encode base64
-    public func encodeBase64Data() -> NSData? {
-        return (self as String).encodeBase64Data()
-    }
-    public func encodeBase64String() -> String? {
-        return (self as String).encodeBase64String()
+
+    /** URL to main document folder. */
+    public class func documentDirectory() -> NSURL? {
+        let array = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        return array.last
     }
 }

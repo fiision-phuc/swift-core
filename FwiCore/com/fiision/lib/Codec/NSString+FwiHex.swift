@@ -5,7 +5,8 @@
 //  Created date: 11/20/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
-//  Copyright (c) 2014 Monster Group. All rights reserved.
+//  Copyright © 2012, 2016 Fiision Studio.
+//  All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -31,7 +32,7 @@
 //  __________
 //  Although reasonable care has been taken to  ensure  the  correctness  of  this
 //  software, this software should never be used in any application without proper
-//  testing. Monster Group  disclaim  all  liability  and  responsibility  to  any
+//  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
@@ -39,13 +40,14 @@ import Foundation
 
 
 public extension NSString {
+
     
     // MARK: Validate Hex
     public func isHex() -> Bool {
         return (self as String).isHex()
     }
-    
-    
+
+
     // MARK: Decode Hex
     public func decodeHexData() -> NSData? {
         return (self as String).decodeHexData()
@@ -53,8 +55,8 @@ public extension NSString {
     public func decodeHexString() -> String? {
         return (self as String).decodeHexString()
     }
-    
-    
+
+
     // MARK: Encode Hex
     public func encodeHexData() -> NSData? {
         return (self as String).encodeHexData()

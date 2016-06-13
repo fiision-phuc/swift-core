@@ -5,7 +5,8 @@
 //  Created date: 11/22/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
-//  Copyright (c) 2014 Monster Group. All rights reserved.
+//  Copyright © 2012, 2016 Fiision Studio.
+//  All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -31,7 +32,7 @@
 //  __________
 //  Although reasonable care has been taken to  ensure  the  correctness  of  this
 //  software, this software should never be used in any application without proper
-//  testing. Monster Group  disclaim  all  liability  and  responsibility  to  any
+//  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
@@ -43,30 +44,29 @@ public extension NSNumber {
     /** Display number to specific currency format. */
     public func currencyWithISO3(currencyISO3: String, decimalSeparator decimal: String, groupingSeparator grouping: String, usingSymbol isSymbol: Bool) -> String? {
         // Initialize currency format object
-        var locale = NSLocale(localeIdentifier: "en_US")
-        var currencyFormat = NSNumberFormatter()
-        
+        let locale = NSLocale(localeIdentifier: "en_US")
+        let currencyFormat = NSNumberFormatter()
+
         // Layout currency
         currencyFormat.formatterBehavior = NSNumberFormatterBehavior.Behavior10_4
         currencyFormat.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp
         currencyFormat.numberStyle  = NSNumberFormatterStyle.CurrencyStyle
-        
+
         currencyFormat.generatesDecimalNumbers = true
         currencyFormat.locale = locale
-        
+
         currencyFormat.currencyGroupingSeparator = grouping
         currencyFormat.currencyDecimalSeparator  = decimal
-        
-        if (isSymbol) {
+
+        if isSymbol {
             currencyFormat.positiveFormat = "\u{00a4}#,##0.00"
             currencyFormat.negativeFormat = "- \u{00a4}#,##0.00"
-        }
-        else {
+        } else {
             currencyFormat.positiveFormat = "#,##0.00 \(currencyISO3)"
             currencyFormat.negativeFormat = "- #,##0.00 \(currencyISO3)"
         }
         currencyFormat.currencyCode = currencyISO3
-        
+
         // Return result
         return currencyFormat.stringFromNumber(self)
     }

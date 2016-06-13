@@ -5,7 +5,8 @@
 //  Created date: 11/22/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
-//  Copyright (c) 2014 Monster Group. All rights reserved.
+//  Copyright © 2012, 2016 Fiision Studio.
+//  All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -31,38 +32,38 @@
 //  __________
 //  Although reasonable care has been taken to  ensure  the  correctness  of  this
 //  software, this software should never be used in any application without proper
-//  testing. Monster Group  disclaim  all  liability  and  responsibility  to  any
+//  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import Foundation
 import UIKit
+import Foundation
 
 
 public extension UIView {
-   
+
     /** Create image from current view. */
     public func createImage() -> UIImage? {
         return self.createImageWithScaleFactor(UIScreen.mainScreen().scale)
     }
     public func createImageWithScaleFactor(scaleFactor: CGFloat) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, scaleFactor)
-        
+
         // Translate graphic context to offset before render if view is table view
         if let tableView = self as? UITableView {
-            var contentOffset = tableView.contentOffset
+            let contentOffset = tableView.contentOffset
             CGContextTranslateCTM(UIGraphicsGetCurrentContext(), contentOffset.x, -contentOffset.y)
         }
-        
+
         // Render view
-        self.layer.renderInContext(UIGraphicsGetCurrentContext())
-        
+        self.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+
         // Create image
-        var image = UIGraphicsGetImageFromCurrentImageContext()
+        let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
     }
-    
+
     /** Create image from region of interest. */
     public func createImageWithROI(roiRect: CGRect) -> UIImage? {
         /* Condition validation: Validate ROI */
@@ -77,15 +78,15 @@ public extension UIView {
             return nil
         }
         UIGraphicsBeginImageContextWithOptions(roiRect.size, false, scale)
-        
-        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), -roiRect.origin.x, -roiRect.origin.y)
-        self.layer.renderInContext(UIGraphicsGetCurrentContext())
 
-        var image = UIGraphicsGetImageFromCurrentImageContext()
+        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), -roiRect.origin.x, -roiRect.origin.y)
+        self.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+
+        let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
     }
-    
+
     /** Find first responder within tree views. */
     public func findFirstResponder() -> UIView? {
         /* Condition validation */
@@ -94,35 +95,30 @@ public extension UIView {
         }
 
         // Find and resign first responder
-        if let views = self.subviews as? [UIView] {
-            for view in views {
-                if (view.isFirstResponder()) {
-                    return view
-                }
-                else {
-                    var subView = view.findFirstResponder()
-                    if (subView?.isFirstResponder() == true) {
-                        return subView
-                    }
-                }
+        for view in self.subviews {
+            if (view.isFirstResponder()) {
+                return view
+            } else {
+                return view.findFirstResponder()
             }
         }
+
         return nil
     }
-    
+
     /** Find and resign first responder within tree views. */
     public func findAndResignFirstResponder() {
         if (self.isFirstResponder()) {
             self.resignFirstResponder()
         } else {
-            var firstResponder = self.findFirstResponder()
+            let firstResponder = self.findFirstResponder()
             firstResponder?.resignFirstResponder()
         }
     }
-    
+
     /** Round corner of an UIView with specific radius. */
     public func roundCorner(radius: CGFloat) {
-        var bgLayer = self.layer
+        let bgLayer = self.layer
         bgLayer.masksToBounds = true
         bgLayer.cornerRadius  = radius
     }

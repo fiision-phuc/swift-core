@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiExtensionDataTest.swift
+//  File name   : UIApplication+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/27/14
+//  Created date: 6/13/16
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -36,50 +36,39 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import XCTest
-@testable import FwiCore
+import UIKit
+import Foundation
 
 
-class FwiExtensionDataTest: XCTestCase {
+public extension UIApplication {
 
-    // MARK: Setup
-    override func setUp() {
-        super.setUp()
+    /** Return iOS major version. */
+    public class func osMajor() -> Int {
+        if let
+            token = UIDevice.currentDevice().systemVersion.split("."),
+            major = Int(token[0]) {
+            return major
+        }
+        return 0
     }
-    
-    
-    // MARK: Tear Down
-    override func tearDown() {
-        super.tearDown()
+    /** Return iOS minor version. */
+    public class func osMinor() -> Int {
+        if let
+            token = UIDevice.currentDevice().systemVersion.split(".") where token.count >= 2,
+            let minor = Int(token[1]) {
+            return minor
+        }
+        return 0
     }
 
-    
-    // MARK: Test Cases
-    func testToString() {
-        var data: NSData? = nil
-        XCTAssertNil(data?.toString(), "Nil data should always return nil.")
-        
-        data = "FwiCore".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
-        XCTAssertEqual(data!.toString()!, "FwiCore", "Data should return FwiCore.")
-    }
-    
-    func testClearBytes() {
-        var bytes1: [UInt8] = [0x40,0x41,0x42]
-        var bytes2: [UInt8] = [0x00,0x00,0x00]
-        var data1: NSData = NSData(bytes: bytes1, length: 3)
-        var data2: NSData = NSData(bytes: bytes2, length: 3)
-        
-        data1.clearBytes()
-        XCTAssertEqual(data1, data2, "Data1 should contain all zero.")
-    }
-    
-    func testReverseBytes() {
-        var bytes1: [UInt8] = [0x40,0x41,0x42]
-        var bytes2: [UInt8] = [0x42,0x41,0x40]
-        var data1: NSData = NSData(bytes: bytes1, length: 3)
-        var data2: NSData = NSData(bytes: bytes2, length: 3)
-        
-        data1.reverseBytes()
-        XCTAssertEqual(data1, data2, "Data1 should be reversed.")
+    /** Enable remote notification. */
+    public class func enableRemoteNotification() {
+        #if (arch(i386) || arch(x86_64)) && os(iOS)
+            // Skip registration process.
+        #else
+            let settings = UIUserNotificationSettings(forTypes: UIUserNotificationType(rawValue:UIUserNotificationType.Alert.rawValue | UIUserNotificationType.Badge.rawValue | UIUserNotificationType.Sound.rawValue), categories: nil)
+            UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+            UIApplication.sharedApplication().registerForRemoteNotifications()
+        #endif
     }
 }

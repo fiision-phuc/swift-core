@@ -1,11 +1,12 @@
 //  Project name: FwiCore
-//  File name   : String+FwiHex.swift
+//  File name   : NSString+FwiBase64.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/26/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
-//  Copyright (c) 2014 Monster Group. All rights reserved.
+//  Copyright © 2012, 2016 Fiision Studio.
+//  All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -31,65 +32,36 @@
 //  __________
 //  Although reasonable care has been taken to  ensure  the  correctness  of  this
 //  software, this software should never be used in any application without proper
-//  testing. Monster Group  disclaim  all  liability  and  responsibility  to  any
+//  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
 
 
-public extension String {
+public extension NSString {
+
     
-    // MARK: Validate Hex
-    public func isHex() -> Bool {
-        /* Condition validation */
-        if (count(self) <= 0) {
-            return false
-        }
-        
-        var data = self.toData()
-        return (data != nil ? self.toData()!.isHex() : false)
+    // MARK: Validate base64
+    public func isBase64() -> Bool {
+        return (self as String).isBase64()
     }
-    
-    
-    // MARK: Decode Hex
-    public func decodeHexData() -> NSData? {
-        /* Condition validation */
-        if (count(self) <= 0) {
-            return nil
-        }
-        
-        var data = self.toData()
-        return data?.decodeHexData()
+
+
+    // MARK: Decode base64
+    public func decodeBase64Data() -> NSData? {
+        return (self as String).decodeBase64Data()
     }
-    public func decodeHexString() -> String? {
-        /* Condition validation */
-        if (count(self) <= 0) {
-            return nil
-        }
-        
-        var data = self.toData()
-        return data?.decodeHexString()
+    public func decodeBase64String() -> String? {
+        return (self as String).decodeBase64String()
     }
-    
-    
-    // MARK: Encode Hex
-    public func encodeHexData() -> NSData? {
-        /* Condition validation */
-        if (count(self) <= 0) {
-            return nil
-        }
-        
-        var data = self.toData()
-        return data?.encodeHexData()
+
+
+    // MARK: Encode base64
+    public func encodeBase64Data() -> NSData? {
+        return (self as String).encodeBase64Data()
     }
-    public func encodeHexString() -> String? {
-        /* Condition validation */
-        if (count(self) <= 0) {
-            return nil
-        }
-        
-        var data = self.toData()
-        return data?.encodeHexString()
+    public func encodeBase64String() -> String? {
+        return (self as String).encodeBase64String()
     }
 }

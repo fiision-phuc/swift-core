@@ -5,7 +5,8 @@
 //  Created date: 11/22/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
-//  Copyright (c) 2014 Monster Group. All rights reserved.
+//  Copyright © 2012, 2016 Fiision Studio.
+//  All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -31,23 +32,36 @@
 //  __________
 //  Although reasonable care has been taken to  ensure  the  correctness  of  this
 //  software, this software should never be used in any application without proper
-//  testing. Monster Group  disclaim  all  liability  and  responsibility  to  any
+//  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import Foundation
 import UIKit
+import Foundation
 
 
 public extension UIButton {
-    
+
+    /** Apply background to button. */
+    public func applyBackgroundImage(imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets) {
+        let imageDefault     = UIImage(named: "\(imageName)_Default")?.resizableImageWithCapInsets(edgeInsets)
+        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImageWithCapInsets(edgeInsets)
+        let imageSelected    = UIImage(named: "\(imageName)_Selected")?.resizableImageWithCapInsets(edgeInsets)
+        let imageDisabled    = UIImage(named: "\(imageName)_Disabled")?.resizableImageWithCapInsets(edgeInsets)
+
+        self.setImage(imageDefault, forState: UIControlState.Normal)
+        self.setImage(imageHighlighted, forState: UIControlState.Highlighted)
+        self.setImage(imageSelected, forState: UIControlState.Selected)
+        self.setImage(imageDisabled, forState: UIControlState.Disabled)
+    }
+
     /** Apply image to button. */
     public func applyImage(imageName: String) {
-        var imageDefault     = UIImage(named: "\(imageName)_Default")
-        var imageHighlighted = UIImage(named: "\(imageName)_Highlighted")
-        var imageSelected    = UIImage(named: "\(imageName)_Selected")
-        var imageDisabled    = UIImage(named: "\(imageName)_Disabled")
-        
+        let imageDefault     = UIImage(named: "\(imageName)_Default")
+        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")
+        let imageSelected    = UIImage(named: "\(imageName)_Selected")
+        let imageDisabled    = UIImage(named: "\(imageName)_Disabled")
+
         self.setImage(imageDefault, forState: UIControlState.Normal)
         self.setImage(imageHighlighted, forState: UIControlState.Highlighted)
         self.setImage(imageSelected, forState: UIControlState.Selected)

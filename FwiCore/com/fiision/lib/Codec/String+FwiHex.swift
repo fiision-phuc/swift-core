@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiExtensionDataTest.swift
+//  File name   : String+FwiHex.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/27/14
+//  Created date: 11/26/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -36,50 +36,47 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import XCTest
-@testable import FwiCore
+import Foundation
 
 
-class FwiExtensionDataTest: XCTestCase {
-
-    // MARK: Setup
-    override func setUp() {
-        super.setUp()
-    }
-    
-    
-    // MARK: Tear Down
-    override func tearDown() {
-        super.tearDown()
-    }
+public extension String {
 
     
-    // MARK: Test Cases
-    func testToString() {
-        var data: NSData? = nil
-        XCTAssertNil(data?.toString(), "Nil data should always return nil.")
-        
-        data = "FwiCore".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
-        XCTAssertEqual(data!.toString()!, "FwiCore", "Data should return FwiCore.")
+    // MARK: Validate Hex
+    public func isHex() -> Bool {
+        if let isHex = toData()?.isHex() {
+            return isHex
+        }
+        return false
     }
-    
-    func testClearBytes() {
-        var bytes1: [UInt8] = [0x40,0x41,0x42]
-        var bytes2: [UInt8] = [0x00,0x00,0x00]
-        var data1: NSData = NSData(bytes: bytes1, length: 3)
-        var data2: NSData = NSData(bytes: bytes2, length: 3)
-        
-        data1.clearBytes()
-        XCTAssertEqual(data1, data2, "Data1 should contain all zero.")
+
+
+    // MARK: Decode Hex
+    public func decodeHexData() -> NSData? {
+        if let data = toData()?.decodeHexData() {
+            return data
+        }
+        return nil
     }
-    
-    func testReverseBytes() {
-        var bytes1: [UInt8] = [0x40,0x41,0x42]
-        var bytes2: [UInt8] = [0x42,0x41,0x40]
-        var data1: NSData = NSData(bytes: bytes1, length: 3)
-        var data2: NSData = NSData(bytes: bytes2, length: 3)
-        
-        data1.reverseBytes()
-        XCTAssertEqual(data1, data2, "Data1 should be reversed.")
+    public func decodeHexString() -> String? {
+        if let data = toData()?.decodeHexString() {
+            return data
+        }
+        return nil
+    }
+
+
+    // MARK: Encode Hex
+    public func encodeHexData() -> NSData? {
+        if let data = toData()?.encodeHexData() {
+            return data
+        }
+        return nil
+    }
+    public func encodeHexString() -> String? {
+        if let data = toData()?.encodeHexString() {
+            return data
+        }
+        return nil
     }
 }

@@ -5,7 +5,8 @@
 //  Created date: 11/20/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
-//  Copyright (c) 2014 Monster Group. All rights reserved.
+//  Copyright © 2012, 2016 Fiision Studio.
+//  All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -31,7 +32,7 @@
 //  __________
 //  Although reasonable care has been taken to  ensure  the  correctness  of  this
 //  software, this software should never be used in any application without proper
-//  testing. Monster Group  disclaim  all  liability  and  responsibility  to  any
+//  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
@@ -48,21 +49,21 @@ public let Metric_Circle: Float = 6.28319  // (360 degree)
 
 
 // Log Function
-public func FwiLog(className: String = __FILE__, methodName: String = __FUNCTION__, line: Int = __LINE__, message: String?) {
+public func FwiLog(className: String = #file, methodName: String = #function, line: Int = #line, message: String?) {
 #if !NDEBUG
-    var name = className.componentsSeparatedByString("/").last
-    
+    let name = className.componentsSeparatedByString("/").last
+
     if name != nil && name?.isEmpty != true {
         if message != nil && message?.isEmpty != true {
-            println("\(name!) > \(methodName)[\(NSDate()) \(line)]: \(message!)")
+            print("\(name!) > \(methodName)[\(NSDate()) \(line)]: \(message!)")
         } else {
-            println("\(name!) > \(methodName)[\(NSDate()) \(line)]")
+            print("\(name!) > \(methodName)[\(NSDate()) \(line)]")
         }
     } else {
         if message != nil && message?.isEmpty != true {
-            println("\(methodName)[\(NSDate()) \(line)]: \(message!)")
+            print("\(methodName)[\(NSDate()) \(line)]: \(message!)")
         } else {
-            println("\(methodName)[\(NSDate()) \(line)]")
+            print("\(methodName)[\(NSDate()) \(line)]")
         }
     }
 #endif
@@ -86,10 +87,10 @@ public func FwiColorWithRGBA(hexValue rgba: UInt) -> UIColor {
 
 // Metric Functions
 public func FwiConvertToDegree(radianValue radian: Double) -> Double {
-    var degree = radian * Metric_RadianToDegree
+    let degree = radian * Metric_RadianToDegree
     return degree
 }
 public func FwiConvertToRadian(degreeValue degree: Double) -> Double {
-    var radian = degree * Metric_DegreeToRadian
+    let radian = degree * Metric_DegreeToRadian
     return radian
 }
