@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : NSString+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -38,7 +38,6 @@
 
 import Foundation
 
-
 public extension NSString {
 
     /** Generate random identifier base on uuid. */
@@ -50,7 +49,6 @@ public extension NSString {
     public class func timestamp() -> String? {
         return String.timestamp()
     }
-
 
     /** Compare 2 string regardless case sensitive. */
     public func isEqualToStringIgnoreCase(otherString: String?) -> Bool {

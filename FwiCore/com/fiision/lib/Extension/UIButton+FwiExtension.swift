@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : UIButton+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -39,15 +39,14 @@
 import UIKit
 import Foundation
 
-
 public extension UIButton {
 
     /** Apply background to button. */
     public func applyBackgroundImage(imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets) {
-        let imageDefault     = UIImage(named: "\(imageName)_Default")?.resizableImageWithCapInsets(edgeInsets)
+        let imageDefault = UIImage(named: "\(imageName)_Default")?.resizableImageWithCapInsets(edgeInsets)
         let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImageWithCapInsets(edgeInsets)
-        let imageSelected    = UIImage(named: "\(imageName)_Selected")?.resizableImageWithCapInsets(edgeInsets)
-        let imageDisabled    = UIImage(named: "\(imageName)_Disabled")?.resizableImageWithCapInsets(edgeInsets)
+        let imageSelected = UIImage(named: "\(imageName)_Selected")?.resizableImageWithCapInsets(edgeInsets)
+        let imageDisabled = UIImage(named: "\(imageName)_Disabled")?.resizableImageWithCapInsets(edgeInsets)
 
         self.setImage(imageDefault, forState: UIControlState.Normal)
         self.setImage(imageHighlighted, forState: UIControlState.Highlighted)
@@ -57,10 +56,10 @@ public extension UIButton {
 
     /** Apply image to button. */
     public func applyImage(imageName: String) {
-        let imageDefault     = UIImage(named: "\(imageName)_Default")
+        let imageDefault = UIImage(named: "\(imageName)_Default")
         let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")
-        let imageSelected    = UIImage(named: "\(imageName)_Selected")
-        let imageDisabled    = UIImage(named: "\(imageName)_Disabled")
+        let imageSelected = UIImage(named: "\(imageName)_Selected")
+        let imageDisabled = UIImage(named: "\(imageName)_Disabled")
 
         self.setImage(imageDefault, forState: UIControlState.Normal)
         self.setImage(imageHighlighted, forState: UIControlState.Highlighted)

@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : FwiExtensionNumberTest.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -39,31 +39,28 @@
 import XCTest
 @testable import FwiCore
 
-
 class FwiExtensionNumberTest: XCTestCase {
 
     // MARK: Setup
     override func setUp() {
         super.setUp()
     }
-    
-    
+
     // MARK: Tear Down
     override func tearDown() {
         super.tearDown()
     }
 
-    
     // MARK: Test Cases
     func testCurrency() {
         let currencyNumber = NSNumber(float: 2000)
-        
+
         var currencyString = currencyNumber.currencyWithISO3("USD", decimalSeparator: ".", groupingSeparator: ",", usingSymbol: true)
         XCTAssertEqual(currencyString, "$2,000.00", "Currency string should be: $2,000.00")
-        
+
         currencyString = currencyNumber.currencyWithISO3("USD", decimalSeparator: ".", groupingSeparator: ",", usingSymbol: false)
         XCTAssertEqual(currencyString, "2,000.00 USD", "Currency string should be: 2,000.00 USD")
-        
+
         currencyString = currencyNumber.currencyWithISO3("USD", decimalSeparator: ",", groupingSeparator: ".", usingSymbol: true)
         XCTAssertEqual(currencyString, "$2.000,00", "Currency string should be: $2.000,00")
     }

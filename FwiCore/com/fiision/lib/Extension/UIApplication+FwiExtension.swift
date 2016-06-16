@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : UIApplication+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -39,24 +39,23 @@
 import UIKit
 import Foundation
 
-
 public extension UIApplication {
 
     /** Return iOS major version. */
     public class func osMajor() -> Int {
         if let
-            token = UIDevice.currentDevice().systemVersion.split("."),
+        token = UIDevice.currentDevice().systemVersion.split("."),
             major = Int(token[0]) {
-            return major
+                return major
         }
         return 0
     }
     /** Return iOS minor version. */
     public class func osMinor() -> Int {
         if let
-            token = UIDevice.currentDevice().systemVersion.split(".") where token.count >= 2,
+        token = UIDevice.currentDevice().systemVersion.split(".") where token.count >= 2,
             let minor = Int(token[1]) {
-            return minor
+                return minor
         }
         return 0
     }
@@ -66,7 +65,7 @@ public extension UIApplication {
         #if (arch(i386) || arch(x86_64)) && os(iOS)
             // Skip registration process.
         #else
-            let settings = UIUserNotificationSettings(forTypes: UIUserNotificationType(rawValue:UIUserNotificationType.Alert.rawValue | UIUserNotificationType.Badge.rawValue | UIUserNotificationType.Sound.rawValue), categories: nil)
+            let settings = UIUserNotificationSettings(forTypes: UIUserNotificationType(rawValue: UIUserNotificationType.Alert.rawValue | UIUserNotificationType.Badge.rawValue | UIUserNotificationType.Sound.rawValue), categories: nil)
             UIApplication.sharedApplication().registerUserNotificationSettings(settings)
             UIApplication.sharedApplication().registerForRemoteNotifications()
         #endif

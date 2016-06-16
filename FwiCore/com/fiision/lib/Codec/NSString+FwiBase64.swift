@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : NSString+FwiBase64.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -38,15 +38,12 @@
 
 import Foundation
 
-
 public extension NSString {
 
-    
     // MARK: Validate base64
     public func isBase64() -> Bool {
         return (self as String).isBase64()
     }
-
 
     // MARK: Decode base64
     public func decodeBase64Data() -> NSData? {
@@ -55,7 +52,6 @@ public extension NSString {
     public func decodeBase64String() -> String? {
         return (self as String).decodeBase64String()
     }
-
 
     // MARK: Encode base64
     public func encodeBase64Data() -> NSData? {

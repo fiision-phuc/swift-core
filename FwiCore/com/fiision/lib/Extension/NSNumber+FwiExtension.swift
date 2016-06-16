@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : NSNumber+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -38,7 +38,6 @@
 
 import Foundation
 
-
 public extension NSNumber {
 
     /** Display number to specific currency format. */
@@ -50,13 +49,13 @@ public extension NSNumber {
         // Layout currency
         currencyFormat.formatterBehavior = NSNumberFormatterBehavior.Behavior10_4
         currencyFormat.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp
-        currencyFormat.numberStyle  = NSNumberFormatterStyle.CurrencyStyle
+        currencyFormat.numberStyle = NSNumberFormatterStyle.CurrencyStyle
 
         currencyFormat.generatesDecimalNumbers = true
         currencyFormat.locale = locale
 
         currencyFormat.currencyGroupingSeparator = grouping
-        currencyFormat.currencyDecimalSeparator  = decimal
+        currencyFormat.currencyDecimalSeparator = decimal
 
         if isSymbol {
             currencyFormat.positiveFormat = "\u{00a4}#,##0.00"

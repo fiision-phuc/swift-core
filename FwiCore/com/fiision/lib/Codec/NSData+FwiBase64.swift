@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : NSData+FwiBase64.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -38,7 +38,6 @@
 
 import Foundation
 
-
 private let encodingTable: [UInt8] = Array("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".utf8)
 private let decodingTable: [UInt8] = [
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -51,10 +50,8 @@ private let decodingTable: [UInt8] = [
     0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x00, 0x00, 0x00, 0x00, 0x00
 ]
 
-
 public extension NSData {
 
-    
     // MARK: Validate base64
     public func isBase64() -> Bool {
         /* Condition validation */
@@ -82,7 +79,6 @@ public extension NSData {
         }
         return isBase64
     }
-
 
     // MARK: Decode base64
     public func decodeBase64Data() -> NSData? {
@@ -158,7 +154,6 @@ public extension NSData {
         }
         return decodeBase64Data()?.toString()
     }
-
 
     // MARK: Encode base64
     public func encodeBase64Data() -> NSData? {

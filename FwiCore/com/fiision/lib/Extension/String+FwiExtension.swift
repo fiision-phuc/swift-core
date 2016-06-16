@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : String+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -38,7 +38,6 @@
 
 import Foundation
 
-
 public extension String {
 
     /** Generate random identifier base on uuid. */
@@ -54,7 +53,6 @@ public extension String {
         return "\(time(nil))"
     }
 
-
     /** Compare 2 string regardless case sensitive. */
     public func isEqualToStringIgnoreCase(otherString: String?) -> Bool {
         /* Condition validation */
@@ -63,9 +61,9 @@ public extension String {
         }
 
         if let
-            text1 = self.lowercaseString.trim(),
+        text1 = self.lowercaseString.trim(),
             text2 = otherString?.lowercaseString.trim() {
-            return (text1 == text2)
+                return (text1 == text2)
         }
         return false
     }

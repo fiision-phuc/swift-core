@@ -250,7 +250,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BEA6D1EE1A1D2090005021BB /* Build configuration list for PBXNativeTarget "FwiCore" */;
 			buildPhases = (
-				BE5D54F91D0F067B00E69F30 /* SwiftLint */,
 				BEA6D1D31A1D2090005021BB /* Sources */,
 				BEA6D1D41A1D2090005021BB /* Frameworks */,
 				BEA6D1D51A1D2090005021BB /* Headers */,
@@ -337,23 +336,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		BE5D54F91D0F067B00E69F30 /* SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = SwiftLint;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint autocorrect --path ${SRCROOT}/FwiCore\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n\n    # Install Homebrew\n    ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\"\n\n    # Install swiftlint\n    brew install swiftlint\nfi";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BEA6D1D31A1D2090005021BB /* Sources */ = {

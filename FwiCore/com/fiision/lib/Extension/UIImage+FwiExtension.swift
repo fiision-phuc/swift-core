@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : UIImage+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -41,7 +41,6 @@ import Foundation
 import Accelerate
 import CoreGraphics
 
-
 public extension UIImage {
 
     /** Create a reflected image for specific view. */
@@ -50,12 +49,11 @@ public extension UIImage {
         if (view == nil || height == 0.0) {
             return nil
         }
-        let imgWidth  = Int(round(CGRectGetWidth(view!.bounds)))
+        let imgWidth = Int(round(CGRectGetWidth(view!.bounds)))
         let imgHeight = Int(round(height))
 
-
         // create a bitmap graphics context the size of the image
-        var colorSpace  = CGColorSpaceCreateDeviceRGB()
+        var colorSpace = CGColorSpaceCreateDeviceRGB()
 
         let bitmapInfoRaw = CGBitmapInfo.ByteOrder32Little.union(CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue))
         let mainContext = CGBitmapContextCreate(nil, imgWidth, imgHeight, 8, 0, colorSpace, bitmapInfoRaw.rawValue)
@@ -71,7 +69,7 @@ public extension UIImage {
 
         // Draw the gradient into the gray bitmap context
         let gradientStart = CGPoint.zero
-        let gradientEnd   = CGPointMake(0.0, CGFloat(imgHeight))
+        let gradientEnd = CGPointMake(0.0, CGFloat(imgHeight))
         CGContextDrawLinearGradient(gradientContext, grayscaleGradient, gradientStart, gradientEnd, CGGradientDrawingOptions.DrawsAfterEndLocation)
 
         // Convert the context into a CGImageRef
@@ -94,7 +92,6 @@ public extension UIImage {
         return (imgReflectedRef != nil) ? UIImage(CGImage: imgReflectedRef!) : nil
     }
 
-
     /** Create blur effect image from original source. */
     public func darkBlur() -> UIImage? {
         return self.darkBlurWithRadius(20.0, saturationFactor: 1.9)
@@ -111,7 +108,6 @@ public extension UIImage {
         let tintColor = UIColor(white: 1.0, alpha: 0.5)
         return self.generateBlurImage(radius, tintColor: tintColor, saturationFactor: saturation)
     }
-
 
     // MARK: Class's private methods
     public func generateBlurImage(blurRadius: CGFloat, tintColor tint: UIColor?, saturationFactor saturation: CGFloat) -> UIImage {
@@ -135,9 +131,9 @@ public extension UIImage {
 
             // Capture image from input context to input buffer
             var inputBuffer = vImage_Buffer(data: CGBitmapContextGetData(inputContext),
-                                            height: vImagePixelCount(CGBitmapContextGetHeight(inputContext)),
-                                            width: vImagePixelCount(CGBitmapContextGetWidth(inputContext)),
-                                            rowBytes: CGBitmapContextGetBytesPerRow(inputContext))
+                height: vImagePixelCount(CGBitmapContextGetHeight(inputContext)),
+                width: vImagePixelCount(CGBitmapContextGetWidth(inputContext)),
+                rowBytes: CGBitmapContextGetBytesPerRow(inputContext))
 
             /** Effect Output Context */
             UIGraphicsBeginImageContextWithOptions(self.size, false, 1.0)
@@ -145,9 +141,9 @@ public extension UIImage {
 
             // Prepare output buffer
             var outputBuffer = vImage_Buffer(data: CGBitmapContextGetData(outputContext),
-                                             height: vImagePixelCount(CGBitmapContextGetHeight(outputContext)),
-                                             width: vImagePixelCount(CGBitmapContextGetWidth(outputContext)),
-                                             rowBytes: CGBitmapContextGetBytesPerRow(outputContext))
+                height: vImagePixelCount(CGBitmapContextGetHeight(outputContext)),
+                width: vImagePixelCount(CGBitmapContextGetWidth(outputContext)),
+                rowBytes: CGBitmapContextGetBytesPerRow(outputContext))
 
             // Apply blur if required
             if (hasBlur) {
@@ -167,9 +163,9 @@ public extension UIImage {
             if (hasSaturation) {
                 let s = saturation
                 var saturationMatrixf = [0.0722 + 0.9278 * s, 0.0722 - 0.0722 * s, 0.0722 - 0.0722 * s, 0,
-                                         0.7152 - 0.7152 * s, 0.7152 + 0.2848 * s, 0.7152 - 0.7152 * s, 0,
-                                         0.2126 - 0.2126 * s, 0.2126 - 0.2126 * s, 0.2126 + 0.7873 * s, 0,
-                                         0, 0, 0, 1]
+                    0.7152 - 0.7152 * s, 0.7152 + 0.2848 * s, 0.7152 - 0.7152 * s, 0,
+                    0.2126 - 0.2126 * s, 0.2126 - 0.2126 * s, 0.2126 + 0.7873 * s, 0,
+                    0, 0, 0, 1]
 
                 // Convert saturation matrix from float to 8Bits value
                 let divisor: Int32 = 256
@@ -197,7 +193,6 @@ public extension UIImage {
             }
             UIGraphicsEndImageContext()
         }
-
 
         // Set up output context.
         UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.mainScreen().scale)

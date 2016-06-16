@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : String+FwiHex.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -38,10 +38,8 @@
 
 import Foundation
 
-
 public extension String {
 
-    
     // MARK: Validate Hex
     public func isHex() -> Bool {
         if let isHex = toData()?.isHex() {
@@ -49,7 +47,6 @@ public extension String {
         }
         return false
     }
-
 
     // MARK: Decode Hex
     public func decodeHexData() -> NSData? {
@@ -64,7 +61,6 @@ public extension String {
         }
         return nil
     }
-
 
     // MARK: Encode Hex
     public func encodeHexData() -> NSData? {

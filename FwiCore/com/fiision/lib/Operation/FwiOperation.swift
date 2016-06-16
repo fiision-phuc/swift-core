@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : FwiOperation.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -39,52 +39,46 @@
 import Foundation
 import UIKit
 
-
 public enum FwiOperationState: UInt8 {
     case Initialize = 0x00
-    case Executing	= 0x01
-    case Cancelled  = 0x02
-    case Finished	= 0x03
-    case Error      = 0x04
+    case Executing = 0x01
+    case Cancelled = 0x02
+    case Finished = 0x03
+    case Error = 0x04
 }
-
 
 private var operationQueue: NSOperationQueue?
 
-
 public class FwiOperation: NSOperation {
-
 
     // MARK: Environment initialize
     public class override func initialize() {
-        objc_sync_enter(self)  // Lock
+        objc_sync_enter(self) // Lock
         if operationQueue == nil {
             operationQueue = NSOperationQueue()
         }
         operationQueue?.maxConcurrentOperationCount = 5
 
-        //        // Define quality of service if system version is from 8
-        //        if let version = Int(UIDevice.currentDevice().systemName) {
-        //            if version >= 8 {
-        //                if #available(iOS 8.0, *) {
-        //                    operationQueue?.qualityOfService = NSQualityOfService.Utility
-        //                } else {
-        //                    // Fallback on earlier versions
-        //                }
-        //            }
-        //        }
-        objc_sync_exit(self)   // Unlock
+        // // Define quality of service if system version is from 8
+        // if let version = Int(UIDevice.currentDevice().systemName) {
+        // if version >= 8 {
+        // if #available(iOS 8.0, *) {
+        // operationQueue?.qualityOfService = NSQualityOfService.Utility
+        // } else {
+        // // Fallback on earlier versions
+        // }
+        // }
+        // }
+        objc_sync_exit(self) // Unlock
     }
     public class func getPrivateQueue() -> NSOperationQueue? {
         return operationQueue
     }
 
-
     // MARK: Class's constructors
     public override init() {
         super.init()
     }
-
 
     // MARK: Class's properties
     public var identifier: String?
@@ -93,13 +87,12 @@ public class FwiOperation: NSOperation {
     public var isLongOperation = false
     public var state = FwiOperationState.Initialize
 
-    private var isFinished  = false
+    private var isFinished = false
     private var isCancelled = false
     private var isExecuting = false
 
-    private var userInfo: [String : AnyObject]?
+    private var userInfo: [String: AnyObject]?
     private var bgTask: UIBackgroundTaskIdentifier?
-
 
     // MARK: Class's public methods
     public func execute() {
@@ -134,7 +127,6 @@ public class FwiOperation: NSOperation {
         // To be overrided.
     }
 
-
     // MARK: Class's private methods
     private func operationCompleted() {
         // Check operation stage
@@ -149,7 +141,7 @@ public class FwiOperation: NSOperation {
         willChangeValueForKey("isExecuting")
         willChangeValueForKey("isFinished")
         isExecuting = false
-        isFinished  = true
+        isFinished = true
         didChangeValueForKey("isExecuting")
         didChangeValueForKey("isFinished")
 
@@ -159,7 +151,6 @@ public class FwiOperation: NSOperation {
             bgTask = UIBackgroundTaskInvalid
         }
     }
-
 
     // MARK: NSOperation's members
     public override var asynchronous: Bool {
@@ -218,7 +209,6 @@ public class FwiOperation: NSOperation {
     }
 }
 
-
 // Extension
 public extension FwiOperation {
 
@@ -229,7 +219,6 @@ public extension FwiOperation {
     }
 }
 
-
 // Delegate
 @objc
 public protocol FwiOperationDelegate {
@@ -239,5 +228,5 @@ public protocol FwiOperationDelegate {
     /** Notify delegate this operation was cancelled. */
     optional func operationDidCancel(operation: FwiOperation)
     /** Notify delegate that this operation finished. */
-    optional func operationDidFinish(operation: FwiOperation, withState state: UInt8, userInfo info: [String : AnyObject]?)
+    optional func operationDidFinish(operation: FwiOperation, withState state: UInt8, userInfo info: [String: AnyObject]?)
 }

@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : UIView+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -38,7 +38,6 @@
 
 import UIKit
 import Foundation
-
 
 public extension UIView {
 
@@ -120,6 +119,6 @@ public extension UIView {
     public func roundCorner(radius: CGFloat) {
         let bgLayer = self.layer
         bgLayer.masksToBounds = true
-        bgLayer.cornerRadius  = radius
+        bgLayer.cornerRadius = radius
     }
 }

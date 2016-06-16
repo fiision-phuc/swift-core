@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : NSData+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -37,7 +37,6 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
-
 
 public extension NSData {
 

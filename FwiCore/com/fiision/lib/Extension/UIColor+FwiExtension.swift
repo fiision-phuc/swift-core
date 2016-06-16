@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : UIColor+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -39,20 +39,19 @@
 import UIKit
 import Foundation
 
-
 public extension UIColor {
 
     /** Convert hex to color. */
     public class func rgb(rgb: UInt32) -> UIColor {
         return UIColor(red: CGFloat((rgb & 0xff0000) >> 16) / 255.0,
-                       green: CGFloat((rgb & 0x00ff00) >> 8) / 255.0,
-                       blue: CGFloat(rgb & 0x0000ff) / 255.0,
-                       alpha: CGFloat(1.0))
+            green: CGFloat((rgb & 0x00ff00) >> 8) / 255.0,
+            blue: CGFloat(rgb & 0x0000ff) / 255.0,
+            alpha: CGFloat(1.0))
     }
     public class func rgba(rgba: UInt32) -> UIColor {
         return UIColor(red: CGFloat((rgba & 0xff000000) >> 24) / 255.0,
-                       green: CGFloat((rgba & 0x00ff0000) >> 16) / 255.0,
-                       blue: CGFloat((rgba & 0x0000ff00) >> 8) / 255.0,
-                       alpha: CGFloat(rgba & 0x000000ff) / 255.0)
+            green: CGFloat((rgba & 0x00ff0000) >> 16) / 255.0,
+            blue: CGFloat((rgba & 0x0000ff00) >> 8) / 255.0,
+            alpha: CGFloat(rgba & 0x000000ff) / 255.0)
     }
 }
