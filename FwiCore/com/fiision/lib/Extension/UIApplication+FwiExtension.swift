@@ -71,12 +71,12 @@ public extension UIApplication {
 
     /** Enable remote notification. */
     public class func enableRemoteNotification() {
-        #if (arch(i386) || arch(x86_64)) && os(iOS)
-            print("Push notification does not support this device.")
-        #else
-            let settings = UIUserNotificationSettings(forTypes: UIUserNotificationType(rawValue: UIUserNotificationType.Alert.rawValue | UIUserNotificationType.Badge.rawValue | UIUserNotificationType.Sound.rawValue), categories: nil)
-            UIApplication.sharedApplication().registerUserNotificationSettings(settings)
-            UIApplication.sharedApplication().registerForRemoteNotifications()
-        #endif
+    #if (arch(i386) || arch(x86_64)) && os(iOS)
+        print("Push notification does not support this device.")
+    #else
+        let settings = UIUserNotificationSettings(forTypes: UIUserNotificationType(rawValue: UIUserNotificationType.Alert.rawValue | UIUserNotificationType.Badge.rawValue | UIUserNotificationType.Sound.rawValue), categories: nil)
+        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+        UIApplication.sharedApplication().registerForRemoteNotifications()
+    #endif
     }
 }
