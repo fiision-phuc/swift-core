@@ -41,6 +41,15 @@ import Foundation
 
 public extension UIApplication {
 
+    /** Define whether the device is iPad or not. */
+    public class func isPad() -> Bool {
+        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad
+    }
+    /** Define whether the device is iPhone or not. */
+    public class func isPhone() -> Bool {
+        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Phone
+    }
+
     /** Return iOS major version. */
     public class func osMajor() -> Int {
         if let
@@ -63,7 +72,7 @@ public extension UIApplication {
     /** Enable remote notification. */
     public class func enableRemoteNotification() {
         #if (arch(i386) || arch(x86_64)) && os(iOS)
-            // Skip registration process.
+            print("Push notification does not support this device.")
         #else
             let settings = UIUserNotificationSettings(forTypes: UIUserNotificationType(rawValue: UIUserNotificationType.Alert.rawValue | UIUserNotificationType.Badge.rawValue | UIUserNotificationType.Sound.rawValue), categories: nil)
             UIApplication.sharedApplication().registerUserNotificationSettings(settings)

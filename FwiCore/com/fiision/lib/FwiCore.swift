@@ -48,37 +48,23 @@ public let Metric_Circle: Float = 6.28319 // (360 degree)
 
 // Log Function
 public func FwiLog(className: String = #file, methodName: String = #function, line: Int = #line, message: String?) {
-    #if !NDEBUG
-        let name = className.componentsSeparatedByString("/").last
+#if DEBUG
+    let name = className.componentsSeparatedByString("/").last
 
-        if name != nil && name?.isEmpty != true {
-            if message != nil && message?.isEmpty != true {
-                print("\(name!) > \(methodName)[\(NSDate()) \(line)]: \(message!)")
-            } else {
-                print("\(name!) > \(methodName)[\(NSDate()) \(line)]")
-            }
+    if name != nil && name?.isEmpty != true {
+        if message != nil && message?.isEmpty != true {
+            print("\(name!) > \(methodName)[\(NSDate()) \(line)]: \(message!)")
         } else {
-            if message != nil && message?.isEmpty != true {
-                print("\(methodName)[\(NSDate()) \(line)]: \(message!)")
-            } else {
-                print("\(methodName)[\(NSDate()) \(line)]")
-            }
+            print("\(name!) > \(methodName)[\(NSDate()) \(line)]")
         }
-    #endif
-}
-
-// Color Functions
-public func FwiColorWithRGB(hexValue rgb: UInt) -> UIColor {
-    return UIColor(red: CGFloat((rgb & 0xff0000) >> 16) / 255.0,
-        green: CGFloat((rgb & 0xff00) >> 8) / 255.0,
-        blue: CGFloat(rgb & 0xff) / 255.0,
-        alpha: CGFloat(1.0))
-}
-public func FwiColorWithRGBA(hexValue rgba: UInt) -> UIColor {
-    return UIColor(red: CGFloat((rgba & 0xff000000) >> 24) / 255.0,
-        green: CGFloat((rgba & 0xff0000) >> 16) / 255.0,
-        blue: CGFloat((rgba & 0xff00) >> 8) / 255.0,
-        alpha: CGFloat(rgba & 0xff) / 255.0)
+    } else {
+        if message != nil && message?.isEmpty != true {
+            print("\(methodName)[\(NSDate()) \(line)]: \(message!)")
+        } else {
+            print("\(methodName)[\(NSDate()) \(line)]")
+        }
+    }
+#endif
 }
 
 // Metric Functions
