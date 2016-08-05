@@ -1,8 +1,8 @@
-// Project name: FwiCore
-//  File name   : NSString+FwiBase64.swift
+//  Project name: FwiCore
+//  File name   : NSString+FwiHex.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/26/14
+//  Created date: 11/20/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -40,24 +40,24 @@ import Foundation
 
 public extension NSString {
 
-    // MARK: Validate base64
-    public func isBase64() -> Bool {
-        return (self as String).isBase64()
+    // MARK: Validate Hex
+    public func isHex() -> Bool {
+        return (self as String).isHex()
     }
 
-    // MARK: Decode base64
-    public func decodeBase64Data() -> NSData? {
-        return (self as String).decodeBase64Data()
+    // MARK: Decode Hex
+    public func decodeHexData() -> NSData? {
+        return (self as String).decodeHexData()
     }
-    public func decodeBase64String() -> String? {
-        return (self as String).decodeBase64String()
+    public func decodeHexString() -> String? {
+        return (self as String).decodeHexString()
     }
 
-    // MARK: Encode base64
-    public func encodeBase64Data() -> NSData? {
-        return (self as String).encodeBase64Data()
+    // MARK: Encode Hex
+    public func encodeHexData() -> NSData? {
+        return (self as String).encodeHexData()
     }
-    public func encodeBase64String() -> String? {
-        return (self as String).encodeBase64String()
+    public func encodeHexString() -> String? {
+        return (self as String).encodeHexString()
     }
 }
