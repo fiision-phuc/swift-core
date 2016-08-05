@@ -1,5 +1,5 @@
-// Project name: FwiCore
-//  File name   : NSData+FwiExtension.swift
+//  Project name: FwiCore
+//  File name   : NSNumber+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/22/14
@@ -38,62 +38,35 @@
 
 import Foundation
 
-public extension NSData {
+public extension NSNumber {
 
-    /** Convert data to UTF8 string. */
-    public func toString() -> String? {
-        return toStringWithEncoding(NSUTF8StringEncoding)
-    }
+    /** Display number to specific currency format. */
+    public func currencyWithISO3(currencyISO3: String, decimalSeparator decimal: String, groupingSeparator grouping: String, usingSymbol isSymbol: Bool) -> String? {
+        // Initialize currency format object
+        let locale = NSLocale(localeIdentifier: "en_US")
+        let currencyFormat = NSNumberFormatter()
 
-    /** Convert data to string base on string encoding type. */
-    public func toStringWithEncoding(encoding: NSStringEncoding) -> String? {
-        /* Condition validation */
-        if length <= 0 {
-            return nil
+        // Layout currency
+        currencyFormat.formatterBehavior = NSNumberFormatterBehavior.Behavior10_4
+        currencyFormat.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp
+        currencyFormat.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+
+        currencyFormat.generatesDecimalNumbers = true
+        currencyFormat.locale = locale
+
+        currencyFormat.currencyGroupingSeparator = grouping
+        currencyFormat.currencyDecimalSeparator = decimal
+
+        if isSymbol {
+            currencyFormat.positiveFormat = "\u{00a4}#,##0.00"
+            currencyFormat.negativeFormat = "- \u{00a4}#,##0.00"
+        } else {
+            currencyFormat.positiveFormat = "#,##0.00 \(currencyISO3)"
+            currencyFormat.negativeFormat = "- #,##0.00 \(currencyISO3)"
         }
-        return NSString(data: self, encoding: encoding) as? String
-    }
+        currencyFormat.currencyCode = currencyISO3
 
-    /** Clear all bytes data. */
-    public func clearBytes() {
-        /* Condition validation */
-        if length <= 0 {
-            return
-        }
-
-        let bytes = UnsafeMutablePointer<UInt8>(self.bytes)
-        let step = length >> 1
-        var end = length - 1
-
-        for i in 0 ..< step {
-            bytes[end] = 0
-            bytes[i] = 0
-            end -= 1
-        }
-
-        // Handle the last stand alone byte
-        if (length % 2) == 1 {
-            bytes[step] = 0
-        }
-    }
-
-    /** Reverse the order of bytes. */
-    public func reverseBytes() {
-        /* Condition validation */
-        if length <= 0 {
-            return
-        }
-
-        let bytes = UnsafeMutablePointer<UInt8>(self.bytes)
-        let step = length >> 1
-        var end = length - 1
-
-        for i in 0 ..< step {
-            let temp = bytes[i]
-
-            bytes[i] = bytes[end]
-            bytes[end] = temp
-            end -= 1
-        }
+        // Return result
+        return currencyFormat.stringFromNumber(self)
     }
 }

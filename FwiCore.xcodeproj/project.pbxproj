@@ -8,6 +8,27 @@
 
 /* Begin PBXBuildFile section */
 		BE0E7C831A67AC63005079A9 /* FwiOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0E7C821A67AC63005079A9 /* FwiOperationTest.swift */; };
+		BE2A158F1D54F2E9007D60BC /* NSData+FwiBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15761D54F2E9007D60BC /* NSData+FwiBase64.swift */; };
+		BE2A15901D54F2E9007D60BC /* NSString+FwiBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15771D54F2E9007D60BC /* NSString+FwiBase64.swift */; };
+		BE2A15911D54F2E9007D60BC /* String+FwiBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15781D54F2E9007D60BC /* String+FwiBase64.swift */; };
+		BE2A15921D54F2E9007D60BC /* NSData+FwiHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A157A1D54F2E9007D60BC /* NSData+FwiHex.swift */; };
+		BE2A15931D54F2E9007D60BC /* NSString+FwiHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A157B1D54F2E9007D60BC /* NSString+FwiHex.swift */; };
+		BE2A15941D54F2E9007D60BC /* String+FwiHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A157C1D54F2E9007D60BC /* String+FwiHex.swift */; };
+		BE2A15951D54F2E9007D60BC /* NSData+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A157E1D54F2E9007D60BC /* NSData+FwiExtension.swift */; };
+		BE2A15961D54F2E9007D60BC /* NSNumber+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A157F1D54F2E9007D60BC /* NSNumber+FwiExtension.swift */; };
+		BE2A15971D54F2E9007D60BC /* NSString+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15801D54F2E9007D60BC /* NSString+FwiExtension.swift */; };
+		BE2A15981D54F2E9007D60BC /* NSURL+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15811D54F2E9007D60BC /* NSURL+FwiExtension.swift */; };
+		BE2A15991D54F2E9007D60BC /* String+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15821D54F2E9007D60BC /* String+FwiExtension.swift */; };
+		BE2A159A1D54F2E9007D60BC /* UIApplication+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15831D54F2E9007D60BC /* UIApplication+FwiExtension.swift */; };
+		BE2A159B1D54F2E9007D60BC /* UIButton+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15841D54F2E9007D60BC /* UIButton+FwiExtension.swift */; };
+		BE2A159C1D54F2E9007D60BC /* UIColor+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15851D54F2E9007D60BC /* UIColor+FwiExtension.swift */; };
+		BE2A159D1D54F2E9007D60BC /* UIImage+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15861D54F2E9007D60BC /* UIImage+FwiExtension.swift */; };
+		BE2A159E1D54F2E9007D60BC /* UINavigationController+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15871D54F2E9007D60BC /* UINavigationController+FwiExtension.swift */; };
+		BE2A159F1D54F2E9007D60BC /* UISplitViewController+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15881D54F2E9007D60BC /* UISplitViewController+FwiExtension.swift */; };
+		BE2A15A01D54F2E9007D60BC /* UITableViewController+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15891D54F2E9007D60BC /* UITableViewController+FwiExtension.swift */; };
+		BE2A15A11D54F2E9007D60BC /* UIView+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A158A1D54F2E9007D60BC /* UIView+FwiExtension.swift */; };
+		BE2A15A21D54F2E9007D60BC /* FwiOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A158C1D54F2E9007D60BC /* FwiOperation.swift */; };
+		BE2A15A31D54F2E9007D60BC /* FwiReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A158E1D54F2E9007D60BC /* FwiReachability.swift */; };
 		BE3C416D1A210B4A009910E7 /* FwiBase64DataTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3C416C1A210B4A009910E7 /* FwiBase64DataTest.swift */; };
 		BE3C416F1A210B5A009910E7 /* FwiHexDataTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3C416E1A210B5A009910E7 /* FwiHexDataTest.swift */; };
 		BE3C41711A210B6E009910E7 /* FwiBase64StringTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3C41701A210B6E009910E7 /* FwiBase64StringTest.swift */; };
@@ -31,6 +52,27 @@
 
 /* Begin PBXFileReference section */
 		BE0E7C821A67AC63005079A9 /* FwiOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiOperationTest.swift; sourceTree = "<group>"; };
+		BE2A15761D54F2E9007D60BC /* NSData+FwiBase64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+FwiBase64.swift"; sourceTree = "<group>"; };
+		BE2A15771D54F2E9007D60BC /* NSString+FwiBase64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+FwiBase64.swift"; sourceTree = "<group>"; };
+		BE2A15781D54F2E9007D60BC /* String+FwiBase64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+FwiBase64.swift"; sourceTree = "<group>"; };
+		BE2A157A1D54F2E9007D60BC /* NSData+FwiHex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+FwiHex.swift"; sourceTree = "<group>"; };
+		BE2A157B1D54F2E9007D60BC /* NSString+FwiHex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+FwiHex.swift"; sourceTree = "<group>"; };
+		BE2A157C1D54F2E9007D60BC /* String+FwiHex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+FwiHex.swift"; sourceTree = "<group>"; };
+		BE2A157E1D54F2E9007D60BC /* NSData+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE2A157F1D54F2E9007D60BC /* NSNumber+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSNumber+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE2A15801D54F2E9007D60BC /* NSString+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE2A15811D54F2E9007D60BC /* NSURL+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURL+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE2A15821D54F2E9007D60BC /* String+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE2A15831D54F2E9007D60BC /* UIApplication+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE2A15841D54F2E9007D60BC /* UIButton+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE2A15851D54F2E9007D60BC /* UIColor+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE2A15861D54F2E9007D60BC /* UIImage+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE2A15871D54F2E9007D60BC /* UINavigationController+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationController+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE2A15881D54F2E9007D60BC /* UISplitViewController+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UISplitViewController+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE2A15891D54F2E9007D60BC /* UITableViewController+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableViewController+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE2A158A1D54F2E9007D60BC /* UIView+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE2A158C1D54F2E9007D60BC /* FwiOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiOperation.swift; sourceTree = "<group>"; };
+		BE2A158E1D54F2E9007D60BC /* FwiReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiReachability.swift; sourceTree = "<group>"; };
 		BE3C416C1A210B4A009910E7 /* FwiBase64DataTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiBase64DataTest.swift; sourceTree = "<group>"; };
 		BE3C416E1A210B5A009910E7 /* FwiHexDataTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiHexDataTest.swift; sourceTree = "<group>"; };
 		BE3C41701A210B6E009910E7 /* FwiBase64StringTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiBase64StringTest.swift; sourceTree = "<group>"; };
@@ -64,6 +106,71 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BE2A15741D54F2E9007D60BC /* codec */ = {
+			isa = PBXGroup;
+			children = (
+				BE2A15751D54F2E9007D60BC /* base64 */,
+				BE2A15791D54F2E9007D60BC /* hex */,
+			);
+			path = codec;
+			sourceTree = "<group>";
+		};
+		BE2A15751D54F2E9007D60BC /* base64 */ = {
+			isa = PBXGroup;
+			children = (
+				BE2A15761D54F2E9007D60BC /* NSData+FwiBase64.swift */,
+				BE2A15771D54F2E9007D60BC /* NSString+FwiBase64.swift */,
+				BE2A15781D54F2E9007D60BC /* String+FwiBase64.swift */,
+			);
+			path = base64;
+			sourceTree = "<group>";
+		};
+		BE2A15791D54F2E9007D60BC /* hex */ = {
+			isa = PBXGroup;
+			children = (
+				BE2A157A1D54F2E9007D60BC /* NSData+FwiHex.swift */,
+				BE2A157B1D54F2E9007D60BC /* NSString+FwiHex.swift */,
+				BE2A157C1D54F2E9007D60BC /* String+FwiHex.swift */,
+			);
+			path = hex;
+			sourceTree = "<group>";
+		};
+		BE2A157D1D54F2E9007D60BC /* extension */ = {
+			isa = PBXGroup;
+			children = (
+				BE2A157E1D54F2E9007D60BC /* NSData+FwiExtension.swift */,
+				BE2A157F1D54F2E9007D60BC /* NSNumber+FwiExtension.swift */,
+				BE2A15801D54F2E9007D60BC /* NSString+FwiExtension.swift */,
+				BE2A15811D54F2E9007D60BC /* NSURL+FwiExtension.swift */,
+				BE2A15821D54F2E9007D60BC /* String+FwiExtension.swift */,
+				BE2A15831D54F2E9007D60BC /* UIApplication+FwiExtension.swift */,
+				BE2A15841D54F2E9007D60BC /* UIButton+FwiExtension.swift */,
+				BE2A15851D54F2E9007D60BC /* UIColor+FwiExtension.swift */,
+				BE2A15861D54F2E9007D60BC /* UIImage+FwiExtension.swift */,
+				BE2A15871D54F2E9007D60BC /* UINavigationController+FwiExtension.swift */,
+				BE2A15881D54F2E9007D60BC /* UISplitViewController+FwiExtension.swift */,
+				BE2A15891D54F2E9007D60BC /* UITableViewController+FwiExtension.swift */,
+				BE2A158A1D54F2E9007D60BC /* UIView+FwiExtension.swift */,
+			);
+			path = extension;
+			sourceTree = "<group>";
+		};
+		BE2A158B1D54F2E9007D60BC /* operation */ = {
+			isa = PBXGroup;
+			children = (
+				BE2A158C1D54F2E9007D60BC /* FwiOperation.swift */,
+			);
+			path = operation;
+			sourceTree = "<group>";
+		};
+		BE2A158D1D54F2E9007D60BC /* reachability */ = {
+			isa = PBXGroup;
+			children = (
+				BE2A158E1D54F2E9007D60BC /* FwiReachability.swift */,
+			);
+			path = reachability;
+			sourceTree = "<group>";
+		};
 		BE5D54D01D0F057000E69F30 /* com */ = {
 			isa = PBXGroup;
 			children = (
@@ -84,6 +191,10 @@
 			isa = PBXGroup;
 			children = (
 				BE5D54E31D0F057000E69F30 /* FwiCore.swift */,
+				BE2A15741D54F2E9007D60BC /* codec */,
+				BE2A157D1D54F2E9007D60BC /* extension */,
+				BE2A158B1D54F2E9007D60BC /* operation */,
+				BE2A158D1D54F2E9007D60BC /* reachability */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -110,17 +221,17 @@
 			isa = PBXGroup;
 			children = (
 				BE5D54D01D0F057000E69F30 /* com */,
-				BEA6D1DB1A1D2090005021BB /* Supporting Files */,
+				BEA6D1DB1A1D2090005021BB /* supporting_files */,
 			);
 			path = FwiCore;
 			sourceTree = "<group>";
 		};
-		BEA6D1DB1A1D2090005021BB /* Supporting Files */ = {
+		BEA6D1DB1A1D2090005021BB /* supporting_files */ = {
 			isa = PBXGroup;
 			children = (
 				BEA6D1DC1A1D2090005021BB /* Info.plist */,
 			);
-			name = "Supporting Files";
+			name = supporting_files;
 			sourceTree = "<group>";
 		};
 		BEA6D1E71A1D2090005021BB /* FwiCoreTests */ = {
@@ -209,7 +320,6 @@
 				TargetAttributes = {
 					BEA6D1D71A1D2090005021BB = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 3DTN9R4998;
 					};
 					BEA6D1E21A1D2090005021BB = {
 						CreatedOnToolsVersion = 6.1;
@@ -256,7 +366,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE2A15A21D54F2E9007D60BC /* FwiOperation.swift in Sources */,
+				BE2A15941D54F2E9007D60BC /* String+FwiHex.swift in Sources */,
+				BE2A159A1D54F2E9007D60BC /* UIApplication+FwiExtension.swift in Sources */,
+				BE2A159C1D54F2E9007D60BC /* UIColor+FwiExtension.swift in Sources */,
+				BE2A15A01D54F2E9007D60BC /* UITableViewController+FwiExtension.swift in Sources */,
+				BE2A159B1D54F2E9007D60BC /* UIButton+FwiExtension.swift in Sources */,
+				BE2A159D1D54F2E9007D60BC /* UIImage+FwiExtension.swift in Sources */,
+				BE2A159E1D54F2E9007D60BC /* UINavigationController+FwiExtension.swift in Sources */,
+				BE2A158F1D54F2E9007D60BC /* NSData+FwiBase64.swift in Sources */,
+				BE2A15921D54F2E9007D60BC /* NSData+FwiHex.swift in Sources */,
+				BE2A159F1D54F2E9007D60BC /* UISplitViewController+FwiExtension.swift in Sources */,
+				BE2A15901D54F2E9007D60BC /* NSString+FwiBase64.swift in Sources */,
+				BE2A15971D54F2E9007D60BC /* NSString+FwiExtension.swift in Sources */,
+				BE2A15911D54F2E9007D60BC /* String+FwiBase64.swift in Sources */,
+				BE2A15981D54F2E9007D60BC /* NSURL+FwiExtension.swift in Sources */,
+				BE2A15951D54F2E9007D60BC /* NSData+FwiExtension.swift in Sources */,
+				BE2A15961D54F2E9007D60BC /* NSNumber+FwiExtension.swift in Sources */,
+				BE2A15991D54F2E9007D60BC /* String+FwiExtension.swift in Sources */,
+				BE2A15931D54F2E9007D60BC /* NSString+FwiHex.swift in Sources */,
+				BE2A15A31D54F2E9007D60BC /* FwiReachability.swift in Sources */,
 				BE5D54F61D0F057000E69F30 /* FwiCore.swift in Sources */,
+				BE2A15A11D54F2E9007D60BC /* UIView+FwiExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,7 +420,6 @@
 		BEA6D1EC1A1D2090005021BB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -336,7 +466,6 @@
 		BEA6D1ED1A1D2090005021BB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -377,6 +506,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -384,7 +514,7 @@
 				INFOPLIST_FILE = FwiCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.webonyx.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -395,6 +525,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -402,7 +533,7 @@
 				INFOPLIST_FILE = FwiCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.webonyx.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};

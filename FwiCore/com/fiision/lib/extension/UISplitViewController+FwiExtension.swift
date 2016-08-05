@@ -1,8 +1,8 @@
-// Project name: FwiCore
-//  File name   : UIButton+FwiExtension.swift
+//  Project name: FwiCore
+//  File name   : UISplitViewController+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/22/14
+//  Created date: 8/4/16
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -39,31 +39,33 @@
 import UIKit
 import Foundation
 
-public extension UIButton {
 
-    /** Apply background to button. */
-    public func applyBackgroundImage(imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets) {
-        let imageDefault = UIImage(named: "\(imageName)_Default")?.resizableImageWithCapInsets(edgeInsets)
-        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImageWithCapInsets(edgeInsets)
-        let imageSelected = UIImage(named: "\(imageName)_Selected")?.resizableImageWithCapInsets(edgeInsets)
-        let imageDisabled = UIImage(named: "\(imageName)_Disabled")?.resizableImageWithCapInsets(edgeInsets)
+public extension UISplitViewController {
 
-        self.setImage(imageDefault, forState: UIControlState.Normal)
-        self.setImage(imageHighlighted, forState: UIControlState.Highlighted)
-        self.setImage(imageSelected, forState: UIControlState.Selected)
-        self.setImage(imageDisabled, forState: UIControlState.Disabled)
+    // MARK: Class's override methods
+    public override func prefersStatusBarHidden() -> Bool {
+        if UIApplication.isPhone() {
+            return viewControllers.first?.prefersStatusBarHidden() ?? super.prefersStatusBarHidden()
+        }
+        return super.prefersStatusBarHidden()
+    }
+    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        if UIApplication.isPhone() {
+            return viewControllers.first?.preferredStatusBarStyle() ?? super.preferredStatusBarStyle()
+        }
+        return super.preferredStatusBarStyle()
     }
 
-    /** Apply image to button. */
-    public func applyImage(imageName: String) {
-        let imageDefault = UIImage(named: "\(imageName)_Default")
-        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")
-        let imageSelected = UIImage(named: "\(imageName)_Selected")
-        let imageDisabled = UIImage(named: "\(imageName)_Disabled")
-
-        self.setImage(imageDefault, forState: UIControlState.Normal)
-        self.setImage(imageHighlighted, forState: UIControlState.Highlighted)
-        self.setImage(imageSelected, forState: UIControlState.Selected)
-        self.setImage(imageDisabled, forState: UIControlState.Disabled)
+    public override func shouldAutorotate() -> Bool {
+        if UIApplication.isPhone() {
+            return viewControllers.first?.shouldAutorotate() ?? super.shouldAutorotate()
+        }
+        return super.shouldAutorotate()
+    }
+    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        if UIApplication.isPhone() {
+            return viewControllers.first?.supportedInterfaceOrientations() ?? super.supportedInterfaceOrientations()
+        }
+        return super.supportedInterfaceOrientations()
     }
 }

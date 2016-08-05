@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiCore.swift
+//  File name   : NSData+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/20/14
+//  Created date: 11/22/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -36,43 +36,64 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import UIKit
 import Foundation
 
-// Degree/Radians Values
-public let FLT_EPSILON: CGFloat = 1.19209e-07
+public extension NSData {
 
-public let Metric_DegreeToRadian: Double = 0.0174532925199432957
-public let Metric_RadianToDegree: Double = 57.295779513082320876
-public let Metric_Circle: Float = 6.28319 // (360 degree)
+    /** Convert data to UTF8 string. */
+    public func toString() -> String? {
+        return toStringWithEncoding(NSUTF8StringEncoding)
+    }
 
-// Log Function
-public func FwiLog(className: String = #file, methodName: String = #function, line: Int = #line, message: String?) {
-#if DEBUG
-    let name = className.componentsSeparatedByString("/").last
-
-    if name != nil && name?.isEmpty != true {
-        if message != nil && message?.isEmpty != true {
-            print("\(name!) > \(methodName)[\(NSDate()) \(line)]: \(message!)")
-        } else {
-            print("\(name!) > \(methodName)[\(NSDate()) \(line)]")
+    /** Convert data to string base on string encoding type. */
+    public func toStringWithEncoding(encoding: NSStringEncoding) -> String? {
+        /* Condition validation */
+        if length <= 0 {
+            return nil
         }
-    } else {
-        if message != nil && message?.isEmpty != true {
-            print("\(methodName)[\(NSDate()) \(line)]: \(message!)")
-        } else {
-            print("\(methodName)[\(NSDate()) \(line)]")
+        return NSString(data: self, encoding: encoding) as? String
+    }
+
+    /** Clear all bytes data. */
+    public func clearBytes() {
+        /* Condition validation */
+        if length <= 0 {
+            return
+        }
+
+        let bytes = UnsafeMutablePointer<UInt8>(self.bytes)
+        let step = length >> 1
+        var end = length - 1
+
+        for i in 0 ..< step {
+            bytes[end] = 0
+            bytes[i] = 0
+            end -= 1
+        }
+
+        // Handle the last stand alone byte
+        if (length % 2) == 1 {
+            bytes[step] = 0
         }
     }
-#endif
-}
 
-// Metric Functions
-public func FwiConvertToDegree(radianValue radian: Double) -> Double {
-    let degree = radian * Metric_RadianToDegree
-    return degree
-}
-public func FwiConvertToRadian(degreeValue degree: Double) -> Double {
-    let radian = degree * Metric_DegreeToRadian
-    return radian
+    /** Reverse the order of bytes. */
+    public func reverseBytes() {
+        /* Condition validation */
+        if length <= 0 {
+            return
+        }
+
+        let bytes = UnsafeMutablePointer<UInt8>(self.bytes)
+        let step = length >> 1
+        var end = length - 1
+
+        for i in 0 ..< step {
+            let temp = bytes[i]
+
+            bytes[i] = bytes[end]
+            bytes[end] = temp
+            end -= 1
+        }
+    }
 }

@@ -1,8 +1,8 @@
-// Project name: FwiCore
-//  File name   : UIApplication+FwiExtension.swift
+//  Project name: FwiCore
+//  File name   : UINavigationController+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 6/13/16
+//  Created date: 8/4/16
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -39,44 +39,21 @@
 import UIKit
 import Foundation
 
-public extension UIApplication {
 
-    /** Define whether the device is iPad or not. */
-    public class func isPad() -> Bool {
-        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad
-    }
-    /** Define whether the device is iPhone or not. */
-    public class func isPhone() -> Bool {
-        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Phone
-    }
+public extension UINavigationController {
 
-    /** Return iOS major version. */
-    public class func osMajor() -> Int {
-        if let
-        token = UIDevice.currentDevice().systemVersion.split("."),
-            major = Int(token[0]) {
-                return major
-        }
-        return 0
+    // MARK: Class's override methods
+    public override func prefersStatusBarHidden() -> Bool {
+        return visibleViewController?.prefersStatusBarHidden() ?? super.prefersStatusBarHidden()
     }
-    /** Return iOS minor version. */
-    public class func osMinor() -> Int {
-        if let
-        token = UIDevice.currentDevice().systemVersion.split(".") where token.count >= 2,
-            let minor = Int(token[1]) {
-                return minor
-        }
-        return 0
+    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return visibleViewController?.preferredStatusBarStyle() ?? super.preferredStatusBarStyle()
     }
 
-    /** Enable remote notification. */
-    public class func enableRemoteNotification() {
-    #if (arch(i386) || arch(x86_64)) && os(iOS)
-        print("Push notification does not support this device.")
-    #else
-        let settings = UIUserNotificationSettings(forTypes: UIUserNotificationType(rawValue: UIUserNotificationType.Alert.rawValue | UIUserNotificationType.Badge.rawValue | UIUserNotificationType.Sound.rawValue), categories: nil)
-        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
-        UIApplication.sharedApplication().registerForRemoteNotifications()
-    #endif
+    public override func shouldAutorotate() -> Bool {
+        return visibleViewController?.shouldAutorotate() ?? super.shouldAutorotate()
+    }
+    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return visibleViewController?.supportedInterfaceOrientations() ?? super.supportedInterfaceOrientations()
     }
 }

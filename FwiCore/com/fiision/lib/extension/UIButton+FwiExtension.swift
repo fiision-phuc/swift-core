@@ -1,5 +1,5 @@
-// Project name: FwiCore
-//  File name   : NSNumber+FwiExtension.swift
+//  Project name: FwiCore
+//  File name   : UIButton+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/22/14
@@ -36,37 +36,34 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
+import UIKit
 import Foundation
 
-public extension NSNumber {
+public extension UIButton {
 
-    /** Display number to specific currency format. */
-    public func currencyWithISO3(currencyISO3: String, decimalSeparator decimal: String, groupingSeparator grouping: String, usingSymbol isSymbol: Bool) -> String? {
-        // Initialize currency format object
-        let locale = NSLocale(localeIdentifier: "en_US")
-        let currencyFormat = NSNumberFormatter()
+    /** Apply background to button. */
+    public func applyBackgroundImage(imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets) {
+        let imageDefault = UIImage(named: "\(imageName)_Default")?.resizableImageWithCapInsets(edgeInsets)
+        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImageWithCapInsets(edgeInsets)
+        let imageSelected = UIImage(named: "\(imageName)_Selected")?.resizableImageWithCapInsets(edgeInsets)
+        let imageDisabled = UIImage(named: "\(imageName)_Disabled")?.resizableImageWithCapInsets(edgeInsets)
 
-        // Layout currency
-        currencyFormat.formatterBehavior = NSNumberFormatterBehavior.Behavior10_4
-        currencyFormat.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp
-        currencyFormat.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+        self.setImage(imageDefault, forState: UIControlState.Normal)
+        self.setImage(imageHighlighted, forState: UIControlState.Highlighted)
+        self.setImage(imageSelected, forState: UIControlState.Selected)
+        self.setImage(imageDisabled, forState: UIControlState.Disabled)
+    }
 
-        currencyFormat.generatesDecimalNumbers = true
-        currencyFormat.locale = locale
+    /** Apply image to button. */
+    public func applyImage(imageName: String) {
+        let imageDefault = UIImage(named: "\(imageName)_Default")
+        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")
+        let imageSelected = UIImage(named: "\(imageName)_Selected")
+        let imageDisabled = UIImage(named: "\(imageName)_Disabled")
 
-        currencyFormat.currencyGroupingSeparator = grouping
-        currencyFormat.currencyDecimalSeparator = decimal
-
-        if isSymbol {
-            currencyFormat.positiveFormat = "\u{00a4}#,##0.00"
-            currencyFormat.negativeFormat = "- \u{00a4}#,##0.00"
-        } else {
-            currencyFormat.positiveFormat = "#,##0.00 \(currencyISO3)"
-            currencyFormat.negativeFormat = "- #,##0.00 \(currencyISO3)"
-        }
-        currencyFormat.currencyCode = currencyISO3
-
-        // Return result
-        return currencyFormat.stringFromNumber(self)
+        self.setImage(imageDefault, forState: UIControlState.Normal)
+        self.setImage(imageHighlighted, forState: UIControlState.Highlighted)
+        self.setImage(imageSelected, forState: UIControlState.Selected)
+        self.setImage(imageDisabled, forState: UIControlState.Disabled)
     }
 }

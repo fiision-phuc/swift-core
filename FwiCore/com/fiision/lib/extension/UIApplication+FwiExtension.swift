@@ -1,5 +1,5 @@
-// Project name: FwiCore
-//  File name   : UIColor+FwiExtension.swift
+//  Project name: FwiCore
+//  File name   : UIApplication+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 6/13/16
@@ -39,19 +39,44 @@
 import UIKit
 import Foundation
 
-public extension UIColor {
+public extension UIApplication {
 
-    /** Convert hex to color. */
-    public class func rgb(rgb: UInt32) -> UIColor {
-        return UIColor(red: CGFloat((rgb & 0xff0000) >> 16) / 255.0,
-                       green: CGFloat((rgb & 0x00ff00) >> 8) / 255.0,
-                       blue: CGFloat(rgb & 0x0000ff) / 255.0,
-                       alpha: CGFloat(1.0))
+    /** Define whether the device is iPad or not. */
+    public class func isPad() -> Bool {
+        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad
     }
-    public class func rgba(rgba: UInt32) -> UIColor {
-        return UIColor(red: CGFloat((rgba & 0xff000000) >> 24) / 255.0,
-                       green: CGFloat((rgba & 0x00ff0000) >> 16) / 255.0,
-                       blue: CGFloat((rgba & 0x0000ff00) >> 8) / 255.0,
-                       alpha: CGFloat(rgba & 0x000000ff) / 255.0)
+    /** Define whether the device is iPhone or not. */
+    public class func isPhone() -> Bool {
+        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Phone
+    }
+
+    /** Return iOS major version. */
+    public class func osMajor() -> Int {
+        if let
+        token = UIDevice.currentDevice().systemVersion.split("."),
+            major = Int(token[0]) {
+                return major
+        }
+        return 0
+    }
+    /** Return iOS minor version. */
+    public class func osMinor() -> Int {
+        if let
+        token = UIDevice.currentDevice().systemVersion.split(".") where token.count >= 2,
+            let minor = Int(token[1]) {
+                return minor
+        }
+        return 0
+    }
+
+    /** Enable remote notification. */
+    public class func enableRemoteNotification() {
+    #if (arch(i386) || arch(x86_64)) && os(iOS)
+        print("Push notification does not support this device.")
+    #else
+        let settings = UIUserNotificationSettings(forTypes: UIUserNotificationType(rawValue: UIUserNotificationType.Alert.rawValue | UIUserNotificationType.Badge.rawValue | UIUserNotificationType.Sound.rawValue), categories: nil)
+        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+        UIApplication.sharedApplication().registerForRemoteNotifications()
+    #endif
     }
 }
