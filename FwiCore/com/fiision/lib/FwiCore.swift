@@ -39,6 +39,7 @@
 import UIKit
 import Foundation
 
+
 // Degree/Radians Values
 public let FLT_EPSILON: CGFloat = 1.19209e-07
 
@@ -48,23 +49,25 @@ public let Metric_Circle: Float = 6.28319 // (360 degree)
 
 // Log Function
 public func FwiLog(className: String = #file, methodName: String = #function, line: Int = #line, message: String?) {
-#if DEBUG
-    let name = className.componentsSeparatedByString("/").last
-
-    if name != nil && name?.isEmpty != true {
-        if message != nil && message?.isEmpty != true {
-            print("\(name!) > \(methodName)[\(NSDate()) \(line)]: \(message!)")
-        } else {
-            print("\(name!) > \(methodName)[\(NSDate()) \(line)]")
+    #if DEBUG
+        let name = className.componentsSeparatedByString("/").last
+        
+        if name != nil && name?.isEmpty != true {
+            if message != nil && message?.isEmpty != true {
+                print("\(name!) > \(methodName)[\(NSDate()) \(line)]: \(message!)")
+            }
+            else {
+                print("\(name!) > \(methodName)[\(NSDate()) \(line)]")
+            }
         }
-    } else {
-        if message != nil && message?.isEmpty != true {
-            print("\(methodName)[\(NSDate()) \(line)]: \(message!)")
-        } else {
-            print("\(methodName)[\(NSDate()) \(line)]")
+        else {
+            if message != nil && message?.isEmpty != true {
+                print("\(methodName)[\(NSDate()) \(line)]: \(message!)")
+            } else {
+                print("\(methodName)[\(NSDate()) \(line)]")
+            }
         }
-    }
-#endif
+    #endif
 }
 
 // Metric Functions

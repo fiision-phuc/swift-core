@@ -40,25 +40,25 @@ import Foundation
 
 
 public extension NSData {
-
+    
     // MARK: Validate Hex
     public func isHex() -> Bool {
         /* Condition validation */
         if length <= 0 || (length % 2) != 0 {
             return false
         }
-
+        
         // Load bytes buffer
         let bytes = UnsafePointer<UInt8>(self.bytes)
         let step = length >> 1
         var end = length - 1
-
+        
         // Validate each byte
         var isHex = true
         for i in 0..<step {
             let hex1 = bytes[i]
             let hex2 = bytes[end]
-
+            
             isHex = isHex && (hex1 >= 0 || hex1 < UInt8(decodingTable.count))
             isHex = isHex && (hex2 >= 0 || hex2 < UInt8(decodingTable.count))
             if !isHex {
@@ -68,22 +68,22 @@ public extension NSData {
         }
         return isHex
     }
-
+    
     // MARK: Decode Hex
     public func decodeHexData() -> NSData? {
         /* Condition validation */
         if !isHex() {
             return nil
         }
-
+        
         let l = length >> 1
         var outputBytes = [UInt8](count: l, repeatedValue: 0)
-
+        
         let chars = UnsafePointer<UInt8>(bytes)
         for i in 0.stride(to: l, by: 2) {
             let b1 = chars[i]
             let b2 = chars[i + 1]
-
+            
             outputBytes[i / 2] = ((decodingTable[Int(b1)] << 4) | decodingTable[Int(b2)])
         }
         return NSData(bytes: outputBytes, length: l)
@@ -95,24 +95,24 @@ public extension NSData {
         }
         return decodeHexData()?.toString()
     }
-
+    
     // MARK: Encode Hex
     public func encodeHexData() -> NSData? {
         /* Condition validation */
         if length <= 0 {
             return nil
         }
-
+        
         let l = length << 1
         var outputBytes = [UInt8](count: l, repeatedValue: 0)
-
+        
         var j = 0
         let bytes = UnsafePointer<UInt8>(self.bytes)
         for i in 0.stride(to: l, by: 2) {
             let b = bytes[j]
             outputBytes[i] = encodingTable[Int(b >> 4)]
             outputBytes[i + 1] = encodingTable[Int(b & 0x0f)]
-
+            
             j += 1
         }
         return NSData(bytes: outputBytes, length: l)

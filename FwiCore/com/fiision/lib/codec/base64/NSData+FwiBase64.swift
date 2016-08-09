@@ -40,25 +40,25 @@ import Foundation
 
 
 public extension NSData {
-
+    
     // MARK: Validate base64
     public func isBase64() -> Bool {
         /* Condition validation */
         if length <= 0 || (length % 4) != 0 {
             return false
         }
-
+        
         // Load bytes buffer
         let bytes = UnsafePointer<UInt8>(self.bytes)
         let step = self.length >> 1
         var end = self.length - 1
-
+        
         // Validate each byte
         var isBase64 = true
         for i in 0 ..< step {
             let octet1 = bytes[i]
             let octet2 = bytes[end]
-
+            
             isBase64 = isBase64 && (octet1 == UTF8.CodeUnit(ascii: "=") || octet1 < UInt8(decodingTable.count))
             isBase64 = isBase64 && (octet2 == UTF8.CodeUnit(ascii: "=") || octet2 < UInt8(decodingTable.count))
             if !isBase64 {
@@ -68,23 +68,23 @@ public extension NSData {
         }
         return isBase64
     }
-
+    
     // MARK: Decode base64
     public func decodeBase64Data() -> NSData? {
         /* Condition validation */
         if !isBase64() {
             return nil
         }
-
+        
         // Initialize buffer
         var b1, b2, b3, b4: UInt8
         let bytes = UnsafePointer<UInt8>(self.bytes)
-
+        
         // Calculate output length
         let end = length
         let finish = end - 4
         var l = (finish >> 2) * 3
-
+        
         if bytes[end - 2] == UTF8.CodeUnit(ascii: "=") {
             l += 1
         } else if bytes[end - 1] == UTF8.CodeUnit(ascii: "=") {
@@ -92,10 +92,10 @@ public extension NSData {
         } else {
             l += 3
         }
-
+        
         // Create output buffer
         var outputBytes = [UInt8](count: l, repeatedValue: 0)
-
+        
         // Decoding process
         var index = 0
         for i in 0.stride(to: finish, by: 4) {
@@ -103,25 +103,25 @@ public extension NSData {
             b2 = decodingTable[Int(bytes[i + 1])]
             b3 = decodingTable[Int(bytes[i + 2])]
             b4 = decodingTable[Int(bytes[i + 3])]
-
+            
             outputBytes[index] = (b1 << 2) | (b2 >> 4)
             outputBytes[index.advancedBy(1)] = (b2 << 4) | (b3 >> 2)
             outputBytes[index.advancedBy(2)] = (b3 << 6) | b4
-
+            
             index = index.advancedBy(3)
         }
-
+        
         // Decoding last block process
         if bytes[end - 2] == UTF8.CodeUnit(ascii: "=") {
             b1 = decodingTable[Int(bytes[end - 4])]
             b2 = decodingTable[Int(bytes[end - 3])]
-
+            
             outputBytes[index] = (b1 << 2) | (b2 >> 4)
         } else if bytes[end - 1] == UTF8.CodeUnit(ascii: "=") {
             b1 = decodingTable[Int(bytes[end - 4])]
             b2 = decodingTable[Int(bytes[end - 3])]
             b3 = decodingTable[Int(bytes[end - 2])]
-
+            
             outputBytes[index] = (b1 << 2) | (b2 >> 4)
             outputBytes[index.advancedBy(1)] = (b2 << 4) | (b3 >> 2)
         } else {
@@ -129,7 +129,7 @@ public extension NSData {
             b2 = decodingTable[Int(bytes[end - 3])]
             b3 = decodingTable[Int(bytes[end - 2])]
             b4 = decodingTable[Int(bytes[end - 1])]
-
+            
             outputBytes[index] = (b1 << 2) | (b2 >> 4)
             outputBytes[index.advancedBy(1)] = (b2 << 4) | (b3 >> 2)
             outputBytes[index.advancedBy(2)] = (b3 << 6) | b4
@@ -143,23 +143,23 @@ public extension NSData {
         }
         return decodeBase64Data()?.toString()
     }
-
+    
     // MARK: Encode base64
     public func encodeBase64Data() -> NSData? {
         /* Condition validation */
         if length <= 0 {
             return nil
         }
-
+        
         // Calculate output length
         let modulus = length % 3
         let dataLength = length - modulus
         let outputLength = (dataLength / 3) * 4 + ((modulus == 0) ? 0 : 4)
-
+        
         // Create output space
         let bytes = UnsafePointer<UInt8>(self.bytes)
         var outputBytes = [UInt8](count: outputLength, repeatedValue: 0)
-
+        
         // Encoding process
         var index = 0
         var a1, a2, a3: UInt8
@@ -167,15 +167,15 @@ public extension NSData {
             a1 = bytes[i]
             a2 = bytes[i + 1]
             a3 = bytes[i + 2]
-
+            
             outputBytes[index] = encodingTable[Int((a1 >> 2) & 0x3f)]
             outputBytes[index.advancedBy(1)] = encodingTable[Int(((a1 << 4) | (a2 >> 4)) & 0x3f)]
             outputBytes[index.advancedBy(2)] = encodingTable[Int(((a2 << 2) | (a3 >> 6)) & 0x3f)]
             outputBytes[index.advancedBy(3)] = encodingTable[Int(a3 & 0x3f)]
-
+            
             index = index.advancedBy(4)
         }
-
+        
         // Process the tail end
         var b1, b2, b3: UInt8
         var d1, d2: UInt8
@@ -184,27 +184,27 @@ public extension NSData {
             d1 = bytes[dataLength]
             b1 = (d1 >> 2) & 0x3f
             b2 = (d1 << 4) & 0x3f
-
+            
             outputBytes[index] = encodingTable[Int(b1)]
             outputBytes[index.advancedBy(1)] = encodingTable[Int(b1)]
             outputBytes[index.advancedBy(2)] = UTF8.CodeUnit(ascii: "=")
             outputBytes[index.advancedBy(3)] = UTF8.CodeUnit(ascii: "=")
             break
-
+            
         case 2:
             d1 = bytes[dataLength]
             d2 = bytes[dataLength + 1]
-
+            
             b1 = (d1 >> 2) & 0x3f
             b2 = ((d1 << 4) | (d2 >> 4)) & 0x3f
             b3 = (d2 << 2) & 0x3f
-
+            
             outputBytes[index] = encodingTable[Int(b1)]
             outputBytes[index.advancedBy(1)] = encodingTable[Int(b2)]
             outputBytes[index.advancedBy(2)] = encodingTable[Int(b3)]
             outputBytes[index.advancedBy(3)] = UTF8.CodeUnit(ascii: "=")
             break
-
+            
         default:
             break
         }

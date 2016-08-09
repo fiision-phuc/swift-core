@@ -39,7 +39,7 @@
 import Foundation
 
 public extension String {
-
+    
     // MARK: Validate base64
     public func isBase64() -> Bool {
         if let isBase64 = toData()?.isBase64() {
@@ -47,7 +47,7 @@ public extension String {
         }
         return false
     }
-
+    
     // MARK: Decode base64
     public func decodeBase64Data() -> NSData? {
         if let data = toData()?.decodeBase64Data() {
@@ -61,7 +61,7 @@ public extension String {
         }
         return nil
     }
-
+    
     // MARK: Encode base64
     public func encodeBase64Data() -> NSData? {
         if let data = toData()?.encodeBase64Data() {
