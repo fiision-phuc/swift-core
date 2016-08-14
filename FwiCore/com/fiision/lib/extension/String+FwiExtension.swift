@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : String+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -41,11 +41,11 @@ import Foundation
 public extension String {
 
     /** Generate random identifier base on uuid. */
-    public static func randomIdentifier() -> String {
-        let uuidRef = CFUUIDCreate(nil)
-        let cfString = CFUUIDCreateString(nil, uuidRef)
-
-        return cfString as String
+    public static func randomIdentifier() -> String? {
+        if let uuidRef = CFUUIDCreate(nil), cfString = CFUUIDCreateString(nil, uuidRef) {
+            return cfString as String
+        }
+        return nil
     }
 
     /** Generate timestamp string. */
@@ -60,12 +60,8 @@ public extension String {
             return false
         }
 
-        if let
-        text1 = self.lowercaseString.trim(),
-            text2 = otherString?.lowercaseString.trim() {
-                return (text1 == text2)
-        }
-        return false
+        let (text1, text2) = (self.lowercaseString.trim(), otherString?.lowercaseString.trim())
+        return text1 == text2
     }
 
     /** Validate string. */
@@ -89,10 +85,11 @@ public extension String {
             if let matches = regex?.numberOfMatchesInString(self, options: .Anchored, range: NSMakeRange(0, self.length())) {
                 return (matches == 1)
             }
-            return false
-        } catch _ {
-            return false
         }
+        catch _ {
+            // Ignore error and suppose it is not matched pattern.
+        }
+        return false
     }
 
     /** Calculate string length. */
@@ -109,16 +106,16 @@ public extension String {
     }
 
     /** Convert html string compatible to string. */
-    public func decodeHTML() -> String? {
+    public func decodeHTML() -> String {
         return CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, self, "") as String
     }
     /** Convert string to html string compatible. */
-    public func encodeHTML() -> String? {
-        return stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet(charactersInString: ":/=,!$&'()*+[]@#?"))
+    public func encodeHTML() -> String {
+        return stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet(charactersInString: ":/=,!$&'()*+[]@#?")) ?? ""
     }
 
     /** Split string into components. */
-    public func split(separator: String) -> [String]? {
+    public func split(separator: String) -> [String] {
         return componentsSeparatedByString(separator)
     }
 
@@ -129,7 +126,7 @@ public extension String {
     }
 
     /** Trim all spaces before and after a string. */
-    public func trim() -> String? {
+    public func trim() -> String {
         return stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
     }
 }

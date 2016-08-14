@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : NSNumber+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -37,6 +37,7 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
+
 
 public extension NSNumber {
 

@@ -36,44 +36,11 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import Foundation
 import UIKit
+import Foundation
 
-public enum FwiOperationState: UInt8 {
-    case Initialize = 0x00
-    case Executing = 0x01
-    case Cancelled = 0x02
-    case Finished = 0x03
-    case Error = 0x04
-}
-
-private var operationQueue: NSOperationQueue?
 
 public class FwiOperation: NSOperation {
-
-    // MARK: Environment initialize
-    public class override func initialize() {
-        objc_sync_enter(self) // Lock
-        if operationQueue == nil {
-            operationQueue = NSOperationQueue()
-        }
-        operationQueue?.maxConcurrentOperationCount = 5
-
-        // // Define quality of service if system version is from 8
-        // if let version = Int(UIDevice.currentDevice().systemName) {
-        // if version >= 8 {
-        // if #available(iOS 8.0, *) {
-        // operationQueue?.qualityOfService = NSQualityOfService.Utility
-        // } else {
-        // // Fallback on earlier versions
-        // }
-        // }
-        // }
-        objc_sync_exit(self) // Unlock
-    }
-    public class func getPrivateQueue() -> NSOperationQueue? {
-        return operationQueue
-    }
 
     // MARK: Class's constructors
     public override init() {
@@ -81,16 +48,14 @@ public class FwiOperation: NSOperation {
     }
 
     // MARK: Class's properties
-    public var identifier: String?
-    public weak var delegate: FwiOperationDelegate?
-
     public var isLongOperation = false
-    public var state = FwiOperationState.Initialize
+    public lazy var identifier: String = {
+        return String()
+    }()
 
-    private var isFinished = false
+    private var isFinished  = false
     private var isCancelled = false
     private var isExecuting = false
-
     private var userInfo: [String: AnyObject]?
     private var bgTask: UIBackgroundTaskIdentifier?
 
@@ -99,7 +64,8 @@ public class FwiOperation: NSOperation {
         // Always check for cancellation before launching the task.
         if cancelled {
             operationCompleted()
-        } else {
+        }
+        else {
             // Register bgTask
             bgTask = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({ () -> Void in
                 /* Condition validatioN: Is long operation */
@@ -109,34 +75,21 @@ public class FwiOperation: NSOperation {
 
                 // Cancel this operation
                 self.cancel()
-
-                // Terminate background task
-                if self.bgTask != nil && self.bgTask != UIBackgroundTaskInvalid {
-                    UIApplication.sharedApplication().endBackgroundTask(self.bgTask!)
-                    self.bgTask = UIBackgroundTaskInvalid
-                }
+                self.operationCompleted()
             })
 
             // Add to operation queue
-            operationQueue?.addOperation(self)
+            operationQueue.addOperation(self)
         }
     }
 
     /** Implement business logic. */
     public func businessLogic() {
-        // To be overrided.
+        preconditionFailure("This function must be overridden.")
     }
 
     // MARK: Class's private methods
     private func operationCompleted() {
-        // Check operation stage
-        if (state == .Executing) {
-            state = .Finished
-        }
-
-        // Notify delegate
-        delegate?.operationDidFinish?(self, withState: state.rawValue, userInfo: userInfo)
-
         // Terminate operation
         willChangeValueForKey("isExecuting")
         willChangeValueForKey("isFinished")
@@ -146,8 +99,8 @@ public class FwiOperation: NSOperation {
         didChangeValueForKey("isFinished")
 
         // Terminate background task
-        if bgTask != nil && bgTask != UIBackgroundTaskInvalid {
-            UIApplication.sharedApplication().endBackgroundTask(bgTask!)
+        if let task = bgTask where bgTask != UIBackgroundTaskInvalid {
+            UIApplication.sharedApplication().endBackgroundTask(task)
             bgTask = UIBackgroundTaskInvalid
         }
     }
@@ -176,12 +129,6 @@ public class FwiOperation: NSOperation {
 
     public override func cancel() {
         isCancelled = true
-        state = .Cancelled
-
-        // Notify delegate
-        delegate?.operationDidCancel?(self)
-
-        // Return event to super
         super.cancel()
     }
 
@@ -190,10 +137,8 @@ public class FwiOperation: NSOperation {
             // Always check for cancellation before launching the task.
             if cancelled {
                 operationCompleted()
-            } else {
-                delegate?.operationWillStart?(self)
-                state = .Executing
-
+            }
+            else {
                 // If the operation is not canceled, begin executing the task.
                 willChangeValueForKey("isExecuting")
                 isExecuting = true
@@ -209,24 +154,23 @@ public class FwiOperation: NSOperation {
     }
 }
 
-// Extension
+
+// MARK: Extension
 public extension FwiOperation {
 
     /** Execute business with completion closure. */
-    public func executeWithCompletion(completion: (() -> Void)?) {
+    public func executeWithCompletion(completion:(() -> Void)?) {
         super.completionBlock = completion
         execute()
     }
 }
 
-// Delegate
-@objc
-public protocol FwiOperationDelegate {
 
-    /** Notify delegate this operation will start. */
-    optional func operationWillStart(operation: FwiOperation)
-    /** Notify delegate this operation was cancelled. */
-    optional func operationDidCancel(operation: FwiOperation)
-    /** Notify delegate that this operation finished. */
-    optional func operationDidFinish(operation: FwiOperation, withState state: UInt8, userInfo info: [String: AnyObject]?)
-}
+// MARK: Private queue
+public var operationQueue: NSOperationQueue = {
+    let operationQueue = NSOperationQueue()
+    operationQueue.maxConcurrentOperationCount = 5
+    operationQueue.qualityOfService = NSQualityOfService.Utility
+    
+    return operationQueue
+}()

@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : UIApplication+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -52,31 +52,32 @@ public extension UIApplication {
 
     /** Return iOS major version. */
     public class func osMajor() -> Int {
-        if let
-        token = UIDevice.currentDevice().systemVersion.split("."),
-            major = Int(token[0]) {
-                return major
+        let token = UIDevice.currentDevice().systemVersion.split(".")
+        if let major = Int(token[0]) {
+            return major
         }
         return 0
     }
     /** Return iOS minor version. */
     public class func osMinor() -> Int {
-        if let
-        token = UIDevice.currentDevice().systemVersion.split(".") where token.count >= 2,
-            let minor = Int(token[1]) {
-                return minor
+        let token = UIDevice.currentDevice().systemVersion.split(".")
+        if let minor = Int(token[1]) where token.count >= 2 {
+            return minor
         }
         return 0
     }
 
     /** Enable remote notification. */
     public class func enableRemoteNotification() {
-    #if (arch(i386) || arch(x86_64)) && os(iOS)
-        print("Push notification does not support this device.")
-    #else
-        let settings = UIUserNotificationSettings(forTypes: UIUserNotificationType(rawValue: UIUserNotificationType.Alert.rawValue | UIUserNotificationType.Badge.rawValue | UIUserNotificationType.Sound.rawValue), categories: nil)
-        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
-        UIApplication.sharedApplication().registerForRemoteNotifications()
-    #endif
+        #if (arch(i386) || arch(x86_64)) && os(iOS)
+            print("Remote notification does not support this device.")
+        #else
+            let notificationType = UIUserNotificationType.Alert.union(UIUserNotificationType.Badge)
+                                                               .union(UIUserNotificationType.Sound)
+            
+            let settings = UIUserNotificationSettings(forTypes: notificationType, categories: nil)
+            UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+            UIApplication.sharedApplication().registerForRemoteNotifications()
+        #endif
     }
 }

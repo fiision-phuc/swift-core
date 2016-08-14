@@ -38,6 +38,7 @@
 
 import Foundation
 
+
 public extension NSString {
     
     // MARK: Validate Hex

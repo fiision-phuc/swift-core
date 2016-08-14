@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : NSURL+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -43,12 +43,12 @@ public extension NSURL {
     /** URL to main cache folder. */
     public class func cacheDirectory() -> NSURL? {
         let array = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
-        return array.last
+        return array.first
     }
 
     /** URL to main document folder. */
     public class func documentDirectory() -> NSURL? {
         let array = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return array.last
+        return array.first
     }
 }

@@ -38,6 +38,7 @@
 
 import Foundation
 
+
 public extension String {
     
     // MARK: Validate base64

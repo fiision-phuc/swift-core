@@ -89,27 +89,28 @@ public extension UIView {
     /** Find first responder within tree views. */
     public func findFirstResponder() -> UIView? {
         /* Condition validation */
-        if (self.isFirstResponder()) {
+        if self.isFirstResponder() {
             return self
         }
 
         // Find and resign first responder
         for view in self.subviews {
-            if (view.isFirstResponder()) {
+            if view.isFirstResponder() {
                 return view
-            } else {
+            }
+            else {
                 return view.findFirstResponder()
             }
         }
-
         return nil
     }
 
     /** Find and resign first responder within tree views. */
     public func findAndResignFirstResponder() {
-        if (self.isFirstResponder()) {
+        if self.isFirstResponder() {
             self.resignFirstResponder()
-        } else {
+        }
+        else {
             let firstResponder = self.findFirstResponder()
             firstResponder?.resignFirstResponder()
         }

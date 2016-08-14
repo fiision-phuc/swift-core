@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BE0E7C831A67AC63005079A9 /* FwiOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0E7C821A67AC63005079A9 /* FwiOperationTest.swift */; };
 		BE2A158F1D54F2E9007D60BC /* NSData+FwiBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15761D54F2E9007D60BC /* NSData+FwiBase64.swift */; };
 		BE2A15901D54F2E9007D60BC /* NSString+FwiBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15771D54F2E9007D60BC /* NSString+FwiBase64.swift */; };
 		BE2A15911D54F2E9007D60BC /* String+FwiBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A15781D54F2E9007D60BC /* String+FwiBase64.swift */; };
@@ -29,15 +28,16 @@
 		BE2A15A11D54F2E9007D60BC /* UIView+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A158A1D54F2E9007D60BC /* UIView+FwiExtension.swift */; };
 		BE2A15A21D54F2E9007D60BC /* FwiOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A158C1D54F2E9007D60BC /* FwiOperation.swift */; };
 		BE2A15A31D54F2E9007D60BC /* FwiReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A158E1D54F2E9007D60BC /* FwiReachability.swift */; };
-		BE3C416D1A210B4A009910E7 /* FwiBase64DataTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3C416C1A210B4A009910E7 /* FwiBase64DataTest.swift */; };
-		BE3C416F1A210B5A009910E7 /* FwiHexDataTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3C416E1A210B5A009910E7 /* FwiHexDataTest.swift */; };
-		BE3C41711A210B6E009910E7 /* FwiBase64StringTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3C41701A210B6E009910E7 /* FwiBase64StringTest.swift */; };
-		BE3C41731A210B80009910E7 /* FwiHexStringTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3C41721A210B80009910E7 /* FwiHexStringTest.swift */; };
 		BE5D54F61D0F057000E69F30 /* FwiCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5D54E31D0F057000E69F30 /* FwiCore.swift */; };
 		BEA6D1E41A1D2090005021BB /* FwiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA6D1D81A1D2090005021BB /* FwiCore.framework */; };
-		BEC2E4741A26D5DA00A47694 /* FwiExtensionStringTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC2E4731A26D5DA00A47694 /* FwiExtensionStringTest.swift */; };
-		BEC5935D1A2642FA00D3A205 /* FwiExtensionDataTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC5935C1A2642FA00D3A205 /* FwiExtensionDataTest.swift */; };
-		BEC5935F1A26A72200D3A205 /* FwiExtensionNumberTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC5935E1A26A72200D3A205 /* FwiExtensionNumberTest.swift */; };
+		BEB71AB21D60CF6B00F969E0 /* FwiBase64DataTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB71AA71D60CF6B00F969E0 /* FwiBase64DataTest.swift */; };
+		BEB71AB31D60CF6B00F969E0 /* FwiBase64StringTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB71AA81D60CF6B00F969E0 /* FwiBase64StringTest.swift */; };
+		BEB71AB41D60CF6B00F969E0 /* FwiHexDataTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB71AAA1D60CF6B00F969E0 /* FwiHexDataTest.swift */; };
+		BEB71AB51D60CF6B00F969E0 /* FwiHexStringTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB71AAB1D60CF6B00F969E0 /* FwiHexStringTest.swift */; };
+		BEB71AB61D60CF6B00F969E0 /* FwiExtensionDataTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB71AAD1D60CF6B00F969E0 /* FwiExtensionDataTest.swift */; };
+		BEB71AB71D60CF6B00F969E0 /* FwiExtensionNumberTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB71AAE1D60CF6B00F969E0 /* FwiExtensionNumberTest.swift */; };
+		BEB71AB81D60CF6B00F969E0 /* FwiExtensionStringTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB71AAF1D60CF6B00F969E0 /* FwiExtensionStringTest.swift */; };
+		BEB71AB91D60CF6B00F969E0 /* FwiOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB71AB11D60CF6B00F969E0 /* FwiOperationTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,7 +51,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		BE0E7C821A67AC63005079A9 /* FwiOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiOperationTest.swift; sourceTree = "<group>"; };
 		BE2A15761D54F2E9007D60BC /* NSData+FwiBase64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+FwiBase64.swift"; sourceTree = "<group>"; };
 		BE2A15771D54F2E9007D60BC /* NSString+FwiBase64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSString+FwiBase64.swift"; sourceTree = "<group>"; };
 		BE2A15781D54F2E9007D60BC /* String+FwiBase64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+FwiBase64.swift"; sourceTree = "<group>"; };
@@ -73,18 +72,19 @@
 		BE2A158A1D54F2E9007D60BC /* UIView+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+FwiExtension.swift"; sourceTree = "<group>"; };
 		BE2A158C1D54F2E9007D60BC /* FwiOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiOperation.swift; sourceTree = "<group>"; };
 		BE2A158E1D54F2E9007D60BC /* FwiReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiReachability.swift; sourceTree = "<group>"; };
-		BE3C416C1A210B4A009910E7 /* FwiBase64DataTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiBase64DataTest.swift; sourceTree = "<group>"; };
-		BE3C416E1A210B5A009910E7 /* FwiHexDataTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiHexDataTest.swift; sourceTree = "<group>"; };
-		BE3C41701A210B6E009910E7 /* FwiBase64StringTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiBase64StringTest.swift; sourceTree = "<group>"; };
-		BE3C41721A210B80009910E7 /* FwiHexStringTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiHexStringTest.swift; sourceTree = "<group>"; };
 		BE5D54E31D0F057000E69F30 /* FwiCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiCore.swift; sourceTree = "<group>"; };
 		BEA6D1D81A1D2090005021BB /* FwiCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FwiCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEA6D1DC1A1D2090005021BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BEA6D1E31A1D2090005021BB /* FwiCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FwiCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEA6D1E91A1D2090005021BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BEC2E4731A26D5DA00A47694 /* FwiExtensionStringTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiExtensionStringTest.swift; sourceTree = "<group>"; };
-		BEC5935C1A2642FA00D3A205 /* FwiExtensionDataTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiExtensionDataTest.swift; sourceTree = "<group>"; };
-		BEC5935E1A26A72200D3A205 /* FwiExtensionNumberTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiExtensionNumberTest.swift; sourceTree = "<group>"; };
+		BEB71AA71D60CF6B00F969E0 /* FwiBase64DataTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiBase64DataTest.swift; sourceTree = "<group>"; };
+		BEB71AA81D60CF6B00F969E0 /* FwiBase64StringTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiBase64StringTest.swift; sourceTree = "<group>"; };
+		BEB71AAA1D60CF6B00F969E0 /* FwiHexDataTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiHexDataTest.swift; sourceTree = "<group>"; };
+		BEB71AAB1D60CF6B00F969E0 /* FwiHexStringTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiHexStringTest.swift; sourceTree = "<group>"; };
+		BEB71AAD1D60CF6B00F969E0 /* FwiExtensionDataTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiExtensionDataTest.swift; sourceTree = "<group>"; };
+		BEB71AAE1D60CF6B00F969E0 /* FwiExtensionNumberTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiExtensionNumberTest.swift; sourceTree = "<group>"; };
+		BEB71AAF1D60CF6B00F969E0 /* FwiExtensionStringTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiExtensionStringTest.swift; sourceTree = "<group>"; };
+		BEB71AB11D60CF6B00F969E0 /* FwiOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiOperationTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,15 +237,10 @@
 		BEA6D1E71A1D2090005021BB /* FwiCoreTests */ = {
 			isa = PBXGroup;
 			children = (
+				BEB71AA51D60CF6B00F969E0 /* codec */,
+				BEB71AAC1D60CF6B00F969E0 /* extension */,
+				BEB71AB01D60CF6B00F969E0 /* operation */,
 				BEA6D1E81A1D2090005021BB /* Supporting Files */,
-				BE3C416C1A210B4A009910E7 /* FwiBase64DataTest.swift */,
-				BE3C41701A210B6E009910E7 /* FwiBase64StringTest.swift */,
-				BE3C416E1A210B5A009910E7 /* FwiHexDataTest.swift */,
-				BE3C41721A210B80009910E7 /* FwiHexStringTest.swift */,
-				BEC5935C1A2642FA00D3A205 /* FwiExtensionDataTest.swift */,
-				BEC5935E1A26A72200D3A205 /* FwiExtensionNumberTest.swift */,
-				BEC2E4731A26D5DA00A47694 /* FwiExtensionStringTest.swift */,
-				BE0E7C821A67AC63005079A9 /* FwiOperationTest.swift */,
 			);
 			path = FwiCoreTests;
 			sourceTree = "<group>";
@@ -256,6 +251,51 @@
 				BEA6D1E91A1D2090005021BB /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BEB71AA51D60CF6B00F969E0 /* codec */ = {
+			isa = PBXGroup;
+			children = (
+				BEB71AA61D60CF6B00F969E0 /* base64 */,
+				BEB71AA91D60CF6B00F969E0 /* hex */,
+			);
+			path = codec;
+			sourceTree = "<group>";
+		};
+		BEB71AA61D60CF6B00F969E0 /* base64 */ = {
+			isa = PBXGroup;
+			children = (
+				BEB71AA71D60CF6B00F969E0 /* FwiBase64DataTest.swift */,
+				BEB71AA81D60CF6B00F969E0 /* FwiBase64StringTest.swift */,
+			);
+			path = base64;
+			sourceTree = "<group>";
+		};
+		BEB71AA91D60CF6B00F969E0 /* hex */ = {
+			isa = PBXGroup;
+			children = (
+				BEB71AAA1D60CF6B00F969E0 /* FwiHexDataTest.swift */,
+				BEB71AAB1D60CF6B00F969E0 /* FwiHexStringTest.swift */,
+			);
+			path = hex;
+			sourceTree = "<group>";
+		};
+		BEB71AAC1D60CF6B00F969E0 /* extension */ = {
+			isa = PBXGroup;
+			children = (
+				BEB71AAD1D60CF6B00F969E0 /* FwiExtensionDataTest.swift */,
+				BEB71AAE1D60CF6B00F969E0 /* FwiExtensionNumberTest.swift */,
+				BEB71AAF1D60CF6B00F969E0 /* FwiExtensionStringTest.swift */,
+			);
+			path = extension;
+			sourceTree = "<group>";
+		};
+		BEB71AB01D60CF6B00F969E0 /* operation */ = {
+			isa = PBXGroup;
+			children = (
+				BEB71AB11D60CF6B00F969E0 /* FwiOperationTest.swift */,
+			);
+			path = operation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -395,14 +435,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE3C416F1A210B5A009910E7 /* FwiHexDataTest.swift in Sources */,
-				BEC2E4741A26D5DA00A47694 /* FwiExtensionStringTest.swift in Sources */,
-				BEC5935D1A2642FA00D3A205 /* FwiExtensionDataTest.swift in Sources */,
-				BE0E7C831A67AC63005079A9 /* FwiOperationTest.swift in Sources */,
-				BE3C41731A210B80009910E7 /* FwiHexStringTest.swift in Sources */,
-				BE3C41711A210B6E009910E7 /* FwiBase64StringTest.swift in Sources */,
-				BEC5935F1A26A72200D3A205 /* FwiExtensionNumberTest.swift in Sources */,
-				BE3C416D1A210B4A009910E7 /* FwiBase64DataTest.swift in Sources */,
+				BEB71AB91D60CF6B00F969E0 /* FwiOperationTest.swift in Sources */,
+				BEB71AB31D60CF6B00F969E0 /* FwiBase64StringTest.swift in Sources */,
+				BEB71AB71D60CF6B00F969E0 /* FwiExtensionNumberTest.swift in Sources */,
+				BEB71AB21D60CF6B00F969E0 /* FwiBase64DataTest.swift in Sources */,
+				BEB71AB81D60CF6B00F969E0 /* FwiExtensionStringTest.swift in Sources */,
+				BEB71AB61D60CF6B00F969E0 /* FwiExtensionDataTest.swift in Sources */,
+				BEB71AB41D60CF6B00F969E0 /* FwiHexDataTest.swift in Sources */,
+				BEB71AB51D60CF6B00F969E0 /* FwiHexStringTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,6 +460,7 @@
 		BEA6D1EC1A1D2090005021BB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -466,6 +507,7 @@
 		BEA6D1ED1A1D2090005021BB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;

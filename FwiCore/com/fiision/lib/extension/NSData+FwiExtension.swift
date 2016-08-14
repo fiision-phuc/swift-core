@@ -1,4 +1,4 @@
-//  Project name: FwiCore
+// Project name: FwiCore
 //  File name   : NSData+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -51,7 +51,8 @@ public extension NSData {
         if length <= 0 {
             return nil
         }
-        return NSString(data: self, encoding: encoding) as? String
+
+        return String(data: self, encoding: encoding)
     }
 
     /** Clear all bytes data. */
