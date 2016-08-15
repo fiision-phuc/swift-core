@@ -49,7 +49,7 @@ public extension String {
     }
 
     /** Generate timestamp string. */
-    public static func timestamp() -> String? {
+    public static func timestamp() -> String {
         return "\(time(nil))"
     }
 
@@ -65,14 +65,7 @@ public extension String {
     }
 
     /** Validate string. */
-    public func matchPattern(pattern: String) -> Bool {
-        /* Condition validation */
-        if pattern.length() <= 0 {
-            return false
-        }
-        return matchPattern(pattern, expressionOption: .CaseInsensitive)
-    }
-    public func matchPattern(pattern: String, expressionOption option: NSRegularExpressionOptions) -> Bool {
+    public func matchPattern(pattern: String, expressionOption option: NSRegularExpressionOptions = .CaseInsensitive) -> Bool {
         /* Condition validation */
         if pattern.length() <= 0 {
             return false
@@ -98,10 +91,7 @@ public extension String {
     }
 
     /** Convert string to data. */
-    public func toData() -> NSData? {
-        return toDataWithEncoding(NSUTF8StringEncoding)
-    }
-    public func toDataWithEncoding(encoding: NSStringEncoding) -> NSData? {
+    public func toData(encoding: NSStringEncoding = NSUTF8StringEncoding) -> NSData? {
         return dataUsingEncoding(encoding, allowLossyConversion: false)
     }
 

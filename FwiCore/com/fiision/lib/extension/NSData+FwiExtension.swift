@@ -40,13 +40,8 @@ import Foundation
 
 public extension NSData {
 
-    /** Convert data to UTF8 string. */
-    public func toString() -> String? {
-        return toStringWithEncoding(NSUTF8StringEncoding)
-    }
-
     /** Convert data to string base on string encoding type. */
-    public func toStringWithEncoding(encoding: NSStringEncoding) -> String? {
+    public func toString(encoding: NSStringEncoding = NSUTF8StringEncoding) -> String? {
         /* Condition validation */
         if length <= 0 {
             return nil

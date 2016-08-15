@@ -42,10 +42,7 @@ import Foundation
 public extension UIView {
 
     /** Create image from current view. */
-    public func createImage() -> UIImage? {
-        return self.createImageWithScaleFactor(UIScreen.mainScreen().scale)
-    }
-    public func createImageWithScaleFactor(scaleFactor: CGFloat) -> UIImage? {
+    public func createImage(scaleFactor: CGFloat = UIScreen.mainScreen().scale) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, scaleFactor)
 
         // Translate graphic context to offset before render if view is table view
@@ -64,16 +61,9 @@ public extension UIView {
     }
 
     /** Create image from region of interest. */
-    public func createImageWithROI(roiRect: CGRect) -> UIImage? {
+    public func createImageWithROI(roiRect: CGRect, scaleFactor scale: CGFloat = UIScreen.mainScreen().scale) -> UIImage? {
         /* Condition validation: Validate ROI */
-        if (!CGRectContainsRect(self.bounds, roiRect)) {
-            return nil
-        }
-        return self.createImageWithROI(roiRect, scaleFactor: UIScreen.mainScreen().scale)
-    }
-    public func createImageWithROI(roiRect: CGRect, scaleFactor scale: CGFloat) -> UIImage? {
-        /* Condition validation: Validate ROI */
-        if (!CGRectContainsRect(self.bounds, roiRect)) {
+        if !CGRectContainsRect(self.bounds, roiRect) {
             return nil
         }
         UIGraphicsBeginImageContextWithOptions(roiRect.size, false, scale)

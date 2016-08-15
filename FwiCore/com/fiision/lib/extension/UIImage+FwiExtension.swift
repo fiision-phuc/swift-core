@@ -96,23 +96,15 @@ public extension UIImage {
     }
 
     /** Create blur effect image from original source. */
-    public func darkBlur() -> UIImage? {
-        return self.darkBlurWithRadius(20.0, saturationFactor: 1.9)
-    }
-    public func darkBlurWithRadius(radius: CGFloat, saturationFactor saturation: CGFloat) -> UIImage {
+    public func darkBlur(radius: CGFloat = 20.0, saturationFactor saturation: CGFloat = 1.9) -> UIImage {
         let tintColor = UIColor(white: 0.1, alpha: 0.5)
         return self.generateBlurImage(radius, tintColor: tintColor, saturationFactor: saturation)
     }
-
-    public func lightBlur() -> UIImage? {
-        return self.lightBlurWithRadius(20.0, saturationFactor: 1.9)
-    }
-    public func lightBlurWithRadius(radius: CGFloat, saturationFactor saturation: CGFloat) -> UIImage {
+    public func lightBlur(radius: CGFloat = 20.0, saturationFactor saturation: CGFloat = 1.9) -> UIImage {
         let tintColor = UIColor(white: 1.0, alpha: 0.5)
         return self.generateBlurImage(radius, tintColor: tintColor, saturationFactor: saturation)
     }
 
-    // MARK: Class's private methods
     public func generateBlurImage(blurRadius: CGFloat, tintColor tint: UIColor, saturationFactor s: CGFloat) -> UIImage {
         let imageRect = CGRectMake(0.0, 0.0, self.size.width, self.size.height)
         var effectImage = self

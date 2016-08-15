@@ -46,7 +46,7 @@ public extension NSString {
     }
 
     /** Generate timestamp string. */
-    public class func timestamp() -> String? {
+    public class func timestamp() -> String {
         return String.timestamp()
     }
 
@@ -56,37 +56,31 @@ public extension NSString {
     }
 
     /** Validate string. */
-    public func matchPattern(pattern: String) -> Bool {
-        return (self as String).matchPattern(pattern)
-    }
-    public func matchPattern(pattern: String, expressionOption option: NSRegularExpressionOptions) throws -> Bool {
+    public func matchPattern(pattern: String, expressionOption option: NSRegularExpressionOptions = .CaseInsensitive) -> Bool {
         return (self as String).matchPattern(pattern, expressionOption: option)
     }
 
     /** Convert string to data. */
-    public func toData() -> NSData? {
-        return (self as String).toData()
-    }
-    public func toDataWithEncoding(encoding: NSStringEncoding) -> NSData? {
-        return (self as String).toDataWithEncoding(encoding)
+    public func toData(encoding: NSStringEncoding = NSUTF8StringEncoding) -> NSData? {
+        return (self as String).toData(encoding)
     }
 
     /** Convert html string compatible to string. */
-    public func decodeHTML() -> String? {
+    public func decodeHTML() -> String {
         return (self as String).decodeHTML()
     }
     /** Convert string to html string compatible. */
-    public func encodeHTML() -> String? {
+    public func encodeHTML() -> String {
         return (self as String).encodeHTML()
     }
 
     /** Split string into components. */
-    public func split(separator: String) -> [String]? {
+    public func split(separator: String) -> [String] {
         return (self as String).split(separator)
     }
 
     /** Trim all spaces before and after a string. */
-    public func trim() -> String? {
+    public func trim() -> String {
         return (self as String).trim()
     }
 }
