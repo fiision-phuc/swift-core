@@ -1,4 +1,4 @@
-// Project name: FwiCore
+//  Project name: FwiCore
 //  File name   : UIImage+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -41,6 +41,7 @@ import Foundation
 import Accelerate
 import CoreGraphics
 
+
 public extension UIImage {
 
     /** Create a reflected image for specific view. */
@@ -48,7 +49,7 @@ public extension UIImage {
         let imgWidth = Int(round(CGRectGetWidth(view.bounds)))
         let imgHeight = Int(round(height))
         let colors: [CGFloat] = [0.0, 1.0, 1.0, 1.0]
-        
+
         // create a bitmap graphics context the size of the image
         let bitmapInfoRaw = CGBitmapInfo.ByteOrder32Little.union(CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue))
         if let
@@ -56,41 +57,39 @@ public extension UIImage {
             colorSpace1 = CGColorSpaceCreateDeviceRGB(),
             colorSpace2 = CGColorSpaceCreateDeviceGray(),
             grayscaleGradient = CGGradientCreateWithColorComponents(colorSpace2, colors, nil, 2),
-            mainContext = CGBitmapContextCreate(nil, imgWidth, imgHeight, 8, 0, colorSpace1, bitmapInfoRaw.rawValue)
-        {
+            mainContext = CGBitmapContextCreate(nil, imgWidth, imgHeight, 8, 0, colorSpace1, bitmapInfoRaw.rawValue) {
             // Create a 1 pixel wide gradient
             let bitmapInfoRawGradient = CGBitmapInfo.AlphaInfoMask.union(CGBitmapInfo(rawValue: CGImageAlphaInfo.None.rawValue))
             let gradientContext = CGBitmapContextCreate(nil, imgWidth, imgHeight, 8, 0, colorSpace2, bitmapInfoRawGradient.rawValue)
-            
+
             // Draw the gradient into the gray bitmap context
             let gradientStart = CGPoint.zero
             let gradientEnd = CGPointMake(0.0, CGFloat(imgHeight))
             CGContextDrawLinearGradient(gradientContext, grayscaleGradient, gradientStart, gradientEnd, CGGradientDrawingOptions.DrawsAfterEndLocation)
-            
+
             // Convert the context into a CGImageRef
             guard let imgGradientRef = CGBitmapContextCreateImage(gradientContext) else {
                 return nil
             }
-            
+
             // Create an image by masking the bitmap
             CGContextClipToMask(mainContext, CGRectMake(0.0, 0.0, CGFloat(imgWidth), CGFloat(imgHeight)), imgGradientRef)
-            
+
             // In order to grab the part of the image that we want to render, we move the context origin  to the height of the image
             CGContextTranslateCTM(mainContext, 0.0, height)
             CGContextScaleCTM(mainContext, 1.0, -1.0)
-            
+
             // Draw the image into the bitmap context
             CGContextDrawImage(mainContext, view.bounds, image.CGImage)
-            
+
             // Create CGImageRef
             guard let imgReflectedRef = CGBitmapContextCreateImage(mainContext) else {
                 return nil
             }
-            
+
             // Convert to UIImage
             return UIImage(CGImage: imgReflectedRef)
-        }
-        else {
+        } else {
             return nil
         }
     }
@@ -164,7 +163,7 @@ public extension UIImage {
                 // Convert saturation matrix from float to 8Bits value
                 let divisor: Int32 = 256
                 var saturationMatrix = [Int16](count: saturationMatrixf.count, repeatedValue: 0)
-                
+
                 for i in 0 ..< saturationMatrixf.count {
                     saturationMatrix[i] = Int16(roundf(Float(saturationMatrixf[i]) * Float(divisor)))
                 }
@@ -173,8 +172,7 @@ public extension UIImage {
                 if hasBlur {
                     vImageMatrixMultiply_ARGB8888(&outputBuffer, &inputBuffer, saturationMatrix, divisor, nil, nil, vImage_Flags(kvImageNoFlags))
                     isSwapped = true
-                }
-                else {
+                } else {
                     vImageMatrixMultiply_ARGB8888(&inputBuffer, &outputBuffer, saturationMatrix, divisor, nil, nil, vImage_Flags(kvImageNoFlags))
                 }
             }
@@ -218,7 +216,7 @@ public extension UIImage {
         // Output result
         let outputImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
+
         return outputImage
     }
 }

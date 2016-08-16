@@ -1,4 +1,4 @@
-// Project name: FwiCore
+//  Project name: FwiCore
 //  File name   : FwiOperationTest.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -39,6 +39,7 @@
 import XCTest
 @testable import FwiCore
 
+
 class FwiOperationTest: XCTestCase {
 
     // MARK: Setup
@@ -57,9 +58,7 @@ class FwiOperationTest: XCTestCase {
 
         XCTAssertNotNil(operation, "Operation must not be nil.")
         XCTAssertNil(operation.identifier, "Initial operation does not have any identifier.")
-        XCTAssertNil(operation.delegate, "Initial operation does not have any delegate.")
         XCTAssertFalse(operation.isLongOperation, "Initial operation is not a long operation.")
-        XCTAssertEqual(operation.state, FwiOperationState.Initialize, "Initial operation must be in initial state.")
 
         XCTAssertFalse(operation.finished, "Initial operation is not finished.")
         XCTAssertFalse(operation.cancelled, "Initial operation is not cancelled.")
@@ -71,7 +70,7 @@ class FwiOperationTest: XCTestCase {
         XCTAssertTrue(operation.cancelled, "Cancelled operation is cancelled.")
         XCTAssertFalse(operation.executing, "Cancelled operation is not executing.")
 
-        XCTAssertNotNil(FwiOperation.getPrivateQueue(), "Operation Queue must not be nil after first initialize an operation.")
+        XCTAssertNotNil(operationQueue, "Operation Queue must not be nil after first initialize an operation.")
     }
 
     func testCompletedOperation() {

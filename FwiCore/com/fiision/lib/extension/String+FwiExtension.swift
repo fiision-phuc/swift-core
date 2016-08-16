@@ -1,4 +1,4 @@
-// Project name: FwiCore
+//  Project name: FwiCore
 //  File name   : String+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -37,6 +37,7 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
+
 
 public extension String {
 
@@ -78,8 +79,7 @@ public extension String {
             if let matches = regex?.numberOfMatchesInString(self, options: .Anchored, range: NSMakeRange(0, self.length())) {
                 return (matches == 1)
             }
-        }
-        catch _ {
+        } catch _ {
             // Ignore error and suppose it is not matched pattern.
         }
         return false

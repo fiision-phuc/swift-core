@@ -1,4 +1,4 @@
-// Project name: FwiCore
+//  Project name: FwiCore
 //  File name   : FwiBase64StringTest.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -38,6 +38,7 @@
 
 import XCTest
 @testable import FwiCore
+
 
 class FwiBase64StringTest: XCTestCase {
 
@@ -123,7 +124,7 @@ class FwiBase64StringTest: XCTestCase {
         XCTAssertNil(string?.encodeBase64Data(), "Nil data should always return nil.")
 
         string = "つながって"
-        var base64Data = "44Gk44Gq44GM44Gj44Gm".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        let base64Data = "44Gk44Gq44GM44Gj44Gm".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
         XCTAssert(string?.encodeBase64Data() == base64Data, "つながって should be return as 44Gk44Gq44GM44Gj44Gm after encoded.")
 
         var nsstring: NSString? = nil

@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiExtensionNumberTest.swift
+//  File name   : JSONMapperTest.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 11/27/14
+//  Author      : Dung Vu
+//  Created date: 6/14/16
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -40,29 +40,75 @@ import XCTest
 @testable import FwiCore
 
 
-class FwiExtensionNumberTest: XCTestCase {
+class URLTest: NSObject {
+    var url: NSURL?
+}
 
-    // MARK: Setup
+class Test: NSObject, JSONModel {
+
+
+    var a: Int = 0
+    var z: URLTest?
+    var d: [String: AnyObject]?
+    var m: [String: URLTest]?
+    var arr: [URLTest]?
+    var arrNormal: [Int]?
+    var arrString: [String]?
+    var date: NSDate?
+    var dateStr: NSDate?
+
+    func keyMapper() -> [String : String] {
+        return ["test1":"a",
+                "test2":"z",
+                "test3":"d",
+                "test4":"m",
+                "test5":"arr",
+                "test6":"arrNormal",
+                "test7":"arrString",
+                "test8":"date" ,
+                "test9":"dateStr"
+        ]
+    }
+
+
+}
+
+
+class MapperTest: XCTestCase {
+
     override func setUp() {
         super.setUp()
     }
 
-    // MARK: Tear Down
     override func tearDown() {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
 
-    // MARK: Test Cases
-    func testCurrency() {
-        let currencyNumber = NSNumber(float: 2000)
+    func testExample() {
+        let dict = ["test1": 5,
+                    "test2": ["url": "https://www.google.com/?gws_rd=ssl"],
+                    "test3" : ["testDict" : "abc"],
+                    "test4": ["key" : ["url": "https://www.google.com/?gws_rd=ssl"]],
+                    "test5": [["url": "https://www.google.com/?gws_rd=ssl"],
+                        ["url": "https://www.google.com/?gws_rd=ssl"],
+                        ["url": "https://www.google.com/?gws_rd=ssl"]],
+                    "test6": [2, 4, 6],
+                    "test7": ["adad", "dadada", "duadgaud"],
+                    "test8": 1464768697,
+                    "test9": "2012-10-01T094500GMT"
 
-        var currencyString = currencyNumber.currencyWithISO3("USD", decimalSeparator: ".", groupingSeparator: ",", usingSymbol: true)
-        XCTAssertEqual(currencyString, "$2,000.00", "Currency string should be: $2,000.00")
+        ]
 
-        currencyString = currencyNumber.currencyWithISO3("USD", decimalSeparator: ".", groupingSeparator: ",", usingSymbol: false)
-        XCTAssertEqual(currencyString, "2,000.00 USD", "Currency string should be: 2,000.00 USD")
+//        let c = JSONMapper1.mapClassWithDictionary(Test.self, dict: dict).object
 
-        currencyString = currencyNumber.currencyWithISO3("USD", decimalSeparator: ",", groupingSeparator: ".", usingSymbol: true)
-        XCTAssertEqual(currencyString, "$2.000,00", "Currency string should be: $2.000,00")
+        var c = Test()
+        let error = JSONMapper.mapObjectToModel(dict, model: &c)
+
+
+        let dict1 = JSONMapper.toDictionary(c)
+        print(dict1)
+
     }
+
 }

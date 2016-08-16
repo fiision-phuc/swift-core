@@ -1,4 +1,4 @@
-// Project name: FwiCore
+//  Project name: FwiCore
 //  File name   : UIApplication+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -39,6 +39,7 @@
 import UIKit
 import Foundation
 
+
 public extension UIApplication {
 
     /** Define whether the device is iPad or not. */
@@ -74,7 +75,7 @@ public extension UIApplication {
         #else
             let notificationType = UIUserNotificationType.Alert.union(UIUserNotificationType.Badge)
                                                                .union(UIUserNotificationType.Sound)
-            
+
             let settings = UIUserNotificationSettings(forTypes: notificationType, categories: nil)
             UIApplication.sharedApplication().registerUserNotificationSettings(settings)
             UIApplication.sharedApplication().registerForRemoteNotifications()

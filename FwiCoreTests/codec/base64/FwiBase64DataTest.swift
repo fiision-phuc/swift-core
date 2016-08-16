@@ -1,4 +1,4 @@
-// Project name: FwiCore
+//  Project name: FwiCore
 //  File name   : FwiBase64DataTest.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -38,6 +38,7 @@
 
 import XCTest
 @testable import FwiCore
+
 
 class FwiBase64DataTest: XCTestCase {
 

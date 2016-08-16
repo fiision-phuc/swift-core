@@ -1,4 +1,4 @@
-// Project name: FwiCore
+//  Project name: FwiCore
 //  File name   : FwiHexDataTest.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -39,6 +39,7 @@
 import XCTest
 @testable import FwiCore
 
+
 class FwiHexDataTest: XCTestCase {
 
     // MARK: Setup
@@ -77,7 +78,7 @@ class FwiHexDataTest: XCTestCase {
         XCTAssertNil(hexData?.decodeHexData(), "Nil data should always return nil.")
 
         hexData = "467769436f7265".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
-        var data = "FwiCore".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        let data = "FwiCore".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
         XCTAssert(hexData?.decodeHexData() == data, "467769436f7265 should be return as FwiCore after decoded.")
     }
     func testDecodeHexString() {
@@ -93,7 +94,7 @@ class FwiHexDataTest: XCTestCase {
         XCTAssertNil(data?.encodeHexData(), "Nil data should always return nil.")
 
         data = "FwiCore".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
-        var base64Data = "467769436f7265".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        let base64Data = "467769436f7265".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
         XCTAssert(data?.encodeHexData() == base64Data, "FwiCore should be return as 467769436f7265 after encoded.")
     }
     func testEncodeHexString() {

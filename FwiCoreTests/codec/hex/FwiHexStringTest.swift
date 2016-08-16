@@ -1,4 +1,4 @@
-// Project name: FwiCore
+//  Project name: FwiCore
 //  File name   : FwiHexStringTest.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -36,9 +36,9 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import UIKit
 import XCTest
 @testable import FwiCore
+
 
 class FwiHexStringTest: XCTestCase {
 
@@ -124,7 +124,7 @@ class FwiHexStringTest: XCTestCase {
         XCTAssertNil(string?.encodeHexString(), "Nil data should always return nil.")
 
         string = "FwiCore"
-        var base64Data = "467769436f7265".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        let base64Data = "467769436f7265".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
         XCTAssert(string?.encodeHexData() == base64Data, "FwiCore should be return as 467769436f7265 after encoded.")
 
         var nsstring: NSString? = nil

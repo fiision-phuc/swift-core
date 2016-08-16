@@ -1,4 +1,4 @@
-// Project name: FwiCore
+//  Project name: FwiCore
 //  File name   : UIButton+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -39,10 +39,11 @@
 import UIKit
 import Foundation
 
+
 public extension UIButton {
 
     /** Apply background to button. */
-    public func applyBackgroundImage(imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets = UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0)) {
+    public func applyBackgroundImage(imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)) {
         let imageDefault = UIImage(named: "\(imageName)_Default")?.resizableImageWithCapInsets(edgeInsets)
         let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImageWithCapInsets(edgeInsets)
         let imageSelected = UIImage(named: "\(imageName)_Selected")?.resizableImageWithCapInsets(edgeInsets)

@@ -1,4 +1,4 @@
-// Project name: FwiCore
+//  Project name: FwiCore
 //  File name   : UIView+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -38,6 +38,7 @@
 
 import UIKit
 import Foundation
+
 
 public extension UIView {
 
@@ -87,8 +88,7 @@ public extension UIView {
         for view in self.subviews {
             if view.isFirstResponder() {
                 return view
-            }
-            else {
+            } else {
                 return view.findFirstResponder()
             }
         }
@@ -99,8 +99,7 @@ public extension UIView {
     public func findAndResignFirstResponder() {
         if self.isFirstResponder() {
             self.resignFirstResponder()
-        }
-        else {
+        } else {
             let firstResponder = self.findFirstResponder()
             firstResponder?.resignFirstResponder()
         }

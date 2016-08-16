@@ -1,4 +1,4 @@
-// Project name: FwiCore
+//  Project name: FwiCore
 //  File name   : FwiOperation.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -51,7 +51,7 @@ public class FwiOperation: NSOperation {
     // MARK: Class's properties
     public var isLongOperation = false
     public lazy var identifier: String = {
-        return String()
+        return String.randomIdentifier() ?? ""
     }()
 
     private var isFinished  = false
@@ -65,8 +65,7 @@ public class FwiOperation: NSOperation {
         // Always check for cancellation before launching the task.
         if cancelled {
             operationCompleted()
-        }
-        else {
+        } else {
             // Register bgTask
             bgTask = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({ () -> Void in
                 /* Condition validatioN: Is long operation */
@@ -138,8 +137,7 @@ public class FwiOperation: NSOperation {
             // Always check for cancellation before launching the task.
             if cancelled {
                 operationCompleted()
-            }
-            else {
+            } else {
                 // If the operation is not canceled, begin executing the task.
                 willChangeValueForKey("isExecuting")
                 isExecuting = true
@@ -172,6 +170,6 @@ public var operationQueue: NSOperationQueue = {
     let operationQueue = NSOperationQueue()
     operationQueue.maxConcurrentOperationCount = 5
     operationQueue.qualityOfService = NSQualityOfService.Utility
-    
+
     return operationQueue
 }()

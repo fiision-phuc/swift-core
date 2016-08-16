@@ -39,8 +39,9 @@
 import UIKit
 import Foundation
 
+
 public extension UIColor {
-    
+
     /** Convert hex to color. */
     public class func rgb(rgb: UInt32) -> UIColor {
         return UIColor(red: CGFloat((rgb & 0xff0000) >> 16) / 255.0,

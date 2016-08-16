@@ -40,25 +40,25 @@ import Foundation
 
 
 public extension NSString {
-    
+
     // MARK: Validate Hex
-    public func isHex()->Bool {
+    public func isHex() -> Bool {
         return (self as String).isHex()
     }
-    
+
     // MARK: Decode Hex
-    public func decodeHexData()->NSData? {
+    public func decodeHexData() -> NSData? {
         return (self as String).decodeHexData()
     }
-    public func decodeHexString()->String? {
+    public func decodeHexString() -> String? {
         return (self as String).decodeHexString()
     }
-    
+
     // MARK: Encode Hex
-    public func encodeHexData()->NSData? {
+    public func encodeHexData() -> NSData? {
         return (self as String).encodeHexData()
     }
-    public func encodeHexString()->String? {
+    public func encodeHexString() -> String? {
         return (self as String).encodeHexString()
     }
 }

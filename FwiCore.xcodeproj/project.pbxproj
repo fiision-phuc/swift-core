@@ -29,6 +29,11 @@
 		BE2A15A21D54F2E9007D60BC /* FwiOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A158C1D54F2E9007D60BC /* FwiOperation.swift */; };
 		BE2A15A31D54F2E9007D60BC /* FwiReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A158E1D54F2E9007D60BC /* FwiReachability.swift */; };
 		BE5D54F61D0F057000E69F30 /* FwiCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5D54E31D0F057000E69F30 /* FwiCore.swift */; };
+		BE95CE931D62ED0800E0E969 /* JSONMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95CE901D62ED0800E0E969 /* JSONMapper.swift */; };
+		BE95CE941D62ED0800E0E969 /* JSONModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95CE911D62ED0800E0E969 /* JSONModel.swift */; };
+		BE95CE951D62ED0800E0E969 /* Reflector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95CE921D62ED0800E0E969 /* Reflector.swift */; };
+		BE95CE991D62ED2E00E0E969 /* MapperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95CE971D62ED2E00E0E969 /* MapperTest.swift */; };
+		BE95CE9A1D62ED2E00E0E969 /* ReflectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95CE981D62ED2E00E0E969 /* ReflectorTests.swift */; };
 		BEA6D1E41A1D2090005021BB /* FwiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA6D1D81A1D2090005021BB /* FwiCore.framework */; };
 		BEB71AB21D60CF6B00F969E0 /* FwiBase64DataTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB71AA71D60CF6B00F969E0 /* FwiBase64DataTest.swift */; };
 		BEB71AB31D60CF6B00F969E0 /* FwiBase64StringTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB71AA81D60CF6B00F969E0 /* FwiBase64StringTest.swift */; };
@@ -73,6 +78,11 @@
 		BE2A158C1D54F2E9007D60BC /* FwiOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiOperation.swift; sourceTree = "<group>"; };
 		BE2A158E1D54F2E9007D60BC /* FwiReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiReachability.swift; sourceTree = "<group>"; };
 		BE5D54E31D0F057000E69F30 /* FwiCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiCore.swift; sourceTree = "<group>"; };
+		BE95CE901D62ED0800E0E969 /* JSONMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONMapper.swift; sourceTree = "<group>"; };
+		BE95CE911D62ED0800E0E969 /* JSONModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONModel.swift; sourceTree = "<group>"; };
+		BE95CE921D62ED0800E0E969 /* Reflector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reflector.swift; sourceTree = "<group>"; };
+		BE95CE971D62ED2E00E0E969 /* MapperTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapperTest.swift; sourceTree = "<group>"; };
+		BE95CE981D62ED2E00E0E969 /* ReflectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReflectorTests.swift; sourceTree = "<group>"; };
 		BEA6D1D81A1D2090005021BB /* FwiCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FwiCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEA6D1DC1A1D2090005021BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BEA6D1E31A1D2090005021BB /* FwiCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FwiCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -193,10 +203,30 @@
 				BE5D54E31D0F057000E69F30 /* FwiCore.swift */,
 				BE2A15741D54F2E9007D60BC /* codec */,
 				BE2A157D1D54F2E9007D60BC /* extension */,
+				BE95CE8F1D62ED0800E0E969 /* json */,
 				BE2A158B1D54F2E9007D60BC /* operation */,
 				BE2A158D1D54F2E9007D60BC /* reachability */,
 			);
 			path = lib;
+			sourceTree = "<group>";
+		};
+		BE95CE8F1D62ED0800E0E969 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				BE95CE901D62ED0800E0E969 /* JSONMapper.swift */,
+				BE95CE911D62ED0800E0E969 /* JSONModel.swift */,
+				BE95CE921D62ED0800E0E969 /* Reflector.swift */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
+		BE95CE961D62ED2E00E0E969 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				BE95CE971D62ED2E00E0E969 /* MapperTest.swift */,
+				BE95CE981D62ED2E00E0E969 /* ReflectorTests.swift */,
+			);
+			path = json;
 			sourceTree = "<group>";
 		};
 		BEA6D1CE1A1D2090005021BB = {
@@ -239,18 +269,19 @@
 			children = (
 				BEB71AA51D60CF6B00F969E0 /* codec */,
 				BEB71AAC1D60CF6B00F969E0 /* extension */,
+				BE95CE961D62ED2E00E0E969 /* json */,
 				BEB71AB01D60CF6B00F969E0 /* operation */,
-				BEA6D1E81A1D2090005021BB /* Supporting Files */,
+				BEA6D1E81A1D2090005021BB /* supporting_files */,
 			);
 			path = FwiCoreTests;
 			sourceTree = "<group>";
 		};
-		BEA6D1E81A1D2090005021BB /* Supporting Files */ = {
+		BEA6D1E81A1D2090005021BB /* supporting_files */ = {
 			isa = PBXGroup;
 			children = (
 				BEA6D1E91A1D2090005021BB /* Info.plist */,
 			);
-			name = "Supporting Files";
+			name = supporting_files;
 			sourceTree = "<group>";
 		};
 		BEB71AA51D60CF6B00F969E0 /* codec */ = {
@@ -410,7 +441,9 @@
 				BE2A15941D54F2E9007D60BC /* String+FwiHex.swift in Sources */,
 				BE2A159A1D54F2E9007D60BC /* UIApplication+FwiExtension.swift in Sources */,
 				BE2A159C1D54F2E9007D60BC /* UIColor+FwiExtension.swift in Sources */,
+				BE95CE951D62ED0800E0E969 /* Reflector.swift in Sources */,
 				BE2A15A01D54F2E9007D60BC /* UITableViewController+FwiExtension.swift in Sources */,
+				BE95CE941D62ED0800E0E969 /* JSONModel.swift in Sources */,
 				BE2A159B1D54F2E9007D60BC /* UIButton+FwiExtension.swift in Sources */,
 				BE2A159D1D54F2E9007D60BC /* UIImage+FwiExtension.swift in Sources */,
 				BE2A159E1D54F2E9007D60BC /* UINavigationController+FwiExtension.swift in Sources */,
@@ -422,6 +455,7 @@
 				BE2A15911D54F2E9007D60BC /* String+FwiBase64.swift in Sources */,
 				BE2A15981D54F2E9007D60BC /* NSURL+FwiExtension.swift in Sources */,
 				BE2A15951D54F2E9007D60BC /* NSData+FwiExtension.swift in Sources */,
+				BE95CE931D62ED0800E0E969 /* JSONMapper.swift in Sources */,
 				BE2A15961D54F2E9007D60BC /* NSNumber+FwiExtension.swift in Sources */,
 				BE2A15991D54F2E9007D60BC /* String+FwiExtension.swift in Sources */,
 				BE2A15931D54F2E9007D60BC /* NSString+FwiHex.swift in Sources */,
@@ -435,11 +469,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE95CE991D62ED2E00E0E969 /* MapperTest.swift in Sources */,
 				BEB71AB91D60CF6B00F969E0 /* FwiOperationTest.swift in Sources */,
 				BEB71AB31D60CF6B00F969E0 /* FwiBase64StringTest.swift in Sources */,
 				BEB71AB71D60CF6B00F969E0 /* FwiExtensionNumberTest.swift in Sources */,
 				BEB71AB21D60CF6B00F969E0 /* FwiBase64DataTest.swift in Sources */,
 				BEB71AB81D60CF6B00F969E0 /* FwiExtensionStringTest.swift in Sources */,
+				BE95CE9A1D62ED2E00E0E969 /* ReflectorTests.swift in Sources */,
 				BEB71AB61D60CF6B00F969E0 /* FwiExtensionDataTest.swift in Sources */,
 				BEB71AB41D60CF6B00F969E0 /* FwiHexDataTest.swift in Sources */,
 				BEB71AB51D60CF6B00F969E0 /* FwiHexStringTest.swift in Sources */,
