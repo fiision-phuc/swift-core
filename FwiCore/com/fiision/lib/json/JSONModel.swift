@@ -39,7 +39,7 @@
 import Foundation
 
 
-@objc(JSONModel)
+@objc
 public protocol JSONModel: NSObjectProtocol {
 
     /** Define key mapper. */
