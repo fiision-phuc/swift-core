@@ -43,9 +43,9 @@ import Foundation
 // Degree/Radians Values
 public let FLT_EPSILON: CGFloat = 1.19209e-07
 
+public let Metric_Circle: Float = 6.28319 // (360 degree)
 public let Metric_DegreeToRadian: Double = 0.0174532925199432957
 public let Metric_RadianToDegree: Double = 57.295779513082320876
-public let Metric_Circle: Float = 6.28319 // (360 degree)
 
 // Log Function
 public func FwiLog(className: String = #file, methodName: String = #function, line: Int = #line, message: String?) {

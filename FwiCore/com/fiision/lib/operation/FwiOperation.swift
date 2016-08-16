@@ -40,6 +40,7 @@ import UIKit
 import Foundation
 
 
+@objc(FwiOperation)
 public class FwiOperation: NSOperation {
 
     // MARK: Class's constructors
