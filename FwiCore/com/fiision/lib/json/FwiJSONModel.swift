@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : JSONModel.swift
+//  File name   : FwiJSONModel.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 6/10/16
@@ -40,14 +40,14 @@ import Foundation
 
 
 @objc
-public protocol JSONModel: NSObjectProtocol {
+public protocol FwiJSONModel: NSObjectProtocol {
 
     /** Define key mapper. */
-    optional func keyMapper() -> [String: String]
+    optional func keyMapper() -> [String:String]
 
-    /** Validate if property is optional or not. */
+    /** Validate ignored properties. */
+    optional func propertyIsIgnored() -> [String]
+
+    /** Validate optional properties. */
     optional func propertyIsOptional() -> [String]
-
-    /** Validate if property should be ignored or not. */
-    optional func propertyIsIgnored(propertyName: String) -> Bool
 }

@@ -29,9 +29,9 @@
 		BE2A15A21D54F2E9007D60BC /* FwiOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A158C1D54F2E9007D60BC /* FwiOperation.swift */; };
 		BE2A15A31D54F2E9007D60BC /* FwiReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2A158E1D54F2E9007D60BC /* FwiReachability.swift */; };
 		BE5D54F61D0F057000E69F30 /* FwiCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5D54E31D0F057000E69F30 /* FwiCore.swift */; };
-		BE95CE931D62ED0800E0E969 /* JSONMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95CE901D62ED0800E0E969 /* JSONMapper.swift */; };
-		BE95CE941D62ED0800E0E969 /* JSONModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95CE911D62ED0800E0E969 /* JSONModel.swift */; };
-		BE95CE951D62ED0800E0E969 /* Reflector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95CE921D62ED0800E0E969 /* Reflector.swift */; };
+		BE95CE931D62ED0800E0E969 /* FwiJSONMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95CE901D62ED0800E0E969 /* FwiJSONMapper.swift */; };
+		BE95CE941D62ED0800E0E969 /* FwiJSONModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95CE911D62ED0800E0E969 /* FwiJSONModel.swift */; };
+		BE95CE951D62ED0800E0E969 /* FwiReflector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95CE921D62ED0800E0E969 /* FwiReflector.swift */; };
 		BE95CE991D62ED2E00E0E969 /* MapperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95CE971D62ED2E00E0E969 /* MapperTest.swift */; };
 		BE95CE9A1D62ED2E00E0E969 /* ReflectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95CE981D62ED2E00E0E969 /* ReflectorTests.swift */; };
 		BEA6D1E41A1D2090005021BB /* FwiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA6D1D81A1D2090005021BB /* FwiCore.framework */; };
@@ -78,9 +78,9 @@
 		BE2A158C1D54F2E9007D60BC /* FwiOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiOperation.swift; sourceTree = "<group>"; };
 		BE2A158E1D54F2E9007D60BC /* FwiReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiReachability.swift; sourceTree = "<group>"; };
 		BE5D54E31D0F057000E69F30 /* FwiCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiCore.swift; sourceTree = "<group>"; };
-		BE95CE901D62ED0800E0E969 /* JSONMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONMapper.swift; sourceTree = "<group>"; };
-		BE95CE911D62ED0800E0E969 /* JSONModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONModel.swift; sourceTree = "<group>"; };
-		BE95CE921D62ED0800E0E969 /* Reflector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reflector.swift; sourceTree = "<group>"; };
+		BE95CE901D62ED0800E0E969 /* FwiJSONMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONMapper.swift; sourceTree = "<group>"; };
+		BE95CE911D62ED0800E0E969 /* FwiJSONModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONModel.swift; sourceTree = "<group>"; };
+		BE95CE921D62ED0800E0E969 /* FwiReflector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiReflector.swift; sourceTree = "<group>"; };
 		BE95CE971D62ED2E00E0E969 /* MapperTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapperTest.swift; sourceTree = "<group>"; };
 		BE95CE981D62ED2E00E0E969 /* ReflectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReflectorTests.swift; sourceTree = "<group>"; };
 		BEA6D1D81A1D2090005021BB /* FwiCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FwiCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -213,9 +213,9 @@
 		BE95CE8F1D62ED0800E0E969 /* json */ = {
 			isa = PBXGroup;
 			children = (
-				BE95CE901D62ED0800E0E969 /* JSONMapper.swift */,
-				BE95CE911D62ED0800E0E969 /* JSONModel.swift */,
-				BE95CE921D62ED0800E0E969 /* Reflector.swift */,
+				BE95CE901D62ED0800E0E969 /* FwiJSONMapper.swift */,
+				BE95CE911D62ED0800E0E969 /* FwiJSONModel.swift */,
+				BE95CE921D62ED0800E0E969 /* FwiReflector.swift */,
 			);
 			path = json;
 			sourceTree = "<group>";
@@ -441,9 +441,9 @@
 				BE2A15941D54F2E9007D60BC /* String+FwiHex.swift in Sources */,
 				BE2A159A1D54F2E9007D60BC /* UIApplication+FwiExtension.swift in Sources */,
 				BE2A159C1D54F2E9007D60BC /* UIColor+FwiExtension.swift in Sources */,
-				BE95CE951D62ED0800E0E969 /* Reflector.swift in Sources */,
+				BE95CE951D62ED0800E0E969 /* FwiReflector.swift in Sources */,
 				BE2A15A01D54F2E9007D60BC /* UITableViewController+FwiExtension.swift in Sources */,
-				BE95CE941D62ED0800E0E969 /* JSONModel.swift in Sources */,
+				BE95CE941D62ED0800E0E969 /* FwiJSONModel.swift in Sources */,
 				BE2A159B1D54F2E9007D60BC /* UIButton+FwiExtension.swift in Sources */,
 				BE2A159D1D54F2E9007D60BC /* UIImage+FwiExtension.swift in Sources */,
 				BE2A159E1D54F2E9007D60BC /* UINavigationController+FwiExtension.swift in Sources */,
@@ -455,7 +455,7 @@
 				BE2A15911D54F2E9007D60BC /* String+FwiBase64.swift in Sources */,
 				BE2A15981D54F2E9007D60BC /* NSURL+FwiExtension.swift in Sources */,
 				BE2A15951D54F2E9007D60BC /* NSData+FwiExtension.swift in Sources */,
-				BE95CE931D62ED0800E0E969 /* JSONMapper.swift in Sources */,
+				BE95CE931D62ED0800E0E969 /* FwiJSONMapper.swift in Sources */,
 				BE2A15961D54F2E9007D60BC /* NSNumber+FwiExtension.swift in Sources */,
 				BE2A15991D54F2E9007D60BC /* String+FwiExtension.swift in Sources */,
 				BE2A15931D54F2E9007D60BC /* NSString+FwiHex.swift in Sources */,

@@ -91,47 +91,47 @@ class FwiExtensionStringTest: XCTestCase {
         var text1: String? = nil
         XCTAssert(text1?.decodeHTML() == nil, "Nil data should always return nil.")
         text1 = "Functional%20Fwicore"
-        XCTAssertEqual(text1!.decodeHTML()!, "Functional Fwicore", "\(text1) should become Functional Fwicore after decoded.")
+        XCTAssertEqual(text1!.decodeHTML(), "Functional Fwicore", "\(text1) should become Functional Fwicore after decoded.")
 
         var text2: NSString? = nil
         XCTAssert(text2?.decodeHTML() == nil, "Nil data should always return nil.")
         text2 = "Functional%20Fwicore"
-        XCTAssertEqual(text2!.decodeHTML()!, "Functional Fwicore", "\(text2) should become Functional Fwicore after decoded.")
+        XCTAssertEqual(text2!.decodeHTML(), "Functional Fwicore", "\(text2) should become Functional Fwicore after decoded.")
     }
 
     func testEncodeHTML() {
         var text1: String? = nil
         XCTAssert(text1?.encodeHTML() == nil, "Nil data should always return nil.")
         text1 = "Functional Fwicore"
-        XCTAssertEqual(text1!.encodeHTML()!, "Functional%20Fwicore", "\(text1) should become Functional%20Fwicore after encoded.")
+        XCTAssertEqual(text1!.encodeHTML(), "Functional%20Fwicore", "\(text1) should become Functional%20Fwicore after encoded.")
 
         var text2: NSString? = nil
         XCTAssert(text2?.encodeHTML() == nil, "Nil data should always return nil.")
         text2 = "Functional Fwicore"
-        XCTAssertEqual(text2!.encodeHTML()!, "Functional%20Fwicore", "\(text2) should become Functional%20Fwicore after encoded.")
+        XCTAssertEqual(text2!.encodeHTML(), "Functional%20Fwicore", "\(text2) should become Functional%20Fwicore after encoded.")
     }
 
     func testSplitWithSeparator() {
         var text1: String? = nil
         XCTAssert(text1?.split("/") == nil, "Nil data should always return nil.")
         text1 = "FwiCore/FWICORE"
-        XCTAssertEqual(text1!.split("/")!, ["FwiCore", "FWICORE"], "\(text1) should become array after split.")
+        XCTAssertEqual(text1!.split("/"), ["FwiCore", "FWICORE"], "\(text1) should become array after split.")
 
         var text2: NSString? = nil
         XCTAssert(text2?.split("/") == nil, "Nil data should always return nil.")
         text2 = "FwiCore/FWICORE"
-        XCTAssertEqual(text2!.split("/")!, ["FwiCore", "FWICORE"], "\(text2) should become array after split.")
+        XCTAssertEqual(text2!.split("/"), ["FwiCore", "FWICORE"], "\(text2) should become array after split.")
     }
 
     func testTrim() {
         var text1: String? = nil
         XCTAssert(text1?.trim() == nil, "Nil data should always return nil.")
         text1 = " FwiCore "
-        XCTAssertEqual(text1!.trim()!, "FwiCore", "\(text1) should become FwiCore after trim.")
+        XCTAssertEqual(text1!.trim(), "FwiCore", "\(text1) should become FwiCore after trim.")
 
         var text2: NSString? = nil
         XCTAssert(text2?.trim() == nil, "Nil data should always return nil.")
         text2 = " FwiCore "
-        XCTAssertEqual(text2!.trim()!, "FwiCore", "\(text2) should become FwiCore after trim.")
+        XCTAssertEqual(text2!.trim(), "FwiCore", "\(text2) should become FwiCore after trim.")
     }
 }

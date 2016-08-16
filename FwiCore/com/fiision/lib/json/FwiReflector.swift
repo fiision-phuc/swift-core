@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : Reflector.swift
+//  File name   : FwiReflector.swift
 //
 //  Author      : Phuc Tran
 //  Created date: 4/27/16
@@ -39,13 +39,12 @@
 import Foundation
 
 
-@objc(Reflector)
-public class Reflector: NSObject {
-
+public class FwiReflector {
 
     // MARK: Class's constructors
-    public override init() {
-        super.init()
+    public init(mirrorName: String, mirrorValue value: Any) {
+        self.mirrorName = mirrorName
+        self.mirrorType = Mirror(reflecting: value)
     }
 
 
@@ -101,7 +100,7 @@ public class Reflector: NSObject {
             if  type == Bool.self ||
                 type == Int.self || type == Int8.self || type == Int16.self || type == Int32.self || type == Int64.self ||
                 type == UInt.self || type == UInt8.self || type == UInt16.self || type == UInt32.self || type == UInt64.self ||
-                type == Float.self || type == Float32.self || type == Float64.self || type == Float80.self ||
+                type == Float.self || type == Float32.self || type == Float64.self ||
                 type == Double.self ||
                 type == Character.self || type == String.self || type == nsStringType || type == nsMutablestringType {
                 return true
@@ -110,7 +109,7 @@ public class Reflector: NSObject {
             if  type == Optional<Bool>.self ||
                 type == Optional<Int>.self || type == Optional<Int8>.self || type == Optional<Int16>.self || type == Optional<Int32>.self || type == Optional<Int64>.self ||
                 type == Optional<UInt>.self || type == Optional<UInt8>.self || type == Optional<UInt16>.self || type == Optional<UInt32>.self || type == Optional<UInt64>.self ||
-                type == Optional<Float>.self || type == Optional<Float32>.self || type == Optional<Float64>.self || type == Optional<Float80>.self ||
+                type == Optional<Float>.self || type == Optional<Float32>.self || type == Optional<Float64>.self ||
                 type == Optional<Double>.self ||
                 type == Optional<Character>.self || type == Optional<String>.self || type == Optional<NSString>.self || type == Optional<NSMutableString>.self {
                 return true
@@ -163,8 +162,6 @@ public class Reflector: NSObject {
             return Float32.self
         } else if type == Float64.self || type == Optional<Float64>.self {
             return Float64.self
-        } else if type == Float80.self || type == Optional<Float80>.self {
-            return Float80.self
         }
 
             // Double
@@ -190,7 +187,7 @@ public class Reflector: NSObject {
     public lazy var isObject: Bool = {
         if let clazz = self.classType {
             var flag = true
-            if let bundleName: String = String(reflecting: Reflector.self).split(".").first {
+            if let bundleName: String = String(reflecting: FwiReflector.self).split(".").first {
                flag =  NSClassFromString("\(bundleName).\(clazz)") == nil
             }
 
@@ -232,7 +229,7 @@ public class Reflector: NSObject {
         }
         return false
     }()
-    public lazy var collectionType: Reflector? = {
+    public lazy var collectionType: FwiReflector? = {
         /* Condition validation */
         if !(self.isSet || self.isCollection) {
             return nil
@@ -241,7 +238,7 @@ public class Reflector: NSObject {
 
         // Validate ObjC type first
         if type == nsArrayName || type == nsMutableArrayName || type == nsSetName || type == nsMutableSetName {
-            return Reflector(mirrorName: type, mirrorValue: NSObject())
+            return FwiReflector(mirrorName: type, mirrorValue: NSObject())
         }
 
         let collectionType = self.extractCollectionType(type)
@@ -263,7 +260,7 @@ public class Reflector: NSObject {
         }
         return false
     }()
-    public lazy var dictionaryType: (key: Reflector, value: Reflector)? = {
+    public lazy var dictionaryType: (key: FwiReflector, value: FwiReflector)? = {
         /* Condition validation */
         if !self.isDictionary {
             return nil
@@ -272,8 +269,8 @@ public class Reflector: NSObject {
 
         // Validate ObjC type first
         if type == nsDictionaryName || type == nsMutableDictionaryName {
-            let key = Reflector(mirrorName: type, mirrorValue: NSObject())
-            let value = Reflector(mirrorName: type, mirrorValue: NSObject())
+            let key = FwiReflector(mirrorName: type, mirrorValue: NSObject())
+            let value = FwiReflector(mirrorName: type, mirrorValue: NSObject())
 
             return (key, value)
         }
@@ -285,12 +282,10 @@ public class Reflector: NSObject {
         return (key, value)
     }()
 
-    private var mirrorName = ""
-    private var mirrorType = Mirror(reflecting: Reflector.self)
-
+    private var mirrorName: String
+    private var mirrorType: Mirror
 
     // MARK: Class's public methods
-
 
     // MARK: Class's private methods
     private func extractCollectionType(type: String) -> String {
@@ -347,11 +342,11 @@ public class Reflector: NSObject {
         }
     }
 
-    private func generateReflector(type: String) -> Reflector? {
+    private func generateReflector(type: String) -> FwiReflector? {
         if let clazz = self.lookupClassType(type) {
-            return Reflector(mirrorName: type, mirrorValue: clazz.self)
+            return FwiReflector(mirrorName: type, mirrorValue: clazz.self)
         } else if let primitiveType = self.lookupPrimitiveType(type) {
-            return Reflector(mirrorName: type, mirrorValue: primitiveType.self)
+            return FwiReflector(mirrorName: type, mirrorValue: primitiveType.self)
         }
         return nil
     }
@@ -364,8 +359,8 @@ public class Reflector: NSObject {
 
         if let clazz = NSClassFromString(className) {
             return clazz
-        } else if let tokens = String(reflecting: Reflector.self).split(".") where tokens.count >= 1 {
-            let clazzName = "\(tokens[0]).\(className)"
+        } else if let token = String(reflecting: FwiReflector.self).split(".").first {
+            let clazzName = "\(token).\(className)"
             return NSClassFromString(clazzName)
         }
         return nil
@@ -406,8 +401,6 @@ public class Reflector: NSObject {
             return Float32(0)
         case "Float64":
             return Float64(0)
-        case "Float80":
-            return Float80(0)
 
         case "Double":
             return Double(0)
@@ -426,16 +419,15 @@ public class Reflector: NSObject {
 
 
 // Creation
-public extension Reflector {
-
+public extension FwiReflector {
 
     // MARK: Class's static constructors
-    public class func propertiesWithClass(classType: AnyClass) -> [Reflector] {
-        return Reflector.propertiesWithClass(classType, baseClass: NSObject.self)
+    public class func propertiesWithClass(classType: AnyClass) -> [FwiReflector] {
+        return FwiReflector.propertiesWithClass(classType, baseClass: NSObject.self)
     }
-    public class func propertiesWithClass<T: NSObject>(classType: AnyClass, baseClass: T.Type) -> [Reflector] {
+    public class func propertiesWithClass<T: NSObject>(classType: AnyClass, baseClass: T.Type) -> [FwiReflector] {
         var typeClass: AnyClass = classType
-        var properties = [Reflector]()
+        var properties = [FwiReflector]()
 
         while typeClass != T.self {
             /* Condition validation: validate class type */
@@ -446,10 +438,10 @@ public extension Reflector {
             // Scan class's properties
             let o = aClass.init()
             let mirror = Mirror(reflecting: o)
-            properties = mirror.children.reduce(properties, combine: { (property, child) -> [Reflector] in
+            properties = mirror.children.reduce(properties, combine: { (property, child) -> [FwiReflector] in
                 var property = property
                 if let label = child.label {
-                    let reflector = Reflector(mirrorName: label, mirrorValue: child.value)
+                    let reflector = FwiReflector(mirrorName: label, mirrorValue: child.value)
                     property.append(reflector)
                 }
                 return property
@@ -463,14 +455,6 @@ public extension Reflector {
             }
         }
         return properties
-    }
-
-
-    // MARK: Class's constructors
-    public convenience init(mirrorName: String, mirrorValue value: Any) {
-        self.init()
-        self.mirrorName = mirrorName
-        self.mirrorType = Mirror(reflecting: value)
     }
 }
 

@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : JSONMapper.swift
+//  File name   : FwiJSONMapper.swift
 //
 //  Author      : Dung Vu
 //  Created date: 6/14/16
@@ -41,7 +41,7 @@ import Foundation
 
 
 @objc(JSONMapper)
-public class JSONMapper: NSObject {
+public class FwiJSONMapper: NSObject {
 
     // MARK: Class's constructors
     public override init() {
@@ -52,12 +52,12 @@ public class JSONMapper: NSObject {
     /** Map Dictionary To Model */
     public func mapDictionaryToModel<T: NSObject>(dictionary: [String: AnyObject], inout model m: T) -> NSError? {
         var dictionary = dictionary
-        let optionalProperties = (m as? JSONModel)?.propertyIsOptional?() ?? []
-        var properties = Reflector.propertiesWithClass(m.dynamicType)
+        let optionalProperties = (m as? FwiJSONModel)?.propertyIsOptional?() ?? []
+        var properties = FwiReflector.propertiesWithClass(m.dynamicType)
         var errorUserInfo: [String: AnyObject] = [:]
 
         // Override dictionary if neccessary
-        if let json = m as? JSONModel {
+        if let json = m as? FwiJSONModel {
             if let keyMapper = json.keyMapper?() {
                 for (k, v) in keyMapper {
                     dictionary[v] = dictionary[k]
@@ -158,7 +158,7 @@ public class JSONMapper: NSObject {
                 else if p.isClass {
                     if let classaz = p.classType as? NSObject.Type {
                         var obj = classaz.init()
-                        if let error = JSONMapper.mapObjectToModel(valueJson, model: &obj) {
+                        if let error = FwiJSONMapper.mapObjectToModel(valueJson, model: &obj) {
                             errorUserInfo[p.propertyName] = error.userInfo
                         } else {
                             m.setValue(obj, forKey: p.propertyName)
@@ -185,7 +185,7 @@ public class JSONMapper: NSObject {
                                 if let dictItem = valueJson as? [String: AnyObject] {
                                     for (newKey, valueItem) in dictItem {
                                         var obj = classaz.init()
-                                        if let error = JSONMapper.mapObjectToModel(valueItem, model: &obj) {
+                                        if let error = FwiJSONMapper.mapObjectToModel(valueItem, model: &obj) {
                                             errorUserInfo[newKey] = error.userInfo
                                         } else {
                                             value[newKey] = obj
@@ -222,7 +222,7 @@ public class JSONMapper: NSObject {
                             if let arrValue = valueJson as? [AnyObject] {
                                 for (index, obj) in arrValue.enumerate() {
                                     var newObj = classaz.init()
-                                    if let error = JSONMapper.mapObjectToModel(obj, model: &newObj) {
+                                    if let error = FwiJSONMapper.mapObjectToModel(obj, model: &newObj) {
                                         errorUserInfo["value\(index)"] = error.userInfo
                                     } else {
                                         temp.append(newObj)
@@ -264,16 +264,15 @@ public class JSONMapper: NSObject {
 
         return nil
     }
-
 }
 
 // Creation
-extension JSONMapper {
+extension FwiJSONMapper {
 
     // MARK: Class's static constructors
     class func mapObjectToModel<T: NSObject>(object: AnyObject?, inout model m: T) -> NSError? {
         if let dictionary = object as? [String: AnyObject] {
-            return JSONMapper().mapDictionaryToModel(dictionary, model: &m)
+            return FwiJSONMapper().mapDictionaryToModel(dictionary, model: &m)
         }
 
         return NSError(domain: NSURLErrorKey, code: NSURLErrorUnknown, userInfo: [NSLocalizedDescriptionKey: "Parse object to dictionary error !!!"])
@@ -286,7 +285,7 @@ extension JSONMapper {
         let mirror = Mirror(reflecting: object)
 
         // Reflector Object To Identify Type Properties
-        let reflectorItems = Reflector.propertiesWithClass(object.dynamicType)
+        let reflectorItems = FwiReflector.propertiesWithClass(object.dynamicType)
 
         // Create dictionary from object
         var dictionaryKey: [String: String] = [:]
@@ -300,7 +299,7 @@ extension JSONMapper {
         })
 
         // Tracking if it has swap key
-        if let jsonModel = object as? JSONModel {
+        if let jsonModel = object as? FwiJSONModel {
             // Check It Has KeyMapper
             if let keyMapper = jsonModel.keyMapper?() {
                 // Swap Key
@@ -351,7 +350,7 @@ extension JSONMapper {
                     if let obj = value as? NSObject {
                         // Tracking If Object has Init Function
                         if obj.respondsToSelector(#selector(obj.dynamicType.init)) {
-                            let newDict = JSONMapper.toDictionary(obj)
+                            let newDict = FwiJSONMapper.toDictionary(obj)
                             result[keyJson] = newDict
                         }
                     }
@@ -372,7 +371,7 @@ extension JSONMapper {
                         // Loop in new dict to find value
                         for (key, newValue) in newDict {
                             // Check Value type
-                            let reflectItem = Reflector(mirrorName: key, mirrorValue: newValue)
+                            let reflectItem = FwiReflector(mirrorName: key, mirrorValue: newValue)
                             if reflectItem.isPrimitive || newValue is String || newValue is NSNumber {
                                 temp[key] = newValue
                             } else {
@@ -380,7 +379,7 @@ extension JSONMapper {
                                 if let objDict = newValue as? NSObject {
                                     // Tracking If Object has Init Function
                                     if objDict.respondsToSelector(#selector(objDict.dynamicType.init)) {
-                                        let dictObj = JSONMapper.toDictionary(objDict)
+                                        let dictObj = FwiJSONMapper.toDictionary(objDict)
                                         temp[key] = dictObj
                                     }
                                 }
@@ -394,7 +393,7 @@ extension JSONMapper {
                             if let keyPath = key as? String {
                                 // Loop in new dict to find value
                                 // Check Value type
-                                let reflectItem = Reflector(mirrorName: keyPath, mirrorValue: newValue)
+                                let reflectItem = FwiReflector(mirrorName: keyPath, mirrorValue: newValue)
                                 if reflectItem.isPrimitive || newValue is String || newValue is NSNumber {
                                     temp[keyPath] = newValue
                                 } else {
@@ -402,7 +401,7 @@ extension JSONMapper {
                                     if let objDict = newValue as? NSObject {
                                         // Tracking If Object has Init Function
                                         if objDict.respondsToSelector(#selector(objDict.dynamicType.init)) {
-                                            let dictObj = JSONMapper.toDictionary(objDict)
+                                            let dictObj = FwiJSONMapper.toDictionary(objDict)
                                             temp[keyPath] = dictObj
                                         }
                                     }
@@ -423,14 +422,14 @@ extension JSONMapper {
 
                     if let arrItem = value as? NSArray {
                         for valueItem in arrItem {
-                            let reflect = Reflector(mirrorName: "", mirrorValue: valueItem)
+                            let reflect = FwiReflector(mirrorName: "", mirrorValue: valueItem)
                             if reflect.isPrimitive || valueItem is String || valueItem is NSNumber {
                                 temp.append(valueItem)
                             } else {
                                 if let newItem = valueItem as? NSObject {
                                     // Tracking If Object has Init Function
                                     if newItem.respondsToSelector(#selector(newItem.dynamicType.init)) {
-                                        let newDict = JSONMapper.toDictionary(newItem)
+                                        let newDict = FwiJSONMapper.toDictionary(newItem)
                                         temp.append(newDict)
                                     }
                                 }
@@ -445,47 +444,4 @@ extension JSONMapper {
     }
 
     // MARK: Class's constructors
-}
-
-// MARK: Operands helper
-
-infix operator <- { }
-// MARK: -- Basic Type
-func <- <T>(inout left: T, right: AnyObject?) {
-    if let value = right as? T {
-        left = value
-    }
-}
-
-func <- <T>(inout left: T?, right: AnyObject?) {
-    left = right as? T
-}
-
-// MARK: -- Array
-func <- <T>(inout left: [T]?, right: [AnyObject]?) {
-    if let arrValue = right {
-        var temp = [T]()
-        arrValue.forEach {
-            if let value = $0 as? T {
-                temp.append(value)
-            }
-        }
-        if temp.count > 0 {
-            left = temp
-        }
-    }
-}
-
-func <- <T>(inout left: [T], right: [AnyObject]?) {
-    if let arrValue = right {
-        var temp = [T]()
-        arrValue.forEach {
-            if let value = $0 as? T {
-                temp.append(value)
-            }
-        }
-        if temp.count > 0 {
-            left = temp
-        }
-    }
 }

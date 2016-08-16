@@ -103,10 +103,10 @@ class MapperTest: XCTestCase {
 //        let c = JSONMapper1.mapClassWithDictionary(Test.self, dict: dict).object
 
         var c = Test()
-        let error = JSONMapper.mapObjectToModel(dict, model: &c)
+        let error = FwiJSONMapper.mapObjectToModel(dict, model: &c)
 
 
-        let dict1 = JSONMapper.toDictionary(c)
+        let dict1 = FwiJSONMapper.toDictionary(c)
         print(dict1)
 
     }

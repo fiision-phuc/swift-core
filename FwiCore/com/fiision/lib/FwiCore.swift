@@ -40,27 +40,26 @@ import UIKit
 import Foundation
 
 
-// Degree/Radians Values
+// MARK: Degree/Radians Values
 public let FLT_EPSILON: CGFloat = 1.19209e-07
 
 public let Metric_Circle: Float = 6.28319 // (360 degree)
 public let Metric_DegreeToRadian: Double = 0.0174532925199432957
 public let Metric_RadianToDegree: Double = 57.295779513082320876
 
-// Log Function
+
+// MARK: Log Function
 public func FwiLog(className: String = #file, methodName: String = #function, line: Int = #line, message: String?) {
     #if DEBUG
         let name = className.componentsSeparatedByString("/").last
-        
+
         if name != nil && name?.isEmpty != true {
             if message != nil && message?.isEmpty != true {
                 print("\(name!) > \(methodName)[\(NSDate()) \(line)]: \(message!)")
-            }
-            else {
+            } else {
                 print("\(name!) > \(methodName)[\(NSDate()) \(line)]")
             }
-        }
-        else {
+        } else {
             if message != nil && message?.isEmpty != true {
                 print("\(methodName)[\(NSDate()) \(line)]: \(message!)")
             } else {
@@ -70,7 +69,8 @@ public func FwiLog(className: String = #file, methodName: String = #function, li
     #endif
 }
 
-// Metric Functions
+
+// MARK: Metric Function
 public func FwiConvertToDegree(radianValue radian: Double) -> Double {
     let degree = radian * Metric_RadianToDegree
     return degree
@@ -78,4 +78,48 @@ public func FwiConvertToDegree(radianValue radian: Double) -> Double {
 public func FwiConvertToRadian(degreeValue degree: Double) -> Double {
     let radian = degree * Metric_DegreeToRadian
     return radian
+}
+
+
+// MARK: Custom Operator
+infix operator <- {}
+
+func <- <T>(inout left: T, right: AnyObject?) {
+    if let value = right as? T {
+        left = value
+    }
+}
+func <- <T>(inout left: T?, right: AnyObject?) {
+    left = right as? T
+}
+
+func <- <T>(inout left: [T], right: [AnyObject]?) {
+    if let arrValue = right {
+        var temp = [T]()
+
+        arrValue.forEach {
+            if let value = $0 as? T {
+                temp.append(value)
+            }
+        }
+
+        if temp.count > 0 {
+            left = temp
+        }
+    }
+}
+func <- <T>(inout left: [T]?, right: [AnyObject]?) {
+    if let arrValue = right {
+        var temp = [T]()
+
+        arrValue.forEach {
+            if let value = $0 as? T {
+                temp.append(value)
+            }
+        }
+
+        if temp.count > 0 {
+            left = temp
+        }
+    }
 }
