@@ -45,9 +45,9 @@ public protocol FwiJSONModel: NSObjectProtocol {
     /** Define key mapper. */
     optional func keyMapper() -> [String:String]
 
-    /** Validate ignored properties. */
-    optional func propertyIsIgnored() -> [String]
-
     /** Validate optional properties. */
     optional func propertyIsOptional() -> [String]
+
+    /** Validate ignored properties. */
+    optional func propertyIsIgnored(property: String) -> Bool
 }

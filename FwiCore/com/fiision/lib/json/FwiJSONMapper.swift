@@ -49,7 +49,7 @@ public class FwiJSONMapper: NSObject {
     }
 
     // MARK: Class's public methods
-    /** Map Dictionary To Model */
+    /** Map Dictionary To Model. */
     public func mapDictionaryToModel<T: NSObject>(dictionary: [String: AnyObject], inout model m: T) -> NSError? {
         var dictionary = dictionary
         let optionalProperties = (m as? FwiJSONModel)?.propertyIsOptional?() ?? []
@@ -66,7 +66,7 @@ public class FwiJSONMapper: NSObject {
             }
 
             // Filter Ignore property
-//            properties = properties.filter({ (json.propertyIsIgnored?($0.propertyName) ?? false) == false })
+            properties = properties.filter({ (json.propertyIsIgnored?($0.propertyName) ?? false) == false })
         }
 
         // Map values to properties
