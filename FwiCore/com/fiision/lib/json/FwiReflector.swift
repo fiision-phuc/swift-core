@@ -44,34 +44,25 @@ public class FwiReflector {
     // MARK: Class's constructors
     public init(mirrorName: String, mirrorValue value: Any) {
         self.mirrorName = mirrorName
-        self.mirrorType = Mirror(reflecting: value)
+        mirrorType = Mirror(reflecting: value)
     }
 
 
     // MARK: Class's properties
     public lazy var isOptional: Bool = {
-        if let style = self.mirrorType.displayStyle where style == .Optional {
-            return true
-        }
-        return false
+        return self.mirrorType.displayStyle == Mirror.DisplayStyle.Optional
     }()
 
     public lazy var isEnum: Bool = {
         if !self.isOptional {
-            if let style = self.mirrorType.displayStyle where style == .Enum {
-                return true
-            }
+            return self.mirrorType.displayStyle == Mirror.DisplayStyle.Enum
+        } else {
             return false
         }
-        print("\(self.mirrorType.subjectType)")
-        return false
     }()
     public lazy var isTuple: Bool = {
         if !self.isOptional {
-            if let style = self.mirrorType.displayStyle where style == .Tuple {
-                return true
-            }
-            return false
+            return self.mirrorType.displayStyle == Mirror.DisplayStyle.Tuple
         }
 
         let type = self.extractType()
@@ -179,6 +170,11 @@ public class FwiReflector {
 
     // Object type
     public lazy var isClass: Bool = {
+//        // PS: Need to be disable in order to make dictionary work
+//        if !self.isOptional {
+//            return self.mirrorType.displayStyle == Mirror.DisplayStyle.Class
+//        }
+
         if let clazz = self.classType {
             return true
         }

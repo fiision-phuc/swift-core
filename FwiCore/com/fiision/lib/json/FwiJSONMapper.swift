@@ -66,7 +66,7 @@ public class FwiJSONMapper: NSObject {
             }
 
             // Filter Ignore property
-            properties = properties.filter({ (json.propertyIsIgnored?($0.propertyName) ?? false) == false })
+//            properties = properties.filter({ (json.propertyIsIgnored?($0.propertyName) ?? false) == false })
         }
 
         // Map values to properties

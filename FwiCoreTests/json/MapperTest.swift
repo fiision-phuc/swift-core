@@ -44,7 +44,7 @@ class URLTest: NSObject {
     var url: NSURL?
 }
 
-class Test: NSObject, JSONModel {
+class Test: NSObject, FwiJSONModel {
 
 
     var a: Int = 0
