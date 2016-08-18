@@ -352,7 +352,7 @@ public class FwiReflector {
         if className.characters.count <= 0 {
             return nil
         }
-
+        FwiLog(message: "\(#file)")
         if let clazz = NSClassFromString(className) {
             return clazz
         } else if let token = String(reflecting: FwiReflector.self).split(".").first {

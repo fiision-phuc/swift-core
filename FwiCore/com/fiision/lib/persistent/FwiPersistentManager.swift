@@ -46,131 +46,103 @@ public class FwiPersistentManager {
     public init(dataModel: String, modelBundle bundle: NSBundle = NSBundle.mainBundle()) {
         self.bundle = bundle
         self.dataModel = dataModel
+
+        // Register core data changed notification
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FwiPersistentManager.handleContextDidSaveNotification(_:)), name: NSManagedObjectContextDidSaveNotification, object: nil)
     }
+
+
+    // MARK: Cleanup memory
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+
 
     // MARK: Class's properties
     public private (set) lazy var managedModel: NSManagedObjectModel = {
         if let modelURL = self.bundle.URLForResource(self.dataModel, withExtension: "momd"), managedModel = NSManagedObjectModel(contentsOfURL: modelURL) {
             return managedModel
         }
-        fatalError("Data model is not available!")
+        fatalError("\(self.dataModel) model is not available!")
     }()
     public private (set) lazy var managedContext: NSManagedObjectContext = {
-        let coordinator = self.persistentCoordinator
-        var managedObjectContext: NSManagedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-        managedObjectContext.persistentStoreCoordinator = coordinator
+        let managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        managedObjectContext.persistentStoreCoordinator = self.persistentCoordinator
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
+
         return managedObjectContext
     }()
-    public private (set) lazy var persistentCoordinator: NSPersistentStoreCoordinator? = {
-        let storeDB1 = "\(self.dataModel).sqlite"
-        let storeDB2 = "\(self.dataModel).sqlite-shm"
-        let storeDB3 = "\(self.dataModel).sqlite-wal"
-        guard let storeURL1 = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB1) else {
-            fatalError("Cache directory could not be found!")
-        }
-        guard let storeURL2 = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB2) else {
-            fatalError("Cache directory could not be found!")
-        }
-        guard let storeURL3 = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB3) else {
+    public private (set) lazy var persistentCoordinator: NSPersistentStoreCoordinator = {
+        let (storeDB1, storeDB2, storeDB3) = ("\(self.dataModel).sqlite", "\(self.dataModel).sqlite-shm", "\(self.dataModel).sqlite-wal")
+        guard let
+            storeURL1 = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB1),
+            storeURL2 = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB2),
+            storeURL3 = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB3) else {
             fatalError("Cache directory could not be found!")
         }
 
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedModel)
         let options = [NSSQLitePragmasOption:["journal_mode":"WAL"],
                        NSInferMappingModelAutomaticallyOption:true,
                        NSMigratePersistentStoresAutomaticallyOption:true]
-        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedModel)
-        
-        do {
-            let persistentStore = try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL1, options: options)
-            
-            try storeURL1.setResourceValues([NSURLIsExcludedFromBackupKey: true])
-            try storeURL2.setResourceValues([NSURLIsExcludedFromBackupKey: true])
-            try storeURL3.setResourceValues([NSURLIsExcludedFromBackupKey: true])
 
-        } catch let error as NSError {
-            // try delete if database in cache exist
-//            let fileManager = NSFileManager.defaultManager()
-//            fileManager.deleteFileAtPath(storeURL1)
-//            fileManager.deleteFileAtPath(storeURL2)
-//            fileManager.deleteFileAtPath(storeURL3)
+        for i in 0 ..< 2 {
+            do {
+                try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL1, options: options)
+                try storeURL1.setResourceValues([NSURLIsExcludedFromBackupKey: true])
+                try storeURL2.setResourceValues([NSURLIsExcludedFromBackupKey: true])
+                try storeURL3.setResourceValues([NSURLIsExcludedFromBackupKey: true])
+                break
+
+            } catch _ {
+                // Note: If the first time fail, we remove everything but not second time.
+                if i == 0 {
+                    let fileManager = NSFileManager.defaultManager()
+                    fileManager.deleteFileAtURL(storeURL1)
+                    fileManager.deleteFileAtURL(storeURL2)
+                    fileManager.deleteFileAtURL(storeURL3)
+                } else {
+                    fatalError("Could not create persistent store coordinator for \(self.dataModel) model!")
+                }
+            }
         }
-
         return coordinator
-    }()
-
-    
-
-    /** Return a sub managed object context that had been optimized to serve the update data process. */
-    public private (set) lazy var importContext: NSManagedObjectContext = {
-        let coordinator = self.persistentCoordinator
-        var managedObjectContext: NSManagedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-        managedObjectContext.persistentStoreCoordinator = coordinator
-        managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
-        managedObjectContext.undoManager = nil
-        return managedObjectContext
     }()
 
     private var bundle: NSBundle
     private var dataModel: String
-    
+
 
     // MARK: Class's public methods
-
-    /** Save current working context. */
     public func saveContext() -> NSError? {
-        if managedContext.hasChanges {
-            var errorResult: NSError?
-            managedContext.performBlockAndWait({
-                
+        var error: NSError?
+        managedContext.performBlockAndWait({ [weak self] in
+            do {
+                try self?.managedContext.save()
+            } catch let err as NSError {
+                error = err
+            }
             })
-            
-            managedContext.performBlockAndWait({ [weak self] in
-                do {
-                    try self?.managedContext.save()
-                } catch let error as NSError {
-                    errorResult = error
-                }
-            })
-            return errorResult
-        } else {
-            return nil
-        }
+        return error
     }
 
-    /** Handle did save event from other context beside main context. */
-    func _handleContextDidSaveNotification(notification: NSNotification) {
-        guard let otherContext = notification.object as? NSManagedObjectContext where otherContext != self.managedContext else {
-            return
-        }
+    /** Return a sub managed object context that had been optimized to serve the update data process. */
+    public func importContext() -> NSManagedObjectContext {
+        let managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        managedObjectContext.persistentStoreCoordinator = self.persistentCoordinator
+        managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
+        managedObjectContext.undoManager = nil
 
-        managedContext.mergeChangesFromContextDidSaveNotification(notification)
+        return managedObjectContext
     }
+
 
     // MARK: Class's private methods
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-}
-
-// Creation
-extension FwiPersistentManager {
-
-    // MARK: Class's static constructors
-    /** Create persistent manager for specific data model. */
-    public class func persistentWithDataModel(dataModel: String, bundle: NSBundle) -> FwiPersistentManager? {
-        if dataModel.length() == 0 { return nil }
-        return FwiPersistentManager(dataModel: dataModel, bundle: bundle)
-    }
-
-    // MARK: Class's constructors
-    private convenience init(dataModel: String, bundle: NSBundle) {
-        self.init()
-
-        self.dataModel = dataModel
-        self.bundle = bundle
-
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FwiPersistentManager._handleContextDidSaveNotification(_:)), name: NSManagedObjectContextDidSaveNotification, object: nil)
-
+    @objc
+    private func handleContextDidSaveNotification(notification: NSNotification) {
+        guard let otherContext = notification.object as? NSManagedObjectContext where otherContext !== self.managedContext else {
+            return
+        }
+        managedContext.mergeChangesFromContextDidSaveNotification(notification)
     }
 }

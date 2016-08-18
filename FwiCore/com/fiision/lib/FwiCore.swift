@@ -49,25 +49,16 @@ public let Metric_RadianToDegree: Double = 57.295779513082320876
 
 
 // MARK: Log Function
-public func FwiLog(className: String = #file, methodName: String = #function, line: Int = #line, message: String?) {
-    #if DEBUG
-        let name = className.componentsSeparatedByString("/").last
-
-        if name != nil && name?.isEmpty != true {
-            if message != nil && message?.isEmpty != true {
-                print("\(name!) > \(methodName)[\(NSDate()) \(line)]: \(message!)")
-            } else {
-                print("\(name!) > \(methodName)[\(NSDate()) \(line)]")
-            }
-        } else {
-            if message != nil && message?.isEmpty != true {
-                print("\(methodName)[\(NSDate()) \(line)]: \(message!)")
-            } else {
-                print("\(methodName)[\(NSDate()) \(line)]")
-            }
+#if DEBUG
+    public func FwiLog(className: String = #file, methodName: String = #function, line: Int = #line, message: String = "") {
+        if let name = className.split("/").last where name.length() > 0 {
+            print("\(name) > \(methodName)[\(NSDate()) \(line)]: \(message)")
         }
-    #endif
-}
+    }
+#else
+    public func FwiLog(className: String = #file, methodName: String = #function, line: Int = #line, message: String?) {
+    }
+#endif
 
 
 // MARK: Metric Function
