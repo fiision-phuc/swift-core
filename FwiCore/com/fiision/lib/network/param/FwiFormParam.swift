@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiDataParam.h
+//  File name   : FwiFormParam.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 8/11/13
+//  Created date: 9/23/12
 //  Version     : 1.20
 //  --------------------------------------------------------------
 //  Copyright (C) 2012, 2015 Fiision Studio.
@@ -36,25 +36,34 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#import <Foundation/Foundation.h>
+import Foundation
 
 
-@interface FwiDataParam : NSObject <NSCoding> {
+public class FwiFormParam {
+
+    // MARK: Class's constructors
+    public init(key: String, value: String) {
+        self.key = key
+        self.value = value
+    }
+
+    public var key: String
+    public var value: String
 }
 
-@property (nonatomic, readonly) NSData *data;
-@property (nonatomic, readonly) NSString *contentType;
 
-@end
-
-
-@interface FwiDataParam (FwiDataParamCreation)
-
-// Class's static constructors
-+ (__autoreleasing FwiDataParam *)parameterWithString:(NSString *)string;
-+ (__autoreleasing FwiDataParam *)parameterWithData:(NSData *)data contentType:(NSString *)contentType;
-
-// Class's constructors
-- (id)initWithData:(NSData *)data contentType:(NSString *)contentType;
-
-@end
+///** Comparison. */
+//- (NSComparisonResult)compare:(FwiFormParam *)parameter
+//
+//@end
+//
+//
+//@interface FwiFormParam (FwiFormParamCreation)
+//
+//// Class's static constructors
+//+ (__autoreleasing FwiFormParam *)paramWithKey:(NSString *)key andValue:(NSString *)value
+//
+//// Class's constructors
+//- (id)initWithKey:(NSString *)key andValue:(NSString *)value
+//
+//@end

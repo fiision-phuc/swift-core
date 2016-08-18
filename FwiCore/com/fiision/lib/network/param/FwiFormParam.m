@@ -1,10 +1,7 @@
 #import "FwiFormParam.h"
 
 
-@interface FwiFormParam () {
-}
 
-@end
 
 
 @implementation FwiFormParam

@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiFormParam.h
+//  File name   : FwiDataParam.h
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 9/23/12
+//  Created date: 8/11/13
 //  Version     : 1.20
 //  --------------------------------------------------------------
 //  Copyright (C) 2012, 2015 Fiision Studio.
@@ -36,28 +36,25 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#import <Foundation/Foundation.h>
+import Foundation
 
 
-@interface FwiFormParam : NSObject <NSCoding> {
+public class FwiDataParam {
 }
 
-@property (nonatomic, strong) NSString *key;
-@property (nonatomic, strong) NSString *value;
-
-
-/** Comparison. */
-- (NSComparisonResult)compare:(FwiFormParam *)parameter;
-
-@end
-
-
-@interface FwiFormParam (FwiFormParamCreation)
-
-// Class's static constructors
-+ (__autoreleasing FwiFormParam *)paramWithKey:(NSString *)key andValue:(NSString *)value;
-
-// Class's constructors
-- (id)initWithKey:(NSString *)key andValue:(NSString *)value;
-
-@end
+//@property (nonatomic, readonly) NSData *data
+//@property (nonatomic, readonly) NSString *contentType
+//
+//@end
+//
+//
+//@interface FwiDataParam (FwiDataParamCreation)
+//
+//// Class's static constructors
+//+ (__autoreleasing FwiDataParam *)parameterWithString:(NSString *)string
+//+ (__autoreleasing FwiDataParam *)parameterWithData:(NSData *)data contentType:(NSString *)contentType
+//
+//// Class's constructors
+//- (id)initWithData:(NSData *)data contentType:(NSString *)contentType
+//
+//@end

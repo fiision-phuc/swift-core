@@ -26,8 +26,8 @@
 
 #pragma mark - Cleanup memory
 - (void)dealloc {
-    FwiRelease(_data);
-    FwiRelease(_contentType);
+//    FwiRelease(_data);
+//    FwiRelease(_contentType);
 
 #if !__has_feature(objc_arc)
     [super dealloc];
@@ -39,8 +39,8 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [self init];
     if (self && aDecoder) {
-        _data = FwiRetain([aDecoder decodeObjectForKey:@"_data"]);
-        _contentType = FwiRetain([aDecoder decodeObjectForKey:@"_contentType"]);
+        _data = [aDecoder decodeObjectForKey:@"_data"];
+        _contentType = [aDecoder decodeObjectForKey:@"_contentType"];
     }
     return self;
 }
@@ -61,12 +61,12 @@
 + (__autoreleasing FwiDataParam *)parameterWithString:(NSString *)string {
     /* Condition validation */
     if (!string || string.length == 0) return nil;
-    else return [FwiDataParam parameterWithData:[string toData] contentType:@"text/plain; charset=UTF-8"];
+    else return [FwiDataParam parameterWithData:[NSData data] /*[string toData]*/ contentType:@"text/plain; charset=UTF-8"];
 }
 + (__autoreleasing FwiDataParam *)parameterWithData:(NSData *)data contentType:(NSString *)contentType {
     /* Condition validation */
     if (!data || data.length == 0 || !contentType || contentType.length == 0) return nil;
-    return FwiAutoRelease([[FwiDataParam alloc] initWithData:data contentType:contentType]);
+    return [[FwiDataParam alloc] initWithData:data contentType:contentType];
 }
 
 
