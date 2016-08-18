@@ -40,7 +40,6 @@ import Foundation
 import CoreData
 
 
-/** Protocol For NSManagedObject. */
 @objc
 public protocol FwiCoreData {
 }
