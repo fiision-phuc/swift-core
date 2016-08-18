@@ -1,69 +1,60 @@
-// Project name: ZinioReader
+//  Project name: FwiCore
 //  File name   : FwiPersistentManager.swift
 //
 //  Author      : Dung Vu
 //  Created date: 6/8/16
 //  Version     : 1.00
 //  --------------------------------------------------------------
-//  Copyright © 2016 Zinio Pro. All rights reserved.
+//  Copyright © 2012, 2016 Fiision Studio.
+//  All Rights Reserved.
 //  --------------------------------------------------------------
+//
+//  Permission is hereby granted, free of charge, to any person obtaining  a  copy
+//  of this software and associated documentation files (the "Software"), to  deal
+//  in the Software without restriction, including without limitation  the  rights
+//  to use, copy, modify, merge,  publish,  distribute,  sublicense,  and/or  sell
+//  copies of the Software,  and  to  permit  persons  to  whom  the  Software  is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF  ANY  KIND,  EXPRESS  OR
+//  IMPLIED, INCLUDING BUT NOT  LIMITED  TO  THE  WARRANTIES  OF  MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO  EVENT  SHALL  THE
+//  AUTHORS OR COPYRIGHT HOLDERS  BE  LIABLE  FOR  ANY  CLAIM,  DAMAGES  OR  OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING  FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN  THE
+//  SOFTWARE.
+//
+//
+//  Disclaimer
+//  __________
+//  Although reasonable care has been taken to  ensure  the  correctness  of  this
+//  software, this software should never be used in any application without proper
+//  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
+//  person or entity with respect to any loss or damage caused, or alleged  to  be
+//  caused, directly or indirectly, by the use of this software.
 
 import Foundation
 import CoreData
 
-public class FwiPersistentManager: NSObject {
+
+public class FwiPersistentManager {
 
     // MARK: Class's constructors
-    private override init() {
-        super.init()
+    public init(dataModel: String, modelBundle bundle: NSBundle = NSBundle.mainBundle()) {
+        self.bundle = bundle
+        self.dataModel = dataModel
     }
 
     // MARK: Class's properties
     public private (set) lazy var managedModel: NSManagedObjectModel = {
-        guard let modelURL: NSURL = self.bundle.URLForResource(self.dataModel, withExtension: "momd") else {
-            fatalError("Not Found Model!!!")
+        if let modelURL = self.bundle.URLForResource(self.dataModel, withExtension: "momd"), managedModel = NSManagedObjectModel(contentsOfURL: modelURL) {
+            return managedModel
         }
-        return NSManagedObjectModel(contentsOfURL: modelURL)!
+        fatalError("Data model is not available!")
     }()
-
-    public private (set) lazy var persistentCoordinator: NSPersistentStoreCoordinator? = {
-        let coordinator: NSPersistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedModel)
-
-        let storeDB1 = "\(self.dataModel).sqlite"
-        let storeDB2 = "\(self.dataModel).sqlite-shm"
-        let storeDB3 = "\(self.dataModel).sqlite-wal"
-
-        guard let storeURL1: NSURL = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB1) else {
-            fatalError("Not Found Cache directory!!!")
-        }
-
-        let storeURL2: NSURL? = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB2)
-        let storeURL3: NSURL? = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB3)
-
-        // try delete if database in cache exist
-        let fileManager = NSFileManager.defaultManager()
-
-        fileManager.deleteFileAtPath(storeURL1)
-        fileManager.deleteFileAtPath(storeURL2)
-        fileManager.deleteFileAtPath(storeURL3)
-
-        let options = [NSSQLitePragmasOption: ["journal_mode": "WAL"],
-            NSMigratePersistentStoresAutomaticallyOption: true,
-            NSInferMappingModelAutomaticallyOption: true]
-        do {
-            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL1, options: options)
-
-            try storeURL1.setResourceValues([NSURLIsExcludedFromBackupKey: true])
-            try storeURL2?.setResourceValues([NSURLIsExcludedFromBackupKey: true])
-            try storeURL3?.setResourceValues([NSURLIsExcludedFromBackupKey: true])
-
-        } catch let error as NSError {
-            print(error.localizedDescription)
-        }
-
-        return coordinator
-    }()
-
     public private (set) lazy var managedContext: NSManagedObjectContext = {
         let coordinator = self.persistentCoordinator
         var managedObjectContext: NSManagedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
@@ -71,6 +62,44 @@ public class FwiPersistentManager: NSObject {
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
         return managedObjectContext
     }()
+    public private (set) lazy var persistentCoordinator: NSPersistentStoreCoordinator? = {
+        let storeDB1 = "\(self.dataModel).sqlite"
+        let storeDB2 = "\(self.dataModel).sqlite-shm"
+        let storeDB3 = "\(self.dataModel).sqlite-wal"
+        guard let storeURL1 = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB1) else {
+            fatalError("Cache directory could not be found!")
+        }
+        guard let storeURL2 = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB2) else {
+            fatalError("Cache directory could not be found!")
+        }
+        guard let storeURL3 = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB3) else {
+            fatalError("Cache directory could not be found!")
+        }
+
+        let options = [NSSQLitePragmasOption:["journal_mode":"WAL"],
+                       NSInferMappingModelAutomaticallyOption:true,
+                       NSMigratePersistentStoresAutomaticallyOption:true]
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedModel)
+        
+        do {
+            let persistentStore = try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL1, options: options)
+            
+            try storeURL1.setResourceValues([NSURLIsExcludedFromBackupKey: true])
+            try storeURL2.setResourceValues([NSURLIsExcludedFromBackupKey: true])
+            try storeURL3.setResourceValues([NSURLIsExcludedFromBackupKey: true])
+
+        } catch let error as NSError {
+            // try delete if database in cache exist
+//            let fileManager = NSFileManager.defaultManager()
+//            fileManager.deleteFileAtPath(storeURL1)
+//            fileManager.deleteFileAtPath(storeURL2)
+//            fileManager.deleteFileAtPath(storeURL3)
+        }
+
+        return coordinator
+    }()
+
+    
 
     /** Return a sub managed object context that had been optimized to serve the update data process. */
     public private (set) lazy var importContext: NSManagedObjectContext = {
@@ -82,8 +111,9 @@ public class FwiPersistentManager: NSObject {
         return managedObjectContext
     }()
 
-    private var dataModel: String!
-    private var bundle: NSBundle!
+    private var bundle: NSBundle
+    private var dataModel: String
+    
 
     // MARK: Class's public methods
 
@@ -91,6 +121,10 @@ public class FwiPersistentManager: NSObject {
     public func saveContext() -> NSError? {
         if managedContext.hasChanges {
             var errorResult: NSError?
+            managedContext.performBlockAndWait({
+                
+            })
+            
             managedContext.performBlockAndWait({ [weak self] in
                 do {
                     try self?.managedContext.save()
