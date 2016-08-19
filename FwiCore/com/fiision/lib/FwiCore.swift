@@ -38,7 +38,7 @@
 
 import Foundation
 
-// MARK: HTTP Methods
+// HTTP Methods
 public enum FwiHttpMethod: UInt8 {
     case Copy    = 0x00
     case Delete  = 0x01
@@ -53,13 +53,11 @@ public enum FwiHttpMethod: UInt8 {
     case Unlink  = 0x0a
 }
 
-// MARK: Degree/Radians Values
+// Degree/Radians constant
 public let FLT_EPSILON: Float = 1.19209e-07
-
 public let Metric_Circle: Float = 6.28319 // (360 degree)
 public let Metric_DegreeToRadian: Double = 0.0174532925199432957
 public let Metric_RadianToDegree: Double = 57.295779513082320876
-
 
 // MARK: Log Function
 #if DEBUG

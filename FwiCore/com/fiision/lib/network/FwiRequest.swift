@@ -40,15 +40,15 @@ import UIKit
 import Foundation
 
 
-public class FwiRequest : NSMutableURLRequest {
-   
+public class FwiRequest: NSMutableURLRequest {
+
     // MARK: Class's properties
     private var methodType: FwiHttpMethod?
-    
+
     private var raw: FwiDataParam?
     private var form: [FwiFormParam]?
     private var upload: [FwiMultipartParam]?
-    
+
     // MARK: Class's public methods
     public func prepare() -> UInt {
         // Predefine headers
@@ -68,110 +68,97 @@ public class FwiRequest : NSMutableURLRequest {
             return 0
         }
 
-        var length: UInt = 0
-        if let data = raw?.data {
-            self.HTTPBody = data
-            if let contentType = raw?.contentType {
-                setValue(contentType, forHTTPHeaderField: "Content-Type")
-            }
-
-            length = UInt(data.length)
-            setValue("\(length)", forHTTPHeaderField: "Content-Length")
+        /* Condition validation: validate method type */
+        guard let type = methodType else {
+            return 0
         }
-        else {
-            switch methodType! {
-            case .Delete:
-                break
 
+        guard let r = raw else {
+            switch type {
             case .Get:
-                if let params = form, url = URL?.absoluteString {
-                    var stringParams = [String](count:params.count, repeatedValue: "")
-                    for (idx, param) in enumerate(params) {
-                        stringParams[idx] = "\(param)"
-                    }
-                    var stringData = join("&", stringParams)
-                    var finalURL = "\(url)?\(stringData)"
-                    self.URL = NSURL(string: finalURL)
+                let query = form?.map {$0.description}.joinWithSeparator("&")
+                if let url = URL?.absoluteString, q = query {
+                    self.URL = NSURL(string: "\(url)?\(q)")
                 }
-                break
+                return 0
 
             case .Patch, .Post, .Put:
                 if form != nil && upload == nil {
                     setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 
-                    // Generate body content
-                    if let params = form {
-                        var stringParams = [String](count:params.count, repeatedValue: "")
-                        for (idx, param) in enumerate(params) {
-                            stringParams[idx] = "\(param)"
-                        }
-                        var stringData = join("&", stringParams)
-
-                        // Assign data length
-                        if let data = stringData.toData() {
-                            HTTPBody = data
-                            length = UInt(data.length)
-                        }
+                    let query = form?.map {$0.description}.joinWithSeparator("&")
+                    if let data = query?.toData() {
+                        setValue("\(data.length)", forHTTPHeaderField: "Content-Length")
+                        HTTPBody = data
+                        return UInt(data.length)
                     }
-                    setValue("\(length)", forHTTPHeaderField: "Content-Length")
-                }
-                else {
-                    var boundary = "----------\(NSDate().timeIntervalSince1970)"
-                    var contentType = "multipart/form-data; boundary=\(boundary)"
-                    setValue(contentType, forHTTPHeaderField: "Content-Type")
+                    return 0
 
-                    // Generate body content
-                    var body = NSMutableData()
+                } else {
+                    let body = NSMutableData()
+                    let boundary = "----------\(NSDate().timeIntervalSince1970)"
+                    setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
                     // Multi files
-                    if let files = upload {
-                        for file in files {
-                            if let
-                                contentData = file.contentData,
-                                boundaryData = "\r\n--\(boundary)\r\n".toData(),
-                                contentType = "Content-Type: \(file.contentType)\r\n\r\n".toData(),
-                                contentDisposition = "Content-Disposition: form-data; name=\"\(file.name)\"; filename=\"\(file.fileName)\"\r\n".toData()
-                            {
-                                body.appendData(boundaryData)
-                                body.appendData(contentDisposition)
-                                body.appendData(contentType)
-                                body.appendData(contentData)
-                            }
+                    upload?.forEach({
+                        if let
+                            boundaryData = "\r\n--\(boundary)\r\n".toData(),
+                            contentType = "Content-Type: \($0.contentType)\r\n\r\n".toData(),
+                            contentDisposition = "Content-Disposition: form-data; name=\"\($0.name)\"; filename=\"\($0.fileName)\"\r\n".toData() {
+
+                            body.appendData(boundaryData)
+                            body.appendData(contentDisposition)
+                            body.appendData(contentType)
+                            body.appendData($0.contentData)
                         }
-                    }
+                    })
 
                     // Multi params
-                    if let params = form {
-                        for param in params {
-                            if let
-                                contentData = param.value?.toData(),
-                                boundaryData = "\r\n--\(boundary)\r\n".toData(),
-                                contentDisposition = "Content-Disposition: form-data; name=\"\(param.key)\"\r\n\r\n".toData()
-                            {
-                                body.appendData(boundaryData)
-                                body.appendData(contentDisposition)
-                                body.appendData(contentData)
-                            }
+                    form?.forEach({
+                        if let
+                            contentData = $0.value.toData(),
+                            boundaryData = "\r\n--\(boundary)\r\n".toData(),
+                            contentDisposition = "Content-Disposition: form-data; name=\"\($0.key)\"\r\n\r\n".toData() {
+
+                            body.appendData(boundaryData)
+                            body.appendData(contentDisposition)
+                            body.appendData(contentData)
                         }
-                    }
+                    })
 
                     // Finalize request
                     if let boundaryData = "\r\n--\(boundary)\r\n".toData() {
                         body.appendData(boundaryData)
                     }
 
-                    // Prepare body
+                    setValue("\(body.length)", forHTTPHeaderField: "Content-Length")
                     HTTPBody = body
-                    length = UInt(body.length)
-                    setValue("\(length)", forHTTPHeaderField: "Content-Length")
+
+                    return UInt(body.length)
                 }
-                break
 
             default:
-                break
+                return 0
             }
         }
-        return 0
+
+        // Handle raw data request
+        HTTPBody = r.data
+        setValue(r.contentType, forHTTPHeaderField: "Content-Type")
+        setValue("\(r.data.length)", forHTTPHeaderField: "Content-Length")
+
+        return UInt(r.data.length)
+    }
+
+    /** Set custom data param. */
+    public func setDataParam(param: FwiDataParam?) {
+        /* Condition validation: Validate method type */
+        if !(methodType == .Post || methodType == .Patch || methodType == .Put) {
+            return
+        }
+        raw = param
+        form = nil
+        upload = nil
     }
 
     /** Add form parameter. */
@@ -184,9 +171,6 @@ public class FwiRequest : NSMutableURLRequest {
         }
     }
     public func setFormParam(param: FwiFormParam?) {
-        self.initializeForm()
-        raw = nil
-
         form?.removeAll(keepCapacity: false)
         self.addFormParam(param)
     }
@@ -194,16 +178,11 @@ public class FwiRequest : NSMutableURLRequest {
         self.initializeForm()
         raw = nil
 
-        if let paramsForm = params {
-            for param in paramsForm {
-                form?.append(param)
-            }
+        params?.forEach() { [weak self] in
+            self?.form?.append($0)
         }
     }
     public func setFormParams(params: [FwiFormParam]?) {
-        self.initializeForm()
-        raw = nil
-
         form?.removeAll(keepCapacity: false)
         self.addFormParams(params)
     }
@@ -213,14 +192,11 @@ public class FwiRequest : NSMutableURLRequest {
         self.initializeUpload()
         raw = nil
 
-        if let paramsMultipart = param {
-            upload?.append(paramsMultipart)
+        if let p = param {
+            upload?.append(p)
         }
     }
     public func setMultipartParam(param: FwiMultipartParam?) {
-        self.initializeUpload()
-        raw = nil
-
         upload?.removeAll(keepCapacity: false)
         self.addMultipartParam(param)
     }
@@ -228,30 +204,13 @@ public class FwiRequest : NSMutableURLRequest {
         self.initializeUpload()
         raw = nil
 
-        if let paramsMultipart = params {
-            for param in paramsMultipart {
-                upload?.append(param)
-            }
+        params?.forEach() { [weak self] in
+            self?.upload?.append($0)
         }
     }
     public func setMultipartParams(params: [FwiMultipartParam]?) {
-        self.initializeUpload()
-        raw = nil
-
         upload?.removeAll(keepCapacity: false)
         self.addMultipartParams(params)
-    }
-
-    /** Set custom data param. */
-    public func setDataParam(param: FwiDataParam?) {
-        /* Condition validation: Validate method type */
-        if !(methodType == FwiHttpMethod.Post || methodType == FwiHttpMethod.Patch || methodType == FwiHttpMethod.Put) {
-            return;
-        }
-        raw = param
-
-        form = nil
-        upload = nil
     }
 
     // MARK: Class's private methods
@@ -270,27 +229,12 @@ public class FwiRequest : NSMutableURLRequest {
 
     /** Define user agent for each request. */
     private func defineUserAgent() {
-        var bundleInfo = NSBundle.mainBundle().infoDictionary
-        var deviceInfo = UIDevice.currentDevice();
-        var bundleExecutable: String! = nil
-        var bundleIdentifier: String! = ""
-        var bundleVersion: String! = ""
+        let deviceInfo = UIDevice.currentDevice()
+        let bundleInfo = NSBundle.mainBundle().infoDictionary
+        let bundleVersion = (bundleInfo?[kCFBundleVersionKey as String] as? String) ?? ""
+        let bundleIdentifier = (bundleInfo?[kCFBundleIdentifierKey as String] as? String) ?? ""
 
-        var model = deviceInfo.model
-        var systemVersion = deviceInfo.systemVersion
-
-        // Extract bundle's info
-        if let executable = bundleInfo?[kCFBundleExecutableKey] as? String {
-            bundleExecutable = executable
-        }
-        if let identifier = bundleInfo?[kCFBundleIdentifierKey] as? String {
-            bundleIdentifier = identifier
-        }
-        if let version = bundleInfo?[kCFBundleVersionKey] as? String {
-            bundleVersion = version
-        }
-
-        var userAgent = "\(bundleExecutable != nil ? bundleExecutable : bundleIdentifier)/\(bundleVersion) (\(model); iOS \(systemVersion); Scale/\(UIScreen.mainScreen().scale))"
+        let userAgent = "\(bundleIdentifier)/\(bundleVersion) (\(deviceInfo.model); iOS \(deviceInfo.systemVersion); Scale/\(UIScreen.mainScreen().scale))"
         setValue(userAgent, forHTTPHeaderField: "User-Agent")
     }
 }
@@ -300,13 +244,13 @@ public class FwiRequest : NSMutableURLRequest {
 public extension FwiRequest {
 
     // MARK: Class's constructors
-    public convenience init(url: NSURL, httpMethod method: FwiHttpMethod) {
+    public convenience init(url: NSURL, httpMethod method: FwiHttpMethod = .Get) {
         self.init(URL: url, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData, timeoutInterval: 30.0)
-        raw    = nil
-        form   = nil
+        raw = nil
+        form = nil
         upload = nil
-
         methodType = method
+
         switch method {
         case .Copy:
             self.HTTPMethod = "COPY"

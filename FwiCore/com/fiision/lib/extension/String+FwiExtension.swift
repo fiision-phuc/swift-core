@@ -97,11 +97,13 @@ public extension String {
 
     /** Convert html string compatible to string. */
     public func decodeHTML() -> String {
-        return CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, self, "") as String
+        return stringByRemovingPercentEncoding ?? ""
+//        return CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, self, "") as String
     }
     /** Convert string to html string compatible. */
     public func encodeHTML() -> String {
-        return stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet(charactersInString: ":/=,!$&'()*+[]@#?")) ?? ""
+        return stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet()) ?? ""
+//        return stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet(charactersInString: ":/=,!$&'()*+[]@#?")) ?? ""
     }
 
     /** Split string into components. */
