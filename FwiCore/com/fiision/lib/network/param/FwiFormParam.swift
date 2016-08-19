@@ -38,7 +38,7 @@
 
 import Foundation
 
-public class FwiFormParam: CustomDebugStringConvertible, CustomStringConvertible {
+public final class FwiFormParam: CustomDebugStringConvertible, CustomStringConvertible {
 
     // MARK: Class's constructors
     public init(key: String = "", value: String = "") {
@@ -65,12 +65,12 @@ public class FwiFormParam: CustomDebugStringConvertible, CustomStringConvertible
     public func compare(param: FwiFormParam) -> NSComparisonResult {
         return key.compare(param.key)
     }
-    
+
     // MARK: CustomDebugStringConvertible's members
     public var debugDescription: String {
         return description
     }
-    
+
     // MARK: CustomStringConvertible's members
     public var description: String {
         return "\(key)=\(value.encodeHTML())"

@@ -39,7 +39,7 @@
 import Foundation
 
 
-public class FwiReflector {
+public final class FwiReflector {
 
     // MARK: Class's constructors
     public init(mirrorName: String, mirrorValue value: Any) {

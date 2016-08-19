@@ -39,8 +39,8 @@
 import Foundation
 
 
-public class FwiDataParam: CustomDebugStringConvertible, CustomStringConvertible {
-    
+public final class FwiDataParam: CustomDebugStringConvertible, CustomStringConvertible {
+
     // MARK: Class's constructors
     public init(data: NSData = NSData(), contentType type: String = "text/plain; charset=UTF-8") {
         self.contentType = type
@@ -59,7 +59,7 @@ public class FwiDataParam: CustomDebugStringConvertible, CustomStringConvertible
     public var debugDescription: String {
         return description
     }
-    
+
     // MARK: CustomStringConvertible's members
     public var description: String {
         if let encoded = data.encodeBase64String() {

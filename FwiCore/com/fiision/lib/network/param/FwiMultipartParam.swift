@@ -39,8 +39,8 @@
 import Foundation
 
 
-public class FwiMultipartParam: CustomDebugStringConvertible, CustomStringConvertible {
-   
+public final class FwiMultipartParam: CustomDebugStringConvertible, CustomStringConvertible {
+
     // MARK: Class's constructors
     public init(name: String = "", fileName file: String = "", contentData data: NSData = NSData(), contentType type: String = "") {
         self.name = name
@@ -48,22 +48,22 @@ public class FwiMultipartParam: CustomDebugStringConvertible, CustomStringConver
         self.contentData = data
         self.contentType = type
     }
-    
+
     // MARK: Class's properties
     public private (set) var name: String
     public private (set) var fileName: String
     public private (set) var contentData: NSData
     public private (set) var contentType: String
-    
+
     public var hash: Int {
         var hash = name.hash
         hash ^= fileName.hash
         hash ^= contentData.hash
         hash ^= contentType.hash
-        
+
         return hash
     }
-    
+
     // MARK: Class's public methods
     public func isEqual(object: AnyObject?) -> Bool {
         if let other = object as? FwiMultipartParam {
@@ -71,21 +71,21 @@ public class FwiMultipartParam: CustomDebugStringConvertible, CustomStringConver
         }
         return false
     }
-    
+
     public func compare(param: FwiMultipartParam) -> NSComparisonResult {
         return name.compare(param.name)
     }
-    
+
     // MARK: CustomDebugStringConvertible's members
     public var debugDescription: String {
         return description
     }
-    
+
     // MARK: CustomStringConvertible's members
     public var description: String {
         let type = "Content-Type: \(contentType)"
         let disposition = "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(fileName)\"\r\n"
-        
+
         if let encoded = contentData.encodeBase64String() {
             return "\n\(type)\n\(disposition)\n\(encoded)"
         }

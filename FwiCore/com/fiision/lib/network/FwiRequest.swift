@@ -40,7 +40,7 @@ import UIKit
 import Foundation
 
 
-public class FwiRequest: NSMutableURLRequest {
+public final class FwiRequest: NSMutableURLRequest {
 
     // MARK: Class's properties
     private var methodType: FwiHttpMethod?
