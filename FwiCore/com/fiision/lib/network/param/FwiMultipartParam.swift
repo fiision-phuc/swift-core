@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : FwiFormParam.swift
+//  File name   : FwiMultipartParam.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 12/3/14
@@ -38,32 +38,42 @@
 
 import Foundation
 
-public class FwiFormParam: CustomDebugStringConvertible, CustomStringConvertible {
 
+public class FwiMultipartParam: CustomDebugStringConvertible, CustomStringConvertible {
+   
     // MARK: Class's constructors
-    public init(key: String = "", value: String = "") {
-        self.key = key
-        self.value = value
+    public init(name: String = "", fileName file: String = "", contentData data: NSData = NSData(), contentType type: String = "") {
+        self.name = name
+        self.fileName = file
+        self.contentData = data
+        self.contentType = type
     }
-
+    
     // MARK: Class's properties
-    public private (set) var key: String
-    public private (set) var value: String
-
+    public private (set) var name: String
+    public private (set) var fileName: String
+    public private (set) var contentData: NSData
+    public private (set) var contentType: String
+    
     public var hash: Int {
-        return (key.hash ?? 0) ^ (value.hash ?? 0)
+        var hash = name.hash
+        hash ^= fileName.hash
+        hash ^= contentData.hash
+        hash ^= contentType.hash
+        
+        return hash
     }
-
+    
     // MARK: Class's public methods
     public func isEqual(object: AnyObject?) -> Bool {
-        if let other = object as? FwiFormParam {
+        if let other = object as? FwiMultipartParam {
             return (self.hash == other.hash)
         }
         return false
     }
-
-    public func compare(param: FwiFormParam) -> NSComparisonResult {
-        return key.compare(param.key)
+    
+    public func compare(param: FwiMultipartParam) -> NSComparisonResult {
+        return name.compare(param.name)
     }
     
     // MARK: CustomDebugStringConvertible's members
@@ -73,6 +83,12 @@ public class FwiFormParam: CustomDebugStringConvertible, CustomStringConvertible
     
     // MARK: CustomStringConvertible's members
     public var description: String {
-        return "\(key)=\(value.encodeHTML())"
+        let type = "Content-Type: \(contentType)"
+        let disposition = "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(fileName)\"\r\n"
+        
+        if let encoded = contentData.encodeBase64String() {
+            return "\n\(type)\n\(disposition)\n\(encoded)"
+        }
+        return "\n\(type)\n\(disposition)"
     }
 }

@@ -109,8 +109,8 @@ public extension UIImage {
         var effectImage = self
 
         /* Condition validation: Validate against zero */
-        let hasBlur = (blurRadius > FLT_EPSILON)
-        let hasSaturation = (fabs(s - 1.0) > FLT_EPSILON)
+        let hasBlur = (blurRadius > CGFloat(FLT_EPSILON))
+        let hasSaturation = (fabs(s - 1.0) > CGFloat(FLT_EPSILON))
 
         if hasBlur || hasSaturation {
             /** Effect Input Context */

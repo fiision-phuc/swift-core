@@ -1,11 +1,11 @@
 //  Project name: FwiCore
-//  File name   : FwiDataParam.h
+//  File name   : FwiDataParam.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 8/11/13
-//  Version     : 1.20
+//  Created date: 12/3/14
+//  Version     : 1.00
 //  --------------------------------------------------------------
-//  Copyright (C) 2012, 2015 Fiision Studio.
+//  Copyright © 2012, 2016 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -39,22 +39,32 @@
 import Foundation
 
 
-public class FwiDataParam {
-}
+public class FwiDataParam: CustomDebugStringConvertible, CustomStringConvertible {
+    
+    // MARK: Class's constructors
+    public init(data: NSData = NSData(), contentType type: String = "text/plain; charset=UTF-8") {
+        self.contentType = type
+        self.data = data
+    }
 
-//@property (nonatomic, readonly) NSData *data
-//@property (nonatomic, readonly) NSString *contentType
-//
-//@end
-//
-//
-//@interface FwiDataParam (FwiDataParamCreation)
-//
-//// Class's static constructors
-//+ (__autoreleasing FwiDataParam *)parameterWithString:(NSString *)string
-//+ (__autoreleasing FwiDataParam *)parameterWithData:(NSData *)data contentType:(NSString *)contentType
-//
-//// Class's constructors
-//- (id)initWithData:(NSData *)data contentType:(NSString *)contentType
-//
-//@end
+    // MARK: Class's properties
+    public private (set) var data: NSData
+    public private (set) var contentType: String
+
+    public var hash: Int {
+        return contentType.hash ^ data.hash
+    }
+
+    // MARK: CustomDebugStringConvertible's members
+    public var debugDescription: String {
+        return description
+    }
+    
+    // MARK: CustomStringConvertible's members
+    public var description: String {
+        if let encoded = data.encodeBase64String() {
+            return "\n\(contentType)\n\(encoded)\n"
+        }
+        return "\n\(contentType)\n"
+    }
+}

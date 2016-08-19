@@ -36,12 +36,25 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import UIKit
 import Foundation
 
+// MARK: HTTP Methods
+public enum FwiHttpMethod: UInt8 {
+    case Copy    = 0x00
+    case Delete  = 0x01
+    case Get     = 0x02
+    case Head    = 0x03
+    case Link    = 0x04
+    case Options = 0x05
+    case Patch   = 0x06
+    case Post    = 0x07
+    case Purge   = 0x08
+    case Put     = 0x09
+    case Unlink  = 0x0a
+}
 
 // MARK: Degree/Radians Values
-public let FLT_EPSILON: CGFloat = 1.19209e-07
+public let FLT_EPSILON: Float = 1.19209e-07
 
 public let Metric_Circle: Float = 6.28319 // (360 degree)
 public let Metric_DegreeToRadian: Double = 0.0174532925199432957
@@ -60,7 +73,6 @@ public let Metric_RadianToDegree: Double = 57.295779513082320876
     }
 #endif
 
-
 // MARK: Metric Function
 public func FwiConvertToDegree(radianValue radian: Double) -> Double {
     let degree = radian * Metric_RadianToDegree
@@ -71,6 +83,10 @@ public func FwiConvertToRadian(degreeValue degree: Double) -> Double {
     return radian
 }
 
+// MARK: Network Functions
+public func FwiNetworkStatusIsSuccces(networkStatus: Int32) -> Bool {
+    return (200 <= networkStatus && networkStatus <= 299)
+}
 
 // MARK: Custom Operator
 infix operator <- {}
