@@ -83,7 +83,7 @@ public extension FwiCoreData where Self: NSManagedObject {
                     }
                 })
             } catch let err as NSError {
-                FwiLog(message: "There was an error when fetch all entities (\(err))!")
+                FwiLog("There was an error when fetch all entities (\(err))!")
             }
         }
 
