@@ -1,11 +1,11 @@
 //  Project name: FwiCore
-//  File name   : FwiLocalization.h
+//  File name   : FwiLocalization.swift
 //
 //  Author      : Phuc Tran
 //  Created date: 4/13/15
-//  Version     : 1.20
+//  Version     : 1.00
 //  --------------------------------------------------------------
-//  Copyright (C) 2012, 2015 Fiision Studio.
+//  Copyright © 2012, 2016 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -36,27 +36,53 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#import <Foundation/Foundation.h>
+import Foundation
 
 
-@interface FwiLocalization : NSObject {
+public class FwiLocalization {
+
+    // MARK: Class's constructors
+    public init() {
+        reset()
+    }
+
+    // MARK: Class's properties
+    public private (set) var bundle: NSBundle?
+    public var locale: String? {
+        didSet {
+            guard let path = NSBundle.mainBundle().pathForResource("Localizable", ofType: "strings", inDirectory: nil, forLocalization: locale) else {
+                reset()
+                return
+            }
+            
+            NSUserDefaults.standardUserDefaults().setObject([locale!], forKey: "AppleLanguages")
+            NSUserDefaults.standardUserDefaults().synchronize()
+            
+            bundle = NSBundle(path: (path as NSString).stringByDeletingLastPathComponent)
+        }
+    }
+
+    // MARK: Class's public methods
+    func localizedForString(string: String) -> String {
+        if let localized = bundle?.localizedStringForKey(string, value: string, table: nil) {
+            return localized
+        }
+        return string
+    }
+
+    func reset() {
+        let languages = NSBundle.mainBundle().preferredLocalizations
+        locale = languages.count > 0 ? languages[0] : "en"
+    }
 }
 
-@property (nonatomic, strong) NSBundle *bundle;
-@property (nonatomic, strong) NSString *locale;
 
-
-/** Find localize text for text. */
-- (__autoreleasing NSString *)localizedForString:(NSString *)string alternative:(NSString *)alternative;
-/** Reset localize to default. */
-- (void)reset;
-
-@end
-
-
-@interface FwiLocalization (FwiLocalizationCreation)
-
-// Class's static constructors
-+ (FwiLocalization *)sharedInstance;
-
-@end
+// MARK: Singleton
+public extension FwiLocalization {
+    private static let instance = FwiLocalization()
+    
+    /** Get singleton network manager. */
+    public class func sharedInstance() -> FwiLocalization {
+        return instance
+    }
+}

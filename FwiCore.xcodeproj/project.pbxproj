@@ -30,6 +30,7 @@
 		BE35A4161D6599720059EB58 /* UISplitViewController+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE35A4071D6599720059EB58 /* UISplitViewController+FwiExtension.swift */; };
 		BE35A4171D6599720059EB58 /* UITableViewController+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE35A4081D6599720059EB58 /* UITableViewController+FwiExtension.swift */; };
 		BE35A4181D6599720059EB58 /* UIView+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE35A4091D6599720059EB58 /* UIView+FwiExtension.swift */; };
+		BE49B34B1D695BFF0052179E /* FwiLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE49B34A1D695BFF0052179E /* FwiLocalization.swift */; };
 		BE5D54F61D0F057000E69F30 /* FwiCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5D54E31D0F057000E69F30 /* FwiCore.swift */; };
 		BE708A311D66DD6800A6BE6A /* FwiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE708A301D66DD6800A6BE6A /* FwiRequest.swift */; };
 		BE73A9D21D67788500A09194 /* FwiNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73A9D11D67788500A09194 /* FwiNetworkManager.swift */; };
@@ -89,6 +90,7 @@
 		BE35A4071D6599720059EB58 /* UISplitViewController+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UISplitViewController+FwiExtension.swift"; sourceTree = "<group>"; };
 		BE35A4081D6599720059EB58 /* UITableViewController+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableViewController+FwiExtension.swift"; sourceTree = "<group>"; };
 		BE35A4091D6599720059EB58 /* UIView+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+FwiExtension.swift"; sourceTree = "<group>"; };
+		BE49B34A1D695BFF0052179E /* FwiLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiLocalization.swift; sourceTree = "<group>"; };
 		BE5D54E31D0F057000E69F30 /* FwiCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiCore.swift; sourceTree = "<group>"; };
 		BE708A301D66DD6800A6BE6A /* FwiRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiRequest.swift; sourceTree = "<group>"; };
 		BE73A9D11D67788500A09194 /* FwiNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiNetworkManager.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				BE5D54E31D0F057000E69F30 /* FwiCore.swift */,
 				BE2A157D1D54F2E9007D60BC /* extension */,
 				BE2A15741D54F2E9007D60BC /* codec */,
+				BE73A9DA1D695A6000A09194 /* i18n */,
 				BE95CE8F1D62ED0800E0E969 /* json */,
 				BE35A4191D659BA80059EB58 /* network */,
 				BE2A158B1D54F2E9007D60BC /* operation */,
@@ -260,6 +263,14 @@
 				BE73A9D61D68B6BB00A09194 /* FwiNetworkManagerTest.swift */,
 			);
 			path = network;
+			sourceTree = "<group>";
+		};
+		BE73A9DA1D695A6000A09194 /* i18n */ = {
+			isa = PBXGroup;
+			children = (
+				BE49B34A1D695BFF0052179E /* FwiLocalization.swift */,
+			);
+			path = i18n;
 			sourceTree = "<group>";
 		};
 		BE95CE8F1D62ED0800E0E969 /* json */ = {
@@ -525,6 +536,7 @@
 				BE35A4161D6599720059EB58 /* UISplitViewController+FwiExtension.swift in Sources */,
 				BE2A15911D54F2E9007D60BC /* String+FwiBase64.swift in Sources */,
 				BE35A4101D6599720059EB58 /* String+FwiExtension.swift in Sources */,
+				BE49B34B1D695BFF0052179E /* FwiLocalization.swift in Sources */,
 				BE95CE931D62ED0800E0E969 /* FwiJSONMapper.swift in Sources */,
 				BE2A15931D54F2E9007D60BC /* NSString+FwiHex.swift in Sources */,
 				BE35A4171D6599720059EB58 /* UITableViewController+FwiExtension.swift in Sources */,
