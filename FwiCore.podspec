@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "FwiCore"
-  s.version          = "v0.9.0"
+  s.version          = "v1.0.0"
   s.summary          = "FwiCore is a set of extension for Swift"
   s.description      = <<-DESC
 FwiCore is a set of extension for Swift. FwiCore also provide some simple network implementation and core data.
