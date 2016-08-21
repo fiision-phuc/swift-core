@@ -170,10 +170,9 @@ public final class FwiReflector {
 
     // Object type
     public lazy var isClass: Bool = {
-//        // PS: Need to be disable in order to make dictionary work
-//        if !self.isOptional {
-//            return self.mirrorType.displayStyle == Mirror.DisplayStyle.Class
-//        }
+        if !self.isOptional {
+            return self.mirrorType.displayStyle == Mirror.DisplayStyle.Class
+        }
 
         if let clazz = self.classType {
             return true
@@ -182,12 +181,7 @@ public final class FwiReflector {
     }()
     public lazy var isObject: Bool = {
         if let clazz = self.classType {
-            var flag = true
-            if let bundleName: String = String(reflecting: FwiReflector.self).split(".").first {
-               flag =  NSClassFromString("\(bundleName).\(clazz)") == nil
-            }
-
-            return (clazz is NSObject.Type) && flag
+            return (clazz is NSObject.Type)
         }
         return false
     }()
@@ -317,9 +311,9 @@ public final class FwiReflector {
         return (key, value)
     }
     private func extractType() -> String {
+        var subjectType = "\(self.mirrorType.subjectType)"
+        
         if !self.isOptional {
-            var subjectType = "\(self.mirrorType.subjectType)"
-
             // Remove ObjC tag
             if subjectType.hasPrefix("__") {
                 subjectType = subjectType.substring(startIndex: 2, reverseIndex: -1)
@@ -329,20 +323,22 @@ public final class FwiReflector {
             if subjectType.hasSuffix(".Type") {
                 subjectType = subjectType.substringToIndex(subjectType.endIndex.advancedBy(-5))
             }
-
-            return subjectType
         } else {
-            let subjectType = "\(self.mirrorType.subjectType)"
-            let type = subjectType.substring(startIndex: 9, reverseIndex: -1)
-            return type
+            subjectType = subjectType.substring(startIndex: 9, reverseIndex: -1)
         }
+        
+//        // Remove private pattern
+//        if subjectType.matchPattern("\\(\\w+\\sin\\s_[a-zA-Z0-9]{32}\\)") {
+//            subjectType = subjectType.substring(startIndex: 1, reverseIndex: -38)
+//        }
+        return subjectType
     }
 
     private func generateReflector(type: String) -> FwiReflector? {
         if let clazz = self.lookupClassType(type) {
-            return FwiReflector(mirrorName: type, mirrorValue: clazz.self)
+            return FwiReflector(mirrorName: type, mirrorValue: clazz)
         } else if let primitiveType = self.lookupPrimitiveType(type) {
-            return FwiReflector(mirrorName: type, mirrorValue: primitiveType.self)
+            return FwiReflector(mirrorName: type, mirrorValue: primitiveType)
         }
         return nil
     }
@@ -352,12 +348,20 @@ public final class FwiReflector {
         if className.characters.count <= 0 {
             return nil
         }
-        FwiLog("\(#file)")
+        
         if let clazz = NSClassFromString(className) {
             return clazz
-        } else if let token = String(reflecting: FwiReflector.self).split(".").first {
-            let clazzName = "\(token).\(className)"
-            return NSClassFromString(clazzName)
+        } else {
+            for bundle in NSBundle.allBundles() {
+                if let module = bundle.bundleIdentifier?.split(".").last where bundle.load() {
+                    let clazzName = "\(module).\(className)"
+                    
+                    let clazz: AnyClass? = NSClassFromString(clazzName)
+                    if clazz != nil {
+                        return clazz
+                    }
+                }
+            }
         }
         return nil
     }

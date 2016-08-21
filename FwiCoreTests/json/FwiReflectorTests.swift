@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : ReflectorTests.swift
+//  File name   : FwiReflectorTests.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 6/14/16
@@ -52,19 +52,19 @@ public enum Compass2: Int {
     case East
     case West
 }
-private enum Compass3: Int {
-    case North = 0
-    case South
-    case East
-    case West
-}
+//private enum Compass3: Int {
+//    case North = 0
+//    case South
+//    case East
+//    case West
+//}
 
 struct Struct1 {
 }
 public struct Struct2 {
 }
-private struct Struct3 {
-}
+//private struct Struct3 {
+//}
 
 class Test1 {
     var value1 = 0
@@ -80,13 +80,13 @@ public class Test2 {
     var value4: UInt?
     var value5: NSNumber?
 }
-private class Test3 {
-    var value1 = 0
-    var value2: UInt = 0
-    var value3: Int?
-    var value4: UInt?
-    var value5: NSNumber?
-}
+//private class Test3 {
+//    var value1 = 0
+//    var value2: UInt = 0
+//    var value3: Int?
+//    var value4: UInt?
+//    var value5: NSNumber?
+//}
 
 @objc(Test4)
 class Test4: NSObject {
@@ -102,18 +102,18 @@ public class Test5: NSObject {
     var object3: NSDate?
     var object4: NSURL?
 }
-@objc(Test6)
-private class Test6: NSObject {
-    var object1: String?
-    var object2: NSData?
-    var object3: NSDate?
-    var object4: NSURL?
-}
+//@objc(Test6)
+//private class Test6: NSObject {
+//    var object1: String?
+//    var object2: NSData?
+//    var object3: NSDate?
+//    var object4: NSURL?
+//}
 
 
 
 
-class ReflectorTests: XCTestCase {
+class FwiReflectorTests: XCTestCase {
 
 
     // MARK: Class's properties
@@ -122,6 +122,7 @@ class ReflectorTests: XCTestCase {
     // MARK: Initialize test case
     override func setUp() {
         super.setUp()
+        FwiLog("\(#file)")
     }
     override func tearDown() {
         super.tearDown()
@@ -263,12 +264,12 @@ class ReflectorTests: XCTestCase {
         r = FwiReflector(mirrorName: "optionalClazz2", mirrorValue: optionalClazz2)
         XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
 
-        let clazz3 = Test3()
-        let optionalClazz3: Test3? = Test3()
-        r = FwiReflector(mirrorName: "clazz3", mirrorValue: clazz3)
-        XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
-        r = FwiReflector(mirrorName: "optionalClazz3", mirrorValue: optionalClazz3)
-        XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
+//        let clazz3 = Test3()
+//        let optionalClazz3: Test3? = Test3()
+//        r = FwiReflector(mirrorName: "clazz3", mirrorValue: clazz3)
+//        XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
+//        r = FwiReflector(mirrorName: "optionalClazz3", mirrorValue: optionalClazz3)
+//        XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
 
         // Test class with super class
         let clazz4 = Test4()
@@ -285,12 +286,12 @@ class ReflectorTests: XCTestCase {
         r = FwiReflector(mirrorName: "optionalClazz5", mirrorValue: optionalClazz5)
         XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
 
-        let clazz6 = Test6()
-        let optionalClazz6: Test6? = Test6()
-        r = FwiReflector(mirrorName: "clazz6", mirrorValue: clazz6)
-        XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
-        r = FwiReflector(mirrorName: "optionalClazz6", mirrorValue: optionalClazz6)
-        XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
+//        let clazz6 = Test6()
+//        let optionalClazz6: Test6? = Test6()
+//        r = FwiReflector(mirrorName: "clazz6", mirrorValue: clazz6)
+//        XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
+//        r = FwiReflector(mirrorName: "optionalClazz6", mirrorValue: optionalClazz6)
+//        XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
     }
 
     func testIsObject() {
@@ -327,12 +328,12 @@ class ReflectorTests: XCTestCase {
         r = FwiReflector(mirrorName: "optionalStruct2", mirrorValue: optionalStruct2)
         XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
 
-        let struct3 = Struct3()
-        let optionalStruct3: Struct3? = Struct3()
-        r = FwiReflector(mirrorName: "struct3", mirrorValue: struct3)
-        XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
-        r = FwiReflector(mirrorName: "optionalStruct3", mirrorValue: optionalStruct3)
-        XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
+//        let struct3 = Struct3()
+//        let optionalStruct3: Struct3? = Struct3()
+//        r = FwiReflector(mirrorName: "struct3", mirrorValue: struct3)
+//        XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
+//        r = FwiReflector(mirrorName: "optionalStruct3", mirrorValue: optionalStruct3)
+//        XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
     }
 
     func testIsSet() {
