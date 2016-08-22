@@ -52,7 +52,7 @@ public let Metric_RadianToDegree: Double = 57.295779513082320876
         }
     }
 #else
-    public func FwiLog(className: String = #file, methodName: String = #function, line: Int = #line, message: String?) {
+    public func FwiLog(message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
     }
 #endif
 
@@ -215,13 +215,13 @@ public struct NetworkStatus: OptionSetType, CustomDebugStringConvertible, Custom
     public static let InsufficientStorage = NetworkStatus(rawValue: 507)
     public static let LoopDetected = NetworkStatus(rawValue: 508)
     public static let NetworkAuthenticationRequired = NetworkStatus(rawValue: 511)
-    
-    
+
+
     public let rawValue: Int32
     private var statusDescription: String?
     public init(rawValue: Int32) {
         self.rawValue = rawValue
-        
+
         switch rawValue {
         case CFNetworkErrors.CFURLErrorUnknown.rawValue:
             statusDescription = "Unknown."
@@ -470,12 +470,12 @@ public struct NetworkStatus: OptionSetType, CustomDebugStringConvertible, Custom
             statusDescription = ""
         }
     }
-    
+
     // MARK: CustomDebugStringConvertible's members
     public var debugDescription: String {
         return description
     }
-    
+
     // MARK: CustomStringConvertible's members
     public var description: String {
         if let d = statusDescription {

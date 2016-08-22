@@ -41,6 +41,37 @@ import Foundation
 
 public extension NSData {
 
+    /** Convert data to json */
+    public func convertToJson(options otp: NSJSONReadingOptions = []) -> [String: AnyObject]? {
+        do {
+            let json = try NSJSONSerialization.JSONObjectWithData(self, options: otp)
+            return json as? [String: AnyObject]
+        } catch {
+            return nil
+        }
+    }
+
+    /** Convert data to model object */
+    public func decodeJSONWithModel<T: NSObject>(inout model m: T) -> NSError? {
+        do {
+            let json = try NSJSONSerialization.JSONObjectWithData(self, options: [])
+            if let error = FwiJSONMapper.mapObjectToModel(json, model: &m) {
+                throw error
+            } else {
+                return nil
+            }
+
+        } catch let error as NSError {
+            return error
+        }
+    }
+
+    /** Convert model object to data */
+    public func encodeJSONWithModel<T: NSObject>(model m: T) -> NSError? {
+
+        return nil
+    }
+
     /** Convert data to string base on string encoding type. */
     public func toString(encoding: NSStringEncoding = NSUTF8StringEncoding) -> String? {
         /* Condition validation */

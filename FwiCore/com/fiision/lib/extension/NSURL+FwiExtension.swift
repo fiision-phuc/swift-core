@@ -53,3 +53,9 @@ public extension NSURL {
         return array.first
     }
 }
+
+
+// MARK: Custom Operator
+public func + (left: NSURL?, right: String) -> NSURL? {
+    return left?.URLByAppendingPathComponent(right)
+}

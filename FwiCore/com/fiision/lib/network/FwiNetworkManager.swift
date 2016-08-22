@@ -52,7 +52,7 @@ public final class FwiNetworkManager: NSObject, NSURLSessionDelegate, NSURLSessi
             }
         }
     }
-    
+
     private lazy var cache: NSURLCache = {
         return NSURLCache.sharedURLCache()
     }()
@@ -97,49 +97,49 @@ public final class FwiNetworkManager: NSObject, NSURLSessionDelegate, NSURLSessi
         // Check request instance
         if let r = request as? FwiRequest {
             r.prepare()
-            
+
             // Add additional content negotiation
             if let cached = cache.cachedResponseForRequest(request)?.response as? NSHTTPURLResponse, modifiedSince = cached.allHeaderFields["Date"] as? String {
                 r.setValue(modifiedSince, forHTTPHeaderField: "If-Modified-Since")
             }
         }
-        
+
         // Turn on activity indicator
         networkCounter += 1
-        
+
         // Create new task
         let task = session.dataTaskWithRequest(request) { [weak self] (data, response, error) in
             var statusCode = NetworkStatus.Unknown
             var error = error
-            
+
             // Turn off activity indicator if neccessary
             self?.networkCounter -= 1
-            
+
             // Obtain HTTP status
             if let err = error {
                 statusCode = NetworkStatus(rawValue: Int32(err.code))
             }
-            
+
             /* Condition validation: Validate HTTP response instance */
             guard let httpResponse = response as? NSHTTPURLResponse else {
                 c?(data: nil, error: error, statusCode: statusCode, response: nil)
                 return
             }
             statusCode = NetworkStatus(rawValue: Int32(httpResponse.statusCode))
-            
+
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
                 error = self?.generateError(request, statusCode: statusCode)
             }
             self?.consoleError(request, data: data, error: error, statusCode: statusCode)
-            
+
             // Validate content negotiation
             if let d = data, cacheControl = httpResponse.allHeaderFields["Cache-Control"]?.lowercaseString where cacheControl.hasPrefix("public") && statusCode.rawValue != 304 {
                 // Remove previous cache, remove it anyways
                 self?.cache.removeCachedResponseForRequest(request)
                 self?.cache.storeCachedResponse(NSCachedURLResponse(response: httpResponse, data: d), forRequest: request)
             }
-    
+
             // Load cache if http status is 304 or offline
             if let cached = self?.cache.cachedResponseForRequest(request) where statusCode == .NotConnectedToInternet || statusCode.rawValue == 304 {
                 c?(data: cached.data, error: nil, statusCode: NetworkStatus(rawValue: 200), response: httpResponse)
@@ -156,31 +156,31 @@ public final class FwiNetworkManager: NSObject, NSURLSessionDelegate, NSURLSessi
         if let r = request as? FwiRequest {
             r.prepare()
         }
-        
+
         // Turn on activity indicator
         networkCounter += 1
-        
+
         // Create new task
         let task = session.downloadTaskWithRequest(request) { [weak self] (location, response, error) in
             var statusCode = NetworkStatus.Unknown
             var error = error
-            
+
             // Turn off activity indicator if neccessary
             self?.networkCounter -= 1
-            
+
             /* Condition validation: Validate HTTP response instance */
             guard let httpResponse = response as? NSHTTPURLResponse else {
                 c?(location: nil, error: error, statusCode: statusCode, response: nil)
                 return
             }
-            
+
             // Obtain HTTP status
             if let err = error {
                 statusCode = NetworkStatus(rawValue: Int32(err.code))
             } else {
                 statusCode = NetworkStatus(rawValue: Int32(httpResponse.statusCode))
             }
-            
+
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
                 error = self?.generateError(request, statusCode: statusCode)
@@ -215,8 +215,8 @@ public final class FwiNetworkManager: NSObject, NSURLSessionDelegate, NSURLSessi
             })
         }
     }
-    
-    
+
+
     // MARK: Class's private methods
     private func consoleError(request: NSURLRequest, data d: NSData?, error e: NSError?, statusCode s: NetworkStatus) {
         if let err = e, url = request.URL, host = url.host, method = request.HTTPMethod {
@@ -225,7 +225,7 @@ public final class FwiNetworkManager: NSObject, NSURLSessionDelegate, NSURLSessi
             let method     = "HTTP Method: \(method)\n"
             let status     = "HTTP Status: \(s.rawValue) (\(err.localizedDescription))\n"
             let dataString = "\(d?.toString() ?? "")"
-            
+
             print("\n\(domain)\(url)\(method)\(status)\(dataString)")
         }
     }
@@ -235,11 +235,11 @@ public final class FwiNetworkManager: NSObject, NSURLSessionDelegate, NSURLSessi
         let userInfo = [NSURLErrorFailingURLErrorKey:request.URL?.description ?? "",
                         NSURLErrorFailingURLStringErrorKey:request.URL?.description ?? "",
                         NSLocalizedDescriptionKey:NSHTTPURLResponse.localizedStringForStatusCode(Int(s.rawValue))]
-        
+
         return NSError(domain: NSURLErrorDomain, code: Int(s.rawValue), userInfo: userInfo)
     }
-    
-    
+
+
     // MARK: NSURLSessionDelegate's members
     public func URLSession(session: NSURLSession, didBecomeInvalidWithError error: NSError?) {
         if let err = error {
@@ -254,8 +254,8 @@ public final class FwiNetworkManager: NSObject, NSURLSessionDelegate, NSURLSessi
             completionHandler(.CancelAuthenticationChallenge, nil)
         }
     }
-    
-    
+
+
     // MARK: NSURLSessionTaskDelegate's members
     public func URLSession(session: NSURLSession, task: NSURLSessionTask, willPerformHTTPRedirection response: NSHTTPURLResponse, newRequest request: NSURLRequest, completionHandler: (NSURLRequest?) -> Void) {
         completionHandler(request)
