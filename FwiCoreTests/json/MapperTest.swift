@@ -41,7 +41,7 @@ import XCTest
 
 
 class URLTest: NSObject {
-    var url: NSURL?
+    var url: URL?
 }
 
 class Test: NSObject, FwiJSONModel {
@@ -54,8 +54,8 @@ class Test: NSObject, FwiJSONModel {
     var arr: [URLTest]?
     var arrNormal: [Int]?
     var arrString: [String]?
-    var date: NSDate?
-    var dateStr: NSDate?
+    var date: Date?
+    var dateStr: Date?
 
     func keyMapper() -> [String : String] {
         return ["test1":"a",
@@ -98,7 +98,7 @@ class MapperTest: XCTestCase {
                     "test8": 1464768697,
                     "test9": "2012-10-01T094500GMT"
 
-        ]
+        ] as [String : Any]
 
 //        let c = JSONMapper1.mapClassWithDictionary(Test.self, dict: dict).object
 

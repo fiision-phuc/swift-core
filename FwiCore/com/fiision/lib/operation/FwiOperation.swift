@@ -40,7 +40,6 @@ import UIKit
 import Foundation
 
 
-@objc(FwiOperation)
 open class FwiOperation: Operation {
 
     // MARK: Class's constructors
@@ -49,48 +48,27 @@ open class FwiOperation: Operation {
     }
 
     // MARK: Class's properties
-    open var isLongOperation = false
-    open lazy var identifier: String = {
+    public var isLongOperation = false
+    public lazy var identifier: String = {
         return String.randomIdentifier() ?? ""
     }()
-    fileprivate var _isFinished = false
-    open override var isFinished: Bool {
-        get{
-            return _isFinished
-        }
-        set{
-            _isFinished = newValue
-        }
-    }
-    fileprivate var _isCancelled = false
-    open override var isCancelled: Bool {
-        get{
-            return _isCancelled
-        }
-        set{
-            _isCancelled = newValue
-        }
-    }
-    fileprivate var _isExecuting = false
-    open override var isExecuting: Bool  {
-        get{
-            return _isExecuting
-        }
-        set{
-            _isExecuting = newValue
-        }
-    }
+
     fileprivate var userInfo: [String: AnyObject]?
     fileprivate var bgTask: UIBackgroundTaskIdentifier?
 
     // MARK: Class's public methods
-    open func execute() {
+    open func businessLogic() {
+        preconditionFailure("This function must be overridden.")
+    }
+
+    // MARK: Class's private methods
+    fileprivate func execute() {
         // Always check for cancellation before launching the task.
         if isCancelled {
             operationCompleted()
         } else {
             // Register bgTask
-            bgTask = UIApplication.shared.beginBackgroundTask(expirationHandler: { () -> Void in
+            bgTask = UIApplication.shared.beginBackgroundTask() {
                 /* Condition validatioN: Is long operation */
                 if self.isLongOperation {
                     return
@@ -99,30 +77,17 @@ open class FwiOperation: Operation {
                 // Cancel this operation
                 self.cancel()
                 self.operationCompleted()
-            })
+            }
 
             // Add to operation queue
             operationQueue.addOperation(self)
         }
     }
 
-    /** Implement business logic. */
-    open func businessLogic() {
-        preconditionFailure("This function must be overridden.")
-    }
-
-    // MARK: Class's private methods
+    /** Called when operation completed. */
     fileprivate func operationCompleted() {
-        // Terminate operation
-        willChangeValue(forKey: "isExecuting")
-        willChangeValue(forKey: "isFinished")
-        isExecuting = false
-        isFinished = true
-        didChangeValue(forKey: "isExecuting")
-        didChangeValue(forKey: "isFinished")
-
         // Terminate background task
-        if let task = bgTask , bgTask != UIBackgroundTaskInvalid {
+        if let task = bgTask, bgTask != UIBackgroundTaskInvalid {
             UIApplication.shared.endBackgroundTask(task)
             bgTask = UIBackgroundTaskInvalid
         }
@@ -134,10 +99,10 @@ open class FwiOperation: Operation {
             return true
         }
     }
-   
-    open override func cancel() {
-        isCancelled = true
-        super.cancel()
+    open override var isReady: Bool {
+        get {
+            return true
+        }
     }
 
     open override func start() {
@@ -146,11 +111,6 @@ open class FwiOperation: Operation {
             if isCancelled {
                 operationCompleted()
             } else {
-                // If the operation is not canceled, begin executing the task.
-                willChangeValue(forKey: "isExecuting")
-                isExecuting = true
-                didChangeValue(forKey: "isExecuting")
-
                 // Process business
                 businessLogic()
 

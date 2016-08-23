@@ -50,14 +50,14 @@ public final class FwiFormParam: CustomDebugStringConvertible, CustomStringConve
     public fileprivate (set) var key: String
     public fileprivate (set) var value: String
 
-    public var hash: Int {
-        return key.hash ^ value.hash
+    public var hashValue: Int {
+        return key.hashValue ^ value.hashValue
     }
 
     // MARK: Class's public methods
     public func isEqual(_ object: AnyObject?) -> Bool {
         if let other = object as? FwiFormParam {
-            return (self.hash == other.hash)
+            return (self.hashValue == other.hashValue)
         }
         return false
     }

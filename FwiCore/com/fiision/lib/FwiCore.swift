@@ -46,7 +46,7 @@ public let Metric_RadianToDegree: Double = 57.295779513082320876
 
 // MARK: Log Function
 #if DEBUG
-    public func FwiLog(message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
+    public func FwiLog(_ message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
         if let name = className.split("/").last , name.length() > 0 {
             print("\(NSDate()) \(name) > [\(methodName) \(line)]: \(message)")
         }
@@ -67,7 +67,7 @@ public func FwiConvertToRadian(degreeValue degree: Double) -> Double {
 }
 
 // MARK: Custom Operator
-infix operator <- {}
+infix operator <-
 
 func <- <T>(left: inout T, right: AnyObject?) {
     if let value = right as? T {

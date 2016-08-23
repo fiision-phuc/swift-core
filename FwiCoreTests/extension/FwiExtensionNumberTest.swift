@@ -54,7 +54,7 @@ class FwiExtensionNumberTest: XCTestCase {
 
     // MARK: Test Cases
     func testCurrency() {
-        let currencyNumber = NSNumber(float: 2000)
+        let currencyNumber = NSNumber(value: 2000)
 
         var currencyString = currencyNumber.currencyWithISO3("USD", decimalSeparator: ".", groupingSeparator: ",", usingSymbol: true)
         XCTAssertEqual(currencyString, "$2,000.00", "Currency string should be: $2,000.00")

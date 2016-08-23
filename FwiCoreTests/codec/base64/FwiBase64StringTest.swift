@@ -96,7 +96,7 @@ class FwiBase64StringTest: XCTestCase {
         XCTAssertNil(base64String?.decodeBase64Data(), "Nil data should always return nil.")
 
         base64String = "44Gk44Gq44GM44Gj44Gm"
-        let data = "つながって".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        let data = "つながって".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssert(base64String?.decodeBase64Data() == data, "44Gk44Gq44GM44Gj44Gm should be return as つながって after decoded.")
 
         var base64NSString: NSString? = nil
@@ -124,7 +124,7 @@ class FwiBase64StringTest: XCTestCase {
         XCTAssertNil(string?.encodeBase64Data(), "Nil data should always return nil.")
 
         string = "つながって"
-        let base64Data = "44Gk44Gq44GM44Gj44Gm".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        let base64Data = "44Gk44Gq44GM44Gj44Gm".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssert(string?.encodeBase64Data() == base64Data, "つながって should be return as 44Gk44Gq44GM44Gj44Gm after encoded.")
 
         var nsstring: NSString? = nil

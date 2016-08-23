@@ -60,35 +60,35 @@ class FwiOperationTest: XCTestCase {
         XCTAssertNil(operation.identifier, "Initial operation does not have any identifier.")
         XCTAssertFalse(operation.isLongOperation, "Initial operation is not a long operation.")
 
-        XCTAssertFalse(operation.finished, "Initial operation is not finished.")
-        XCTAssertFalse(operation.cancelled, "Initial operation is not cancelled.")
-        XCTAssertFalse(operation.executing, "Initial operation is not executing.")
-        XCTAssertTrue(operation.asynchronous, "Initial operation is asynchronous.")
+        XCTAssertFalse(operation.isFinished, "Initial operation is not finished.")
+        XCTAssertFalse(operation.isCancelled, "Initial operation is not cancelled.")
+        XCTAssertFalse(operation.isExecuting, "Initial operation is not executing.")
+        XCTAssertTrue(operation.isAsynchronous, "Initial operation is asynchronous.")
 
         operation.cancel()
-        XCTAssertFalse(operation.finished, "Cancelled operation is not finished.")
-        XCTAssertTrue(operation.cancelled, "Cancelled operation is cancelled.")
-        XCTAssertFalse(operation.executing, "Cancelled operation is not executing.")
+        XCTAssertFalse(operation.isFinished, "Cancelled operation is not finished.")
+        XCTAssertTrue(operation.isCancelled, "Cancelled operation is cancelled.")
+        XCTAssertFalse(operation.isExecuting, "Cancelled operation is not executing.")
 
         XCTAssertNotNil(operationQueue, "Operation Queue must not be nil after first initialize an operation.")
     }
 
     func testCompletedOperation() {
-        let completedExpectation = self.expectationWithDescription("Operation completed.")
+        let completedExpectation = self.expectation(description: "Operation completed.")
 
         let operation = FwiOperation()
         operation.executeWithCompletion { () -> Void in
-            XCTAssertFalse(operation.cancelled, "Initial operation is not cancelled.")
-            XCTAssertFalse(operation.executing, "Initial operation is not executing.")
+            XCTAssertFalse(operation.isCancelled, "Initial operation is not cancelled.")
+            XCTAssertFalse(operation.isExecuting, "Initial operation is not executing.")
 
             completedExpectation.fulfill()
         }
 
-        self.waitForExpectationsWithTimeout(1.0) { (err: NSError?) in
+        self.waitForExpectations(timeout: 1.0) { (err: NSError?) in
             if err == nil {
-                XCTAssertTrue(operation.finished, "Operation finished.")
+                XCTAssertTrue(operation.isFinished, "Operation finished.")
             } else {
-                XCTAssertFalse(operation.finished, "Operation could not finish.")
+                XCTAssertFalse(operation.isFinished, "Operation could not finish.")
             }
         }
     }

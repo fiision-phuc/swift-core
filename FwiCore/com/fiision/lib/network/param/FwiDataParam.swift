@@ -51,8 +51,8 @@ public final class FwiDataParam: CustomDebugStringConvertible, CustomStringConve
     public fileprivate (set) var data: Data
     public fileprivate (set) var contentType: String
 
-    public var hash: Int {
-        return contentType.hash ^ (data as NSData).hash
+    public var hashValue: Int {
+        return contentType.hashValue ^ data.hashValue
     }
 
     // MARK: CustomDebugStringConvertible's members

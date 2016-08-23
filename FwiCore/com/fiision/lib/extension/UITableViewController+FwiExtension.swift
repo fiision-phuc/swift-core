@@ -40,20 +40,20 @@ import UIKit
 import Foundation
 
 
-public extension UITabBarController {
+extension UITabBarController {
 
     // MARK: Class's override methods
-    public override func prefersStatusBarHidden() -> Bool {
+    open override var prefersStatusBarHidden: Bool {
         return selectedViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
     }
-    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
         return selectedViewController?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
     }
 
-    public override func shouldAutorotate() -> Bool {
+    open override var shouldAutorotate: Bool {
         return selectedViewController?.shouldAutorotate ?? super.shouldAutorotate
     }
-    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return selectedViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
     }
 }

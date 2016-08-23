@@ -54,18 +54,18 @@ class FwiExtensionDataTest: XCTestCase {
 
     // MARK: Test Cases
     func testToString() {
-        var data: NSData? = nil
+        var data: Data? = nil
         XCTAssertNil(data?.toString(), "Nil data should always return nil.")
 
-        data = "FwiCore".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        data = "FwiCore".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssertEqual(data!.toString()!, "FwiCore", "Data should return FwiCore.")
     }
 
     func testClearBytes() {
         var bytes1: [UInt8] = [0x40, 0x41, 0x42]
         var bytes2: [UInt8] = [0x00, 0x00, 0x00]
-        var data1: NSData = NSData(bytes: bytes1, length: 3)
-        var data2: NSData = NSData(bytes: bytes2, length: 3)
+        var data1: Data = Data(bytes: UnsafePointer<UInt8>(bytes1), count: 3)
+        var data2: Data = Data(bytes: UnsafePointer<UInt8>(bytes2), count: 3)
 
         data1.clearBytes()
         XCTAssertEqual(data1, data2, "Data1 should contain all zero.")
@@ -74,8 +74,8 @@ class FwiExtensionDataTest: XCTestCase {
     func testReverseBytes() {
         var bytes1: [UInt8] = [0x40, 0x41, 0x42]
         var bytes2: [UInt8] = [0x42, 0x41, 0x40]
-        var data1: NSData = NSData(bytes: bytes1, length: 3)
-        var data2: NSData = NSData(bytes: bytes2, length: 3)
+        var data1: Data = Data(bytes: UnsafePointer<UInt8>(bytes1), count: 3)
+        var data2: Data = Data(bytes: UnsafePointer<UInt8>(bytes2), count: 3)
 
         data1.reverseBytes()
         XCTAssertEqual(data1, data2, "Data1 should be reversed.")

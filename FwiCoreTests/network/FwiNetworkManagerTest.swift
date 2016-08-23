@@ -43,9 +43,9 @@ import XCTest
 class FwiNetworkManagerTest: XCTestCase {
     
     
-    private lazy var instance  = FwiNetworkManager.sharedInstance()
-    private lazy var baseHTTP  = NSURL(string: "http://httpbin.org")
-    private lazy var baseHTTPS = NSURL(string: "https://httpbin.org")
+    fileprivate lazy var instance  = FwiNetworkManager.sharedInstance()
+    fileprivate lazy var baseHTTP  = URL(string: "http://httpbin.org")
+    fileprivate lazy var baseHTTPS = URL(string: "https://httpbin.org")
     
     
     // MARK: Setup
@@ -60,9 +60,9 @@ class FwiNetworkManagerTest: XCTestCase {
     
     // MARK: Test Cases
     func testHTTP() {
-        let completedExpectation = self.expectationWithDescription("Operation completed.")
-        if let url = NSURL(string: "/get", relativeToURL: baseHTTP) {
-            let request = NSURLRequest(URL: url)
+        let completedExpectation = self.expectation(description: "Operation completed.")
+        if let url = URL(string: "/get", relativeTo: baseHTTP) {
+            let request = URLRequest(url: url)
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertTrue(FwiNetworkStatusIsSuccces(statusCode), "Success connection should return status code range 200 - 299. But found \(statusCode)")
@@ -76,15 +76,15 @@ class FwiNetworkManagerTest: XCTestCase {
         }
         
         // Wait for timeout handler
-        self.waitForExpectationsWithTimeout(5.0) { (error) in
+        self.waitForExpectations(timeout: 5.0) { (error) in
             XCTAssertTrue(error == nil, "Operation could not finish.")
         }
     }
     
     func testHTTPS() {
-        let completedExpectation = self.expectationWithDescription("Operation completed.")
-        if let url = NSURL(string: "/get", relativeToURL: baseHTTPS) {
-            let request = NSURLRequest(URL: url)
+        let completedExpectation = self.expectation(description: "Operation completed.")
+        if let url = URL(string: "/get", relativeTo: baseHTTPS) {
+            let request = URLRequest(url: url)
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertTrue(FwiNetworkStatusIsSuccces(statusCode), "Success connection should return status code range 200 - 299. But found \(statusCode)")
@@ -98,15 +98,15 @@ class FwiNetworkManagerTest: XCTestCase {
         }
         
         // Wait for timeout handler
-        self.waitForExpectationsWithTimeout(5.0) { (error) in
+        self.waitForExpectations(timeout: 5.0) { (error) in
             XCTAssertTrue(error == nil, "Operation could not finish.")
         }
     }
 
     func testNetworkIndicator() {
-        let completedExpectation = self.expectationWithDescription("Operation completed.")
-        if let url = NSURL(string: "/get", relativeToURL: baseHTTP) {
-            let req = NSURLRequest(URL: url)
+        let completedExpectation = self.expectation(description: "Operation completed.")
+        if let url = URL(string: "/get", relativeTo: baseHTTP) {
+            let req = URLRequest(url: url)
             var request1 = false
             var request2 = false
             var request3 = false
@@ -146,15 +146,15 @@ class FwiNetworkManagerTest: XCTestCase {
         }
     
         // Wait for timeout handler
-        self.waitForExpectationsWithTimeout(5.0) { (error) in
+        self.waitForExpectations(timeout: 5.0) { (error) in
             XCTAssertTrue(error == nil, "Operation could not finish.")
         }
     }
 
     func testUnsupportedURL() {
-        let completedExpectation = self.expectationWithDescription("Operation completed.")
-        if let url = NSURL(string: "/", relativeToURL: nil) {
-            let request = NSURLRequest(URL: url)
+        let completedExpectation = self.expectation(description: "Operation completed.")
+        if let url = URL(string: "/", relativeTo: nil) {
+            let request = URLRequest(url: url)
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertTrue(statusCode == .UnsupportedURL, "Fail connection status should be \(NetworkStatus.UnsupportedURL). But found \(statusCode)")
@@ -168,15 +168,15 @@ class FwiNetworkManagerTest: XCTestCase {
         }
 
         // Wait for timeout handler
-        self.waitForExpectationsWithTimeout(5.0) { (error) in
+        self.waitForExpectations(timeout: 5.0) { (error) in
             XCTAssertTrue(error == nil, "Operation could not finish.")
         }
     }
 
     func testCannotConnectToHost() {
-        let completedExpectation = self.expectationWithDescription("Operation completed.")
-        if let url = NSURL(string: "http://localhost:8080") {
-            let request = NSURLRequest(URL: url)
+        let completedExpectation = self.expectation(description: "Operation completed.")
+        if let url = URL(string: "http://localhost:8080") {
+            let request = URLRequest(url: url)
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertTrue(statusCode == .CannotConnectToHost, "Cancelled connection status should be \(NetworkStatus.CannotConnectToHost). But found \(statusCode)")
@@ -190,15 +190,15 @@ class FwiNetworkManagerTest: XCTestCase {
         }
 
         // Wait for timeout handler
-        self.waitForExpectationsWithTimeout(5.0) { (error) in
+        self.waitForExpectations(timeout: 5.0) { (error) in
             XCTAssertTrue(error == nil, "Operation could not finish.")
         }
     }
 
     func testStatus3xx() {
-        let completedExpectation = self.expectationWithDescription("Operation completed.")
-        if let url = NSURL(string: "/redirect/5", relativeToURL: baseHTTP) {
-            let request = NSURLRequest(URL: url)
+        let completedExpectation = self.expectation(description: "Operation completed.")
+        if let url = URL(string: "/redirect/5", relativeTo: baseHTTP) {
+            let request = URLRequest(url: url)
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertNil(error, "Redirect connection should return nil error. But found \(error)")
@@ -210,15 +210,15 @@ class FwiNetworkManagerTest: XCTestCase {
         }
 
         // Wait for timeout handler
-        self.waitForExpectationsWithTimeout(5.0) { (error) in
+        self.waitForExpectations(timeout: 5.0) { (error) in
             XCTAssertTrue(error == nil, "Operation could not finish.")
         }
     }
     
     func testStatus4xx() {
-        let completedExpectation = self.expectationWithDescription("Operation completed.")
-        if let url = NSURL(string: "/status/404", relativeToURL: baseHTTP) {
-            let request = NSURLRequest(URL: url)
+        let completedExpectation = self.expectation(description: "Operation completed.")
+        if let url = URL(string: "/status/404", relativeTo: baseHTTP) {
+            let request = URLRequest(url: url)
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertTrue(statusCode == .NotFound, "Status should be \(NetworkStatus.NotFound). But found \(statusCode)")
@@ -231,15 +231,15 @@ class FwiNetworkManagerTest: XCTestCase {
         }
         
         // Wait for timeout handler
-        self.waitForExpectationsWithTimeout(5.0) { (error) in
+        self.waitForExpectations(timeout: 5.0) { (error) in
             XCTAssertTrue(error == nil, "Operation could not finish.")
         }
     }
 
     func testStatus5xx() {
-        let completedExpectation = self.expectationWithDescription("Operation completed.")
-        if let url = NSURL(string: "/status/500", relativeToURL: baseHTTP) {
-            let request = NSURLRequest(URL: url)
+        let completedExpectation = self.expectation(description: "Operation completed.")
+        if let url = URL(string: "/status/500", relativeTo: baseHTTP) {
+            let request = URLRequest(url: url)
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertTrue(statusCode == .InternalServerError, "Status should be \(NetworkStatus.InternalServerError). But found \(statusCode)")
@@ -252,7 +252,7 @@ class FwiNetworkManagerTest: XCTestCase {
         }
         
         // Wait for timeout handler
-        self.waitForExpectationsWithTimeout(5.0) { (error) in
+        self.waitForExpectations(timeout: 5.0) { (error) in
             XCTAssertTrue(error == nil, "Operation could not finish.")
         }
     }

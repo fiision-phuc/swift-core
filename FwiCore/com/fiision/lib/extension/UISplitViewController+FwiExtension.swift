@@ -40,29 +40,29 @@ import UIKit
 import Foundation
 
 
-public extension UISplitViewController {
+extension UISplitViewController {
 
     // MARK: Class's override methods
-    public override func prefersStatusBarHidden() -> Bool {
+    open override var prefersStatusBarHidden: Bool {
         if UIApplication.isPhone() {
             return viewControllers.first?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
         }
         return super.prefersStatusBarHidden
     }
-    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
         if UIApplication.isPhone() {
             return viewControllers.first?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
         }
         return super.preferredStatusBarStyle
     }
 
-    public override func shouldAutorotate() -> Bool {
+    open override var shouldAutorotate: Bool {
         if UIApplication.isPhone() {
             return viewControllers.first?.shouldAutorotate ?? super.shouldAutorotate
         }
         return super.shouldAutorotate
     }
-    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIApplication.isPhone() {
             return viewControllers.first?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
         }

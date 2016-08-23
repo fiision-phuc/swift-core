@@ -54,54 +54,54 @@ class FwiHexDataTest: XCTestCase {
 
     // MARK: Test Cases
     func testIsHex() {
-        var hexData: NSData? = nil
+        var hexData: Data? = nil
         XCTAssertNil(hexData?.isHex(), "Nil data should always return nil.")
 
-        hexData = "".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        hexData = "".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssert(hexData?.isHex() == false, "Empty data should always return false.")
 
-        hexData = "FwiCore".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        hexData = "FwiCore".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssert(hexData?.isHex() == false, "Invalid data length should always return false.")
 
-        hexData = "つながって".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        hexData = "つながって".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssert(hexData?.isHex() == false, "Unicode data [つながって] should always return false.")
 
-        hexData = "46776943 6f7265".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        hexData = "46776943 6f7265".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssert(hexData?.isHex() == false, "46776943 6f7265 is an invalid hex.")
 
-        hexData = "467769436f7265".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        hexData = "467769436f7265".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssert(hexData?.isHex() == true, "467769436f7265 is a valid hex.")
     }
 
     func testDecodeHexData() {
-        var hexData: NSData? = nil
+        var hexData: Data? = nil
         XCTAssertNil(hexData?.decodeHexData(), "Nil data should always return nil.")
 
-        hexData = "467769436f7265".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
-        let data = "FwiCore".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        hexData = "467769436f7265".data(using: String.Encoding.utf8, allowLossyConversion: false)
+        let data = "FwiCore".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssert(hexData?.decodeHexData() == data, "467769436f7265 should be return as FwiCore after decoded.")
     }
     func testDecodeHexString() {
-        var hexData: NSData? = nil
+        var hexData: Data? = nil
         XCTAssertNil(hexData?.decodeHexString(), "Nil data should always return nil.")
 
-        hexData = "467769436f7265".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        hexData = "467769436f7265".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssert(hexData?.decodeHexString() == "FwiCore", "467769436f7265 should be return as FwiCore after decoded.")
     }
 
     func testEncodeHexData() {
-        var data: NSData? = nil
+        var data: Data? = nil
         XCTAssertNil(data?.encodeHexData(), "Nil data should always return nil.")
 
-        data = "FwiCore".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
-        let base64Data = "467769436f7265".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        data = "FwiCore".data(using: String.Encoding.utf8, allowLossyConversion: false)
+        let base64Data = "467769436f7265".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssert(data?.encodeHexData() == base64Data, "FwiCore should be return as 467769436f7265 after encoded.")
     }
     func testEncodeHexString() {
-        var data: NSData? = nil
+        var data: Data? = nil
         XCTAssertNil(data?.encodeHexString(), "Nil data should always return nil.")
 
-        data = "FwiCore".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        data = "FwiCore".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssert(data?.encodeHexString() == "467769436f7265", "FwiCore should be return as 467769436f7265 after encoded.")
     }
 }

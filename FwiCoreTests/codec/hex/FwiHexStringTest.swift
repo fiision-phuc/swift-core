@@ -96,7 +96,7 @@ class FwiHexStringTest: XCTestCase {
         XCTAssertNil(hexString?.decodeHexData(), "Nil data should always return nil.")
 
         hexString = "467769436f7265"
-        var data = "FwiCore".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        var data = "FwiCore".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssert(hexString?.decodeHexData() == data, "467769436f7265 should be return as FwiCore after decoded.")
 
         var base64NSString: NSString? = nil
@@ -124,7 +124,7 @@ class FwiHexStringTest: XCTestCase {
         XCTAssertNil(string?.encodeHexString(), "Nil data should always return nil.")
 
         string = "FwiCore"
-        let base64Data = "467769436f7265".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        let base64Data = "467769436f7265".data(using: String.Encoding.utf8, allowLossyConversion: false)
         XCTAssert(string?.encodeHexData() == base64Data, "FwiCore should be return as 467769436f7265 after encoded.")
 
         var nsstring: NSString? = nil

@@ -40,20 +40,20 @@ import UIKit
 import Foundation
 
 
-public extension UINavigationController {
+extension UINavigationController {
 
     // MARK: Class's override methods
-    public override func prefersStatusBarHidden() -> Bool {
+    open override var prefersStatusBarHidden: Bool {
         return visibleViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
     }
-    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
         return visibleViewController?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
     }
 
-    public override func shouldAutorotate() -> Bool {
+    open override var shouldAutorotate: Bool {
         return visibleViewController?.shouldAutorotate ?? super.shouldAutorotate
     }
-    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return visibleViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
     }
 }

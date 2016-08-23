@@ -55,11 +55,11 @@ public final class FwiMultipartParam: CustomDebugStringConvertible, CustomString
     public fileprivate (set) var contentData: Data
     public fileprivate (set) var contentType: String
 
-    public var hash: Int {
-        var hash = name.hash
-        hash ^= fileName.hash
-        hash ^= contentData.hash
-        hash ^= contentType.hash
+    public var hashValue: Int {
+        var hash = name.hashValue
+        hash ^= fileName.hashValue
+        hash ^= contentData.hashValue
+        hash ^= contentType.hashValue
 
         return hash
     }
@@ -67,7 +67,7 @@ public final class FwiMultipartParam: CustomDebugStringConvertible, CustomString
     // MARK: Class's public methods
     public func isEqual(_ object: AnyObject?) -> Bool {
         if let other = object as? FwiMultipartParam {
-            return (self.hash == other.hash)
+            return (self.hashValue == other.hashValue)
         }
         return false
     }

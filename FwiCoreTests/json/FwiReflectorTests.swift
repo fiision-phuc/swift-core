@@ -41,16 +41,16 @@ import XCTest
 
 
 enum Compass1: Int {
-    case North = 0
-    case South
-    case East
-    case West
+    case north = 0
+    case south
+    case east
+    case west
 }
 public enum Compass2: Int {
-    case North = 0
-    case South
-    case East
-    case West
+    case north = 0
+    case south
+    case east
+    case west
 }
 //private enum Compass3: Int {
 //    case North = 0
@@ -73,7 +73,7 @@ class Test1 {
     var value4: UInt?
     var value5: NSNumber?
 }
-public class Test2 {
+open class Test2 {
     var value1 = 0
     var value2: UInt = 0
     var value3: Int?
@@ -91,16 +91,16 @@ public class Test2 {
 @objc(Test4)
 class Test4: NSObject {
     var object1: String?
-    var object2: NSData?
-    var object3: NSDate?
-    var object4: NSURL?
+    var object2: Data?
+    var object3: Date?
+    var object4: URL?
 }
 @objc(Test5)
-public class Test5: NSObject {
+open class Test5: NSObject {
     var object1: String?
-    var object2: NSData?
-    var object3: NSDate?
-    var object4: NSURL?
+    var object2: Data?
+    var object3: Date?
+    var object4: URL?
 }
 //@objc(Test6)
 //private class Test6: NSObject {
@@ -213,11 +213,11 @@ class FwiReflectorTests: XCTestCase {
     }
 
     func testIsEnum() {
-        let enumCompass = Compass1.North
+        let enumCompass = Compass1.north
         var r = FwiReflector(mirrorName: "enumCompass", mirrorValue: enumCompass)
         XCTAssertTrue(r.isEnum, "Expected true but found \(r.isEnum).")
 
-        let optionalEnumCompass: Compass1? = Compass1.North
+        let optionalEnumCompass: Compass1? = Compass1.north
         r = FwiReflector(mirrorName: "optionalEnumCompass", mirrorValue: optionalEnumCompass)
         XCTAssertTrue(r.isEnum, "Expected true but found \(r.isEnum).")
     }
