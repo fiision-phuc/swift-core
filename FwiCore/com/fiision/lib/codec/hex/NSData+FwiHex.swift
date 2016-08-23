@@ -39,19 +39,19 @@
 import Foundation
 
 
-public extension NSData {
+public extension Data {
 
     // MARK: Validate Hex
     public func isHex() -> Bool {
         /* Condition validation */
-        if length <= 0 || (length % 2) != 0 {
+        if count <= 0 || (count % 2) != 0 {
             return false
         }
 
         // Load bytes buffer
-        let bytes = UnsafePointer<UInt8>(self.bytes)
-        let step = length >> 1
-        var end = length - 1
+        let bytes = (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count)
+        let step = count >> 1
+        var end = count - 1
 
         // Validate each byte
         var isHex = true
@@ -70,23 +70,23 @@ public extension NSData {
     }
 
     // MARK: Decode Hex
-    public func decodeHexData() -> NSData? {
+    public func decodeHexData() -> Data? {
         /* Condition validation */
         if !isHex() {
             return nil
         }
 
-        let l = length >> 1
-        var outputBytes = [UInt8](count: l, repeatedValue: 0)
+        let l = count >> 1
+        var outputBytes = [UInt8](repeating: 0, count: l)
 
         let chars = UnsafePointer<UInt8>(bytes)
-        for i in 0.stride(to: l, by: 2) {
+        for i in stride(from: 0, to: l, by: 2) {
             let b1 = chars[i]
             let b2 = chars[i + 1]
 
             outputBytes[i / 2] = ((decodingTable[Int(b1)] << 4) | decodingTable[Int(b2)])
         }
-        return NSData(bytes: outputBytes, length: l)
+        return Data(bytes: UnsafePointer<UInt8>(outputBytes), count: l)
     }
     public func decodeHexString() -> String? {
         /* Condition validation */
@@ -97,29 +97,29 @@ public extension NSData {
     }
 
     // MARK: Encode Hex
-    public func encodeHexData() -> NSData? {
+    public func encodeHexData() -> Data? {
         /* Condition validation */
-        if length <= 0 {
+        if count <= 0 {
             return nil
         }
 
-        let l = length << 1
-        var outputBytes = [UInt8](count: l, repeatedValue: 0)
+        let l = count << 1
+        var outputBytes = [UInt8](repeating: 0, count: l)
 
         var j = 0
-        let bytes = UnsafePointer<UInt8>(self.bytes)
-        for i in 0.stride(to: l, by: 2) {
+        let bytes = (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count)
+        for i in stride(from: 0, to: l, by: 2) {
             let b = bytes[j]
             outputBytes[i] = encodingTable[Int(b >> 4)]
             outputBytes[i + 1] = encodingTable[Int(b & 0x0f)]
 
             j += 1
         }
-        return NSData(bytes: outputBytes, length: l)
+        return Data(bytes: UnsafePointer<UInt8>(outputBytes), count: l)
     }
     public func encodeHexString() -> String? {
         /* Condition validation */
-        if length <= 0 {
+        if count <= 0 {
             return nil
         }
         return encodeHexData()?.toString()

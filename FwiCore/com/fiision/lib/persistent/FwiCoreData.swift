@@ -48,25 +48,25 @@ public protocol FwiCoreData {
 public extension FwiCoreData where Self: NSManagedObject {
 
     /** Fetch all entities base on search condition. */
-    static func allEntitiesFromContext(context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [AnyObject]? = nil, limit l: Int = 0) -> [Self]? {
+    static func allEntitiesFromContext(_ context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [AnyObject]? = nil, limit l: Int = 0) -> [Self]? {
         /* Condition validation */
         guard let c = context else {
             return nil
         }
 
         var entities = [Self]()
-        c.performBlockAndWait {
-            let request = NSFetchRequest(entityName: NSStringFromClass(self))
+        c.performAndWait {
+            let request = NSFetchRequest<Self>(entityName: NSStringFromClass(self))
 
             // Apply standard condition
             request.predicate = p
             request.sortDescriptors = s
 
             // Apply group by condition
-            if let groupBy = g where groupBy.count > 0 {
+            if let groupBy = g , groupBy.count > 0 {
                 request.propertiesToFetch = groupBy
                 request.returnsDistinctResults = true
-                request.resultType = .DictionaryResultType
+                request.resultType = .dictionaryResultType
             }
 
             // Apply limit
@@ -76,11 +76,9 @@ public extension FwiCoreData where Self: NSManagedObject {
 
             // Perform fetch
             do {
-                let result = try c.executeFetchRequest(request)
+                let result = try c.fetch(request)
                 result.forEach({ (obj) in
-                    if let item = obj as? Self {
-                        entities.append(item)
-                    }
+                    entities.append(obj)
                 })
             } catch let err as NSError {
                 FwiLog("There was an error when fetch all entities (\(err))!")
@@ -95,7 +93,7 @@ public extension FwiCoreData where Self: NSManagedObject {
     }
 
     /** Fetch an entity base on search condition. Create new if necessary. */
-    static func entityFromContext(context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, shouldCreate create: Bool = false) -> Self? {
+    static func entityFromContext(_ context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, shouldCreate create: Bool = false) -> Self? {
         /* Condition validation */
         guard let c = context else {
             return nil
@@ -112,16 +110,16 @@ public extension FwiCoreData where Self: NSManagedObject {
     }
 
     /** Insert new entity into database. */
-    static func newEntityWithContext(context: NSManagedObjectContext?) -> Self? {
+    static func newEntityWithContext(_ context: NSManagedObjectContext?) -> Self? {
         /* Condition validation */
         guard let c = context else {
             return nil
         }
-        return NSEntityDescription.insertNewObjectForEntityForName(NSStringFromClass(self), inManagedObjectContext: c) as? Self
+        return NSEntityDescription.insertNewObject(forEntityName: NSStringFromClass(self), into: c) as? Self
     }
 
     /** Delete all entities from database. */
-    static func deleteAllEntitiesWithContext(context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) {
+    static func deleteAllEntitiesWithContext(_ context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) {
         let entities = self.allEntitiesFromContext(context, predicate: p)
         entities?.forEach({
             $0.deleteFromDatabase()

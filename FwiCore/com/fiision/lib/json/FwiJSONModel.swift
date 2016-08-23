@@ -43,11 +43,11 @@ import Foundation
 public protocol FwiJSONModel: NSObjectProtocol {
 
     /** Define key mapper. */
-    optional func keyMapper() -> [String:String]
+    @objc optional func keyMapper() -> [String:String]
 
     /** Validate optional properties. */
-    optional func propertyIsOptional() -> [String]
+    @objc optional func propertyIsOptional() -> [String]
 
     /** Validate ignored properties. */
-    optional func propertyIsIgnored(property: String) -> Bool
+    @objc optional func propertyIsIgnored(_ property: String) -> Bool
 }

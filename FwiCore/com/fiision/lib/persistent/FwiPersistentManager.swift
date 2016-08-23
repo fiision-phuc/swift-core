@@ -40,64 +40,64 @@ import Foundation
 import CoreData
 
 
-public class FwiPersistentManager {
+open class FwiPersistentManager {
 
     // MARK: Class's constructors
-    public init(dataModel: String, modelBundle bundle: NSBundle = NSBundle.mainBundle()) {
+    public init(dataModel: String, modelBundle bundle: Bundle = Bundle.main) {
         self.bundle = bundle
         self.dataModel = dataModel
 
         // Register core data changed notification
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FwiPersistentManager.handleContextDidSaveNotification(_:)), name: NSManagedObjectContextDidSaveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FwiPersistentManager.handleContextDidSaveNotification(_:)), name: NSNotification.Name.NSManagedObjectContextDidSave, object: nil)
     }
 
 
     // MARK: Cleanup memory
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 
 
     // MARK: Class's properties
-    public private (set) lazy var managedModel: NSManagedObjectModel = {
-        if let modelURL = self.bundle.URLForResource(self.dataModel, withExtension: "momd"), managedModel = NSManagedObjectModel(contentsOfURL: modelURL) {
+    open fileprivate (set) lazy var managedModel: NSManagedObjectModel = {
+        if let modelURL = self.bundle.url(forResource: self.dataModel, withExtension: "momd"), let managedModel = NSManagedObjectModel(contentsOf: modelURL) {
             return managedModel
         }
         fatalError("\(self.dataModel) model is not available!")
     }()
-    public private (set) lazy var managedContext: NSManagedObjectContext = {
-        let managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+    open fileprivate (set) lazy var managedContext: NSManagedObjectContext = {
+        let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = self.persistentCoordinator
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
 
         return managedObjectContext
     }()
-    public private (set) lazy var persistentCoordinator: NSPersistentStoreCoordinator = {
+    open fileprivate (set) lazy var persistentCoordinator: NSPersistentStoreCoordinator = {
         let (storeDB1, storeDB2, storeDB3) = ("\(self.dataModel).sqlite", "\(self.dataModel).sqlite-shm", "\(self.dataModel).sqlite-wal")
         guard let
-            storeURL1 = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB1),
-            storeURL2 = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB2),
-            storeURL3 = NSURL.cacheDirectory()?.URLByAppendingPathComponent(storeDB3) else {
+            storeURL1 = URL.cacheDirectory()?.appendingPathComponent(storeDB1),
+            let storeURL2 = URL.cacheDirectory()?.appendingPathComponent(storeDB2),
+            let storeURL3 = URL.cacheDirectory()?.appendingPathComponent(storeDB3) else {
             fatalError("Cache directory could not be found!")
         }
 
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedModel)
         let options = [NSSQLitePragmasOption:["journal_mode":"WAL"],
                        NSInferMappingModelAutomaticallyOption:true,
-                       NSMigratePersistentStoresAutomaticallyOption:true]
+                       NSMigratePersistentStoresAutomaticallyOption:true] as [String : Any]
 
         for i in 0 ..< 2 {
             do {
-                try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL1, options: options)
-                try storeURL1.setResourceValues([NSURLIsExcludedFromBackupKey: true])
-                try storeURL2.setResourceValues([NSURLIsExcludedFromBackupKey: true])
-                try storeURL3.setResourceValues([NSURLIsExcludedFromBackupKey: true])
+                try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL1, options: options)
+                try (storeURL1 as NSURL).setResourceValues([URLResourceKey.isExcludedFromBackupKey: true])
+                try (storeURL2 as NSURL).setResourceValues([URLResourceKey.isExcludedFromBackupKey: true])
+                try (storeURL3 as NSURL).setResourceValues([URLResourceKey.isExcludedFromBackupKey: true])
                 break
 
             } catch _ {
                 // Note: If the first time fail, we remove everything but not second time.
                 if i == 0 {
-                    let fileManager = NSFileManager.defaultManager()
+                    let fileManager = FileManager.default
                     fileManager.deleteFileAtURL(storeURL1)
                     fileManager.deleteFileAtURL(storeURL2)
                     fileManager.deleteFileAtURL(storeURL3)
@@ -109,14 +109,14 @@ public class FwiPersistentManager {
         return coordinator
     }()
 
-    private var bundle: NSBundle
-    private var dataModel: String
+    fileprivate var bundle: Bundle
+    fileprivate var dataModel: String
 
 
     // MARK: Class's public methods
-    public func saveContext() -> NSError? {
+    open func saveContext() -> NSError? {
         var error: NSError?
-        managedContext.performBlockAndWait({ [weak self] in
+        managedContext.performAndWait({ [weak self] in
             do {
                 try self?.managedContext.save()
             } catch let err as NSError {
@@ -127,8 +127,8 @@ public class FwiPersistentManager {
     }
 
     /** Return a sub managed object context that had been optimized to serve the update data process. */
-    public func importContext() -> NSManagedObjectContext {
-        let managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+    open func importContext() -> NSManagedObjectContext {
+        let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = self.persistentCoordinator
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
         managedObjectContext.undoManager = nil
@@ -139,10 +139,10 @@ public class FwiPersistentManager {
 
     // MARK: Class's private methods
     @objc
-    private func handleContextDidSaveNotification(notification: NSNotification) {
-        guard let otherContext = notification.object as? NSManagedObjectContext where otherContext !== self.managedContext else {
+    fileprivate func handleContextDidSaveNotification(_ notification: Notification) {
+        guard let otherContext = notification.object as? NSManagedObjectContext , otherContext !== self.managedContext else {
             return
         }
-        managedContext.mergeChangesFromContextDidSaveNotification(notification)
+        managedContext.mergeChanges(fromContextDidSave: notification)
     }
 }

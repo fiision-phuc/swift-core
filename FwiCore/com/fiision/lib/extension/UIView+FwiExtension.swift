@@ -43,17 +43,17 @@ import Foundation
 public extension UIView {
 
     /** Create image from current view. */
-    public func createImage(scaleFactor: CGFloat = UIScreen.mainScreen().scale) -> UIImage? {
+    public func createImage(_ scaleFactor: CGFloat = UIScreen.main.scale) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, scaleFactor)
 
         // Translate graphic context to offset before render if view is table view
         if let tableView = self as? UITableView {
             let contentOffset = tableView.contentOffset
-            CGContextTranslateCTM(UIGraphicsGetCurrentContext(), contentOffset.x, -contentOffset.y)
+            UIGraphicsGetCurrentContext()?.translateBy(x: contentOffset.x, y: -contentOffset.y)
         }
 
         // Render view
-        self.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        self.layer.render(in: UIGraphicsGetCurrentContext()!)
 
         // Create image
         let image = UIGraphicsGetImageFromCurrentImageContext()
@@ -62,15 +62,15 @@ public extension UIView {
     }
 
     /** Create image from region of interest. */
-    public func createImageWithROI(roiRect: CGRect, scaleFactor scale: CGFloat = UIScreen.mainScreen().scale) -> UIImage? {
+    public func createImageWithROI(_ roiRect: CGRect, scaleFactor scale: CGFloat = UIScreen.main.scale) -> UIImage? {
         /* Condition validation: Validate ROI */
-        if !CGRectContainsRect(self.bounds, roiRect) {
+        if !self.bounds.contains(roiRect) {
             return nil
         }
         UIGraphicsBeginImageContextWithOptions(roiRect.size, false, scale)
 
-        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), -roiRect.origin.x, -roiRect.origin.y)
-        self.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        UIGraphicsGetCurrentContext()?.translateBy(x: -roiRect.origin.x, y: -roiRect.origin.y)
+        self.layer.render(in: UIGraphicsGetCurrentContext()!)
 
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -80,13 +80,13 @@ public extension UIView {
     /** Find first responder within tree views. */
     public func findFirstResponder() -> UIView? {
         /* Condition validation */
-        if self.isFirstResponder() {
+        if self.isFirstResponder {
             return self
         }
 
         // Find and resign first responder
         for view in self.subviews {
-            if view.isFirstResponder() {
+            if view.isFirstResponder {
                 return view
             } else {
                 return view.findFirstResponder()
@@ -97,7 +97,7 @@ public extension UIView {
 
     /** Find and resign first responder within tree views. */
     public func findAndResignFirstResponder() {
-        if self.isFirstResponder() {
+        if self.isFirstResponder {
             self.resignFirstResponder()
         } else {
             let firstResponder = self.findFirstResponder()
@@ -106,7 +106,7 @@ public extension UIView {
     }
 
     /** Round corner of an UIView with specific radius. */
-    public func roundCorner(radius: CGFloat) {
+    public func roundCorner(_ radius: CGFloat) {
         let bgLayer = self.layer
         bgLayer.masksToBounds = true
         bgLayer.cornerRadius = radius

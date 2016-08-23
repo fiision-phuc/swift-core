@@ -50,7 +50,7 @@ public extension String {
     }
 
     // MARK: Decode Hex
-    public func decodeHexData() -> NSData? {
+    public func decodeHexData() -> Data? {
         if let data = toData()?.decodeHexData() {
             return data
         }
@@ -64,7 +64,7 @@ public extension String {
     }
 
     // MARK: Encode Hex
-    public func encodeHexData() -> NSData? {
+    public func encodeHexData() -> Data? {
         if let data = toData()?.encodeHexData() {
             return data
         }

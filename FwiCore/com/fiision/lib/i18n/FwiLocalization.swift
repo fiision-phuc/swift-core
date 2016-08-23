@@ -39,7 +39,7 @@
 import Foundation
 
 
-public class FwiLocalization {
+open class FwiLocalization {
 
     // MARK: Class's constructors
     public init() {
@@ -47,31 +47,31 @@ public class FwiLocalization {
     }
 
     // MARK: Class's properties
-    public private (set) var bundle: NSBundle?
-    public var locale: String? {
+    open fileprivate (set) var bundle: Bundle?
+    open var locale: String? {
         didSet {
-            guard let path = NSBundle.mainBundle().pathForResource("Localizable", ofType: "strings", inDirectory: nil, forLocalization: locale) else {
+            guard let path = Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: locale) else {
                 reset()
                 return
             }
             
-            NSUserDefaults.standardUserDefaults().setObject([locale!], forKey: "AppleLanguages")
-            NSUserDefaults.standardUserDefaults().synchronize()
+            UserDefaults.standard.set([locale!], forKey: "AppleLanguages")
+            UserDefaults.standard.synchronize()
             
-            bundle = NSBundle(path: (path as NSString).stringByDeletingLastPathComponent)
+            bundle = Bundle(path: (path as NSString).deletingLastPathComponent)
         }
     }
 
     // MARK: Class's public methods
-    func localizedForString(string: String) -> String {
-        if let localized = bundle?.localizedStringForKey(string, value: string, table: nil) {
+    func localizedForString(_ string: String) -> String {
+        if let localized = bundle?.localizedString(forKey: string, value: string, table: nil) {
             return localized
         }
         return string
     }
 
     func reset() {
-        let languages = NSBundle.mainBundle().preferredLocalizations
+        let languages = Bundle.main.preferredLocalizations
         locale = languages.count > 0 ? languages[0] : "en"
     }
 }
@@ -79,7 +79,7 @@ public class FwiLocalization {
 
 // MARK: Singleton
 public extension FwiLocalization {
-    private static let instance = FwiLocalization()
+    fileprivate static let instance = FwiLocalization()
     
     /** Get singleton network manager. */
     public class func sharedInstance() -> FwiLocalization {

@@ -47,22 +47,22 @@ public final class FwiFormParam: CustomDebugStringConvertible, CustomStringConve
     }
 
     // MARK: Class's properties
-    public private (set) var key: String
-    public private (set) var value: String
+    public fileprivate (set) var key: String
+    public fileprivate (set) var value: String
 
     public var hash: Int {
-        return (key.hash ?? 0) ^ (value.hash ?? 0)
+        return key.hash ^ value.hash
     }
 
     // MARK: Class's public methods
-    public func isEqual(object: AnyObject?) -> Bool {
+    public func isEqual(_ object: AnyObject?) -> Bool {
         if let other = object as? FwiFormParam {
             return (self.hash == other.hash)
         }
         return false
     }
 
-    public func compare(param: FwiFormParam) -> NSComparisonResult {
+    public func compare(_ param: FwiFormParam) -> ComparisonResult {
         return key.compare(param.key)
     }
 

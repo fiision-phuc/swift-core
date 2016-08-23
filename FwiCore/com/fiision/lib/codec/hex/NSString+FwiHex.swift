@@ -47,7 +47,7 @@ public extension NSString {
     }
 
     // MARK: Decode Hex
-    public func decodeHexData() -> NSData? {
+    public func decodeHexData() -> Data? {
         return (self as String).decodeHexData()
     }
     public func decodeHexString() -> String? {
@@ -55,7 +55,7 @@ public extension NSString {
     }
 
     // MARK: Encode Hex
-    public func encodeHexData() -> NSData? {
+    public func encodeHexData() -> Data? {
         return (self as String).encodeHexData()
     }
     public func encodeHexString() -> String? {

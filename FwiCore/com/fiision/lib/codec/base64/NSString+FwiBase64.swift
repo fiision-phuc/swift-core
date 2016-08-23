@@ -47,7 +47,7 @@ public extension NSString {
     }
 
     // MARK: Decode base64
-    public func decodeBase64Data() -> NSData? {
+    public func decodeBase64Data() -> Data? {
         return (self as String).decodeBase64Data()
     }
     public func decodeBase64String() -> String? {
@@ -55,7 +55,7 @@ public extension NSString {
     }
 
     // MARK: Encode base64
-    public func encodeBase64Data() -> NSData? {
+    public func encodeBase64Data() -> Data? {
         return (self as String).encodeBase64Data()
     }
     public func encodeBase64String() -> String? {

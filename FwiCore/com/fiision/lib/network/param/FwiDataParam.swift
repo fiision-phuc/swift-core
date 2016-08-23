@@ -42,17 +42,17 @@ import Foundation
 public final class FwiDataParam: CustomDebugStringConvertible, CustomStringConvertible {
 
     // MARK: Class's constructors
-    public init(data: NSData = NSData(), contentType type: String = "text/plain; charset=UTF-8") {
+    public init(data: Data = Data(), contentType type: String = "text/plain; charset=UTF-8") {
         self.contentType = type
         self.data = data
     }
 
     // MARK: Class's properties
-    public private (set) var data: NSData
-    public private (set) var contentType: String
+    public fileprivate (set) var data: Data
+    public fileprivate (set) var contentType: String
 
     public var hash: Int {
-        return contentType.hash ^ data.hash
+        return contentType.hash ^ (data as NSData).hash
     }
 
     // MARK: CustomDebugStringConvertible's members

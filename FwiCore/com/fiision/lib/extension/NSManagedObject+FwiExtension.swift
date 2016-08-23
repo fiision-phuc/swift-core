@@ -44,12 +44,12 @@ public extension NSManagedObject {
 
     /** Delete self from database. */
     func deleteFromDatabase() {
-        self.managedObjectContext?.performBlockAndWait() { [weak self] in
+        self.managedObjectContext?.performAndWait() { [weak self] in
             /* Condition validation */
             guard let weakSelf = self else {
                 return
             }
-            weakSelf.managedObjectContext?.deleteObject(weakSelf)
+            weakSelf.managedObjectContext?.delete(weakSelf)
         }
     }
 }

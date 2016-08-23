@@ -41,7 +41,7 @@ import Foundation
 
 
 @objc(FwiOperation)
-public class FwiOperation: NSOperation {
+open class FwiOperation: Operation {
 
     // MARK: Class's constructors
     public override init() {
@@ -49,25 +49,48 @@ public class FwiOperation: NSOperation {
     }
 
     // MARK: Class's properties
-    public var isLongOperation = false
-    public lazy var identifier: String = {
+    open var isLongOperation = false
+    open lazy var identifier: String = {
         return String.randomIdentifier() ?? ""
     }()
-
-    private var isFinished  = false
-    private var isCancelled = false
-    private var isExecuting = false
-    private var userInfo: [String: AnyObject]?
-    private var bgTask: UIBackgroundTaskIdentifier?
+    fileprivate var _isFinished = false
+    open override var isFinished: Bool {
+        get{
+            return _isFinished
+        }
+        set{
+            _isFinished = newValue
+        }
+    }
+    fileprivate var _isCancelled = false
+    open override var isCancelled: Bool {
+        get{
+            return _isCancelled
+        }
+        set{
+            _isCancelled = newValue
+        }
+    }
+    fileprivate var _isExecuting = false
+    open override var isExecuting: Bool  {
+        get{
+            return _isExecuting
+        }
+        set{
+            _isExecuting = newValue
+        }
+    }
+    fileprivate var userInfo: [String: AnyObject]?
+    fileprivate var bgTask: UIBackgroundTaskIdentifier?
 
     // MARK: Class's public methods
-    public func execute() {
+    open func execute() {
         // Always check for cancellation before launching the task.
-        if cancelled {
+        if isCancelled {
             operationCompleted()
         } else {
             // Register bgTask
-            bgTask = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({ () -> Void in
+            bgTask = UIApplication.shared.beginBackgroundTask(expirationHandler: { () -> Void in
                 /* Condition validatioN: Is long operation */
                 if self.isLongOperation {
                     return
@@ -84,64 +107,49 @@ public class FwiOperation: NSOperation {
     }
 
     /** Implement business logic. */
-    public func businessLogic() {
+    open func businessLogic() {
         preconditionFailure("This function must be overridden.")
     }
 
     // MARK: Class's private methods
-    private func operationCompleted() {
+    fileprivate func operationCompleted() {
         // Terminate operation
-        willChangeValueForKey("isExecuting")
-        willChangeValueForKey("isFinished")
+        willChangeValue(forKey: "isExecuting")
+        willChangeValue(forKey: "isFinished")
         isExecuting = false
         isFinished = true
-        didChangeValueForKey("isExecuting")
-        didChangeValueForKey("isFinished")
+        didChangeValue(forKey: "isExecuting")
+        didChangeValue(forKey: "isFinished")
 
         // Terminate background task
-        if let task = bgTask where bgTask != UIBackgroundTaskInvalid {
-            UIApplication.sharedApplication().endBackgroundTask(task)
+        if let task = bgTask , bgTask != UIBackgroundTaskInvalid {
+            UIApplication.shared.endBackgroundTask(task)
             bgTask = UIBackgroundTaskInvalid
         }
     }
 
     // MARK: NSOperation's members
-    public override var asynchronous: Bool {
+    open override var isAsynchronous: Bool {
         get {
             return true
         }
     }
-    public override var executing: Bool {
-        get {
-            return isExecuting
-        }
-    }
-    public override var finished: Bool {
-        get {
-            return isFinished
-        }
-    }
-    public override var ready: Bool {
-        get {
-            return true
-        }
-    }
-
-    public override func cancel() {
+   
+    open override func cancel() {
         isCancelled = true
         super.cancel()
     }
 
-    public override func start() {
+    open override func start() {
         autoreleasepool { () -> () in
             // Always check for cancellation before launching the task.
-            if cancelled {
+            if isCancelled {
                 operationCompleted()
             } else {
                 // If the operation is not canceled, begin executing the task.
-                willChangeValueForKey("isExecuting")
+                willChangeValue(forKey: "isExecuting")
                 isExecuting = true
-                didChangeValueForKey("isExecuting")
+                didChangeValue(forKey: "isExecuting")
 
                 // Process business
                 businessLogic()
@@ -158,7 +166,7 @@ public class FwiOperation: NSOperation {
 public extension FwiOperation {
 
     /** Execute business with completion closure. */
-    public func executeWithCompletion(completion:(() -> Void)?) {
+    public func executeWithCompletion(_ completion:(() -> Void)?) {
         super.completionBlock = completion
         execute()
     }
@@ -166,10 +174,10 @@ public extension FwiOperation {
 
 
 // MARK: Private queue
-public var operationQueue: NSOperationQueue = {
-    let operationQueue = NSOperationQueue()
+public var operationQueue: OperationQueue = {
+    let operationQueue = OperationQueue()
     operationQueue.maxConcurrentOperationCount = 5
-    operationQueue.qualityOfService = NSQualityOfService.Utility
+    operationQueue.qualityOfService = QualityOfService.utility
 
     return operationQueue
 }()

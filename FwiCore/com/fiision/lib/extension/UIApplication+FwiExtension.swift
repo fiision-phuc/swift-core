@@ -44,16 +44,16 @@ public extension UIApplication {
 
     /** Define whether the device is iPad or not. */
     public class func isPad() -> Bool {
-        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad
+        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad
     }
     /** Define whether the device is iPhone or not. */
     public class func isPhone() -> Bool {
-        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Phone
+        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone
     }
 
     /** Return iOS major version. */
     public class func osMajor() -> Int {
-        let token = UIDevice.currentDevice().systemVersion.split(".")
+        let token = UIDevice.current.systemVersion.split(".")
         if let major = Int(token[0]) {
             return major
         }
@@ -61,8 +61,8 @@ public extension UIApplication {
     }
     /** Return iOS minor version. */
     public class func osMinor() -> Int {
-        let token = UIDevice.currentDevice().systemVersion.split(".")
-        if let minor = Int(token[1]) where token.count >= 2 {
+        let token = UIDevice.current.systemVersion.split(".")
+        if let minor = Int(token[1]) , token.count >= 2 {
             return minor
         }
         return 0
@@ -73,12 +73,12 @@ public extension UIApplication {
         #if (arch(i386) || arch(x86_64)) && os(iOS)
             print("Remote notification does not support this device.")
         #else
-            let notificationType = UIUserNotificationType.Alert.union(UIUserNotificationType.Badge)
-                                                               .union(UIUserNotificationType.Sound)
+            let notificationType = UIUserNotificationType.alert.union(UIUserNotificationType.badge)
+                                                               .union(UIUserNotificationType.sound)
 
-            let settings = UIUserNotificationSettings(forTypes: notificationType, categories: nil)
-            UIApplication.sharedApplication().registerUserNotificationSettings(settings)
-            UIApplication.sharedApplication().registerForRemoteNotifications()
+            let settings = UIUserNotificationSettings(types: notificationType, categories: nil)
+            UIApplication.shared.registerUserNotificationSettings(settings)
+            UIApplication.shared.registerForRemoteNotifications()
         #endif
     }
 }

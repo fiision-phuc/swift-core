@@ -42,7 +42,7 @@ import Foundation
 public final class FwiMultipartParam: CustomDebugStringConvertible, CustomStringConvertible {
 
     // MARK: Class's constructors
-    public init(name: String = "", fileName file: String = "", contentData data: NSData = NSData(), contentType type: String = "") {
+    public init(name: String = "", fileName file: String = "", contentData data: Data = Data(), contentType type: String = "") {
         self.name = name
         self.fileName = file
         self.contentData = data
@@ -50,10 +50,10 @@ public final class FwiMultipartParam: CustomDebugStringConvertible, CustomString
     }
 
     // MARK: Class's properties
-    public private (set) var name: String
-    public private (set) var fileName: String
-    public private (set) var contentData: NSData
-    public private (set) var contentType: String
+    public fileprivate (set) var name: String
+    public fileprivate (set) var fileName: String
+    public fileprivate (set) var contentData: Data
+    public fileprivate (set) var contentType: String
 
     public var hash: Int {
         var hash = name.hash
@@ -65,14 +65,14 @@ public final class FwiMultipartParam: CustomDebugStringConvertible, CustomString
     }
 
     // MARK: Class's public methods
-    public func isEqual(object: AnyObject?) -> Bool {
+    public func isEqual(_ object: AnyObject?) -> Bool {
         if let other = object as? FwiMultipartParam {
             return (self.hash == other.hash)
         }
         return false
     }
 
-    public func compare(param: FwiMultipartParam) -> NSComparisonResult {
+    public func compare(_ param: FwiMultipartParam) -> ComparisonResult {
         return name.compare(param.name)
     }
 

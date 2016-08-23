@@ -43,28 +43,28 @@ import Foundation
 public extension UIButton {
 
     /** Apply background to button. */
-    public func applyBackgroundImage(imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)) {
-        let imageDefault = UIImage(named: "\(imageName)_Default")?.resizableImageWithCapInsets(edgeInsets)
-        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImageWithCapInsets(edgeInsets)
-        let imageSelected = UIImage(named: "\(imageName)_Selected")?.resizableImageWithCapInsets(edgeInsets)
-        let imageDisabled = UIImage(named: "\(imageName)_Disabled")?.resizableImageWithCapInsets(edgeInsets)
+    public func applyBackgroundImage(_ imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)) {
+        let imageDefault = UIImage(named: "\(imageName)_Default")?.resizableImage(withCapInsets: edgeInsets)
+        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImage(withCapInsets: edgeInsets)
+        let imageSelected = UIImage(named: "\(imageName)_Selected")?.resizableImage(withCapInsets: edgeInsets)
+        let imageDisabled = UIImage(named: "\(imageName)_Disabled")?.resizableImage(withCapInsets: edgeInsets)
 
-        self.setImage(imageDefault, forState: UIControlState.Normal)
-        self.setImage(imageHighlighted, forState: UIControlState.Highlighted)
-        self.setImage(imageSelected, forState: UIControlState.Selected)
-        self.setImage(imageDisabled, forState: UIControlState.Disabled)
+        self.setImage(imageDefault, for: UIControlState())
+        self.setImage(imageHighlighted, for: UIControlState.highlighted)
+        self.setImage(imageSelected, for: UIControlState.selected)
+        self.setImage(imageDisabled, for: UIControlState.disabled)
     }
 
     /** Apply image to button. */
-    public func applyImage(imageName: String) {
+    public func applyImage(_ imageName: String) {
         let imageDefault = UIImage(named: "\(imageName)_Default")
         let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")
         let imageSelected = UIImage(named: "\(imageName)_Selected")
         let imageDisabled = UIImage(named: "\(imageName)_Disabled")
 
-        self.setImage(imageDefault, forState: UIControlState.Normal)
-        self.setImage(imageHighlighted, forState: UIControlState.Highlighted)
-        self.setImage(imageSelected, forState: UIControlState.Selected)
-        self.setImage(imageDisabled, forState: UIControlState.Disabled)
+        self.setImage(imageDefault, for: UIControlState())
+        self.setImage(imageHighlighted, for: UIControlState.highlighted)
+        self.setImage(imageSelected, for: UIControlState.selected)
+        self.setImage(imageDisabled, for: UIControlState.disabled)
     }
 }

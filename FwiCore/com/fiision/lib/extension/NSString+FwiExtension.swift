@@ -52,17 +52,17 @@ public extension NSString {
     }
 
     /** Compare 2 string regardless case sensitive. */
-    public func isEqualToStringIgnoreCase(otherString: String?) -> Bool {
+    public func isEqualToStringIgnoreCase(_ otherString: String?) -> Bool {
         return (self as String).isEqualToStringIgnoreCase(otherString)
     }
 
     /** Validate string. */
-    public func matchPattern(pattern: String, expressionOption option: NSRegularExpressionOptions = .CaseInsensitive) -> Bool {
+    public func matchPattern(_ pattern: String, expressionOption option: NSRegularExpression.Options = .caseInsensitive) -> Bool {
         return (self as String).matchPattern(pattern, expressionOption: option)
     }
 
     /** Convert string to data. */
-    public func toData(encoding: NSStringEncoding = NSUTF8StringEncoding) -> NSData? {
+    public func toData(_ encoding: String.Encoding = String.Encoding.utf8) -> Data? {
         return (self as String).toData(encoding)
     }
 
@@ -76,7 +76,7 @@ public extension NSString {
     }
 
     /** Split string into components. */
-    public func split(separator: String) -> [String] {
+    public func split(_ separator: String) -> [String] {
         return (self as String).split(separator)
     }
 

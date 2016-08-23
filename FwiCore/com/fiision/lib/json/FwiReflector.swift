@@ -50,27 +50,27 @@ public final class FwiReflector {
 
     // MARK: Class's properties
     public lazy var isOptional: Bool = {
-        return self.mirrorType.displayStyle == Mirror.DisplayStyle.Optional
+        return self.mirrorType.displayStyle == Mirror.DisplayStyle.optional
     }()
 
     public lazy var isEnum: Bool = {
         if !self.isOptional {
-            return self.mirrorType.displayStyle == Mirror.DisplayStyle.Enum
+            return self.mirrorType.displayStyle == Mirror.DisplayStyle.enum
         } else {
             return false
         }
     }()
     public lazy var isTuple: Bool = {
         if !self.isOptional {
-            return self.mirrorType.displayStyle == Mirror.DisplayStyle.Tuple
+            return self.mirrorType.displayStyle == Mirror.DisplayStyle.tuple
         }
 
         let type = self.extractType()
-        return (type[type.startIndex] == "(" && type[type.endIndex.advancedBy(-1)] == ")")
+        return (type[type.startIndex] == "(" && type[type.characters.index(type.endIndex, offsetBy: -1)] == ")")
     }()
     public lazy var isStruct: Bool = {
         if !self.isOptional {
-            if let style = self.mirrorType.displayStyle where style == .Struct {
+            if let style = self.mirrorType.displayStyle , style == .struct {
                 return true
             }
             return false
@@ -171,7 +171,7 @@ public final class FwiReflector {
     // Object type
     public lazy var isClass: Bool = {
         if !self.isOptional {
-            return self.mirrorType.displayStyle == Mirror.DisplayStyle.Class
+            return self.mirrorType.displayStyle == Mirror.DisplayStyle.class
         }
 
         if let clazz = self.classType {
@@ -193,7 +193,7 @@ public final class FwiReflector {
     // Collection type
     public lazy var isSet: Bool = {
         if !self.isOptional {
-            if let style = self.mirrorType.displayStyle where style == .Set {
+            if let style = self.mirrorType.displayStyle , style == .set {
                 return true
             }
             return false
@@ -207,7 +207,7 @@ public final class FwiReflector {
     }()
     public lazy var isCollection: Bool = {
         if !self.isOptional {
-            if let style = self.mirrorType.displayStyle where style == .Collection {
+            if let style = self.mirrorType.displayStyle , style == .collection {
                 return true
             }
             return false
@@ -238,7 +238,7 @@ public final class FwiReflector {
     // Dictionary type
     public lazy var isDictionary: Bool = {
         if !self.isOptional {
-            if let style = self.mirrorType.displayStyle where style == .Dictionary {
+            if let style = self.mirrorType.displayStyle , style == .dictionary {
                 return true
             }
             return false
@@ -272,13 +272,13 @@ public final class FwiReflector {
         return (key, value)
     }()
 
-    private var mirrorName: String
-    private var mirrorType: Mirror
+    fileprivate var mirrorName: String
+    fileprivate var mirrorType: Mirror
 
     // MARK: Class's public methods
 
     // MARK: Class's private methods
-    private func extractCollectionType(type: String) -> String {
+    fileprivate func extractCollectionType(_ type: String) -> String {
         var collectionType = type
 
         if collectionType.hasPrefix(arrayName) {
@@ -293,14 +293,14 @@ public final class FwiReflector {
 
         return collectionType
     }
-    private func extractDictionaryType(type: String) -> (key: String, value: String) {
+    fileprivate func extractDictionaryType(_ type: String) -> (key: String, value: String) {
         var dictionaryType = type
 
         if dictionaryType.hasPrefix(dictionaryName) {
             dictionaryType = dictionaryType.substring(startIndex: 11, reverseIndex: -1)
         }
 
-        let tokens = dictionaryType.componentsSeparatedByString(", ")
+        let tokens = dictionaryType.components(separatedBy: ", ")
         let key   = tokens[0]
         var value = tokens[1]
 
@@ -310,7 +310,7 @@ public final class FwiReflector {
 
         return (key, value)
     }
-    private func extractType() -> String {
+    fileprivate func extractType() -> String {
         var subjectType = "\(self.mirrorType.subjectType)"
         
         if !self.isOptional {
@@ -321,7 +321,7 @@ public final class FwiReflector {
 
             // Remove Type
             if subjectType.hasSuffix(".Type") {
-                subjectType = subjectType.substringToIndex(subjectType.endIndex.advancedBy(-5))
+                subjectType = subjectType.substring(to: subjectType.index(subjectType.endIndex, offsetBy: -5))
             }
         } else {
             subjectType = subjectType.substring(startIndex: 9, reverseIndex: -1)
@@ -334,7 +334,7 @@ public final class FwiReflector {
         return subjectType
     }
 
-    private func generateReflector(type: String) -> FwiReflector? {
+    fileprivate func generateReflector(_ type: String) -> FwiReflector? {
         if let clazz = self.lookupClassType(type) {
             return FwiReflector(mirrorName: type, mirrorValue: clazz)
         } else if let primitiveType = self.lookupPrimitiveType(type) {
@@ -343,7 +343,7 @@ public final class FwiReflector {
         return nil
     }
 
-    private func lookupClassType(className: String) -> AnyClass? {
+    fileprivate func lookupClassType(_ className: String) -> AnyClass? {
         /* Condition validation */
         if className.characters.count <= 0 {
             return nil
@@ -352,8 +352,8 @@ public final class FwiReflector {
         if let clazz = NSClassFromString(className) {
             return clazz
         } else {
-            for bundle in NSBundle.allBundles() {
-                if let module = bundle.bundleIdentifier?.split(".").last where bundle.load() {
+            for bundle in Bundle.allBundles {
+                if let module = bundle.bundleIdentifier?.split(".").last , bundle.load() {
                     let clazzName = "\(module).\(className)"
                     
                     let clazz: AnyClass? = NSClassFromString(clazzName)
@@ -366,7 +366,7 @@ public final class FwiReflector {
         return nil
     }
 
-    public func lookupPrimitiveType(primitiveType: String) -> Any? {
+    public func lookupPrimitiveType(_ primitiveType: String) -> Any? {
         // Convert from string to Any.Type
         switch primitiveType {
 
@@ -422,10 +422,10 @@ public final class FwiReflector {
 public extension FwiReflector {
 
     // MARK: Class's static constructors
-    public class func propertiesWithClass(classType: AnyClass) -> [FwiReflector] {
+    public class func propertiesWithClass(_ classType: AnyClass) -> [FwiReflector] {
         return FwiReflector.propertiesWithClass(classType, baseClass: NSObject.self)
     }
-    public class func propertiesWithClass<T: NSObject>(classType: AnyClass, baseClass: T.Type) -> [FwiReflector] {
+    public class func propertiesWithClass<T: NSObject>(_ classType: AnyClass, baseClass: T.Type) -> [FwiReflector] {
         var typeClass: AnyClass = classType
         var properties = [FwiReflector]()
 
@@ -438,7 +438,7 @@ public extension FwiReflector {
             // Scan class's properties
             let o = aClass.init()
             let mirror = Mirror(reflecting: o)
-            properties = mirror.children.reduce(properties, combine: { (property, child) -> [FwiReflector] in
+            properties = mirror.children.reduce(properties, { (property, child) -> [FwiReflector] in
                 var property = property
                 if let label = child.label {
                     let reflector = FwiReflector(mirrorName: label, mirrorValue: child.value)

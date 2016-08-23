@@ -43,23 +43,24 @@ import Foundation
 public final class FwiRequest: NSMutableURLRequest {
 
     // MARK: Class's properties
-    private var methodType: FwiHttpMethod?
+    fileprivate var methodType: FwiHttpMethod?
 
-    private var raw: FwiDataParam?
-    private var form: [FwiFormParam]?
-    private var upload: [FwiMultipartParam]?
+    fileprivate var raw: FwiDataParam?
+    fileprivate var form: [FwiFormParam]?
+    fileprivate var upload: [FwiMultipartParam]?
 
     // MARK: Class's public methods
+    @discardableResult
     public func prepare() -> UInt {
         // Predefine headers
         self.defineUserAgent()
-        if  valueForHTTPHeaderField("Accept") == nil {
+        if  value(forHTTPHeaderField: "Accept") == nil {
             setValue("*/*", forHTTPHeaderField: "Accept")
         }
-        if valueForHTTPHeaderField("Accept-Charset") == nil {
+        if value(forHTTPHeaderField: "Accept-Charset") == nil {
             setValue("UTF-8", forHTTPHeaderField: "Accept-Charset")
         }
-        if valueForHTTPHeaderField("Connection") == nil {
+        if value(forHTTPHeaderField: "Connection") == nil {
             setValue("close", forHTTPHeaderField: "Connection")
         }
 
@@ -75,41 +76,41 @@ public final class FwiRequest: NSMutableURLRequest {
 
         guard let r = raw else {
             switch type {
-            case .Get:
-                let query = form?.map {$0.description}.joinWithSeparator("&")
-                if let url = URL?.absoluteString, q = query {
-                    self.URL = NSURL(string: "\(url)?\(q)")
+            case .get:
+                let query = form?.map {$0.description}.joined(separator: "&")
+                if let url = url?.absoluteString, let q = query {
+                    self.url = URL(string: "\(url)?\(q)")
                 }
                 return 0
 
-            case .Patch, .Post, .Put:
+            case .patch, .post, .put:
                 if form != nil && upload == nil {
                     setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 
-                    let query = form?.map {$0.description}.joinWithSeparator("&")
+                    let query = form?.map {$0.description}.joined(separator: "&")
                     if let data = query?.toData() {
-                        setValue("\(data.length)", forHTTPHeaderField: "Content-Length")
-                        HTTPBody = data
-                        return UInt(data.length)
+                        setValue("\(data.count)", forHTTPHeaderField: "Content-Length")
+                        httpBody = data
+                        return UInt(data.count)
                     }
                     return 0
 
                 } else {
                     let body = NSMutableData()
-                    let boundary = "----------\(NSDate().timeIntervalSince1970)"
+                    let boundary = "----------\(Date().timeIntervalSince1970)"
                     setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
                     // Multi files
                     upload?.forEach({
                         if let
                             boundaryData = "\r\n--\(boundary)\r\n".toData(),
-                            contentType = "Content-Type: \($0.contentType)\r\n\r\n".toData(),
-                            contentDisposition = "Content-Disposition: form-data; name=\"\($0.name)\"; filename=\"\($0.fileName)\"\r\n".toData() {
+                            let contentType = "Content-Type: \($0.contentType)\r\n\r\n".toData(),
+                            let contentDisposition = "Content-Disposition: form-data; name=\"\($0.name)\"; filename=\"\($0.fileName)\"\r\n".toData() {
 
-                            body.appendData(boundaryData)
-                            body.appendData(contentDisposition)
-                            body.appendData(contentType)
-                            body.appendData($0.contentData)
+                            body.append(boundaryData)
+                            body.append(contentDisposition)
+                            body.append(contentType)
+                            body.append($0.contentData as Data)
                         }
                     })
 
@@ -117,22 +118,22 @@ public final class FwiRequest: NSMutableURLRequest {
                     form?.forEach({
                         if let
                             contentData = $0.value.toData(),
-                            boundaryData = "\r\n--\(boundary)\r\n".toData(),
-                            contentDisposition = "Content-Disposition: form-data; name=\"\($0.key)\"\r\n\r\n".toData() {
+                            let boundaryData = "\r\n--\(boundary)\r\n".toData(),
+                            let contentDisposition = "Content-Disposition: form-data; name=\"\($0.key)\"\r\n\r\n".toData() {
 
-                            body.appendData(boundaryData)
-                            body.appendData(contentDisposition)
-                            body.appendData(contentData)
+                            body.append(boundaryData)
+                            body.append(contentDisposition)
+                            body.append(contentData)
                         }
                     })
 
                     // Finalize request
                     if let boundaryData = "\r\n--\(boundary)\r\n".toData() {
-                        body.appendData(boundaryData)
+                        body.append(boundaryData)
                     }
 
                     setValue("\(body.length)", forHTTPHeaderField: "Content-Length")
-                    HTTPBody = body
+                    httpBody = body as Data
 
                     return UInt(body.length)
                 }
@@ -143,17 +144,17 @@ public final class FwiRequest: NSMutableURLRequest {
         }
 
         // Handle raw data request
-        HTTPBody = r.data
+        httpBody = r.data as Data
         setValue(r.contentType, forHTTPHeaderField: "Content-Type")
-        setValue("\(r.data.length)", forHTTPHeaderField: "Content-Length")
+        setValue("\(r.data.count)", forHTTPHeaderField: "Content-Length")
 
-        return UInt(r.data.length)
+        return UInt(r.data.count)
     }
 
     /** Set custom data param. */
-    public func setDataParam(param: FwiDataParam?) {
+    public func setDataParam(_ param: FwiDataParam?) {
         /* Condition validation: Validate method type */
-        if !(methodType == .Post || methodType == .Patch || methodType == .Put) {
+        if !(methodType == .post || methodType == .patch || methodType == .put) {
             return
         }
         raw = param
@@ -162,7 +163,7 @@ public final class FwiRequest: NSMutableURLRequest {
     }
 
     /** Add form parameter. */
-    public func addFormParam(param: FwiFormParam?) {
+    public func addFormParam(_ param: FwiFormParam?) {
         self.initializeForm()
         raw = nil
 
@@ -170,11 +171,11 @@ public final class FwiRequest: NSMutableURLRequest {
             form?.append(paramsForm)
         }
     }
-    public func setFormParam(param: FwiFormParam?) {
-        form?.removeAll(keepCapacity: false)
+    public func setFormParam(_ param: FwiFormParam?) {
+        form?.removeAll(keepingCapacity: false)
         self.addFormParam(param)
     }
-    public func addFormParams(params: [FwiFormParam]?) {
+    public func addFormParams(_ params: [FwiFormParam]?) {
         self.initializeForm()
         raw = nil
 
@@ -182,13 +183,13 @@ public final class FwiRequest: NSMutableURLRequest {
             self?.form?.append($0)
         }
     }
-    public func setFormParams(params: [FwiFormParam]?) {
-        form?.removeAll(keepCapacity: false)
+    public func setFormParams(_ params: [FwiFormParam]?) {
+        form?.removeAll(keepingCapacity: false)
         self.addFormParams(params)
     }
 
     /** Add multipart parameter. */
-    public func addMultipartParam(param: FwiMultipartParam?) {
+    public func addMultipartParam(_ param: FwiMultipartParam?) {
         self.initializeUpload()
         raw = nil
 
@@ -196,11 +197,11 @@ public final class FwiRequest: NSMutableURLRequest {
             upload?.append(p)
         }
     }
-    public func setMultipartParam(param: FwiMultipartParam?) {
-        upload?.removeAll(keepCapacity: false)
+    public func setMultipartParam(_ param: FwiMultipartParam?) {
+        upload?.removeAll(keepingCapacity: false)
         self.addMultipartParam(param)
     }
-    public func addMultipartParams(params: [FwiMultipartParam]?) {
+    public func addMultipartParams(_ params: [FwiMultipartParam]?) {
         self.initializeUpload()
         raw = nil
 
@@ -208,19 +209,19 @@ public final class FwiRequest: NSMutableURLRequest {
             self?.upload?.append($0)
         }
     }
-    public func setMultipartParams(params: [FwiMultipartParam]?) {
-        upload?.removeAll(keepCapacity: false)
+    public func setMultipartParams(_ params: [FwiMultipartParam]?) {
+        upload?.removeAll(keepingCapacity: false)
         self.addMultipartParams(params)
     }
 
     // MARK: Class's private methods
-    private func initializeForm() {
+    fileprivate func initializeForm() {
         if form != nil {
             return
         }
         form = [FwiFormParam]()
     }
-    private func initializeUpload() {
+    fileprivate func initializeUpload() {
         if upload != nil {
             return
         }
@@ -228,13 +229,13 @@ public final class FwiRequest: NSMutableURLRequest {
     }
 
     /** Define user agent for each request. */
-    private func defineUserAgent() {
-        let deviceInfo = UIDevice.currentDevice()
-        let bundleInfo = NSBundle.mainBundle().infoDictionary
+    fileprivate func defineUserAgent() {
+        let deviceInfo = UIDevice.current
+        let bundleInfo = Bundle.main.infoDictionary
         let bundleVersion = (bundleInfo?[kCFBundleVersionKey as String] as? String) ?? ""
         let bundleIdentifier = (bundleInfo?[kCFBundleIdentifierKey as String] as? String) ?? ""
 
-        let userAgent = "\(bundleIdentifier)/\(bundleVersion) (\(deviceInfo.model); iOS \(deviceInfo.systemVersion); Scale/\(UIScreen.mainScreen().scale))"
+        let userAgent = "\(bundleIdentifier)/\(bundleVersion) (\(deviceInfo.model); iOS \(deviceInfo.systemVersion); Scale/\(UIScreen.main.scale))"
         setValue(userAgent, forHTTPHeaderField: "User-Agent")
     }
 }
@@ -244,57 +245,57 @@ public final class FwiRequest: NSMutableURLRequest {
 public extension FwiRequest {
 
     // MARK: Class's constructors
-    public convenience init(url: NSURL, httpMethod method: FwiHttpMethod = .Get) {
-        self.init(URL: url, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData, timeoutInterval: 30.0)
+    public convenience init(url: URL, httpMethod method: FwiHttpMethod = .get) {
+        self.init(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData, timeoutInterval: 30.0)
         raw = nil
         form = nil
         upload = nil
         methodType = method
 
         switch method {
-        case .Copy:
-            self.HTTPMethod = "COPY"
+        case .copy:
+            self.httpMethod = "COPY"
             break
 
-        case .Delete:
-            self.HTTPMethod = "DELETE"
+        case .delete:
+            self.httpMethod = "DELETE"
             break
 
-        case .Head:
-            self.HTTPMethod = "HEAD"
+        case .head:
+            self.httpMethod = "HEAD"
             break
 
-        case .Link:
-            self.HTTPMethod = "LINK"
+        case .link:
+            self.httpMethod = "LINK"
             break
 
-        case .Options:
-            self.HTTPMethod = "OPTIONS"
+        case .options:
+            self.httpMethod = "OPTIONS"
             break
 
-        case .Patch:
-            self.HTTPMethod = "PATCH"
+        case .patch:
+            self.httpMethod = "PATCH"
             break
 
-        case .Post:
-            self.HTTPMethod = "POST"
+        case .post:
+            self.httpMethod = "POST"
             break
 
-        case .Purge:
-            self.HTTPMethod = "PURGE"
+        case .purge:
+            self.httpMethod = "PURGE"
             break
 
-        case .Put:
-            self.HTTPMethod = "PUT"
+        case .put:
+            self.httpMethod = "PUT"
             break
 
-        case .Unlink:
-            self.HTTPMethod = "UNLINK"
+        case .unlink:
+            self.httpMethod = "UNLINK"
             break
 
 
         default:
-            self.HTTPMethod = "GET"
+            self.httpMethod = "GET"
             break
         }
     }

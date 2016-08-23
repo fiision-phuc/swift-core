@@ -44,16 +44,16 @@ public extension UITabBarController {
 
     // MARK: Class's override methods
     public override func prefersStatusBarHidden() -> Bool {
-        return selectedViewController?.prefersStatusBarHidden() ?? super.prefersStatusBarHidden()
+        return selectedViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
     }
     public override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return selectedViewController?.preferredStatusBarStyle() ?? super.preferredStatusBarStyle()
+        return selectedViewController?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
     }
 
     public override func shouldAutorotate() -> Bool {
-        return selectedViewController?.shouldAutorotate() ?? super.shouldAutorotate()
+        return selectedViewController?.shouldAutorotate ?? super.shouldAutorotate
     }
     public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return selectedViewController?.supportedInterfaceOrientations() ?? super.supportedInterfaceOrientations()
+        return selectedViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
     }
 }

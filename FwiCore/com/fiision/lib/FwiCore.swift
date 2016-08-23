@@ -47,12 +47,12 @@ public let Metric_RadianToDegree: Double = 57.295779513082320876
 // MARK: Log Function
 #if DEBUG
     public func FwiLog(message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
-        if let name = className.split("/").last where name.length() > 0 {
+        if let name = className.split("/").last , name.length() > 0 {
             print("\(NSDate()) \(name) > [\(methodName) \(line)]: \(message)")
         }
     }
 #else
-    public func FwiLog(message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
+    public func FwiLog(_ message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
     }
 #endif
 
@@ -69,16 +69,16 @@ public func FwiConvertToRadian(degreeValue degree: Double) -> Double {
 // MARK: Custom Operator
 infix operator <- {}
 
-func <- <T>(inout left: T, right: AnyObject?) {
+func <- <T>(left: inout T, right: AnyObject?) {
     if let value = right as? T {
         left = value
     }
 }
-func <- <T>(inout left: T?, right: AnyObject?) {
+func <- <T>(left: inout T?, right: AnyObject?) {
     left = right as? T
 }
 
-func <- <T>(inout left: [T], right: [AnyObject]?) {
+func <- <T>(left: inout [T], right: [AnyObject]?) {
     if let arrValue = right {
         var temp = [T]()
 
@@ -93,7 +93,7 @@ func <- <T>(inout left: [T], right: [AnyObject]?) {
         }
     }
 }
-func <- <T>(inout left: [T]?, right: [AnyObject]?) {
+func <- <T>(left: inout [T]?, right: [AnyObject]?) {
     if let arrValue = right {
         var temp = [T]()
 
@@ -111,71 +111,71 @@ func <- <T>(inout left: [T]?, right: [AnyObject]?) {
 
 // MARK: HTTP Network
 public enum FwiHttpMethod: UInt8 {
-    case Copy    = 0x00
-    case Delete  = 0x01
-    case Get     = 0x02
-    case Head    = 0x03
-    case Link    = 0x04
-    case Options = 0x05
-    case Patch   = 0x06
-    case Post    = 0x07
-    case Purge   = 0x08
-    case Put     = 0x09
-    case Unlink  = 0x0a
+    case copy    = 0x00
+    case delete  = 0x01
+    case get     = 0x02
+    case head    = 0x03
+    case link    = 0x04
+    case options = 0x05
+    case patch   = 0x06
+    case post    = 0x07
+    case purge   = 0x08
+    case put     = 0x09
+    case unlink  = 0x0a
 }
 
-public func FwiNetworkStatusIsSuccces(networkStatus: NetworkStatus) -> Bool {
+public func FwiNetworkStatusIsSuccces(_ networkStatus: NetworkStatus) -> Bool {
     return ((200 <= networkStatus.rawValue && networkStatus.rawValue <= 299) || networkStatus.rawValue == 304)
 }
 
-public struct NetworkStatus: OptionSetType, CustomDebugStringConvertible, CustomStringConvertible {
-    public static let Unknown = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorUnknown.rawValue)
-    public static let Cancelled = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCancelled.rawValue)
-    public static let BadURL = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorBadURL.rawValue)
-    public static let TimedOut = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorTimedOut.rawValue)
-    public static let UnsupportedURL = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorUnsupportedURL.rawValue)
-    public static let CannotFindHost = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCannotFindHost.rawValue)
-    public static let CannotConnectToHost = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCannotConnectToHost.rawValue)
-    public static let NetworkConnectionLost = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorNetworkConnectionLost.rawValue)
-    public static let DNSLookupFailed = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorDNSLookupFailed.rawValue)
-    public static let HTTPTooManyRedirects = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorHTTPTooManyRedirects.rawValue)
-    public static let ResourceUnavailable = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorResourceUnavailable.rawValue)
-    public static let NotConnectedToInternet = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorNotConnectedToInternet.rawValue)
-    public static let RedirectToNonExistentLocation = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorRedirectToNonExistentLocation.rawValue)
-    public static let BadServerResponse = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorBadServerResponse.rawValue)
-    public static let UserCancelledAuthentication = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorUserCancelledAuthentication.rawValue)
-    public static let UserAuthenticationRequired = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorUserAuthenticationRequired.rawValue)
-    public static let ZeroByteResource = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorZeroByteResource.rawValue)
-    public static let CannotDecodeRawData = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCannotDecodeRawData.rawValue)
-    public static let CannotDecodeContentData = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCannotDecodeContentData.rawValue)
-    public static let CannotParseResponse = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCannotParseResponse.rawValue)
-    public static let FileDoesNotExist = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorFileDoesNotExist.rawValue)
-    public static let FileIsDirectory = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorFileIsDirectory.rawValue)
-    public static let NoPermissionsToReadFile = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorNoPermissionsToReadFile.rawValue)
-    public static let DataLengthExceedsMaximum = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorDataLengthExceedsMaximum.rawValue)
+public struct NetworkStatus: OptionSet, CustomDebugStringConvertible, CustomStringConvertible {
+    public static let Unknown = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorUnknown.rawValue)
+    public static let Cancelled = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCancelled.rawValue)
+    public static let BadURL = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorBadURL.rawValue)
+    public static let TimedOut = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorTimedOut.rawValue)
+    public static let UnsupportedURL = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorUnsupportedURL.rawValue)
+    public static let CannotFindHost = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCannotFindHost.rawValue)
+    public static let CannotConnectToHost = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCannotConnectToHost.rawValue)
+    public static let NetworkConnectionLost = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorNetworkConnectionLost.rawValue)
+    public static let DNSLookupFailed = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorDNSLookupFailed.rawValue)
+    public static let HTTPTooManyRedirects = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorHTTPTooManyRedirects.rawValue)
+    public static let ResourceUnavailable = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorResourceUnavailable.rawValue)
+    public static let NotConnectedToInternet = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+    public static let RedirectToNonExistentLocation = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorRedirectToNonExistentLocation.rawValue)
+    public static let BadServerResponse = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorBadServerResponse.rawValue)
+    public static let UserCancelledAuthentication = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorUserCancelledAuthentication.rawValue)
+    public static let UserAuthenticationRequired = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorUserAuthenticationRequired.rawValue)
+    public static let ZeroByteResource = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorZeroByteResource.rawValue)
+    public static let CannotDecodeRawData = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCannotDecodeRawData.rawValue)
+    public static let CannotDecodeContentData = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCannotDecodeContentData.rawValue)
+    public static let CannotParseResponse = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCannotParseResponse.rawValue)
+    public static let FileDoesNotExist = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorFileDoesNotExist.rawValue)
+    public static let FileIsDirectory = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorFileIsDirectory.rawValue)
+    public static let NoPermissionsToReadFile = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorNoPermissionsToReadFile.rawValue)
+    public static let DataLengthExceedsMaximum = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorDataLengthExceedsMaximum.rawValue)
     // SSL errors
-    public static let SecureConnectionFailed = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorSecureConnectionFailed.rawValue)
-    public static let ServerCertificateHasBadDate = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorServerCertificateHasBadDate.rawValue)
-    public static let ServerCertificateUntrusted = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorServerCertificateUntrusted.rawValue)
-    public static let ServerCertificateHasUnknownRoot = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorServerCertificateHasUnknownRoot.rawValue)
-    public static let ServerCertificateNotYetValid = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorServerCertificateNotYetValid.rawValue)
-    public static let ClientCertificateRejected = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorClientCertificateRejected.rawValue)
-    public static let ClientCertificateRequired = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorClientCertificateRequired.rawValue)
-    public static let CannotLoadFromNetwork = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCannotLoadFromNetwork.rawValue)
+    public static let SecureConnectionFailed = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorSecureConnectionFailed.rawValue)
+    public static let ServerCertificateHasBadDate = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorServerCertificateHasBadDate.rawValue)
+    public static let ServerCertificateUntrusted = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorServerCertificateUntrusted.rawValue)
+    public static let ServerCertificateHasUnknownRoot = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorServerCertificateHasUnknownRoot.rawValue)
+    public static let ServerCertificateNotYetValid = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorServerCertificateNotYetValid.rawValue)
+    public static let ClientCertificateRejected = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorClientCertificateRejected.rawValue)
+    public static let ClientCertificateRequired = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorClientCertificateRequired.rawValue)
+    public static let CannotLoadFromNetwork = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCannotLoadFromNetwork.rawValue)
     // Download and file I/O errors
-    public static let CannotCreateFile = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCannotCreateFile.rawValue)
-    public static let CannotOpenFile = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCannotOpenFile.rawValue)
-    public static let CannotCloseFile = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCannotCloseFile.rawValue)
-    public static let CannotWriteToFile = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCannotWriteToFile.rawValue)
-    public static let CannotRemoveFile = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCannotRemoveFile.rawValue)
-    public static let CannotMoveFile = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCannotMoveFile.rawValue)
-    public static let DownloadDecodingFailedMidStream = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorDownloadDecodingFailedMidStream.rawValue)
-    public static let DownloadDecodingFailedToComplete = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorDownloadDecodingFailedToComplete.rawValue)
+    public static let CannotCreateFile = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCannotCreateFile.rawValue)
+    public static let CannotOpenFile = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCannotOpenFile.rawValue)
+    public static let CannotCloseFile = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCannotCloseFile.rawValue)
+    public static let CannotWriteToFile = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCannotWriteToFile.rawValue)
+    public static let CannotRemoveFile = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCannotRemoveFile.rawValue)
+    public static let CannotMoveFile = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCannotMoveFile.rawValue)
+    public static let DownloadDecodingFailedMidStream = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorDownloadDecodingFailedMidStream.rawValue)
+    public static let DownloadDecodingFailedToComplete = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorDownloadDecodingFailedToComplete.rawValue)
     // ???
-    public static let InternationalRoamingOff = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorInternationalRoamingOff.rawValue)
-    public static let CallIsActive = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorCallIsActive.rawValue)
-    public static let DataNotAllowed = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorDataNotAllowed.rawValue)
-    public static let RequestBodyStreamExhausted = NetworkStatus(rawValue: CFNetworkErrors.CFURLErrorRequestBodyStreamExhausted.rawValue)
+    public static let InternationalRoamingOff = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorInternationalRoamingOff.rawValue)
+    public static let CallIsActive = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorCallIsActive.rawValue)
+    public static let DataNotAllowed = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorDataNotAllowed.rawValue)
+    public static let RequestBodyStreamExhausted = NetworkStatus(rawValue: CFNetworkErrors.cfurlErrorRequestBodyStreamExhausted.rawValue)
     // 4xx Client Error
     public static let BadRequest = NetworkStatus(rawValue: 400)
     public static let UnauthorizedAccess = NetworkStatus(rawValue: 401)
@@ -218,141 +218,141 @@ public struct NetworkStatus: OptionSetType, CustomDebugStringConvertible, Custom
 
 
     public let rawValue: Int32
-    private var statusDescription: String?
+    fileprivate var statusDescription: String?
     public init(rawValue: Int32) {
         self.rawValue = rawValue
 
         switch rawValue {
-        case CFNetworkErrors.CFURLErrorUnknown.rawValue:
+        case CFNetworkErrors.cfurlErrorUnknown.rawValue:
             statusDescription = "Unknown."
             break
-        case CFNetworkErrors.CFURLErrorCancelled.rawValue:
+        case CFNetworkErrors.cfurlErrorCancelled.rawValue:
             statusDescription = "Cancelled."
             break
-        case CFNetworkErrors.CFURLErrorBadURL.rawValue:
+        case CFNetworkErrors.cfurlErrorBadURL.rawValue:
             statusDescription = "Bad URL."
             break
-        case CFNetworkErrors.CFURLErrorTimedOut.rawValue:
+        case CFNetworkErrors.cfurlErrorTimedOut.rawValue:
             statusDescription = "Timed out."
             break
-        case CFNetworkErrors.CFURLErrorUnsupportedURL.rawValue:
+        case CFNetworkErrors.cfurlErrorUnsupportedURL.rawValue:
             statusDescription = "Unsupported URL."
             break
-        case CFNetworkErrors.CFURLErrorCannotFindHost.rawValue:
+        case CFNetworkErrors.cfurlErrorCannotFindHost.rawValue:
             statusDescription = "Cannot find host."
             break
-        case CFNetworkErrors.CFURLErrorCannotConnectToHost.rawValue:
+        case CFNetworkErrors.cfurlErrorCannotConnectToHost.rawValue:
             statusDescription = "Cannot connect to host."
             break
-        case CFNetworkErrors.CFURLErrorNetworkConnectionLost.rawValue:
+        case CFNetworkErrors.cfurlErrorNetworkConnectionLost.rawValue:
             statusDescription = "Network connection lost."
             break
-        case CFNetworkErrors.CFURLErrorDNSLookupFailed.rawValue:
+        case CFNetworkErrors.cfurlErrorDNSLookupFailed.rawValue:
             statusDescription = "DNS lookup failed."
             break
-        case CFNetworkErrors.CFURLErrorHTTPTooManyRedirects.rawValue:
+        case CFNetworkErrors.cfurlErrorHTTPTooManyRedirects.rawValue:
             statusDescription = "HTTP too many redirects."
             break
-        case CFNetworkErrors.CFURLErrorResourceUnavailable.rawValue:
+        case CFNetworkErrors.cfurlErrorResourceUnavailable.rawValue:
             statusDescription = "Resource unavailable."
             break
-        case CFNetworkErrors.CFURLErrorNotConnectedToInternet.rawValue:
+        case CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue:
             statusDescription = "Not connected to Internet."
             break
-        case CFNetworkErrors.CFURLErrorRedirectToNonExistentLocation.rawValue:
+        case CFNetworkErrors.cfurlErrorRedirectToNonExistentLocation.rawValue:
             statusDescription = "Redirect to non existent location."
             break
-        case CFNetworkErrors.CFURLErrorBadServerResponse.rawValue:
+        case CFNetworkErrors.cfurlErrorBadServerResponse.rawValue:
             statusDescription = "Bad server response."
             break
-        case CFNetworkErrors.CFURLErrorUserCancelledAuthentication.rawValue:
+        case CFNetworkErrors.cfurlErrorUserCancelledAuthentication.rawValue:
             statusDescription = "User cancelled authentication."
             break
-        case CFNetworkErrors.CFURLErrorUserAuthenticationRequired.rawValue:
+        case CFNetworkErrors.cfurlErrorUserAuthenticationRequired.rawValue:
             statusDescription = "User authentication required."
             break
-        case CFNetworkErrors.CFURLErrorZeroByteResource.rawValue:
+        case CFNetworkErrors.cfurlErrorZeroByteResource.rawValue:
             statusDescription = "Zero byte resource."
             break
-        case CFNetworkErrors.CFURLErrorCannotDecodeRawData.rawValue:
+        case CFNetworkErrors.cfurlErrorCannotDecodeRawData.rawValue:
             statusDescription = "Cannot decode raw data."
             break
-        case CFNetworkErrors.CFURLErrorCannotDecodeContentData.rawValue:
+        case CFNetworkErrors.cfurlErrorCannotDecodeContentData.rawValue:
             statusDescription = "Cannot decode content data."
             break
-        case CFNetworkErrors.CFURLErrorCannotParseResponse.rawValue:
+        case CFNetworkErrors.cfurlErrorCannotParseResponse.rawValue:
             statusDescription = "Cannot parse response."
             break
-        case CFNetworkErrors.CFURLErrorFileDoesNotExist.rawValue:
+        case CFNetworkErrors.cfurlErrorFileDoesNotExist.rawValue:
             statusDescription = "File does not exist."
             break
-        case CFNetworkErrors.CFURLErrorFileIsDirectory.rawValue:
+        case CFNetworkErrors.cfurlErrorFileIsDirectory.rawValue:
             statusDescription = "File is directory."
             break
-        case CFNetworkErrors.CFURLErrorNoPermissionsToReadFile.rawValue:
+        case CFNetworkErrors.cfurlErrorNoPermissionsToReadFile.rawValue:
             statusDescription = "No permissions to read file."
             break
-        case CFNetworkErrors.CFURLErrorDataLengthExceedsMaximum.rawValue:
+        case CFNetworkErrors.cfurlErrorDataLengthExceedsMaximum.rawValue:
             statusDescription = "Data length exceeds maximum."
             break
-        case CFNetworkErrors.CFURLErrorSecureConnectionFailed.rawValue:
+        case CFNetworkErrors.cfurlErrorSecureConnectionFailed.rawValue:
             statusDescription = "Secure connection failed."
             break
-        case CFNetworkErrors.CFURLErrorServerCertificateHasBadDate.rawValue:
+        case CFNetworkErrors.cfurlErrorServerCertificateHasBadDate.rawValue:
             statusDescription = "Server certificate has bad date."
             break
-        case CFNetworkErrors.CFURLErrorServerCertificateUntrusted.rawValue:
+        case CFNetworkErrors.cfurlErrorServerCertificateUntrusted.rawValue:
             statusDescription = "Server certificate untrusted."
             break
-        case CFNetworkErrors.CFURLErrorServerCertificateHasUnknownRoot.rawValue:
+        case CFNetworkErrors.cfurlErrorServerCertificateHasUnknownRoot.rawValue:
             statusDescription = "Server certificate has unknown root."
             break
-        case CFNetworkErrors.CFURLErrorServerCertificateNotYetValid.rawValue:
+        case CFNetworkErrors.cfurlErrorServerCertificateNotYetValid.rawValue:
             statusDescription = "Server certificate not yet valid."
             break
-        case CFNetworkErrors.CFURLErrorClientCertificateRejected.rawValue:
+        case CFNetworkErrors.cfurlErrorClientCertificateRejected.rawValue:
             statusDescription = "Client certificate rejected."
             break
-        case CFNetworkErrors.CFURLErrorClientCertificateRequired.rawValue:
+        case CFNetworkErrors.cfurlErrorClientCertificateRequired.rawValue:
             statusDescription = "Client certificate required."
             break
-        case CFNetworkErrors.CFURLErrorCannotLoadFromNetwork.rawValue:
+        case CFNetworkErrors.cfurlErrorCannotLoadFromNetwork.rawValue:
             statusDescription = "Cannot load from network."
             break
-        case CFNetworkErrors.CFURLErrorCannotCreateFile.rawValue:
+        case CFNetworkErrors.cfurlErrorCannotCreateFile.rawValue:
             statusDescription = "Cannot create file."
             break
-        case CFNetworkErrors.CFURLErrorCannotOpenFile.rawValue:
+        case CFNetworkErrors.cfurlErrorCannotOpenFile.rawValue:
             statusDescription = "Cannot open file."
             break
-        case CFNetworkErrors.CFURLErrorCannotCloseFile.rawValue:
+        case CFNetworkErrors.cfurlErrorCannotCloseFile.rawValue:
             statusDescription = "Cannot close file."
             break
-        case CFNetworkErrors.CFURLErrorCannotWriteToFile.rawValue:
+        case CFNetworkErrors.cfurlErrorCannotWriteToFile.rawValue:
             statusDescription = "Cannot write to file."
             break
-        case CFNetworkErrors.CFURLErrorCannotRemoveFile.rawValue:
+        case CFNetworkErrors.cfurlErrorCannotRemoveFile.rawValue:
             statusDescription = "Cannot remove file."
             break
-        case CFNetworkErrors.CFURLErrorCannotMoveFile.rawValue:
+        case CFNetworkErrors.cfurlErrorCannotMoveFile.rawValue:
             statusDescription = "Cannot move file."
             break
-        case CFNetworkErrors.CFURLErrorDownloadDecodingFailedMidStream.rawValue:
+        case CFNetworkErrors.cfurlErrorDownloadDecodingFailedMidStream.rawValue:
             statusDescription = "Download decoding failed mid stream."
             break
-        case CFNetworkErrors.CFURLErrorDownloadDecodingFailedToComplete.rawValue:
+        case CFNetworkErrors.cfurlErrorDownloadDecodingFailedToComplete.rawValue:
             statusDescription = "Download decoding failed to complete."
             break
-        case CFNetworkErrors.CFURLErrorInternationalRoamingOff.rawValue:
+        case CFNetworkErrors.cfurlErrorInternationalRoamingOff.rawValue:
             statusDescription = "International roaming off."
             break
-        case CFNetworkErrors.CFURLErrorCallIsActive.rawValue:
+        case CFNetworkErrors.cfurlErrorCallIsActive.rawValue:
             statusDescription = "Call is active."
             break
-        case CFNetworkErrors.CFURLErrorDataNotAllowed.rawValue:
+        case CFNetworkErrors.cfurlErrorDataNotAllowed.rawValue:
             statusDescription = "Data not allowed."
             break
-        case CFNetworkErrors.CFURLErrorRequestBodyStreamExhausted.rawValue:
+        case CFNetworkErrors.cfurlErrorRequestBodyStreamExhausted.rawValue:
             statusDescription = "Request body stream exhausted."
             break
         case 400:

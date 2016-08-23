@@ -39,12 +39,12 @@
 import Foundation
 
 
-public extension NSData {
+public extension Data {
 
     /** Convert data to json */
-    public func convertToJson(options otp: NSJSONReadingOptions = []) -> [String: AnyObject]? {
+    public func convertToJson(options otp: JSONSerialization.ReadingOptions = []) -> [String: AnyObject]? {
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(self, options: otp)
+            let json = try JSONSerialization.jsonObject(with: self, options: otp)
             return json as? [String: AnyObject]
         } catch {
             return nil
@@ -52,9 +52,9 @@ public extension NSData {
     }
 
     /** Convert data to model object */
-    public func decodeJSONWithModel<T: NSObject>(inout model m: T) -> NSError? {
+    public func decodeJSONWithModel<T: NSObject>(model m: inout T) -> NSError? {
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(self, options: [])
+            let json = try JSONSerialization.jsonObject(with: self, options: [])
             if let error = FwiJSONMapper.mapObjectToModel(json, model: &m) {
                 throw error
             } else {
@@ -73,9 +73,9 @@ public extension NSData {
     }
 
     /** Convert data to string base on string encoding type. */
-    public func toString(encoding: NSStringEncoding = NSUTF8StringEncoding) -> String? {
+    public func toString(_ encoding: String.Encoding = String.Encoding.utf8) -> String? {
         /* Condition validation */
-        if length <= 0 {
+        if count <= 0 {
             return nil
         }
 
@@ -85,13 +85,13 @@ public extension NSData {
     /** Clear all bytes data. */
     public func clearBytes() {
         /* Condition validation */
-        if length <= 0 {
+        if count <= 0 {
             return
         }
 
-        let bytes = UnsafeMutablePointer<UInt8>(self.bytes)
-        let step = length >> 1
-        var end = length - 1
+        let bytes = UnsafeMutablePointer<UInt8>(mutating: (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count))
+        let step = count >> 1
+        var end = count - 1
 
         for i in 0 ..< step {
             bytes[end] = 0
@@ -100,7 +100,7 @@ public extension NSData {
         }
 
         // Handle the last stand alone byte
-        if (length % 2) == 1 {
+        if (count % 2) == 1 {
             bytes[step] = 0
         }
     }
@@ -108,13 +108,13 @@ public extension NSData {
     /** Reverse the order of bytes. */
     public func reverseBytes() {
         /* Condition validation */
-        if length <= 0 {
+        if count <= 0 {
             return
         }
 
-        let bytes = UnsafeMutablePointer<UInt8>(self.bytes)
-        let step = length >> 1
-        var end = length - 1
+        let bytes = UnsafeMutablePointer<UInt8>(mutating: (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count))
+        let step = count >> 1
+        var end = count - 1
 
         for i in 0 ..< step {
             let temp = bytes[i]

@@ -39,24 +39,24 @@
 import Foundation
 
 
-extension NSFileManager {
+extension FileManager {
 
     /** Check if file is available for a given URL. */
-    func fileExistsAtURL(url: NSURL?) -> Bool {
-        guard let url = url, path = url.path else {
+    func fileExistsAtURL(_ url: URL?) -> Bool {
+        guard let url = url, let path = url.path else {
             return false
         }
-        return self.fileExistsAtPath(path)
+        return self.fileExists(atPath: path)
     }
 
     /** Delete file for a given URL. */
-    func deleteFileAtURL(url: NSURL?) {
-        guard let u = url where self.fileExistsAtURL(url) else {
+    func deleteFileAtURL(_ url: URL?) {
+        guard let u = url , self.fileExistsAtURL(url) else {
             return
         }
 
         do {
-            try self.removeItemAtURL(u)
+            try self.removeItem(at: u)
         } catch _ {
             // Do nothing
         }
@@ -71,12 +71,12 @@ extension NSFileManager {
 
      - returns: error if it has
      */
-    func createDirectoryAtURL(url: NSURL?, withIntermediateDirectories intermediate: Bool, attributes: [String: AnyObject]? = nil) -> NSError? {
-        guard let url = url where url.path != nil else {
+    func createDirectoryAtURL(_ url: URL?, withIntermediateDirectories intermediate: Bool, attributes: [String: AnyObject]? = nil) -> NSError? {
+        guard let url = url , url.path != nil else {
             return NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "URL Not Exist!!!"])
         }
         do {
-            try self.createDirectoryAtURL(url, withIntermediateDirectories: intermediate, attributes: attributes)
+            try self.createDirectory(at: url, withIntermediateDirectories: intermediate, attributes: attributes)
             return nil
         } catch let error as NSError {
             return error
@@ -90,12 +90,12 @@ extension NSFileManager {
 
      - returns: error if it has
      */
-    func moveItem(from fUrl: NSURL?, to tURl: NSURL?) -> NSError? {
-        guard let fUrl = fUrl, tURl = tURl else {
+    func moveItem(from fUrl: URL?, to tURl: URL?) -> NSError? {
+        guard let fUrl = fUrl, let tURl = tURl else {
             return NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "URL Not Exist!!!"])
         }
         do {
-            try self.moveItemAtURL(fUrl, toURL: tURl)
+            try self.moveItem(at: fUrl, to: tURl)
             return nil
         } catch let error as NSError {
             return error
@@ -103,7 +103,7 @@ extension NSFileManager {
     }
 }
 
-extension NSURL {
+extension URL {
     /**
      Check Url is directory
 
@@ -113,8 +113,8 @@ extension NSURL {
         guard self.path != nil else { return false }
         do {
             var rsrc: AnyObject?
-            try self.getResourceValue(&rsrc, forKey: NSURLIsDirectoryKey)
-            if let isDirectory = rsrc as? NSNumber where isDirectory == true {
+            try (self as NSURL).getResourceValue(&rsrc, forKey: URLResourceKey.isDirectoryKey)
+            if let isDirectory = rsrc as? NSNumber , isDirectory == true {
                 return true
             } else {
                 return false

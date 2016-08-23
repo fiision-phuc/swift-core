@@ -39,23 +39,23 @@
 import Foundation
 
 
-public extension NSURL {
+public extension URL {
 
     /** URL to main cache folder. */
-    public class func cacheDirectory() -> NSURL? {
-        let array = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
+    public static func cacheDirectory() -> URL? {
+        let array = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
         return array.first
     }
 
     /** URL to main document folder. */
-    public class func documentDirectory() -> NSURL? {
-        let array = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+    public static func documentDirectory() -> URL? {
+        let array = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return array.first
     }
 }
 
 
 // MARK: Custom Operator
-public func + (left: NSURL?, right: String) -> NSURL? {
-    return left?.URLByAppendingPathComponent(right)
+public func + (left: URL?, right: String) -> URL? {
+    return left?.appendingPathComponent(right)
 }

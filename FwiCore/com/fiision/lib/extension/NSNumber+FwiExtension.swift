@@ -42,18 +42,18 @@ import Foundation
 public extension NSNumber {
 
     /** Display number to specific currency format. */
-    public func currencyWithISO3(currencyISO3: String, decimalSeparator decimal: String, groupingSeparator grouping: String, usingSymbol isSymbol: Bool) -> String? {
+    public func currencyWithISO3(_ currencyISO3: String, decimalSeparator decimal: String, groupingSeparator grouping: String, usingSymbol isSymbol: Bool) -> String? {
         // Initialize currency format object
         let locale = NSLocale(localeIdentifier: "en_US")
-        let currencyFormat = NSNumberFormatter()
+        let currencyFormat = NumberFormatter()
 
         // Layout currency
-        currencyFormat.formatterBehavior = NSNumberFormatterBehavior.Behavior10_4
-        currencyFormat.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp
-        currencyFormat.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+        currencyFormat.formatterBehavior = NumberFormatter.Behavior.behavior10_4
+        currencyFormat.roundingMode = NumberFormatter.RoundingMode.halfUp
+        currencyFormat.numberStyle = NumberFormatter.Style.currency
 
         currencyFormat.generatesDecimalNumbers = true
-        currencyFormat.locale = locale
+        currencyFormat.locale = locale as Locale!
 
         currencyFormat.currencyGroupingSeparator = grouping
         currencyFormat.currencyDecimalSeparator = decimal
@@ -68,6 +68,6 @@ public extension NSNumber {
         currencyFormat.currencyCode = currencyISO3
 
         // Return result
-        return currencyFormat.stringFromNumber(self)
+        return currencyFormat.string(from: self)
     }
 }

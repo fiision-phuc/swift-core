@@ -43,7 +43,7 @@ public extension String {
 
     /** Generate random identifier base on uuid. */
     public static func randomIdentifier() -> String? {
-        if let uuidRef = CFUUIDCreate(nil), cfString = CFUUIDCreateString(nil, uuidRef) {
+        if let uuidRef = CFUUIDCreate(nil), let cfString = CFUUIDCreateString(nil, uuidRef) {
             return cfString as String
         }
         return nil
@@ -55,18 +55,18 @@ public extension String {
     }
 
     /** Compare 2 string regardless case sensitive. */
-    public func isEqualToStringIgnoreCase(otherString: String?) -> Bool {
+    public func isEqualToStringIgnoreCase(_ otherString: String?) -> Bool {
         /* Condition validation */
         if otherString == nil {
             return false
         }
 
-        let (text1, text2) = (self.lowercaseString.trim(), otherString?.lowercaseString.trim())
+        let (text1, text2) = (self.lowercased().trim(), otherString?.lowercased().trim())
         return text1 == text2
     }
 
     /** Validate string. */
-    public func matchPattern(pattern: String, expressionOption option: NSRegularExpressionOptions = .CaseInsensitive) -> Bool {
+    public func matchPattern(_ pattern: String, expressionOption option: NSRegularExpression.Options = .caseInsensitive) -> Bool {
         /* Condition validation */
         if pattern.length() <= 0 {
             return false
@@ -76,7 +76,7 @@ public extension String {
         do {
             regex = try NSRegularExpression(pattern: pattern, options: option)
 
-            if let matches = regex?.numberOfMatchesInString(self, options: .Anchored, range: NSMakeRange(0, self.length())) {
+            if let matches = regex?.numberOfMatches(in: self, options: .anchored, range: NSMakeRange(0, self.length())) {
                 return (matches == 1)
             }
         } catch _ {
@@ -91,8 +91,8 @@ public extension String {
     }
 
     /** Convert string to data. */
-    public func toData(encoding: NSStringEncoding = NSUTF8StringEncoding) -> NSData? {
-        return dataUsingEncoding(encoding, allowLossyConversion: false)
+    public func toData(_ encoding: String.Encoding = String.Encoding.utf8) -> Data? {
+        return data(using: encoding, allowLossyConversion: false)
     }
 
     /** Convert html string compatible to string. */
@@ -102,23 +102,23 @@ public extension String {
     }
     /** Convert string to html string compatible. */
     public func encodeHTML() -> String {
-        return stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet()) ?? ""
+        return addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed) ?? ""
 //        return stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet(charactersInString: ":/=,!$&'()*+[]@#?")) ?? ""
     }
 
     /** Split string into components. */
-    public func split(separator: String) -> [String] {
-        return componentsSeparatedByString(separator)
+    public func split(_ separator: String) -> [String] {
+        return components(separatedBy: separator)
     }
 
     /** Sub string from index to reverse index. */
     func substring(startIndex strIndex: Int, reverseIndex endIndex: Int) -> String {
-        let range = self.startIndex.advancedBy(strIndex) ..< self.endIndex.advancedBy(endIndex)
-        return substringWithRange(range)
+        let range = self.characters.index(self.startIndex, offsetBy: strIndex) ..< self.characters.index(self.endIndex, offsetBy: endIndex)
+        return self.substring(with: range)
     }
 
     /** Trim all spaces before and after a string. */
     public func trim() -> String {
-        return stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        return trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
 }

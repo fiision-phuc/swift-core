@@ -44,16 +44,16 @@ public extension UINavigationController {
 
     // MARK: Class's override methods
     public override func prefersStatusBarHidden() -> Bool {
-        return visibleViewController?.prefersStatusBarHidden() ?? super.prefersStatusBarHidden()
+        return visibleViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
     }
     public override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return visibleViewController?.preferredStatusBarStyle() ?? super.preferredStatusBarStyle()
+        return visibleViewController?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
     }
 
     public override func shouldAutorotate() -> Bool {
-        return visibleViewController?.shouldAutorotate() ?? super.shouldAutorotate()
+        return visibleViewController?.shouldAutorotate ?? super.shouldAutorotate
     }
     public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return visibleViewController?.supportedInterfaceOrientations() ?? super.supportedInterfaceOrientations()
+        return visibleViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
     }
 }
