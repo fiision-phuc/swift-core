@@ -84,7 +84,8 @@ class FwiOperationTest: XCTestCase {
             completedExpectation.fulfill()
         }
 
-        self.waitForExpectations(timeout: 1.0) { (err: NSError?) in
+        
+        self.waitForExpectations(timeout: 1.0) { (err: Error?) in
             if err == nil {
                 XCTAssertTrue(operation.isFinished, "Operation finished.")
             } else {

@@ -61,8 +61,7 @@ class FwiNetworkManagerTest: XCTestCase {
     // MARK: Test Cases
     func testHTTP() {
         let completedExpectation = self.expectation(description: "Operation completed.")
-        if let url = URL(string: "/get", relativeTo: baseHTTP) {
-            let request = URLRequest(url: url)
+        if let url = URL(string: "/get", relativeTo: baseHTTP),let request = instance.prepareRequest(url) {
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertTrue(FwiNetworkStatusIsSuccces(statusCode), "Success connection should return status code range 200 - 299. But found \(statusCode)")
@@ -83,8 +82,7 @@ class FwiNetworkManagerTest: XCTestCase {
     
     func testHTTPS() {
         let completedExpectation = self.expectation(description: "Operation completed.")
-        if let url = URL(string: "/get", relativeTo: baseHTTPS) {
-            let request = URLRequest(url: url)
+        if let url = URL(string: "/get", relativeTo: baseHTTPS) , let request = instance.prepareRequest(url) {
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertTrue(FwiNetworkStatusIsSuccces(statusCode), "Success connection should return status code range 200 - 299. But found \(statusCode)")
@@ -105,8 +103,8 @@ class FwiNetworkManagerTest: XCTestCase {
 
     func testNetworkIndicator() {
         let completedExpectation = self.expectation(description: "Operation completed.")
-        if let url = URL(string: "/get", relativeTo: baseHTTP) {
-            let req = URLRequest(url: url)
+        if let url = URL(string: "/get", relativeTo: baseHTTP), let req = instance.prepareRequest(url) {
+
             var request1 = false
             var request2 = false
             var request3 = false
@@ -153,8 +151,7 @@ class FwiNetworkManagerTest: XCTestCase {
 
     func testUnsupportedURL() {
         let completedExpectation = self.expectation(description: "Operation completed.")
-        if let url = URL(string: "/", relativeTo: nil) {
-            let request = URLRequest(url: url)
+        if let url = URL(string: "/", relativeTo: nil), let request = instance.prepareRequest(url)  {
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertTrue(statusCode == .UnsupportedURL, "Fail connection status should be \(NetworkStatus.UnsupportedURL). But found \(statusCode)")
@@ -175,8 +172,7 @@ class FwiNetworkManagerTest: XCTestCase {
 
     func testCannotConnectToHost() {
         let completedExpectation = self.expectation(description: "Operation completed.")
-        if let url = URL(string: "http://localhost:8080") {
-            let request = URLRequest(url: url)
+        if let url = URL(string: "http://localhost:8080"), let request = instance.prepareRequest(url)  {
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertTrue(statusCode == .CannotConnectToHost, "Cancelled connection status should be \(NetworkStatus.CannotConnectToHost). But found \(statusCode)")
@@ -197,8 +193,7 @@ class FwiNetworkManagerTest: XCTestCase {
 
     func testStatus3xx() {
         let completedExpectation = self.expectation(description: "Operation completed.")
-        if let url = URL(string: "/redirect/5", relativeTo: baseHTTP) {
-            let request = URLRequest(url: url)
+        if let url = URL(string: "/redirect/5", relativeTo: baseHTTP), let request = instance.prepareRequest(url) {
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertNil(error, "Redirect connection should return nil error. But found \(error)")
@@ -217,8 +212,7 @@ class FwiNetworkManagerTest: XCTestCase {
     
     func testStatus4xx() {
         let completedExpectation = self.expectation(description: "Operation completed.")
-        if let url = URL(string: "/status/404", relativeTo: baseHTTP) {
-            let request = URLRequest(url: url)
+        if let url = URL(string: "/status/404", relativeTo: baseHTTP) , let request = instance.prepareRequest(url){
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertTrue(statusCode == .NotFound, "Status should be \(NetworkStatus.NotFound). But found \(statusCode)")
@@ -238,8 +232,7 @@ class FwiNetworkManagerTest: XCTestCase {
 
     func testStatus5xx() {
         let completedExpectation = self.expectation(description: "Operation completed.")
-        if let url = URL(string: "/status/500", relativeTo: baseHTTP) {
-            let request = URLRequest(url: url)
+        if let url = URL(string: "/status/500", relativeTo: baseHTTP), let request = instance.prepareRequest(url) {
             
             instance.sendRequest(request) { (data, error, statusCode, response) in
                 XCTAssertTrue(statusCode == .InternalServerError, "Status should be \(NetworkStatus.InternalServerError). But found \(statusCode)")

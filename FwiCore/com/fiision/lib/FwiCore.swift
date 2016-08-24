@@ -78,6 +78,24 @@ func <- <T>(left: inout T?, right: AnyObject?) {
     left = right as? T
 }
 
+func <- <T: NSObject>(left: inout T, right: AnyObject?) {
+    let _ = FwiJSONMapper.mapObjectToModel(right, model: &left)
+}
+
+//func <- <T: NSObject>(left: inout T?, right: AnyObject?) {
+//    let newObj = type(of: left)
+//    
+//    newObj.init()
+//    let _ = FwiJSONMapper.mapObjectToModel(right, model: &left)
+////    var newObject = T.init()
+////    let error = FwiJSONMapper.mapObjectToModel(right, model: &newObject)
+////    if error == nil {
+////        left = newObject
+////    }else {
+////        left = nil
+////    }
+//}
+
 func <- <T>(left: inout [T], right: [AnyObject]?) {
     if let arrValue = right {
         var temp = [T]()

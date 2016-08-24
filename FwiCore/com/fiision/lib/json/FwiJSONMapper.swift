@@ -110,15 +110,48 @@ open class FwiJSONMapper: NSObject {
 
             } else {
                 // Check Other Type
-                /* Object */
-                if p.isObject {
-                    // NSURL
-                    if p.classType == URL.self || p.classType == URL?.self {
+                if p.isStruct {
+                    // only date , url other not recognize
+                    
+                    if p.structType == URL.self {
                         var value: URL?
                         if let path = valueJson as? String {
                             // Valid URL
                             let validUrl = path.encodeHTML()
                             value = URL(string: validUrl)
+                        }
+                        
+                        if value == nil && isOptional == false {
+                            errorUserInfo[p.propertyName] = "Not Find Value For Key"
+                        } else {
+                            m.setValue(value, forKey: p.propertyName)
+                        }
+                    }
+                        // NSDate
+                    else if p.structType == Date.self {
+                        var value: Date?
+                        
+                        value = self.transformDate(valueJson) as? Date
+                        
+                        if value == nil && isOptional == false {
+                            errorUserInfo[p.propertyName] = "Not Find Value For Key"
+                        } else {
+                            m.setValue(value, forKey: p.propertyName)
+                        }
+                    }else {
+                        fatalError("Not support , only url and date")
+                    }
+                    
+                }
+                /* Object */
+                else if p.isObject {
+                    // NSURL
+                    if p.classType == NSURL.self || p.classType == NSURL?.self {
+                        var value: NSURL?
+                        if let path = valueJson as? String {
+                            // Valid URL
+                            let validUrl = path.encodeHTML()
+                            value = NSURL(string: validUrl)
                         }
 
                         if value == nil && isOptional == false {
@@ -128,8 +161,8 @@ open class FwiJSONMapper: NSObject {
                         }
                     }
                     // NSDate
-                    else if p.classType == Date.self || p.classType == Date?.self {
-                        var value: Date?
+                    else if p.classType == NSDate.self || p.classType == NSDate?.self {
+                        var value: NSDate?
 
                         value = self.transformDate(valueJson)
 
@@ -143,8 +176,10 @@ open class FwiJSONMapper: NSObject {
                     else {
                         var value: AnyObject?
                         if let classaz = p.classType as? NSObject.Type {
-                            value = classaz.init()
-                            value <- valueJson
+                            var obj = classaz.init()
+                            obj <- valueJson
+                            value = obj
+                            
 
                             if value == nil && isOptional == false {
                                 errorUserInfo[p.propertyName] = "Not Find Value For Key"
@@ -171,7 +206,9 @@ open class FwiJSONMapper: NSObject {
                     var value: [String: AnyObject] = [:]
                     defer {
                         if value.keys.count > 0 {
-                            m.setValue(value, forKey: p.propertyName)
+                            
+//                            m.setValue(value, forKey: p.propertyName)
+                            m.setValue(NSDictionary(dictionary: value), forKey: p.propertyName)
                         } else {
                             if !isOptional {
                                 errorUserInfo[p.propertyName] = "Not Find Value For Key"
@@ -251,15 +288,19 @@ open class FwiJSONMapper: NSObject {
 
     // MARK: Class's private methods
     /** Convert value to NSDate*/
-    fileprivate func transformDate(_ value: AnyObject?, format: String = "yyyy-MM-dd'T'HHmmssZZZ") -> Date? {
+    fileprivate func transformDate(_ value: AnyObject?, format: String = "yyyy-MM-dd'T'HHmmssZZZ") -> NSDate? {
         if let number = value as? NSNumber {
-            return Date(timeIntervalSince1970: number.doubleValue)
+            return NSDate(timeIntervalSince1970: number.doubleValue)
         }
 
         if let strDate = (value as? String)?.replacingOccurrences(of: ":", with: "") {
             let formatter = DateFormatter()
             formatter.dateFormat = format
-            return formatter.date(from: strDate)
+            guard let newDate = formatter.date(from: strDate) else {
+                return nil
+            }
+            
+            return NSDate(timeIntervalSince1970: newDate.timeIntervalSince1970)
         }
 
         return nil

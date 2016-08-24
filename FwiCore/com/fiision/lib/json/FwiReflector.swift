@@ -71,13 +71,38 @@ public final class FwiReflector {
     public lazy var isStruct: Bool = {
         if !self.isOptional {
             if let style = self.mirrorType.displayStyle , style == .struct {
-                return true
+                let nTest: String = "\(self.mirrorType.subjectType)"
+                let result: (Bool, Bool) = (nTest == "URL", nTest == "Date")
+                switch result {
+                case (true, false):
+                    self.structType = URL.self
+                    return true
+                case (false, true):
+                    self.structType = Date.self
+                    return true
+                default:
+                    return false
+                }
             }
             return false
         }
-
-        return false
+        let m = self.mirrorType.displayStyle
+        let nTest: String = "\(self.mirrorType.subjectType)"
+        let result: (Bool, Bool) = (nTest.contains("<URL>"), nTest.contains("<Date>"))
+        switch result {
+        case (true, false):
+            self.structType = URL.self
+            return true
+        case (false, true):
+            self.structType = Date.self
+            return true
+        default:
+            return false
+        }
+        
     }()
+    
+    public var structType: Any.Type = String.self
 
     public lazy var propertyName: String = {
         return self.mirrorName
