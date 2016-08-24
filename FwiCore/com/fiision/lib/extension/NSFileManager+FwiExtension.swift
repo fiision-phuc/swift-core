@@ -43,10 +43,10 @@ extension FileManager {
 
     /** Check if file is available for a given URL. */
     func fileExistsAtURL(_ url: URL?) -> Bool {
-        guard let url = url, let path = url.path else {
+        guard let url = url, !url.path.isEmpty else {
             return false
         }
-        return self.fileExists(atPath: path)
+        return self.fileExists(atPath: url.path)
     }
 
     /** Delete file for a given URL. */
@@ -72,7 +72,7 @@ extension FileManager {
      - returns: error if it has
      */
     func createDirectoryAtURL(_ url: URL?, withIntermediateDirectories intermediate: Bool, attributes: [String: AnyObject]? = nil) -> NSError? {
-        guard let url = url , url.path != nil else {
+        guard let url = url , !url.path.isEmpty else {
             return NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "URL Not Exist!!!"])
         }
         do {
@@ -110,7 +110,7 @@ extension URL {
      - returns: true/ false
      */
     func isDirectory() -> Bool {
-        guard self.path != nil else { return false }
+        guard !self.path.isEmpty else { return false }
         do {
             var rsrc: AnyObject?
             try (self as NSURL).getResourceValue(&rsrc, forKey: URLResourceKey.isDirectoryKey)

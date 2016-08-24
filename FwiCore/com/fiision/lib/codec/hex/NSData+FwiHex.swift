@@ -78,15 +78,16 @@ public extension Data {
 
         let l = count >> 1
         var outputBytes = [UInt8](repeating: 0, count: l)
-
-        let chars = UnsafePointer<UInt8>(bytes)
-        for i in stride(from: 0, to: l, by: 2) {
-            let b1 = chars[i]
-            let b2 = chars[i + 1]
-
-            outputBytes[i / 2] = ((decodingTable[Int(b1)] << 4) | decodingTable[Int(b2)])
+        return self.withUnsafeBytes { (chars: UnsafePointer<UInt8>) -> Data in
+            for i in stride(from: 0, to: l, by: 2) {
+                let b1 = chars[i]
+                let b2 = chars[i + 1]
+                
+                outputBytes[i / 2] = ((decodingTable[Int(b1)] << 4) | decodingTable[Int(b2)])
+            }
+            return Data(bytes: UnsafePointer<UInt8>(outputBytes), count: l)
         }
-        return Data(bytes: UnsafePointer<UInt8>(outputBytes), count: l)
+      
     }
     public func decodeHexString() -> String? {
         /* Condition validation */

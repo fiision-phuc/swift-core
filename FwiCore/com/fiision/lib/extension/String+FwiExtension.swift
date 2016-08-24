@@ -97,7 +97,7 @@ public extension String {
 
     /** Convert html string compatible to string. */
     public func decodeHTML() -> String {
-        return stringByRemovingPercentEncoding ?? ""
+        return removingPercentEncoding ?? ""
 //        return CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, self, "") as String
     }
     /** Convert string to html string compatible. */

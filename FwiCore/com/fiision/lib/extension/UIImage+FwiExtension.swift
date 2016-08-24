@@ -52,10 +52,10 @@ public extension UIImage {
 
         // create a bitmap graphics context the size of the image
         let bitmapInfoRaw = CGBitmapInfo.byteOrder32Little.union(CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue))
+        let colorSpace1 = CGColorSpaceCreateDeviceRGB()
+        let colorSpace2 = CGColorSpaceCreateDeviceGray()
         if let
             image = view.createImage(),
-            let colorSpace1 = CGColorSpaceCreateDeviceRGB(),
-            let colorSpace2 = CGColorSpaceCreateDeviceGray(),
             let grayscaleGradient = CGGradient(colorSpace: colorSpace2, colorComponents: colors, locations: nil, count: 2),
             let mainContext = CGContext(data: nil, width: imgWidth, height: imgHeight, bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace1, bitmapInfo: bitmapInfoRaw.rawValue) {
             // Create a 1 pixel wide gradient
@@ -65,10 +65,10 @@ public extension UIImage {
             // Draw the gradient into the gray bitmap context
             let gradientStart = CGPoint.zero
             let gradientEnd = CGPoint(x: 0.0, y: CGFloat(imgHeight))
-            gradientContext.drawLinearGradient(grayscaleGradient, start: gradientStart, end: gradientEnd, options: CGGradientDrawingOptions.drawsAfterEndLocation)
+            gradientContext?.drawLinearGradient(grayscaleGradient, start: gradientStart, end: gradientEnd, options: CGGradientDrawingOptions.drawsAfterEndLocation)
 
             // Convert the context into a CGImageRef
-            guard let imgGradientRef = gradientContext.makeImage() else {
+            guard let imgGradientRef = gradientContext?.makeImage() else {
                 return nil
             }
 
@@ -80,8 +80,11 @@ public extension UIImage {
             mainContext.scaleBy(x: 1.0, y: -1.0)
 
             // Draw the image into the bitmap context
-            CGContextDrawImage(mainContext, view.bounds, image.cgImage)
-
+            guard let imageCGI = image.cgImage  else {
+                return nil
+            }
+            mainContext.draw(imageCGI, in: view.bounds)
+            
             // Create CGImageRef
             guard let imgReflectedRef = mainContext.makeImage() else {
                 return nil
@@ -111,7 +114,12 @@ public extension UIImage {
         /* Condition validation: Validate against zero */
         let hasBlur = (blurRadius > CGFloat(FLT_EPSILON))
         let hasSaturation = (fabs(s - 1.0) > CGFloat(FLT_EPSILON))
-
+        // Draw this image on effect input context
+        
+        guard let imageCGI = self.cgImage else {
+            return UIImage()
+        }
+        
         if hasBlur || hasSaturation {
             /** Effect Input Context */
             UIGraphicsBeginImageContextWithOptions(self.size, false, 1.0)
@@ -119,10 +127,8 @@ public extension UIImage {
 
             inputContext?.scaleBy(x: 1.0, y: -1.0)
             inputContext?.translateBy(x: 0.0, y: -self.size.height)
-
-            // Draw this image on effect input context
-            CGContextDrawImage(inputContext, imageRect, self.cgImage)
-
+            inputContext?.draw(imageCGI, in: imageRect)
+            
             // Capture image from input context to input buffer
             var inputBuffer = vImage_Buffer(data: inputContext?.data,
                                             height: vImagePixelCount((inputContext?.height)!),
@@ -141,7 +147,13 @@ public extension UIImage {
 
             // Apply blur if required
             if hasBlur {
-                var radius = UInt32(floor(blurRadius * 3.0 * CGFloat(sqrt(2 * M_PI)) / 4 + 0.5))
+                func calculateRadius() -> UInt32{
+                    let result = blurRadius * 3.0 * CGFloat(sqrt(2 * M_PI)) / 4 + 0.5
+                    return UInt32(floor(result))
+                }
+                
+                
+                var radius = calculateRadius()
 
                 /* Condition validation: Three box-blur methodology require odd radius */
                 if (radius % 2) != 1 {
@@ -188,22 +200,24 @@ public extension UIImage {
             UIGraphicsEndImageContext()
         }
 
+        guard let effectCGI = effectImage.cgImage else {
+            return UIImage()
+        }
         // Set up output context.
         UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.main.scale)
         let outputContext = UIGraphicsGetCurrentContext()
 
         outputContext?.scaleBy(x: 1.0, y: -1.0)
         outputContext?.translateBy(x: 0.0, y: -self.size.height)
-
+        
         // Draw base image.
-        CGContextDrawImage(outputContext, imageRect, self.cgImage)
-
+        outputContext?.draw(imageCGI, in: imageRect)
+        
+        
         // Draw blur image.
         if (hasBlur) {
             outputContext?.saveGState()
-
-            CGContextDrawImage(outputContext, imageRect, effectImage.cgImage)
-
+            outputContext?.draw(effectCGI, in: imageRect)
             outputContext?.restoreGState()
         }
 
@@ -217,6 +231,6 @@ public extension UIImage {
         let outputImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
 
-        return outputImage!
+        return outputImage ?? UIImage()
     }
 }

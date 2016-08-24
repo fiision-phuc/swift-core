@@ -54,7 +54,7 @@ open class FwiJSONMapper: NSObject {
         var dictionary = dictionary
         let optionalProperties = (m as? FwiJSONModel)?.propertyIsOptional?() ?? []
         var properties = FwiReflector.propertiesWithClass(type(of: m))
-        var errorUserInfo: [String: AnyObject] = [:]
+        var errorUserInfo: [String: Any] = [:]
 
         // Override dictionary if neccessary
         if let json = m as? FwiJSONModel {
@@ -99,7 +99,7 @@ open class FwiJSONMapper: NSObject {
 
                         // Check exsist set key value
                         if m.responds(to: NSSelectorFromString(p.propertyName)) {
-                            m.setValue(value as? AnyObject, forKey: p.propertyName)
+                            m.setValue(value, forKey: p.propertyName)
                         } else {
                             fatalError("Not Support Property Optional Bool, Int , Double!!!! , Try to don't using Optional")
                         }
@@ -117,7 +117,7 @@ open class FwiJSONMapper: NSObject {
                         var value: URL?
                         if let path = valueJson as? String {
                             // Valid URL
-                            let validUrl = path.encodeHTML() ?? ""
+                            let validUrl = path.encodeHTML()
                             value = URL(string: validUrl)
                         }
 
@@ -270,7 +270,7 @@ open class FwiJSONMapper: NSObject {
 extension FwiJSONMapper {
 
     // MARK: Class's static constructors
-    class func mapObjectToModel<T: NSObject>(_ object: AnyObject?, model m: inout T) -> NSError? {
+    class func mapObjectToModel<T: NSObject>(_ object: Any?, model m: inout T) -> NSError? {
         if let dictionary = object as? [String: AnyObject] {
             return FwiJSONMapper().mapDictionaryToModel(dictionary, model: &m)
         }
@@ -278,8 +278,8 @@ extension FwiJSONMapper {
         return NSError(domain: NSURLErrorKey, code: NSURLErrorUnknown, userInfo: [NSLocalizedDescriptionKey: "Parse object to dictionary error !!!"])
     }
 
-    class func toDictionary<T: NSObject>(_ object: T) -> [String: AnyObject] {
-        var result: [String: AnyObject] = [:]
+    class func toDictionary<T: NSObject>(_ object: T) -> [String: Any] {
+        var result: [String: Any] = [:]
 
         // Create Mirror Value Follow Properties
         let mirror = Mirror(reflecting: object)
@@ -325,7 +325,7 @@ extension FwiJSONMapper {
 
             // if it is primity type
             if reflector.isPrimitive {
-                result[keyJson] = value as? AnyObject
+                result[keyJson] = value
             } else {
                 // Object
                 if reflector.isObject {
@@ -340,7 +340,7 @@ extension FwiJSONMapper {
                         result[keyJson] = date.timeIntervalSince1970
                     }
                     // Try other
-                    else if let obj = value as? AnyObject {
+                    else if let obj = value {
                         result[keyJson] = obj
                     }
                 }
@@ -358,7 +358,7 @@ extension FwiJSONMapper {
                 // Dictionary
                 else if reflector.isDictionary {
                     // Create a dictionay temp
-                    var temp: [String: AnyObject] = [:]
+                    var temp: [String: Any] = [:]
 
                     defer {
                         if temp.keys.count > 0 {

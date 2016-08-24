@@ -79,7 +79,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
 
     // MARK: Class's public methods
-    public func prepareRequest(_ url: URL?, requestMethod method: FwiHttpMethod = .get, queryParams params: [String:String]? = nil) -> URLRequest? {
+    public func prepareRequest(_ url: URL?, requestMethod method: FwiHttpMethod = .get, queryParams params: [String:String]? = nil) -> FwiRequest? {
         /* Condition validation */
         guard let u = url else {
             return nil
@@ -89,7 +89,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
         params?.forEach({
             request.addFormParam(FwiFormParam(key: $0, value: $1))
         })
-        return request as URLRequest
+        return request
     }
 
     /** Send request to server. */
