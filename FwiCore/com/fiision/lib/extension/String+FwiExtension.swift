@@ -136,7 +136,7 @@ public extension String {
     }
     
     /** Convert string to data. */
-    public func toData(_ encoding: String.Encoding = String.Encoding.utf8) -> Data? {
+    public func toData(stringEncoding encoding: String.Encoding = String.Encoding.utf8) -> Data? {
         return data(using: encoding, allowLossyConversion: false)
     }
 }

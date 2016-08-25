@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : String+FwiHex.swift
+//  File name   : Data+FwiHexTest.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/26/14
+//  Created date: 11/23/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -36,29 +36,56 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import Foundation
+import XCTest
+@testable import FwiCore
 
 
-public extension String {
+class DataFwiHexTest: XCTestCase {
 
-    // MARK: Validate Hex
-    public func isHex() -> Bool {
-        return toData()?.isHex() ?? false
+    // MARK: Setup
+    override func setUp() {
+        super.setUp()
     }
 
-    // MARK: Decode Hex
-    public func decodeHexData() -> Data? {
-        return toData()?.decodeHexData()
-    }
-    public func decodeHexString() -> String? {
-        return toData()?.decodeHexString()
+    // MARK: Tear Down
+    override func tearDown() {
+        super.tearDown()
     }
 
-    // MARK: Encode Hex
-    public func encodeHexData() -> Data? {
-        return toData()?.encodeHexData()
+    // MARK: Test Cases
+    func testIsHex() {
+        var hexData = "FwiCore".toData()
+        XCTAssert(hexData?.isHex() == false, "Invalid hex data should always return false.")
+
+        hexData = "467769436f7265".toData()
+        XCTAssert(hexData?.isHex() == true, "467769436f7265 is a valid hex.")
     }
-    public func encodeHexString() -> String? {
-        return toData()?.encodeHexString()
+
+    func testDecodeHexData() {
+        var hexData = "FwiCore".toData()
+        XCTAssertNil(hexData?.decodeHexData(), "Expected nil data for invalid hex.")
+
+        let data = "FwiCore".toData()
+        hexData = "467769436f7265".toData()
+        XCTAssertEqual(hexData?.decodeHexData(), data, "Expected 'FwiCore'.")
+    }
+    func testDecodeHexString() {
+        let hexData = "467769436f7265".toData()
+        XCTAssertEqual(hexData?.decodeHexString(), "FwiCore", "Expected 'FwiCore'.")
+    }
+
+    func testEncodeHexData() {
+        var data = "".toData()
+        XCTAssertNil(data?.encodeHexData(), "Empty data should return nil.")
+
+        data = "FwiCore".toData()
+        let hexData = "467769436f7265".toData()
+        XCTAssertEqual(data?.encodeHexData(), hexData, "Expected '467769436f7265'.")
+    }
+    func testEncodeHexString() {
+        XCTAssertNil("".toData()?.encodeHexString(), "Empty string should return nil.")
+
+        let data = "FwiCore".toData()
+        XCTAssertEqual(data?.encodeHexString(), "467769436f7265", "Expected '467769436f7265'.")
     }
 }

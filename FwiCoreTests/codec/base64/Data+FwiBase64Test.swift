@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : String+FwiHex.swift
+//  File name   : Data+FwiBase64Test.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/26/14
+//  Created date: 11/23/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -36,29 +36,56 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import Foundation
+import XCTest
+@testable import FwiCore
 
 
-public extension String {
+class NSDataFwiBase64Test: XCTestCase {
 
-    // MARK: Validate Hex
-    public func isHex() -> Bool {
-        return toData()?.isHex() ?? false
+    // MARK: Setup
+    override func setUp() {
+        super.setUp()
     }
 
-    // MARK: Decode Hex
-    public func decodeHexData() -> Data? {
-        return toData()?.decodeHexData()
-    }
-    public func decodeHexString() -> String? {
-        return toData()?.decodeHexString()
+    // MARK: Tear Down
+    override func tearDown() {
+        super.tearDown()
     }
 
-    // MARK: Encode Hex
-    public func encodeHexData() -> Data? {
-        return toData()?.encodeHexData()
+    // MARK: Test Cases
+    func testIsBase64() {
+        var base64Data = "FwiCore".toData()
+        XCTAssert(base64Data?.isBase64() == false, "Invalid base64 data should always return false.")
+
+        base64Data = "RndpQ29yZQ==".toData()
+        XCTAssert(base64Data?.isBase64() == true, "'RndpQ29yZQ==' is a valid base64.")
     }
-    public func encodeHexString() -> String? {
-        return toData()?.encodeHexString()
+
+    func testDecodeBase64Data() {
+        var base64Data = "FwiCore".toData()
+        XCTAssertNil(base64Data?.decodeBase64Data(), "Expected nil data for invalid base64.")
+
+        let data = "FwiCore".toData()
+        base64Data = "RndpQ29yZQ==".toData()
+        XCTAssertEqual(base64Data?.decodeBase64Data(), data, "Expected 'FwiCore'.")
+    }
+    func testDecodeBase64String() {
+        let base64Data = "RndpQ29yZQ==".toData()
+        XCTAssertEqual(base64Data?.decodeBase64String(), "FwiCore", "Expected 'FwiCore'.")
+    }
+
+    func testEncodeBase64Data() {
+        var data = "".toData()
+        XCTAssertNil(data?.encodeBase64Data(), "Empty data should return nil.")
+
+        data = "FwiCore".toData()
+        let base64Data = "RndpQ29yZQ==".toData()
+        XCTAssertEqual(data?.encodeBase64Data(), base64Data, "Expected 'RndpQ29yZQ=='.")
+    }
+    func testEncodeBase64String() {
+        XCTAssertNil("".toData()?.encodeBase64String(), "Empty string should return nil.")
+
+        let data = "FwiCore".toData()
+        XCTAssertEqual(data?.encodeBase64String(), "RndpQ29yZQ==", "Expected 'RndpQ29yZQ=='.")
     }
 }

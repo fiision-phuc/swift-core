@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : NSData+FwiHex.swift
+//  File name   : Data+FwiHex.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/20/14
@@ -48,16 +48,14 @@ public extension Data {
             return false
         }
 
-        // Load bytes buffer
-        let bytes = (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count)
         let step = count >> 1
         var end = count - 1
 
         // Validate each byte
         var isHex = true
-        for i in 0..<step {
-            let hex1 = bytes[i]
-            let hex2 = bytes[end]
+        for i in 0 ..< step {
+            let hex1 = self[i]
+            let hex2 = self[end]
 
             isHex = isHex && (hex1 >= 0 || hex1 < UInt8(decodingTable.count))
             isHex = isHex && (hex2 >= 0 || hex2 < UInt8(decodingTable.count))
@@ -76,24 +74,15 @@ public extension Data {
             return nil
         }
 
-        let l = count >> 1
-        var outputBytes = [UInt8](repeating: 0, count: l)
-        return self.withUnsafeBytes { (chars: UnsafePointer<UInt8>) -> Data in
-            for i in stride(from: 0, to: l, by: 2) {
-                let b1 = chars[i]
-                let b2 = chars[i + 1]
-                
-                outputBytes[i / 2] = ((decodingTable[Int(b1)] << 4) | decodingTable[Int(b2)])
-            }
-            return Data(bytes: UnsafePointer<UInt8>(outputBytes), count: l)
+        var output = [UInt8](repeating:0, count: (count >> 1))
+        for i in stride(from: 0, to: count, by: 2) {
+            let b1 = self[i]
+            let b2 = self[i + 1]
+            output[i / 2] = ((decodingTable[Int(b1)] << 4) | decodingTable[Int(b2)])
         }
-      
+        return Data(bytes: output)
     }
     public func decodeHexString() -> String? {
-        /* Condition validation */
-        if !isHex() {
-            return nil
-        }
         return decodeHexData()?.toString()
     }
 
@@ -104,33 +93,27 @@ public extension Data {
             return nil
         }
 
-        let l = count << 1
-        var outputBytes = [UInt8](repeating: 0, count: l)
-
         var j = 0
-        let bytes = (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count)
+        let l = count << 1
+        var output = [UInt8](repeatElement(0, count: l))
         for i in stride(from: 0, to: l, by: 2) {
-            let b = bytes[j]
-            outputBytes[i] = encodingTable[Int(b >> 4)]
-            outputBytes[i + 1] = encodingTable[Int(b & 0x0f)]
-
+            let b = self[j]
             j += 1
+
+            output[i] = encodingTable[Int(b >> 4)]
+            output[i + 1] = encodingTable[Int(b & 0x0f)]
         }
-        return Data(bytes: UnsafePointer<UInt8>(outputBytes), count: l)
+        return Data(bytes: output)
     }
     public func encodeHexString() -> String? {
-        /* Condition validation */
-        if count <= 0 {
-            return nil
-        }
         return encodeHexData()?.toString()
     }
 }
 
 
 // MARK: Lookup table
-private let encodingTable: [UInt8] = Array("0123456789abcdef".utf8)
-private let decodingTable: [UInt8] = [
+fileprivate let encodingTable: [UInt8] = Array("0123456789abcdef".utf8)
+fileprivate let decodingTable: [UInt8] = [
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -138,4 +121,5 @@ private let decodingTable: [UInt8] = [
     0x00, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+]
