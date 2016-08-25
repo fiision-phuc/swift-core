@@ -80,7 +80,6 @@ public extension Data {
         if count <= 0 {
             return nil
         }
-
         return String(data: self, encoding: encoding)
     }
 

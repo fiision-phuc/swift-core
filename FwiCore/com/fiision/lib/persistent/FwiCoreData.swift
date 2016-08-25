@@ -48,7 +48,7 @@ public protocol FwiCoreData {
 public extension FwiCoreData where Self: NSManagedObject {
 
     /** Fetch all entities base on search condition. */
-    static func allEntitiesFromContext(_ context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [AnyObject]? = nil, limit l: Int = 0) -> [Self]? {
+    static public func allEntitiesFromContext(_ context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [AnyObject]? = nil, limit l: Int = 0) -> [Self]? {
         /* Condition validation */
         guard let c = context else {
             return nil
@@ -93,7 +93,7 @@ public extension FwiCoreData where Self: NSManagedObject {
     }
 
     /** Fetch an entity base on search condition. Create new if necessary. */
-    static func entityFromContext(_ context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, shouldCreate create: Bool = false) -> Self? {
+    static public func entityFromContext(_ context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, shouldCreate create: Bool = false) -> Self? {
         /* Condition validation */
         guard let c = context else {
             return nil
@@ -110,7 +110,7 @@ public extension FwiCoreData where Self: NSManagedObject {
     }
 
     /** Insert new entity into database. */
-    static func newEntityWithContext(_ context: NSManagedObjectContext?) -> Self? {
+    static public func newEntityWithContext(_ context: NSManagedObjectContext?) -> Self? {
         /* Condition validation */
         guard let c = context else {
             return nil
@@ -119,10 +119,10 @@ public extension FwiCoreData where Self: NSManagedObject {
     }
 
     /** Delete all entities from database. */
-    static func deleteAllEntitiesWithContext(_ context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) {
+    static public func deleteAllEntitiesWithContext(_ context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) {
         let entities = self.allEntitiesFromContext(context, predicate: p)
         entities?.forEach({
-            $0.deleteFromDatabase()
+            $0.remove()
         })
     }
 }

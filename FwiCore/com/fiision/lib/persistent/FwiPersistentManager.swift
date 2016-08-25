@@ -40,7 +40,7 @@ import Foundation
 import CoreData
 
 
-open class FwiPersistentManager {
+public class FwiPersistentManager {
 
     // MARK: Class's constructors
     public init(dataModel: String, modelBundle bundle: Bundle = Bundle.main) {
@@ -59,25 +59,24 @@ open class FwiPersistentManager {
 
 
     // MARK: Class's properties
-    open fileprivate (set) lazy var managedModel: NSManagedObjectModel = {
+    public fileprivate (set) lazy var managedModel: NSManagedObjectModel = {
         if let modelURL = self.bundle.url(forResource: self.dataModel, withExtension: "momd"), let managedModel = NSManagedObjectModel(contentsOf: modelURL) {
             return managedModel
         }
         fatalError("\(self.dataModel) model is not available!")
     }()
-    open fileprivate (set) lazy var managedContext: NSManagedObjectContext = {
+    public fileprivate (set) lazy var managedContext: NSManagedObjectContext = {
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = self.persistentCoordinator
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
 
         return managedObjectContext
     }()
-    open fileprivate (set) lazy var persistentCoordinator: NSPersistentStoreCoordinator = {
+    public fileprivate (set) lazy var persistentCoordinator: NSPersistentStoreCoordinator = {
         let (storeDB1, storeDB2, storeDB3) = ("\(self.dataModel).sqlite", "\(self.dataModel).sqlite-shm", "\(self.dataModel).sqlite-wal")
-        guard let
-            storeURL1 = URL.cacheDirectory()?.appendingPathComponent(storeDB1),
-            let storeURL2 = URL.cacheDirectory()?.appendingPathComponent(storeDB2),
-            let storeURL3 = URL.cacheDirectory()?.appendingPathComponent(storeDB3) else {
+        guard let storeURL1 = URL.cacheDirectory()?.appendingPathComponent(storeDB1),
+              let storeURL2 = URL.cacheDirectory()?.appendingPathComponent(storeDB2),
+              let storeURL3 = URL.cacheDirectory()?.appendingPathComponent(storeDB3) else {
             fatalError("Cache directory could not be found!")
         }
 
@@ -86,21 +85,21 @@ open class FwiPersistentManager {
                        NSInferMappingModelAutomaticallyOption:true,
                        NSMigratePersistentStoresAutomaticallyOption:true] as [String : Any]
 
-        for i in 0 ..< 2 {
+        for i in 0 ... 1 {
             do {
                 try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL1, options: options)
-                try (storeURL1 as NSURL).setResourceValues([URLResourceKey.isExcludedFromBackupKey: true])
-                try (storeURL2 as NSURL).setResourceValues([URLResourceKey.isExcludedFromBackupKey: true])
-                try (storeURL3 as NSURL).setResourceValues([URLResourceKey.isExcludedFromBackupKey: true])
+                // try (storeURL1 as URL).setResourceValues([URLResourceKey.isExcludedFromBackupKey: true as AnyObject])
+                // try (storeURL2 as URL).setResourceValues([URLResourceKey.isExcludedFromBackupKey: true as AnyObject])
+                // try (storeURL3 as URL).setResourceValues([URLResourceKey.isExcludedFromBackupKey: true as AnyObject])
                 break
 
             } catch _ {
                 // Note: If the first time fail, we remove everything but not second time.
                 if i == 0 {
                     let fileManager = FileManager.default
-                    _ = fileManager.removeFile(atURL: storeURL1)
-                    _ = fileManager.removeFile(atURL: storeURL2)
-                    _ = fileManager.removeFile(atURL: storeURL3)
+                    fileManager.removeFile(atURL: storeURL1)
+                    fileManager.removeFile(atURL: storeURL2)
+                    fileManager.removeFile(atURL: storeURL3)
                 } else {
                     fatalError("Could not create persistent store coordinator for \(self.dataModel) model!")
                 }
@@ -114,7 +113,8 @@ open class FwiPersistentManager {
 
 
     // MARK: Class's public methods
-    open func saveContext() -> NSError? {
+    @discardableResult
+    public func saveContext() -> NSError? {
         var error: NSError?
         managedContext.performAndWait({ [weak self] in
             do {
@@ -127,7 +127,7 @@ open class FwiPersistentManager {
     }
 
     /** Return a sub managed object context that had been optimized to serve the update data process. */
-    open func importContext() -> NSManagedObjectContext {
+    public func importContext() -> NSManagedObjectContext {
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = self.persistentCoordinator
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy

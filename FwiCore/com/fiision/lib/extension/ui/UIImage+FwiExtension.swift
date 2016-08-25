@@ -46,8 +46,8 @@ public extension UIImage {
 
     /** Create a reflected image for specific view. */
     public class func reflectedImageWithView(_ view: UIView, imageHeight height: CGFloat) -> UIImage? {
-        let imgWidth = Int(round(view.bounds.width))
         let imgHeight = Int(round(height))
+        let imgWidth = Int(round(view.bounds.width))
         let colors: [CGFloat] = [0.0, 1.0, 1.0, 1.0]
 
         // create a bitmap graphics context the size of the image

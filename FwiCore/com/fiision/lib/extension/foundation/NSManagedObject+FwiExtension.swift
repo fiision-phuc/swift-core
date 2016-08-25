@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : NSNumber+FwiExtension.swift
+//  File name   : NSManagedObject+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/22/14
+//  Created date: 8/18/16
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -37,41 +37,19 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
+import CoreData
 
 
-public extension NSNumber {
+public extension NSManagedObject {
 
-    /** Display number to specific currency format. */
-    public func currencyWithISO3(_ iso3: String, decimalSeparator decimal: String = ".", groupingSeparator grouping: String = ",", usingSymbol isSymbol: Bool = true) -> String? {
-        currencyFormat.currencyDecimalSeparator = decimal
-        currencyFormat.currencyGroupingSeparator = grouping
-        if isSymbol {
-            currencyFormat.positiveFormat = "\u{00a4}#,##0.00"
-            currencyFormat.negativeFormat = "- \u{00a4}#,##0.00"
-        } else {
-            currencyFormat.positiveFormat = "#,##0.00 \(iso3)"
-            currencyFormat.negativeFormat = "- #,##0.00 \(iso3)"
+    /** Remove self from database. */
+    public func remove() {
+        managedObjectContext?.performAndWait() { [weak self] in
+            /* Condition validation */
+            guard let weakSelf = self else {
+                return
+            }
+            self?.managedObjectContext?.delete(weakSelf)
         }
-        currencyFormat.currencyCode = iso3
-
-        // Return result
-        return currencyFormat.string(from: self)
     }
 }
-
-
-// MARK: Currency format
-fileprivate var currencyFormat: NumberFormatter = {
-    // Initialize currency format object
-    let locale = Locale(identifier: "en_US")
-    let currencyFormat = NumberFormatter()
-    
-    // Layout currency
-    currencyFormat.formatterBehavior = NumberFormatter.Behavior.behavior10_4
-    currencyFormat.roundingMode = NumberFormatter.RoundingMode.halfUp
-    currencyFormat.numberStyle = NumberFormatter.Style.currency
-    currencyFormat.generatesDecimalNumbers = true
-    currencyFormat.locale = locale
-    
-    return currencyFormat
-}()

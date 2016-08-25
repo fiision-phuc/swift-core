@@ -39,7 +39,7 @@
 import Foundation
 
 
-open class FwiLocalization {
+public final class FwiLocalization {
 
     // MARK: Class's constructors
     public init() {
@@ -47,8 +47,8 @@ open class FwiLocalization {
     }
 
     // MARK: Class's properties
-    open fileprivate (set) var bundle: Bundle?
-    open var locale: String? {
+    public fileprivate (set) var bundle: Bundle?
+    public var locale: String? {
         didSet {
             guard let path = Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: locale) else {
                 reset()
@@ -63,14 +63,14 @@ open class FwiLocalization {
     }
 
     // MARK: Class's public methods
-    func localizedForString(_ string: String) -> String {
+    public func localizedForString(_ string: String) -> String {
         if let localized = bundle?.localizedString(forKey: string, value: string, table: nil) {
             return localized
         }
         return string
     }
 
-    func reset() {
+    public func reset() {
         let languages = Bundle.main.preferredLocalizations
         locale = languages.count > 0 ? languages[0] : "en"
     }
