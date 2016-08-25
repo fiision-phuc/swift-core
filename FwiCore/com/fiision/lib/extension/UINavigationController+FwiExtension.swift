@@ -40,7 +40,7 @@ import UIKit
 import Foundation
 
 
-public extension UINavigationController {
+extension UINavigationController {
 
     // MARK: Class's override methods
     open override var prefersStatusBarHidden: Bool {
