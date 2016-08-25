@@ -86,6 +86,7 @@ public final class FwiReflector {
             }
             return false
         }
+        
         let m = self.mirrorType.displayStyle
         let nTest: String = "\(self.mirrorType.subjectType)"
         let result: (Bool, Bool) = (nTest.contains("<URL>"), nTest.contains("<Date>"))

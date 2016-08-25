@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : FwiExtensionDataTest.swift
+//  File name   : Data+FwiExtensionTest.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/27/14

@@ -577,11 +577,4 @@ class FwiReflectorTests: XCTestCase {
         XCTAssertTrue(r.dictionaryType?.key.primitiveType == Int.self, "Expected \"\(Int.self)\" but found \(r.dictionaryType?.key.primitiveType).")
         XCTAssertTrue(r.dictionaryType?.value.classType == Test4.self, "Expected \"\(Test4.self)\" but found \(r.dictionaryType?.value.classType).")
     }
-
-
-//    // MARK: Test performances
-//    func testPerformanceExample() {
-//        self.measureBlock {
-//        }
-//    }
 }

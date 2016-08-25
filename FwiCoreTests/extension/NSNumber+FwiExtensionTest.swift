@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : FwiExtensionNumberTest.swift
+//  File name   : NSNumber+FwiExtensionTest.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/27/14

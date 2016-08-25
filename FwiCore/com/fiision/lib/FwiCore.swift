@@ -80,7 +80,7 @@ func <- <T>(left: inout T?, right: AnyObject?) {
 }
 
 func <- <T: NSObject>(left: inout T, right: AnyObject?) {
-    // let _ = FwiJSONMapper.mapObjectToModel(right, model: &left)
+    let _ = FwiJSONMapper.mapObjectToModel(right, model: &left)
 }
 
 func <- <T>(left: inout [T], right: [AnyObject]?) {

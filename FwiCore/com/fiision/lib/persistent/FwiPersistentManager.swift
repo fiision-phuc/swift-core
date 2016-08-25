@@ -98,9 +98,9 @@ open class FwiPersistentManager {
                 // Note: If the first time fail, we remove everything but not second time.
                 if i == 0 {
                     let fileManager = FileManager.default
-                    fileManager.deleteFileAtURL(storeURL1)
-                    fileManager.deleteFileAtURL(storeURL2)
-                    fileManager.deleteFileAtURL(storeURL3)
+                    _ = fileManager.removeFile(atURL: storeURL1)
+                    _ = fileManager.removeFile(atURL: storeURL2)
+                    _ = fileManager.removeFile(atURL: storeURL3)
                 } else {
                     fatalError("Could not create persistent store coordinator for \(self.dataModel) model!")
                 }
