@@ -52,6 +52,7 @@ public extension Data {
     }
 
     /** Convert data to model object */
+    @discardableResult
     public func decodeJSONWithModel<T: NSObject>(model m: inout T) -> NSError? {
         do {
             let json = try JSONSerialization.jsonObject(with: self, options: [])
@@ -67,6 +68,7 @@ public extension Data {
     }
 
     /** Convert model object to data */
+    @discardableResult
     public func encodeJSONWithModel<T: NSObject>(model m: T) -> NSError? {
 
         return nil

@@ -69,6 +69,18 @@ public extension FileManager {
         }
         return false
     }
+
+    /** Move directory from source's URL to destination's URL. */
+    @discardableResult
+    public func moveDirectory(from srcURL: URL?, to dstURL: URL?) -> NSError? {
+        return moveFile(from: srcURL, to: dstURL)
+    }
+
+    /** Remove directory for a given URL. */
+    @discardableResult
+    public func removeDirectory(atURL url: URL?) -> NSError? {
+        return removeFile(atURL: url)
+    }
 }
 
 
@@ -84,6 +96,7 @@ public extension FileManager {
     }
     
     /** Move file from source's URL to destination's URL. */
+    @discardableResult
     public func moveFile(from srcURL: URL?, to dstURL: URL?) -> NSError? {
         guard let srcURL = srcURL, let dstURL = dstURL else {
             return NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Invalid file's source's URL or destination's URL."])
