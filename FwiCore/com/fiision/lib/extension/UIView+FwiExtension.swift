@@ -45,15 +45,16 @@ public extension UIView {
     /** Create image from current view. */
     public func createImage(_ scaleFactor: CGFloat = UIScreen.main.scale) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, scaleFactor)
-
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return nil
+        }
+        
         // Translate graphic context to offset before render if view is table view
         if let tableView = self as? UITableView {
             let contentOffset = tableView.contentOffset
-            UIGraphicsGetCurrentContext()?.translateBy(x: contentOffset.x, y: -contentOffset.y)
+            context.translateBy(x: contentOffset.x, y: -contentOffset.y)
         }
-
-        // Render view
-        self.layer.render(in: UIGraphicsGetCurrentContext()!)
+        self.layer.render(in: context)
 
         // Create image
         let image = UIGraphicsGetImageFromCurrentImageContext()
@@ -67,10 +68,14 @@ public extension UIView {
         if !self.bounds.contains(roiRect) {
             return nil
         }
+        
         UIGraphicsBeginImageContextWithOptions(roiRect.size, false, scale)
-
-        UIGraphicsGetCurrentContext()?.translateBy(x: -roiRect.origin.x, y: -roiRect.origin.y)
-        self.layer.render(in: UIGraphicsGetCurrentContext()!)
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return nil
+        }
+        
+        context.translateBy(x: -roiRect.origin.x, y: -roiRect.origin.y)
+        self.layer.render(in: context)
 
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()

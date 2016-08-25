@@ -49,15 +49,14 @@ public extension Data {
         }
         
         // Load bytes buffer
-        let bytes = (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count)
         let step = self.count >> 1
         var end = self.count - 1
         
         // Validate each byte
         var isBase64 = true
         for i in 0 ..< step {
-            let octet1 = bytes[i]
-            let octet2 = bytes[end]
+            let octet1 = self[i]
+            let octet2 = self[end]
             
             isBase64 = isBase64 && (octet1 == UTF8.CodeUnit(ascii: "=") || octet1 < UInt8(decodingTable.count))
             isBase64 = isBase64 && (octet2 == UTF8.CodeUnit(ascii: "=") || octet2 < UInt8(decodingTable.count))
@@ -75,66 +74,59 @@ public extension Data {
         if !isBase64() {
             return nil
         }
-        
-        // Initialize buffer
-        var b1, b2, b3, b4: UInt8
-        let bytes = (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count)
-        
+
         // Calculate output length
         let end = count
         let finish = end - 4
         var l = (finish >> 2) * 3
         
-        if bytes[end - 2] == UTF8.CodeUnit(ascii: "=") {
+        if self[end - 2] == UTF8.CodeUnit(ascii: "=") {
             l += 1
-        } else if bytes[end - 1] == UTF8.CodeUnit(ascii: "=") {
+        } else if self[end - 1] == UTF8.CodeUnit(ascii: "=") {
             l += 2
         } else {
             l += 3
         }
         
-        // Create output buffer
-        var outputBytes = [UInt8](repeating: 0, count: l)
-        
         // Decoding process
         var index = 0
+        var b1, b2, b3, b4: UInt8
+        var output = Data(capacity: l)
+        
         for i in stride(from: 0, to: finish, by: 4) {
-            b1 = decodingTable[Int(bytes[i])]
-            b2 = decodingTable[Int(bytes[i + 1])]
-            b3 = decodingTable[Int(bytes[i + 2])]
-            b4 = decodingTable[Int(bytes[i + 3])]
+            b1 = decodingTable[Int(self[i])]
+            b2 = decodingTable[Int(self[i + 1])]
+            b3 = decodingTable[Int(self[i + 2])]
+            b4 = decodingTable[Int(self[i + 3])]
             
-            outputBytes[index] = (b1 << 2) | (b2 >> 4)
-            outputBytes[index.advanced(by: 1)] = (b2 << 4) | (b3 >> 2)
-            outputBytes[index.advanced(by: 2)] = (b3 << 6) | b4
-            
-            index = index.advanced(by: 3)
+            output[index] = (b1 << 2) | (b2 >> 4)
+            output[index + 1] = (b2 << 4) | (b3 >> 2)
+            output[index + 2] = (b3 << 6) | b4
+            index += 3
         }
         
         // Decoding last block process
-        if bytes[end - 2] == UTF8.CodeUnit(ascii: "=") {
-            b1 = decodingTable[Int(bytes[end - 4])]
-            b2 = decodingTable[Int(bytes[end - 3])]
-            
-            outputBytes[index] = (b1 << 2) | (b2 >> 4)
-        } else if bytes[end - 1] == UTF8.CodeUnit(ascii: "=") {
-            b1 = decodingTable[Int(bytes[end - 4])]
-            b2 = decodingTable[Int(bytes[end - 3])]
-            b3 = decodingTable[Int(bytes[end - 2])]
-            
-            outputBytes[index] = (b1 << 2) | (b2 >> 4)
-            outputBytes[index.advanced(by: 1)] = (b2 << 4) | (b3 >> 2)
+        if self[end - 2] == UTF8.CodeUnit(ascii: "=") {
+            b1 = decodingTable[Int(self[end - 4])]
+            b2 = decodingTable[Int(self[end - 3])]
+            output[index] = (b1 << 2) | (b2 >> 4)
+        } else if self[end - 1] == UTF8.CodeUnit(ascii: "=") {
+            b1 = decodingTable[Int(self[end - 4])]
+            b2 = decodingTable[Int(self[end - 3])]
+            b3 = decodingTable[Int(self[end - 2])]
+            output[index] = (b1 << 2) | (b2 >> 4)
+            output[index + 1] = (b2 << 4) | (b3 >> 2)
         } else {
-            b1 = decodingTable[Int(bytes[end - 4])]
-            b2 = decodingTable[Int(bytes[end - 3])]
-            b3 = decodingTable[Int(bytes[end - 2])]
-            b4 = decodingTable[Int(bytes[end - 1])]
+            b1 = decodingTable[Int(self[end - 4])]
+            b2 = decodingTable[Int(self[end - 3])]
+            b3 = decodingTable[Int(self[end - 2])]
+            b4 = decodingTable[Int(self[end - 1])]
             
-            outputBytes[index] = (b1 << 2) | (b2 >> 4)
-            outputBytes[index.advanced(by: 1)] = (b2 << 4) | (b3 >> 2)
-            outputBytes[index.advanced(by: 2)] = (b3 << 6) | b4
+            output[index] = (b1 << 2) | (b2 >> 4)
+            output[index + 1] = (b2 << 4) | (b3 >> 2)
+            output[index + 2] = (b3 << 6) | b4
         }
-        return Data(bytes: UnsafePointer<UInt8>(outputBytes), count: l)
+        return output
     }
     public func decodeBase64String() -> String? {
         /* Condition validation */

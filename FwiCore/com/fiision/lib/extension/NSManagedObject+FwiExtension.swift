@@ -43,13 +43,13 @@ import CoreData
 public extension NSManagedObject {
 
     /** Delete self from database. */
-    func deleteFromDatabase() {
-        self.managedObjectContext?.performAndWait() { [weak self] in
+    public func deleteFromDatabase() {
+        managedObjectContext?.performAndWait() { [weak self] in
             /* Condition validation */
             guard let weakSelf = self else {
                 return
             }
-            weakSelf.managedObjectContext?.delete(weakSelf)
+            self?.managedObjectContext?.delete(weakSelf)
         }
     }
 }

@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : NSData+FwiExtension.swift
+//  File name   : Data+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/22/14
@@ -40,7 +40,7 @@ import Foundation
 
 
 public extension Data {
-
+    /*
     /** Convert data to json */
     public func convertToJson(options otp: JSONSerialization.ReadingOptions = []) -> [String: AnyObject]? {
         do {
@@ -71,7 +71,8 @@ public extension Data {
 
         return nil
     }
-
+    */
+    
     /** Convert data to string base on string encoding type. */
     public func toString(_ encoding: String.Encoding = String.Encoding.utf8) -> String? {
         /* Condition validation */
@@ -83,44 +84,42 @@ public extension Data {
     }
 
     /** Clear all bytes data. */
-    public func clearBytes() {
+    public mutating func clearBytes() {
         /* Condition validation */
         if count <= 0 {
             return
         }
-
-        let bytes = UnsafeMutablePointer<UInt8>(mutating: (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count))
+        
         let step = count >> 1
         var end = count - 1
-
+        
         for i in 0 ..< step {
-            bytes[end] = 0
-            bytes[i] = 0
+            self[end] = 0
+            self[i] = 0
             end -= 1
         }
 
         // Handle the last stand alone byte
         if (count % 2) == 1 {
-            bytes[step] = 0
+            self[step] = 0
         }
     }
 
     /** Reverse the order of bytes. */
-    public func reverseBytes() {
+    public mutating func reverseBytes() {
         /* Condition validation */
         if count <= 0 {
             return
         }
 
-        let bytes = UnsafeMutablePointer<UInt8>(mutating: (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count))
         let step = count >> 1
         var end = count - 1
 
         for i in 0 ..< step {
-            let temp = bytes[i]
+            let temp = self[i]
 
-            bytes[i] = bytes[end]
-            bytes[end] = temp
+            self[i] = self[end]
+            self[end] = temp
             end -= 1
         }
     }

@@ -40,7 +40,7 @@ import Foundation
 
 
 public extension String {
-
+    
     /** Generate random identifier base on uuid. */
     public static func randomIdentifier() -> String? {
         if let uuidRef = CFUUIDCreate(nil), let cfString = CFUUIDCreateString(nil, uuidRef) {
@@ -53,7 +53,18 @@ public extension String {
     public static func timestamp() -> String {
         return "\(time(nil))"
     }
-
+    
+    
+    /** Convert html string compatible to string. */
+    public func decodeHTML() -> String {
+        return removingPercentEncoding ?? ""
+    }
+    /** Convert string to html string compatible. */
+    public func encodeHTML() -> String {
+        return addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed) ?? ""
+    }
+    
+    
     /** Compare 2 string regardless case sensitive. */
     public func isEqualToStringIgnoreCase(_ otherString: String?) -> Bool {
         /* Condition validation */
@@ -64,7 +75,12 @@ public extension String {
         let (text1, text2) = (self.lowercased().trim(), otherString?.lowercased().trim())
         return text1 == text2
     }
-
+    
+    /** Calculate string length. */
+    public func length() -> Int {
+        return characters.count
+    }
+    
     /** Validate string. */
     public func matchPattern(_ pattern: String, expressionOption option: NSRegularExpression.Options = .caseInsensitive) -> Bool {
         /* Condition validation */
@@ -85,40 +101,42 @@ public extension String {
         return false
     }
 
-    /** Calculate string length. */
-    public func length() -> Int {
-        return characters.count
-    }
-
-    /** Convert string to data. */
-    public func toData(_ encoding: String.Encoding = String.Encoding.utf8) -> Data? {
-        return data(using: encoding, allowLossyConversion: false)
-    }
-
-    /** Convert html string compatible to string. */
-    public func decodeHTML() -> String {
-        return removingPercentEncoding ?? ""
-//        return CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, self, "") as String
-    }
-    /** Convert string to html string compatible. */
-    public func encodeHTML() -> String {
-        return addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed) ?? ""
-//        return stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet(charactersInString: ":/=,!$&'()*+[]@#?")) ?? ""
-    }
-
     /** Split string into components. */
     public func split(_ separator: String) -> [String] {
         return components(separatedBy: separator)
     }
-
+    
     /** Sub string from index to reverse index. */
     func substring(startIndex strIndex: Int, reverseIndex endIndex: Int) -> String {
-        let range = self.characters.index(self.startIndex, offsetBy: strIndex) ..< self.characters.index(self.endIndex, offsetBy: endIndex)
+        /* Condition validation: Validate start index */
+        if strIndex < 0 || strIndex > length() {
+            FwiLog("Start index should not be a negative number or larger than string's length.")
+            return ""
+        }
+        
+        /* Condition validation: Validate end index */
+        if endIndex > 0 || abs(endIndex) > length() {
+            FwiLog("Reverse index should be a negative number but less than string's length.")
+            return ""
+        }
+        
+        /* Condition validation: Validate overlap index */
+        if strIndex >= length() + endIndex {
+            FwiLog("Start index and reverse index should not overlap each other.")
+            return ""
+        }
+        
+        let range = characters.index(self.startIndex, offsetBy: strIndex) ..< characters.index(self.endIndex, offsetBy: endIndex)
         return self.substring(with: range)
     }
-
+    
     /** Trim all spaces before and after a string. */
     public func trim() -> String {
         return trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+    }
+    
+    /** Convert string to data. */
+    public func toData(_ encoding: String.Encoding = String.Encoding.utf8) -> Data? {
+        return data(using: encoding, allowLossyConversion: false)
     }
 }

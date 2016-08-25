@@ -40,7 +40,7 @@ import UIKit
 import Foundation
 
 
-extension UITabBarController {
+public extension UITabBarController {
 
     // MARK: Class's override methods
     open override var prefersStatusBarHidden: Bool {

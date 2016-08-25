@@ -42,32 +42,36 @@ import Foundation
 public extension NSNumber {
 
     /** Display number to specific currency format. */
-    public func currencyWithISO3(_ currencyISO3: String, decimalSeparator decimal: String, groupingSeparator grouping: String, usingSymbol isSymbol: Bool) -> String? {
-        // Initialize currency format object
-        let locale = NSLocale(localeIdentifier: "en_US")
-        let currencyFormat = NumberFormatter()
-
-        // Layout currency
-        currencyFormat.formatterBehavior = NumberFormatter.Behavior.behavior10_4
-        currencyFormat.roundingMode = NumberFormatter.RoundingMode.halfUp
-        currencyFormat.numberStyle = NumberFormatter.Style.currency
-
-        currencyFormat.generatesDecimalNumbers = true
-        currencyFormat.locale = locale as Locale!
-
-        currencyFormat.currencyGroupingSeparator = grouping
+    public func currencyWithISO3(_ iso3: String, decimalSeparator decimal: String = ".", groupingSeparator grouping: String = ",", usingSymbol isSymbol: Bool = true) -> String? {
         currencyFormat.currencyDecimalSeparator = decimal
-
+        currencyFormat.currencyGroupingSeparator = grouping
         if isSymbol {
             currencyFormat.positiveFormat = "\u{00a4}#,##0.00"
             currencyFormat.negativeFormat = "- \u{00a4}#,##0.00"
         } else {
-            currencyFormat.positiveFormat = "#,##0.00 \(currencyISO3)"
-            currencyFormat.negativeFormat = "- #,##0.00 \(currencyISO3)"
+            currencyFormat.positiveFormat = "#,##0.00 \(iso3)"
+            currencyFormat.negativeFormat = "- #,##0.00 \(iso3)"
         }
-        currencyFormat.currencyCode = currencyISO3
+        currencyFormat.currencyCode = iso3
 
         // Return result
         return currencyFormat.string(from: self)
     }
 }
+
+
+// MARK: Currency format
+fileprivate var currencyFormat: NumberFormatter = {
+    // Initialize currency format object
+    let locale = Locale(identifier: "en_US")
+    let currencyFormat = NumberFormatter()
+    
+    // Layout currency
+    currencyFormat.formatterBehavior = NumberFormatter.Behavior.behavior10_4
+    currencyFormat.roundingMode = NumberFormatter.RoundingMode.halfUp
+    currencyFormat.numberStyle = NumberFormatter.Style.currency
+    currencyFormat.generatesDecimalNumbers = true
+    currencyFormat.locale = locale
+    
+    return currencyFormat
+}()

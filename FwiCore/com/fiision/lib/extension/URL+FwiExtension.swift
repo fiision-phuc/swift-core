@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiExtensionNumberTest.swift
+//  File name   : URL+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/27/14
+//  Created date: 11/22/14
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -36,33 +36,26 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import XCTest
-@testable import FwiCore
+import Foundation
 
 
-class FwiExtensionNumberTest: XCTestCase {
+public extension URL {
 
-    // MARK: Setup
-    override func setUp() {
-        super.setUp()
+    /** URL to main cache folder. */
+    public static func cacheDirectory() -> URL? {
+        let array = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        return array.first
     }
 
-    // MARK: Tear Down
-    override func tearDown() {
-        super.tearDown()
+    /** URL to main document folder. */
+    public static func documentDirectory() -> URL? {
+        let array = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return array.first
     }
+}
 
-    // MARK: Test Cases
-    func testCurrency() {
-        let currencyNumber = NSNumber(value: 2000)
 
-        var currencyString = currencyNumber.currencyWithISO3("USD", decimalSeparator: ".", groupingSeparator: ",", usingSymbol: true)
-        XCTAssertEqual(currencyString, "$2,000.00", "Currency string should be: $2,000.00")
-
-        currencyString = currencyNumber.currencyWithISO3("USD", decimalSeparator: ".", groupingSeparator: ",", usingSymbol: false)
-        XCTAssertEqual(currencyString, "2,000.00 USD", "Currency string should be: 2,000.00 USD")
-
-        currencyString = currencyNumber.currencyWithISO3("USD", decimalSeparator: ",", groupingSeparator: ".", usingSymbol: true)
-        XCTAssertEqual(currencyString, "$2.000,00", "Currency string should be: $2.000,00")
-    }
+// MARK: Custom Operator
+public func + (left: URL?, right: String) -> URL? {
+    return left?.appendingPathComponent(right)
 }

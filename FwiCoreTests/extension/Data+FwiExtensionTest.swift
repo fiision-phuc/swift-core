@@ -40,18 +40,20 @@ import XCTest
 @testable import FwiCore
 
 
-class FwiExtensionDataTest: XCTestCase {
+class DataFwiExtensionTest: XCTestCase {
 
     // MARK: Setup
     override func setUp() {
         super.setUp()
     }
 
+    
     // MARK: Tear Down
     override func tearDown() {
         super.tearDown()
     }
 
+    
     // MARK: Test Cases
     func testToString() {
         var data: Data? = nil
@@ -62,20 +64,20 @@ class FwiExtensionDataTest: XCTestCase {
     }
 
     func testClearBytes() {
-        var bytes1: [UInt8] = [0x40, 0x41, 0x42]
-        var bytes2: [UInt8] = [0x00, 0x00, 0x00]
-        var data1: Data = Data(bytes: UnsafePointer<UInt8>(bytes1), count: 3)
-        var data2: Data = Data(bytes: UnsafePointer<UInt8>(bytes2), count: 3)
-
+        let bytes1: [UInt8] = [0x40, 0x41, 0x42]
+        let bytes2: [UInt8] = [0x00, 0x00, 0x00]
+        var data1 = Data(bytes: UnsafePointer<UInt8>(bytes1), count: 3)
+        let data2 = Data(bytes: UnsafePointer<UInt8>(bytes2), count: 3)
+        
         data1.clearBytes()
         XCTAssertEqual(data1, data2, "Data1 should contain all zero.")
     }
 
     func testReverseBytes() {
-        var bytes1: [UInt8] = [0x40, 0x41, 0x42]
-        var bytes2: [UInt8] = [0x42, 0x41, 0x40]
+        let bytes1: [UInt8] = [0x40, 0x41, 0x42]
+        let bytes2: [UInt8] = [0x42, 0x41, 0x40]
         var data1: Data = Data(bytes: UnsafePointer<UInt8>(bytes1), count: 3)
-        var data2: Data = Data(bytes: UnsafePointer<UInt8>(bytes2), count: 3)
+        let data2: Data = Data(bytes: UnsafePointer<UInt8>(bytes2), count: 3)
 
         data1.reverseBytes()
         XCTAssertEqual(data1, data2, "Data1 should be reversed.")

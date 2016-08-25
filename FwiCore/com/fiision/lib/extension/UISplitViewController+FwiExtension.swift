@@ -40,7 +40,7 @@ import UIKit
 import Foundation
 
 
-extension UISplitViewController {
+public extension UISplitViewController {
 
     // MARK: Class's override methods
     open override var prefersStatusBarHidden: Bool {
