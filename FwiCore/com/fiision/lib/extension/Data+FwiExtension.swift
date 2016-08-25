@@ -73,6 +73,21 @@ public extension Data {
     }
     */
     
+    /** Convert data to model object */
+    public func decodeJSONWithModel<T: NSObject>(model m: inout T) -> NSError? {
+        do {
+            let json = try JSONSerialization.jsonObject(with: self, options: [])
+            if let error = FwiJSONMapper.mapObjectToModel(json, model: &m) {
+                throw error
+            } else {
+                return nil
+            }
+            
+        } catch let error as NSError {
+            return error
+        }
+    }
+    
     /** Convert data to string base on string encoding type. */
     public func toString(_ encoding: String.Encoding = String.Encoding.utf8) -> String? {
         /* Condition validation */

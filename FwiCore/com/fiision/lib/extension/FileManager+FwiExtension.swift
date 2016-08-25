@@ -43,6 +43,7 @@ import Foundation
 public extension FileManager {
     
     /** Create directory for a given URL. */
+    @discardableResult
     public func createDirectory(atURL url: URL?, withIntermediateDirectories intermediate: Bool = true, attributes: [String: AnyObject]? = nil) -> NSError? {
         guard let url = url, url.isFileURL else {
             return NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Invalid directory's URL."])
@@ -97,6 +98,7 @@ public extension FileManager {
     }
     
     /** Remove file for a given URL. */
+    @discardableResult
     public func removeFile(atURL url: URL?) -> NSError? {
         guard let url = url , fileExists(atURL: url) else {
             return NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Invalid file's URL."])
