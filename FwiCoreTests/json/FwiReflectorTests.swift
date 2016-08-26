@@ -122,7 +122,6 @@ class FwiReflectorTests: XCTestCase {
     // MARK: Initialize test case
     override func setUp() {
         super.setUp()
-        FwiLog("\(#file)")
     }
     override func tearDown() {
         super.tearDown()

@@ -45,6 +45,7 @@ public final class FwiReflector {
     public init(mirrorName: String, mirrorValue value: Any) {
         self.mirrorName = mirrorName
         mirrorType = Mirror(reflecting: value)
+        
     }
 
 
@@ -112,14 +113,15 @@ public final class FwiReflector {
     // Primitive type
     public lazy var isPrimitive: Bool = {
         let type = self.mirrorType.subjectType
-
+        
         if !self.isOptional {
             if  type == Bool.self ||
                 type == Int.self || type == Int8.self || type == Int16.self || type == Int32.self || type == Int64.self ||
                 type == UInt.self || type == UInt8.self || type == UInt16.self || type == UInt32.self || type == UInt64.self ||
                 type == Float.self || type == Float32.self || type == Float64.self ||
                 type == Double.self ||
-                type == Character.self || type == String.self || type == nsStringType || type == nsMutablestringType {
+                // type == Character.self || type == String.self || type == nsStringType || type == nsMutablestringType {
+                type == Character.self || type == String.self || type == NSString.self || type == NSMutableString.self {
                 return true
             }
         } else {
@@ -140,7 +142,7 @@ public final class FwiReflector {
             return nil
         }
         let type = self.mirrorType.subjectType
-
+        
         // Bool
         if type == Bool.self || type == Optional<Bool>.self {
             return Bool.self
@@ -488,15 +490,15 @@ public extension FwiReflector {
 
 
 // Constants
-private let arrayName = "Array"
-private let nsArrayName = "NSArray"
-private let nsMutableArrayName = "NSMutableArray"
-private let dictionaryName = "Dictionary"
-private let nsDictionaryName = "NSDictionary"
-private let nsMutableDictionaryName = "NSMutableDictionary"
-private let setName = "Set"
-private let nsSetName = "NSSet"
-private let nsMutableSetName = "NSMutableSet"
+fileprivate let arrayName = "Array"
+fileprivate let nsArrayName = "NSArray"
+fileprivate let nsMutableArrayName = "NSMutableArray"
+fileprivate let dictionaryName = "Dictionary"
+fileprivate let nsDictionaryName = "NSDictionary"
+fileprivate let nsMutableDictionaryName = "NSMutableDictionary"
+fileprivate let setName = "Set"
+fileprivate let nsSetName = "NSSet"
+fileprivate let nsMutableSetName = "NSMutableSet"
 // Mirror types
-private let nsStringType = Mirror(reflecting: NSString()).subjectType
-private let nsMutablestringType = Mirror(reflecting: NSMutableString()).subjectType
+fileprivate let nsStringType = Mirror(reflecting: NSString()).subjectType
+fileprivate let nsMutablestringType = Mirror(reflecting: NSMutableString()).subjectType
