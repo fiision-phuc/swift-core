@@ -56,11 +56,6 @@ public struct FwiFormParam: CustomDebugStringConvertible, CustomStringConvertibl
         return key.hashValue ^ value.hashValue
     }
 
-    // MARK: Custom Operator
-    public static func == (left: FwiFormParam, right: FwiFormParam?) -> Bool {
-        return left.hashValue == right?.hashValue
-    }
-
     // MARK: CustomDebugStringConvertible's members
     public var debugDescription: String {
         return description
@@ -70,4 +65,9 @@ public struct FwiFormParam: CustomDebugStringConvertible, CustomStringConvertibl
     public var description: String {
         return "\(key)=\(value.encodeHTML())"
     }
+}
+
+// MARK: Custom Operator
+public func == (left: FwiFormParam, right: FwiFormParam?) -> Bool {
+    return left.hashValue == right?.hashValue
 }

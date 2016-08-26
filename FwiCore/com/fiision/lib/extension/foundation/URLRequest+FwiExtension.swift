@@ -43,7 +43,7 @@ import Foundation
 // Creation
 public extension URLRequest {
 
-    public init(url: URL, requestMethod method: FwiHttpMethod = .get, extraHeaders headers: [String:String]? = nil, rawParam param: FwiDataParam? = nil) {
+    public init(requestURL url: URL, requestMethod method: FwiHttpMethod = .get, extraHeaders headers: [String:String]? = nil, rawParam param: FwiDataParam? = nil) {
         self.init(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30.0)
 
         defineHTTPMethod(method)
@@ -61,7 +61,7 @@ public extension URLRequest {
         }
     }
 
-    public init(url: URL, requestMethod method: FwiHttpMethod = .get, extraHeaders headers: [String:String]? = nil, queryParams params: [String:String]? = nil, fileParams files: [FwiMultipartParam]? = nil) {
+    public init(requestURL url: URL, requestMethod method: FwiHttpMethod = .get, extraHeaders headers: [String:String]? = nil, queryParams params: [String:String]? = nil, fileParams files: [FwiMultipartParam]? = nil) {
         self.init(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30.0)
 
         defineHTTPMethod(method)

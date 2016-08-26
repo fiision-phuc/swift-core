@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : Data+FwiExtensionTest.swift
+//  File name   : URLRequest+FwiExtensionTest.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 8/26/16
@@ -59,9 +59,9 @@ class URLRequestFwiExtensionTest: XCTestCase {
             XCTFail("Could not initialize url.")
             return
         }
-
-        let request1 = URLRequest(url: url, httpMethod: .get)
-        let request2 = URLRequest(url: url, httpMethod: .get)
+        let a = URLRequest(requestURL: url, method: .post)
+        // let request1 = URLRequest(url: url, httpMethod: .get)
+        // let request2 = URLRequest(url: url, httpMethod: .get)
 
         request1.addFormParam(FwiFormParam(key: "test1", value: "value1"))
         request2.addFormParam(FwiFormParam(key: "test2", value: "value2"))

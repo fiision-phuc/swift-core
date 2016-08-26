@@ -54,6 +54,7 @@ public extension URL {
     }
 }
 
+// MARK: Custom Operator
 public func + (left: URL?, right: String) -> URL? {
     return left?.appendingPathComponent(right)
 }

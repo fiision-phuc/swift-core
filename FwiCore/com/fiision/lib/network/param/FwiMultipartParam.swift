@@ -64,11 +64,6 @@ public struct FwiMultipartParam: CustomDebugStringConvertible, CustomStringConve
         return hash
     }
 
-    // MARK: Custom Operator
-    public static func == (left: FwiMultipartParam, right: FwiMultipartParam?) -> Bool {
-        return left.hashValue == right?.hashValue
-    }
-
     // MARK: CustomDebugStringConvertible's members
     public var debugDescription: String {
         return description
@@ -84,4 +79,9 @@ public struct FwiMultipartParam: CustomDebugStringConvertible, CustomStringConve
         }
         return "\n\(type)\n\(disposition)"
     }
+}
+
+// MARK: Custom Operator
+public func == (left: FwiMultipartParam, right: FwiMultipartParam?) -> Bool {
+    return left.hashValue == right?.hashValue
 }

@@ -56,11 +56,6 @@ public struct FwiDataParam: CustomDebugStringConvertible, CustomStringConvertibl
         return contentType.hashValue ^ data.hashValue
     }
 
-    // MARK: Custom Operator
-    public static func == (left: FwiDataParam, right: FwiDataParam?) -> Bool {
-        return left.hashValue == right?.hashValue
-    }
-
     // MARK: CustomDebugStringConvertible's members
     public var debugDescription: String {
         return description
@@ -73,4 +68,9 @@ public struct FwiDataParam: CustomDebugStringConvertible, CustomStringConvertibl
         }
         return "\n\(contentType)\n"
     }
+}
+
+// MARK: Custom Operator
+public func == (left: FwiDataParam, right: FwiDataParam?) -> Bool {
+    return left.hashValue == right?.hashValue
 }
