@@ -79,16 +79,43 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
 
     // MARK: Class's public methods
-    public func prepareRequest(_ url: URL?, requestMethod method: FwiHttpMethod = .get, queryParams params: [String:String]? = nil) -> FwiRequest? {
+    public func prepareRawRequest(_ url: URL?, requestMethod method: FwiHttpMethod = .get, extraHeaders headers: [String:String]? = nil, rawParam param: FwiDataParam? = nil) -> FwiRequest? {
         /* Condition validation */
         guard let u = url else {
             return nil
         }
 
         let request = FwiRequest(url: u, httpMethod: method)
+
+        // Assign extra HTTP headers
+        headers?.forEach({
+            request.setValue($0, forHTTPHeaderField: $1)
+        })
+
+        request.setDataParam(param)
+        return request
+    }
+    public func prepareRequest(_ url: URL?, requestMethod method: FwiHttpMethod = .get, extraHeaders headers: [String:String]? = nil, queryParams params: [String:String]? = nil, fileParams files: [FwiMultipartParam]? = nil) -> FwiRequest? {
+        /* Condition validation */
+        guard let u = url else {
+            return nil
+        }
+
+        let request = FwiRequest(url: u, httpMethod: method)
+
+        // Assign extra HTTP headers
+        headers?.forEach({
+            request.setValue($0, forHTTPHeaderField: $1)
+        })
+
+        // Generate form params
         params?.forEach({
             request.addFormParam(FwiFormParam(key: $0, value: $1))
         })
+
+        // Generate multipart params
+        request.addMultipartParams(files)
+
         return request
     }
 
@@ -107,7 +134,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
         // Create new task
         let task = session.dataTask(with: request as URLRequest) { [weak self] (data, response, error) in
-            var statusCode = NetworkStatus.Unknown
+            var statusCode = FwiNetworkStatus.Unknown
             var error = error
             
             // Turn off activity indicator if neccessary
@@ -115,7 +142,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
             
             // Obtain HTTP status
             if let err = error as? NSError {
-                statusCode = NetworkStatus(rawValue: Int32(err.code))
+                statusCode = FwiNetworkStatus(rawValue: Int32(err.code))
             }
             
             /* Condition validation: Validate HTTP response instance */
@@ -123,7 +150,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
                 c?(nil, error as NSError?, statusCode, nil)
                 return
             }
-            statusCode = NetworkStatus(rawValue: Int32(httpResponse.statusCode))
+            statusCode = FwiNetworkStatus(rawValue: Int32(httpResponse.statusCode))
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
@@ -141,7 +168,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
             
             // Load cache if http status is 304 or offline
             if let cached = self?.cache.cachedResponse(for: request as URLRequest) , statusCode == .NotConnectedToInternet || statusCode.rawValue == 304 {
-                c?(cached.data, nil, NetworkStatus(rawValue: 200), httpResponse)
+                c?(cached.data, nil, FwiNetworkStatus(rawValue: 200), httpResponse)
                 return
             }
             c?(data, error as NSError?, statusCode, httpResponse)
@@ -162,7 +189,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
         // Create new task
         let task = session.downloadTask(with: request as URLRequest) { [weak self] (location, response, error) in
-            var statusCode = NetworkStatus.Unknown
+            var statusCode = FwiNetworkStatus.Unknown
             var error = error
 
             // Turn off activity indicator if neccessary
@@ -176,9 +203,9 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
             // Obtain HTTP status
             if let err = error as? NSError {
-                statusCode = NetworkStatus(rawValue: Int32(err.code))
+                statusCode = FwiNetworkStatus(rawValue: Int32(err.code))
             } else {
-                statusCode = NetworkStatus(rawValue: Int32(httpResponse.statusCode))
+                statusCode = FwiNetworkStatus(rawValue: Int32(httpResponse.statusCode))
             }
 
             // Validate HTTP status
@@ -218,7 +245,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
 
     // MARK: Class's private methods
-    fileprivate func consoleError(_ request: URLRequest, data d: Data?, error e: NSError?, statusCode s: NetworkStatus) {
+    fileprivate func consoleError(_ request: URLRequest, data d: Data?, error e: NSError?, statusCode s: FwiNetworkStatus) {
         if let err = e, let url = request.url, let host = url.host, let method = request.httpMethod {
             let domain     = "Domain     : \(host)\n"
             let url        = "HTTP Url   : \(url)\n"
@@ -231,7 +258,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
     }
 
     /** Generate network error. */
-    fileprivate func generateError(_ request: URLRequest, statusCode s: NetworkStatus) -> NSError {
+    fileprivate func generateError(_ request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
         let userInfo = [NSURLErrorFailingURLErrorKey:request.url?.description ?? "",
                         NSURLErrorFailingURLStringErrorKey:request.url?.description ?? "",
                         NSLocalizedDescriptionKey:HTTPURLResponse.localizedString(forStatusCode: Int(s.rawValue))]
@@ -277,5 +304,5 @@ public extension FwiNetworkManager {
 
 
 // MARK: Completion definition
-public typealias RequestCompletion = (_ data: Data?, _ error: NSError?, _ statusCode: NetworkStatus, _ response: HTTPURLResponse?) -> ()
-public typealias DownloadCompletion = (_ location: URL?, _ error: NSError?, _ statusCode: NetworkStatus, _ response: HTTPURLResponse?) -> ()
+public typealias RequestCompletion = (_ data: Data?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> ()
+public typealias DownloadCompletion = (_ location: URL?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> ()
