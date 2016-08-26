@@ -39,9 +39,9 @@
 import Foundation
 
 
-public final class FwiMultipartParam: CustomDebugStringConvertible, CustomStringConvertible {
+public struct FwiMultipartParam: CustomDebugStringConvertible, CustomStringConvertible {
 
-    // MARK: Class's constructors
+    // MARK: Struct's constructors
     public init(name: String = "", fileName file: String = "", contentData data: Data = Data(), contentType type: String = "") {
         self.name = name
         self.fileName = file
@@ -49,31 +49,24 @@ public final class FwiMultipartParam: CustomDebugStringConvertible, CustomString
         self.contentType = type
     }
 
-    // MARK: Class's properties
+    // MARK: Struct's properties
     public fileprivate (set) var name: String
     public fileprivate (set) var fileName: String
     public fileprivate (set) var contentData: Data
     public fileprivate (set) var contentType: String
 
-    public var hashValue: Int {
+    // MARK: Struct's private methods
+    fileprivate var hashValue: Int {
         var hash = name.hashValue
         hash ^= fileName.hashValue
         hash ^= contentData.hashValue
         hash ^= contentType.hashValue
-
         return hash
     }
 
-    // MARK: Class's public methods
-    public func isEqual(_ object: AnyObject?) -> Bool {
-        if let other = object as? FwiMultipartParam {
-            return (self.hashValue == other.hashValue)
-        }
-        return false
-    }
-
-    public func compare(_ param: FwiMultipartParam) -> ComparisonResult {
-        return name.compare(param.name)
+    // MARK: Custom Operator
+    public static func == (left: FwiMultipartParam, right: FwiMultipartParam?) -> Bool {
+        return left.hashValue == right?.hashValue
     }
 
     // MARK: CustomDebugStringConvertible's members

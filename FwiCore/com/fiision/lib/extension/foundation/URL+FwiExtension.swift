@@ -52,10 +52,9 @@ public extension URL {
         let array = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return array.first
     }
-}
 
-
-// MARK: Custom Operator
-public func + (left: URL?, right: String) -> URL? {
-    return left?.appendingPathComponent(right)
+    // MARK: Custom Operator
+    public static func + (left: URL, right: String) -> URL? {
+        return left.appendingPathComponent(right)
+    }
 }

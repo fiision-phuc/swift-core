@@ -2,7 +2,7 @@
 //  File name   : Data+FwiExtensionTest.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/27/14
+//  Created date: 8/26/16
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -40,45 +40,32 @@ import XCTest
 @testable import FwiCore
 
 
-class DataFwiExtensionTest: XCTestCase {
-
+class URLRequestFwiExtensionTest: XCTestCase {
+    
     // MARK: Setup
     override func setUp() {
         super.setUp()
     }
-    
+
     // MARK: Tear Down
     override func tearDown() {
         super.tearDown()
     }
 
-    
+
     // MARK: Test Cases
-    func testToString() {
-        var data: Data? = nil
-        XCTAssertNil(data?.toString(), "Nil data should always return nil.")
+    func testInitialize() {
+        guard let url = URL(string: "https://google.com") else {
+            XCTFail("Could not initialize url.")
+            return
+        }
 
-        data = "FwiCore".data(using: String.Encoding.utf8, allowLossyConversion: false)
-        XCTAssertEqual(data!.toString()!, "FwiCore", "Data should return FwiCore.")
-    }
+        let request1 = URLRequest(url: url, httpMethod: .get)
+        let request2 = URLRequest(url: url, httpMethod: .get)
 
-    func testClearBytes() {
-        let bytes1: [UInt8] = [0x40, 0x41, 0x42]
-        let bytes2: [UInt8] = [0x00, 0x00, 0x00]
-        var data1 = Data(bytes: UnsafePointer<UInt8>(bytes1), count: 3)
-        let data2 = Data(bytes: UnsafePointer<UInt8>(bytes2), count: 3)
-        
-        data1.clearBytes()
-        XCTAssertEqual(data1, data2, "Data1 should contain all zero.")
-    }
+        request1.addFormParam(FwiFormParam(key: "test1", value: "value1"))
+        request2.addFormParam(FwiFormParam(key: "test2", value: "value2"))
 
-    func testReverseBytes() {
-        let bytes1: [UInt8] = [0x40, 0x41, 0x42]
-        let bytes2: [UInt8] = [0x42, 0x41, 0x40]
-        var data1: Data = Data(bytes: UnsafePointer<UInt8>(bytes1), count: 3)
-        let data2: Data = Data(bytes: UnsafePointer<UInt8>(bytes2), count: 3)
-
-        data1.reverseBytes()
-        XCTAssertEqual(data1, data2, "Data1 should be reversed.")
+        XCTFail("Test")
     }
 }

@@ -79,53 +79,11 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
 
     // MARK: Class's public methods
-    public func prepareRawRequest(_ url: URL?, requestMethod method: FwiHttpMethod = .get, extraHeaders headers: [String:String]? = nil, rawParam param: FwiDataParam? = nil) -> FwiRequest? {
-        /* Condition validation */
-        guard let u = url else {
-            return nil
-        }
+    public func sendRequest(_ request: URLRequest, completion c: RequestCompletion? = nil) {
+        var request = request
 
-        let request = FwiRequest(url: u, httpMethod: method)
-
-        // Assign extra HTTP headers
-        headers?.forEach({
-            request.setValue($0, forHTTPHeaderField: $1)
-        })
-
-        request.setDataParam(param)
-        return request
-    }
-    public func prepareRequest(_ url: URL?, requestMethod method: FwiHttpMethod = .get, extraHeaders headers: [String:String]? = nil, queryParams params: [String:String]? = nil, fileParams files: [FwiMultipartParam]? = nil) -> FwiRequest? {
-        /* Condition validation */
-        guard let u = url else {
-            return nil
-        }
-
-        let request = FwiRequest(url: u, httpMethod: method)
-
-        // Assign extra HTTP headers
-        headers?.forEach({
-            request.setValue($0, forHTTPHeaderField: $1)
-        })
-
-        // Generate form params
-        params?.forEach({
-            request.addFormParam(FwiFormParam(key: $0, value: $1))
-        })
-
-        // Generate multipart params
-        request.addMultipartParams(files)
-
-        return request
-    }
-
-    /** Send request to server. */
-    public func sendRequest(_ request: FwiRequest, completion c: RequestCompletion? = nil) {
-        // Check request instance
-        request.prepare()
-        
         // Add additional content negotiation
-        if let cached = cache.cachedResponse(for: request as URLRequest)?.response as? HTTPURLResponse, let modifiedSince = cached.allHeaderFields["Date"] as? String {
+        if let cached = cache.cachedResponse(for: request)?.response as? HTTPURLResponse, let modifiedSince = cached.allHeaderFields["Date"] as? String {
             request.setValue(modifiedSince, forHTTPHeaderField: "If-Modified-Since")
         }
 
@@ -133,7 +91,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
         networkCounter += 1
 
         // Create new task
-        let task = session.dataTask(with: request as URLRequest) { [weak self] (data, response, error) in
+        let task = session.dataTask(with: request) { [weak self] (data, response, error) in
             var statusCode = FwiNetworkStatus.Unknown
             var error = error
             
@@ -178,17 +136,12 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
     }
 
     /** Download resource from server. */
-    public func downloadResource(_ request: NSURLRequest, completion c: DownloadCompletion? = nil) {
-        // Check request instance
-        if let r = request as? FwiRequest {
-            r.prepare()
-        }
-
+    public func downloadResource(_ request: URLRequest, completion c: DownloadCompletion? = nil) {
         // Turn on activity indicator
         networkCounter += 1
 
         // Create new task
-        let task = session.downloadTask(with: request as URLRequest) { [weak self] (location, response, error) in
+        let task = session.downloadTask(with: request) { [weak self] (location, response, error) in
             var statusCode = FwiNetworkStatus.Unknown
             var error = error
 
@@ -253,7 +206,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
             let status     = "HTTP Status: \(s.rawValue) (\(err.localizedDescription))\n"
             let dataString = "\(d?.toString() ?? "")"
 
-            print("\n\(domain)\(url)\(method)\(status)\(dataString)")
+            FwiLog("\n\(domain)\(url)\(method)\(status)\(dataString)")
         }
     }
 

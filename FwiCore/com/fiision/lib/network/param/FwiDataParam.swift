@@ -39,7 +39,7 @@
 import Foundation
 
 
-public final class FwiDataParam: CustomDebugStringConvertible, CustomStringConvertible {
+public struct FwiDataParam: CustomDebugStringConvertible, CustomStringConvertible {
 
     // MARK: Class's constructors
     public init(data: Data = Data(), contentType type: String = "text/plain; charset=UTF-8") {
@@ -51,8 +51,14 @@ public final class FwiDataParam: CustomDebugStringConvertible, CustomStringConve
     public fileprivate (set) var data: Data
     public fileprivate (set) var contentType: String
 
+    // MARK: Struct's private methods
     public var hashValue: Int {
         return contentType.hashValue ^ data.hashValue
+    }
+
+    // MARK: Custom Operator
+    public static func == (left: FwiDataParam, right: FwiDataParam?) -> Bool {
+        return left.hashValue == right?.hashValue
     }
 
     // MARK: CustomDebugStringConvertible's members

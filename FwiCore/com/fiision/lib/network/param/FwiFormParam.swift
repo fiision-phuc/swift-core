@@ -38,7 +38,8 @@
 
 import Foundation
 
-public final class FwiFormParam: CustomDebugStringConvertible, CustomStringConvertible {
+
+public struct FwiFormParam: CustomDebugStringConvertible, CustomStringConvertible {
 
     // MARK: Class's constructors
     public init(key: String = "", value: String = "") {
@@ -50,20 +51,14 @@ public final class FwiFormParam: CustomDebugStringConvertible, CustomStringConve
     public fileprivate (set) var key: String
     public fileprivate (set) var value: String
 
+    // MARK: Struct's private methods
     public var hashValue: Int {
         return key.hashValue ^ value.hashValue
     }
 
-    // MARK: Class's public methods
-    public func isEqual(_ object: AnyObject?) -> Bool {
-        if let other = object as? FwiFormParam {
-            return (self.hashValue == other.hashValue)
-        }
-        return false
-    }
-
-    public func compare(_ param: FwiFormParam) -> ComparisonResult {
-        return key.compare(param.key)
+    // MARK: Custom Operator
+    public static func == (left: FwiFormParam, right: FwiFormParam?) -> Bool {
+        return left.hashValue == right?.hashValue
     }
 
     // MARK: CustomDebugStringConvertible's members
