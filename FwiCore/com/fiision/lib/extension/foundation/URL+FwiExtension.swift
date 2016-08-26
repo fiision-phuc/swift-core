@@ -55,17 +55,40 @@ public extension URL {
 }
 
 // MARK: Custom Operator
-public func + (left: URL?, right: String) -> URL? {
-    return left?.appendingPathComponent(right)
+public func + (left: URL?, right: String?) -> URL? {
+    guard let path = right else {
+        return left
+    }
+    return left?.appendingPathComponent(path)
 }
-public func + (left: URL?, right: [String:String]?) -> URL? {
-    // return URL(string: right, relativeTo: left)
-    return nil
+public func += (left: inout URL?, right: String?) {
+    left = left + right
 }
 
-public func += (left: inout URL?, right: String) {
-    left = left?.appendingPathComponent(right)
+public func + (left: URL?, right: [String:String]?) -> URL? {
+    if let url = left?.absoluteString, let params = right, params.count > 0 {
+        var form = [FwiFormParam]()
+        params.forEach({
+            form.append(FwiFormParam(key: $0, value: $1))
+        })
+        form = form.sorted(by: <)
+        
+        let p = form[0]
+        if p.key[p.key.startIndex] == "#" {
+            repeat {
+                form.removeFirst()
+            } while form[0].key[form[0].key.startIndex] == "#"
+            
+            
+            let query = form.map{$0.description}.joined(separator: "&")
+            return URL(string: "\(url)\(p.description)?\(query)")
+        } else {
+            let query = form.map{$0.description}.joined(separator: "&")
+            return URL(string: "\(url)?\(query)")
+        }
+    }
+    return left
 }
 public func += (left: inout URL?, right: [String:String]?) {
-    // left = left?.appendingPathComponent(right)
+    left = left + right
 }

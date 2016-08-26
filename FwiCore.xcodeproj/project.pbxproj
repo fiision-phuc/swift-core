@@ -50,6 +50,7 @@
 		BE9C00DA1D6D3A370052F634 /* Data+FwiBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9C00D31D6D3A370052F634 /* Data+FwiBase64.swift */; };
 		BE9C00DC1D6D3A370052F634 /* String+FwiBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9C00D51D6D3A370052F634 /* String+FwiBase64.swift */; };
 		BEA6D1E41A1D2090005021BB /* FwiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA6D1D81A1D2090005021BB /* FwiCore.framework */; };
+		BEFAAA8A1D70947D004B8B11 /* URL+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFAAA891D70947D004B8B11 /* URL+FwiExtensionTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +110,7 @@
 		BEA6D1DC1A1D2090005021BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BEA6D1E31A1D2090005021BB /* FwiCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FwiCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEA6D1E91A1D2090005021BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BEFAAA891D70947D004B8B11 /* URL+FwiExtensionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+FwiExtensionTest.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -297,6 +299,7 @@
 				BE61F2C61D704B43007CA66B /* Data+FwiExtensionTest.swift */,
 				BE61F2C71D704B43007CA66B /* NSNumber+FwiExtensionTest.swift */,
 				BE61F2C81D704B43007CA66B /* String+FwiExtensionTest.swift */,
+				BEFAAA891D70947D004B8B11 /* URL+FwiExtensionTest.swift */,
 				BE61F2C91D704B43007CA66B /* URLRequest+FwiExtensionTest.swift */,
 			);
 			path = foundation;
@@ -563,6 +566,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEFAAA8A1D70947D004B8B11 /* URL+FwiExtensionTest.swift in Sources */,
 				BE61F2CD1D704B43007CA66B /* URLRequest+FwiExtensionTest.swift in Sources */,
 				BE61F2CA1D704B43007CA66B /* Data+FwiExtensionTest.swift in Sources */,
 				BE337FCD1D6F03080078AE84 /* MapperTest.swift in Sources */,

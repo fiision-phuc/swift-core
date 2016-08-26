@@ -47,50 +47,22 @@ public enum FwiRequestType {
 
 
     // Generate request
-    var request: URLRequest? {
+    var request: URLRequest {
         switch self {
 
         case .raw(let url, let requestMethod, let extraHeaders, let rawParam):
-            var r = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30.0)
-            r.defineHTTPMethod(requestMethod)
-            r.definePrefixHeaders()
-            r.defineUserAgent()
-
-            extraHeaders?.forEach({
-                r.setValue($0, forHTTPHeaderField: $1)
-            })
-
-            if let p = rawParam {
-                r.httpBody = p.data
-                r.setValue(p.contentType, forHTTPHeaderField: "Content-Type")
-                r.setValue("\(p.data.count)", forHTTPHeaderField: "Content-Length")
-            }
+            var r = URLRequest(url: url, requestMethod: requestMethod, extraHeaders: extraHeaders)
+            r.generateRawForm(rawParam)
             return r
 
         case .urlencode(let url, let requestMethod, let extraHeaders, let queryParams):
-            var r = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30.0)
-            r.defineHTTPMethod(requestMethod)
-            r.definePrefixHeaders()
-            r.defineUserAgent()
-
-            extraHeaders?.forEach({
-                r.setValue($0, forHTTPHeaderField: $1)
-            })
-
-            r.generateRequestForm(requestMethod, queryParams: queryParams, fileParams: nil)
+            var r = URLRequest(url: url, requestMethod: requestMethod, extraHeaders: extraHeaders)
+            r.generateURLEncodedForm(queryParams: queryParams)
             return r
 
         case .multipart(let url, let requestMethod, let extraHeaders, let queryParams, let fileParams):
-            var r = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30.0)
-            r.defineHTTPMethod(requestMethod)
-            r.definePrefixHeaders()
-            r.defineUserAgent()
-
-            extraHeaders?.forEach({
-                r.setValue($0, forHTTPHeaderField: $1)
-            })
-
-            r.generateRequestForm(requestMethod, queryParams: queryParams, fileParams: fileParams)
+            var r = URLRequest(url: url, requestMethod: requestMethod, extraHeaders: extraHeaders)
+            r.generateMultipartForm(queryParams: queryParams, fileParams: fileParams)
             return r
         }
     }
@@ -98,8 +70,98 @@ public enum FwiRequestType {
 
 
 public extension URLRequest {
-
-    /** Define HTTP request method. */
+    
+    // MARK: Struct's constructors
+    public init(url: URL, requestMethod method: FwiHttpMethod, extraHeaders headers: [String:String]? = nil) {
+        self.init(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30.0)
+        
+        defineHTTPMethod(method)
+        definePrefixHeaders()
+        defineUserAgent()
+        
+        headers?.forEach({
+            setValue($0, forHTTPHeaderField: $1)
+        })
+    }
+    
+    // MARK: Struct's public methods
+    public mutating func generateRawForm(_ rawParam: FwiDataParam?) {
+        if let p = rawParam {
+            let length = p.data.count
+            
+            setValue(p.contentType, forHTTPHeaderField: "Content-Type")
+            setValue("\(length)", forHTTPHeaderField: "Content-Length")
+            httpBody = p.data
+        }
+    }
+    
+    /** Generate multipart/form-data. */
+    public mutating func generateMultipartForm(queryParams params: [String:String]?, fileParams files: [FwiMultipartParam]?) {
+        /* Condition validation */
+        if (params == nil && files == nil) || (params?.count == 0 && files?.count == 0) {
+            return
+        }
+        
+        let boundary = "----------\(Date().timeIntervalSince1970)"
+        var body = Data()
+        
+        // Multi files
+        files?.forEach({
+            if let
+                boundaryData = "\r\n--\(boundary)\r\n".toData(),
+                let contentType = "Content-Type: \($0.contentType)\r\n\r\n".toData(),
+                let contentDisposition = "Content-Disposition: form-data; name=\"\($0.name)\"; filename=\"\($0.fileName)\"\r\n".toData() {
+                
+                body.append(boundaryData)
+                body.append(contentDisposition)
+                body.append(contentType)
+                body.append($0.contentData)
+            }
+        })
+        // Multi params
+        params?.forEach({
+            if let
+                contentData = $0.value.toData(),
+                let boundaryData = "\r\n--\(boundary)\r\n".toData(),
+                let contentDisposition = "Content-Disposition: form-data; name=\"\($0.key)\"\r\n\r\n".toData() {
+                
+                body.append(boundaryData)
+                body.append(contentDisposition)
+                body.append(contentData)
+            }
+        })
+        // Finalize
+        if let boundaryData = "\r\n--\(boundary)\r\n".toData() {
+            body.append(boundaryData)
+        }
+        
+        setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        setValue("\(body.count)", forHTTPHeaderField: "Content-Length")
+        httpBody = body
+    }
+    
+    /** Generate x-www-form-urlencoded. */
+    public mutating func generateURLEncodedForm(queryParams params: [String:String]?) {
+        guard let params = params, params.count > 0 else {
+            return
+        }
+        
+        // Generate params
+        var form = [FwiFormParam]()
+        params.forEach({
+            form.append(FwiFormParam(key: $0, value: $1))
+        })
+        
+        // Generate form
+        let query = form.map{$0.description}.joined(separator: "&")
+        if let data = query.toData() {
+            setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            setValue("\(data.count)", forHTTPHeaderField: "Content-Length")
+            httpBody = data
+        }
+    }
+    
+    // MARK: Struct's private methods
     fileprivate mutating func defineHTTPMethod(_ method: FwiHttpMethod) {
         switch method {
         case .copy:
@@ -170,85 +232,5 @@ public extension URLRequest {
 
         let userAgent = "\(bundleIdentifier)/\(bundleVersion) (\(deviceInfo.model); iOS \(deviceInfo.systemVersion); Scale/\(UIScreen.main.scale))"
         setValue(userAgent, forHTTPHeaderField: "User-Agent")
-    }
-
-    /** Generate HTTP request form. */
-    fileprivate mutating func generateRequestForm(_ method: FwiHttpMethod, queryParams params: [String:String]?, fileParams files: [FwiMultipartParam]?) {
-        switch method {
-
-        case .get:
-            if let params = params, params.count > 0 {
-                var form = [FwiFormParam]()
-                params.forEach({
-                    form.append(FwiFormParam(key: $0, value: $1))
-                })
-
-                let query = form.map{$0.description}.joined(separator: "&")
-                if let url = url?.absoluteString {
-                    self.url = URL(string: "\(url)?\(query)")
-                }
-            }
-            break
-
-        case .patch, .post, .put:
-            if params != nil && files == nil {
-                setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-                if let params = params, params.count > 0 {
-                    var form = [FwiFormParam]()
-                    params.forEach({
-                        form.append(FwiFormParam(key: $0, value: $1))
-                    })
-
-                    let query = form.map{$0.description}.joined(separator: "&")
-                    if let data = query.toData() {
-                        setValue("\(data.count)", forHTTPHeaderField: "Content-Length")
-                        httpBody = data
-                    }
-                }
-            } else {
-                var body = Data()
-                let boundary = "----------\(Date().timeIntervalSince1970)"
-                setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-
-                // Multi files
-                files?.forEach({
-                    if let
-                        boundaryData = "\r\n--\(boundary)\r\n".toData(),
-                        let contentType = "Content-Type: \($0.contentType)\r\n\r\n".toData(),
-                        let contentDisposition = "Content-Disposition: form-data; name=\"\($0.name)\"; filename=\"\($0.fileName)\"\r\n".toData() {
-
-                        body.append(boundaryData)
-                        body.append(contentDisposition)
-                        body.append(contentType)
-                        body.append($0.contentData as Data)
-                    }
-                })
-
-                // Multi params
-                params?.forEach({
-                    if let
-                        contentData = $0.value.toData(),
-                        let boundaryData = "\r\n--\(boundary)\r\n".toData(),
-                        let contentDisposition = "Content-Disposition: form-data; name=\"\($0.key)\"\r\n\r\n".toData() {
-
-                        body.append(boundaryData)
-                        body.append(contentDisposition)
-                        body.append(contentData)
-                    }
-                })
-
-                // Finalize request
-                if let boundaryData = "\r\n--\(boundary)\r\n".toData() {
-                    body.append(boundaryData)
-                }
-
-                setValue("\(body.count)", forHTTPHeaderField: "Content-Length")
-                httpBody = body
-            }
-            break
-            
-        default:
-            break
-        }
     }
 }

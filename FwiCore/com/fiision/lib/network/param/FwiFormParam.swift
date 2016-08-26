@@ -68,6 +68,35 @@ public struct FwiFormParam: CustomDebugStringConvertible, CustomStringConvertibl
 }
 
 // MARK: Custom Operator
+public func < (left: FwiFormParam?, right: FwiFormParam?) -> Bool {
+    /* Condition validation: Validate left nil */
+    if left == nil && right != nil {
+        return true
+    }
+    
+    /* Condition validation: Validate right nil */
+    if left != nil && right == nil {
+        return false
+    }
+    
+    guard let l = left, let r = right else {
+        return false
+    }
+    
+    if l.key[l.key.startIndex] == "#" && r.key[r.key.startIndex] != "#" {
+        return true
+    }
+    else if l.key[l.key.startIndex] != "#" && r.key[r.key.startIndex] == "#" {
+        return false
+    }
+    else if l.key[l.key.startIndex] == "#" && r.key[r.key.startIndex] == "#" {
+        let key1 = l.key.substring(startIndex: 1, reverseIndex: 0)
+        let key2 = r.key.substring(startIndex: 1, reverseIndex: 0)
+        return key1 < key2
+    }
+    return l.key < r.key
+}
+
 public func == (left: FwiFormParam?, right: FwiFormParam?) -> Bool {
     return left?.hashValue == right?.hashValue
 }
