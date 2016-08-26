@@ -59,12 +59,18 @@ class URLRequestFwiExtensionTest: XCTestCase {
             XCTFail("Could not initialize url.")
             return
         }
-        let a = URLRequest(requestURL: url, method: .post)
+
+        var url1 = URL(string: "https://google.com")
+        url1 += "get"
+        
+
+        // let b = URLRequest(requestURL: url, requestMethod: .post)
+        // let a = URLRequest(requestURL: url, requestMethod: .post, extraHeaders: nil, queryParams: nil, fileParams: nil)
         // let request1 = URLRequest(url: url, httpMethod: .get)
         // let request2 = URLRequest(url: url, httpMethod: .get)
 
-        request1.addFormParam(FwiFormParam(key: "test1", value: "value1"))
-        request2.addFormParam(FwiFormParam(key: "test2", value: "value2"))
+        // request1.addFormParam(FwiFormParam(key: "test1", value: "value1"))
+        // request2.addFormParam(FwiFormParam(key: "test2", value: "value2"))
 
         XCTFail("Test")
     }

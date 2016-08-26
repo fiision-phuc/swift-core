@@ -82,6 +82,6 @@ public struct FwiMultipartParam: CustomDebugStringConvertible, CustomStringConve
 }
 
 // MARK: Custom Operator
-public func == (left: FwiMultipartParam, right: FwiMultipartParam?) -> Bool {
-    return left.hashValue == right?.hashValue
+public func == (left: FwiMultipartParam?, right: FwiMultipartParam?) -> Bool {
+    return left?.hashValue == right?.hashValue
 }

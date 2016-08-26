@@ -40,41 +40,62 @@ import UIKit
 import Foundation
 
 
-// Creation
-public extension URLRequest {
+public enum FwiRequestType {
+    case raw(url: URL, requestMethod: FwiHttpMethod, extraHeaders: [String:String]?, rawParam: FwiDataParam?)
+    case urlencode(url: URL, requestMethod: FwiHttpMethod, extraHeaders: [String:String]?, queryParams: [String:String]?)
+    case multipart(url: URL, requestMethod: FwiHttpMethod, extraHeaders: [String:String]?, queryParams: [String:String]?, fileParams: [FwiMultipartParam]?)
 
-    public init(requestURL url: URL, requestMethod method: FwiHttpMethod = .get, extraHeaders headers: [String:String]? = nil, rawParam param: FwiDataParam? = nil) {
-        self.init(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30.0)
 
-        defineHTTPMethod(method)
-        definePrefixHeaders()
-        defineUserAgent()
+    // Generate request
+    var request: URLRequest? {
+        switch self {
 
-        headers?.forEach({
-            setValue($0, forHTTPHeaderField: $1)
-        })
+        case .raw(let url, let requestMethod, let extraHeaders, let rawParam):
+            var r = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30.0)
+            r.defineHTTPMethod(requestMethod)
+            r.definePrefixHeaders()
+            r.defineUserAgent()
 
-        if let p = param {
-            httpBody = p.data
-            setValue(p.contentType, forHTTPHeaderField: "Content-Type")
-            setValue("\(p.data.count)", forHTTPHeaderField: "Content-Length")
+            extraHeaders?.forEach({
+                r.setValue($0, forHTTPHeaderField: $1)
+            })
+
+            if let p = rawParam {
+                r.httpBody = p.data
+                r.setValue(p.contentType, forHTTPHeaderField: "Content-Type")
+                r.setValue("\(p.data.count)", forHTTPHeaderField: "Content-Length")
+            }
+            return r
+
+        case .urlencode(let url, let requestMethod, let extraHeaders, let queryParams):
+            var r = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30.0)
+            r.defineHTTPMethod(requestMethod)
+            r.definePrefixHeaders()
+            r.defineUserAgent()
+
+            extraHeaders?.forEach({
+                r.setValue($0, forHTTPHeaderField: $1)
+            })
+
+            r.generateRequestForm(requestMethod, queryParams: queryParams, fileParams: nil)
+            return r
+
+        case .multipart(let url, let requestMethod, let extraHeaders, let queryParams, let fileParams):
+            var r = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30.0)
+            r.defineHTTPMethod(requestMethod)
+            r.definePrefixHeaders()
+            r.defineUserAgent()
+
+            extraHeaders?.forEach({
+                r.setValue($0, forHTTPHeaderField: $1)
+            })
+
+            r.generateRequestForm(requestMethod, queryParams: queryParams, fileParams: fileParams)
+            return r
         }
     }
-
-    public init(requestURL url: URL, requestMethod method: FwiHttpMethod = .get, extraHeaders headers: [String:String]? = nil, queryParams params: [String:String]? = nil, fileParams files: [FwiMultipartParam]? = nil) {
-        self.init(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30.0)
-
-        defineHTTPMethod(method)
-        definePrefixHeaders()
-        defineUserAgent()
-
-        headers?.forEach({
-            setValue($0, forHTTPHeaderField: $1)
-        })
-
-        generateRequestForm(method, queryParams: params, fileParams: files)
-    }
 }
+
 
 public extension URLRequest {
 

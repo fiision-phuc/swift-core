@@ -58,3 +58,14 @@ public extension URL {
 public func + (left: URL?, right: String) -> URL? {
     return left?.appendingPathComponent(right)
 }
+public func + (left: URL?, right: [String:String]?) -> URL? {
+    // return URL(string: right, relativeTo: left)
+    return nil
+}
+
+public func += (left: inout URL?, right: String) {
+    left = left?.appendingPathComponent(right)
+}
+public func += (left: inout URL?, right: [String:String]?) {
+    // left = left?.appendingPathComponent(right)
+}

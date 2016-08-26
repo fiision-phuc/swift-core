@@ -68,6 +68,6 @@ public struct FwiFormParam: CustomDebugStringConvertible, CustomStringConvertibl
 }
 
 // MARK: Custom Operator
-public func == (left: FwiFormParam, right: FwiFormParam?) -> Bool {
-    return left.hashValue == right?.hashValue
+public func == (left: FwiFormParam?, right: FwiFormParam?) -> Bool {
+    return left?.hashValue == right?.hashValue
 }
