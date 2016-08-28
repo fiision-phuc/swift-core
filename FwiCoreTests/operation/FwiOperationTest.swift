@@ -57,7 +57,7 @@ class FwiOperationTest: XCTestCase {
         let operation = FwiOperation()
 
         XCTAssertNotNil(operation, "Operation must not be nil.")
-        XCTAssertNil(operation.identifier, "Initial operation does not have any identifier.")
+        XCTAssertNotNil(operation.identifier, "All operations must have any identifier.")
         XCTAssertFalse(operation.isLongOperation, "Initial operation is not a long operation.")
 
         XCTAssertFalse(operation.isFinished, "Initial operation is not finished.")

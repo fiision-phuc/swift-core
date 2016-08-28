@@ -48,7 +48,7 @@ public protocol FwiCoreData {
 public extension FwiCoreData where Self: NSManagedObject {
 
     /** Fetch all entities base on search condition. */
-    static public func allEntitiesFromContext(_ context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [AnyObject]? = nil, limit l: Int = 0) -> [Self]? {
+    static public func allEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [AnyObject]? = nil, limit l: Int = 0) -> [Self]? {
         /* Condition validation */
         guard let c = context else {
             return nil
@@ -93,18 +93,18 @@ public extension FwiCoreData where Self: NSManagedObject {
     }
 
     /** Fetch an entity base on search condition. Create new if necessary. */
-    static public func entityFromContext(_ context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, shouldCreate create: Bool = false) -> Self? {
+    static public func entity(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, shouldCreate create: Bool = false) -> Self? {
         /* Condition validation */
         guard let c = context else {
             return nil
         }
 
         // Find before create
-        let entities = self.allEntitiesFromContext(c, predicate: p)
+        let entities = allEntities(fromContext: c, predicate: p)
         var entity = entities?.first
 
         if entity == nil && create {
-            entity = self.newEntityWithContext(context)
+            entity = newEntityWithContext(context)
         }
         return entity
     }
@@ -120,7 +120,7 @@ public extension FwiCoreData where Self: NSManagedObject {
 
     /** Delete all entities from database. */
     static public func deleteAllEntitiesWithContext(_ context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) {
-        let entities = self.allEntitiesFromContext(context, predicate: p)
+        let entities = allEntities(fromContext: context, predicate: p)
         entities?.forEach({
             $0.remove()
         })

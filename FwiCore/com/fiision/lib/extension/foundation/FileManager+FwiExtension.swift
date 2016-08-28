@@ -45,7 +45,7 @@ public extension FileManager {
     /** Create directory for a given URL. */
     @discardableResult
     public func createDirectory(atURL url: URL?, withIntermediateDirectories intermediate: Bool = true, attributes: [String: AnyObject]? = nil) -> NSError? {
-        guard let url = url, url.isFileURL else {
+        guard let url = url, url.isFileURL && url != URL.documentDirectory() && url != URL.cacheDirectory() else {
             return NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Invalid directory's URL."])
         }
         

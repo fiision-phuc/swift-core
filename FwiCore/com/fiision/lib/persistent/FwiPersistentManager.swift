@@ -40,7 +40,7 @@ import Foundation
 import CoreData
 
 
-public class FwiPersistentManager {
+public final class FwiPersistentManager {
 
     // MARK: Class's constructors
     public init(dataModel: String, modelBundle bundle: Bundle = Bundle.main) {
@@ -60,7 +60,9 @@ public class FwiPersistentManager {
 
     // MARK: Class's properties
     public fileprivate (set) lazy var managedModel: NSManagedObjectModel = {
-        if let modelURL = self.bundle.url(forResource: self.dataModel, withExtension: "momd"), let managedModel = NSManagedObjectModel(contentsOf: modelURL) {
+        if let modelURL = self.bundle.url(forResource: self.dataModel, withExtension: "momd"),
+           let managedModel = NSManagedObjectModel(contentsOf: modelURL)
+        {
             return managedModel
         }
         fatalError("\(self.dataModel) model is not available!")
@@ -69,17 +71,17 @@ public class FwiPersistentManager {
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = self.persistentCoordinator
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
-
         return managedObjectContext
     }()
     public fileprivate (set) lazy var persistentCoordinator: NSPersistentStoreCoordinator = {
         let (storeDB1, storeDB2, storeDB3) = ("\(self.dataModel).sqlite", "\(self.dataModel).sqlite-shm", "\(self.dataModel).sqlite-wal")
-        guard let storeURL1 = URL.cacheDirectory()?.appendingPathComponent(storeDB1),
-              let storeURL2 = URL.cacheDirectory()?.appendingPathComponent(storeDB2),
-              let storeURL3 = URL.cacheDirectory()?.appendingPathComponent(storeDB3) else {
+        guard let storeURL1 = URL.cacheDirectory() + storeDB1,
+              let storeURL2 = URL.cacheDirectory() + storeDB2,
+              let storeURL3 = URL.cacheDirectory() + storeDB3
+        else {
             fatalError("Cache directory could not be found!")
         }
-
+        
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedModel)
         let options = [NSSQLitePragmasOption:["journal_mode":"WAL"],
                        NSInferMappingModelAutomaticallyOption:true,

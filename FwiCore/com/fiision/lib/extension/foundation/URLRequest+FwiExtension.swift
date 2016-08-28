@@ -41,26 +41,26 @@ import Foundation
 
 
 public enum FwiRequestType {
-    case raw(url: URL, requestMethod: FwiHttpMethod, extraHeaders: [String:String]?, rawParam: FwiDataParam?)
-    case urlencode(url: URL, requestMethod: FwiHttpMethod, extraHeaders: [String:String]?, queryParams: [String:String]?)
-    case multipart(url: URL, requestMethod: FwiHttpMethod, extraHeaders: [String:String]?, queryParams: [String:String]?, fileParams: [FwiMultipartParam]?)
+    case Raw(url: URL, requestMethod: FwiHttpMethod, extraHeaders: [String:String]?, rawParam: FwiDataParam?)
+    case URLEncode(url: URL, requestMethod: FwiHttpMethod, extraHeaders: [String:String]?, queryParams: [String:String]?)
+    case Multipart(url: URL, requestMethod: FwiHttpMethod, extraHeaders: [String:String]?, queryParams: [String:String]?, fileParams: [FwiMultipartParam]?)
 
 
     // Generate request
     var request: URLRequest {
         switch self {
 
-        case .raw(let url, let requestMethod, let extraHeaders, let rawParam):
+        case .Raw(let url, let requestMethod, let extraHeaders, let rawParam):
             var r = URLRequest(url: url, requestMethod: requestMethod, extraHeaders: extraHeaders)
             r.generateRawForm(rawParam)
             return r
 
-        case .urlencode(let url, let requestMethod, let extraHeaders, let queryParams):
+        case .URLEncode(let url, let requestMethod, let extraHeaders, let queryParams):
             var r = URLRequest(url: url, requestMethod: requestMethod, extraHeaders: extraHeaders)
             r.generateURLEncodedForm(queryParams: queryParams)
             return r
 
-        case .multipart(let url, let requestMethod, let extraHeaders, let queryParams, let fileParams):
+        case .Multipart(let url, let requestMethod, let extraHeaders, let queryParams, let fileParams):
             var r = URLRequest(url: url, requestMethod: requestMethod, extraHeaders: extraHeaders)
             r.generateMultipartForm(queryParams: queryParams, fileParams: fileParams)
             return r
@@ -80,7 +80,7 @@ public extension URLRequest {
         defineUserAgent()
         
         headers?.forEach({
-            setValue($0, forHTTPHeaderField: $1)
+            setValue($1, forHTTPHeaderField: $0)
         })
     }
     
@@ -96,13 +96,11 @@ public extension URLRequest {
     }
     
     /** Generate multipart/form-data. */
-    public mutating func generateMultipartForm(queryParams params: [String:String]?, fileParams files: [FwiMultipartParam]?) {
+    public mutating func generateMultipartForm(queryParams params: [String:String]?, fileParams files: [FwiMultipartParam]?, boundaryForm boundary: String = "----------\(Date().timeIntervalSince1970)") {
         /* Condition validation */
         if (params == nil && files == nil) || (params?.count == 0 && files?.count == 0) {
             return
         }
-        
-        let boundary = "----------\(Date().timeIntervalSince1970)"
         var body = Data()
         
         // Multi files

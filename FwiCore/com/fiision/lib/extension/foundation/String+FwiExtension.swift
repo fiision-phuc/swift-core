@@ -88,15 +88,13 @@ public extension String {
             return false
         }
 
-        let regex: NSRegularExpression?
         do {
-            regex = try NSRegularExpression(pattern: pattern, options: option)
-
-            if let matches = regex?.numberOfMatches(in: self, options: .anchored, range: NSMakeRange(0, self.length())) {
-                return (matches == 1)
-            }
+            let regex = try NSRegularExpression(pattern: pattern, options: option)
+            let matches = regex.numberOfMatches(in: self, options: .anchored, range: NSMakeRange(0, self.length()))
+            
+            return (matches == 1)
         } catch _ {
-            // Ignore error and suppose it is not matched pattern.
+            FwiLog("Invalid regex pattern.")
         }
         return false
     }
@@ -106,8 +104,18 @@ public extension String {
         return components(separatedBy: separator)
     }
     
+    /** Sub string to index. */
+    public func substring(endIndex index: Int) -> String {
+        /* Condition validation: Validate end index */
+        if index <= 0 || index >= length() {
+            FwiLog("End index should be a positive number but less than string's length.")
+            return ""
+        }
+        return substring(startIndex: 0, reverseIndex: -(length() - index))
+    }
+    
     /** Sub string from index to reverse index. */
-    func substring(startIndex strIndex: Int, reverseIndex endIndex: Int) -> String {
+    public func substring(startIndex strIndex: Int, reverseIndex endIndex: Int = 0) -> String {
         /* Condition validation: Validate start index */
         if strIndex < 0 || strIndex > length() {
             FwiLog("Start index should not be a negative number or larger than string's length.")
@@ -116,7 +124,7 @@ public extension String {
         
         /* Condition validation: Validate end index */
         if endIndex > 0 || abs(endIndex) > length() {
-            FwiLog("Reverse index should be a negative number but less than string's length.")
+            FwiLog("Reverse index should be a negative number but absolute value must less than string's length.")
             return ""
         }
         
@@ -136,7 +144,7 @@ public extension String {
     }
     
     /** Convert string to data. */
-    public func toData(stringEncoding encoding: String.Encoding = String.Encoding.utf8) -> Data? {
+    public func toData(dataEncoding encoding: String.Encoding = .utf8) -> Data? {
         return data(using: encoding, allowLossyConversion: false)
     }
 }

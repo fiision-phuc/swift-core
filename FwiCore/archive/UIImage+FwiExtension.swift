@@ -44,59 +44,6 @@ import CoreGraphics
 
 public extension UIImage {
 
-    /** Create a reflected image for specific view. */
-    public class func reflectedImageWithView(_ view: UIView, imageHeight height: CGFloat) -> UIImage? {
-        let imgHeight = Int(round(height))
-        let imgWidth = Int(round(view.bounds.width))
-        let colors: [CGFloat] = [0.0, 1.0, 1.0, 1.0]
-
-        // create a bitmap graphics context the size of the image
-        let bitmapInfoRaw = CGBitmapInfo.byteOrder32Little.union(CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue))
-        let colorSpace1 = CGColorSpaceCreateDeviceRGB()
-        let colorSpace2 = CGColorSpaceCreateDeviceGray()
-        if let
-            image = view.createImage(),
-            let grayscaleGradient = CGGradient(colorSpace: colorSpace2, colorComponents: colors, locations: nil, count: 2),
-            let mainContext = CGContext(data: nil, width: imgWidth, height: imgHeight, bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace1, bitmapInfo: bitmapInfoRaw.rawValue) {
-            // Create a 1 pixel wide gradient
-            let bitmapInfoRawGradient = CGBitmapInfo.alphaInfoMask.union(CGBitmapInfo(rawValue: CGImageAlphaInfo.none.rawValue))
-            let gradientContext = CGContext(data: nil, width: imgWidth, height: imgHeight, bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace2, bitmapInfo: bitmapInfoRawGradient.rawValue)
-
-            // Draw the gradient into the gray bitmap context
-            let gradientStart = CGPoint.zero
-            let gradientEnd = CGPoint(x: 0.0, y: CGFloat(imgHeight))
-            gradientContext?.drawLinearGradient(grayscaleGradient, start: gradientStart, end: gradientEnd, options: CGGradientDrawingOptions.drawsAfterEndLocation)
-
-            // Convert the context into a CGImageRef
-            guard let imgGradientRef = gradientContext?.makeImage() else {
-                return nil
-            }
-
-            // Create an image by masking the bitmap
-            mainContext.clip(to: CGRect(x: 0.0, y: 0.0, width: CGFloat(imgWidth), height: CGFloat(imgHeight)), mask: imgGradientRef)
-
-            // In order to grab the part of the image that we want to render, we move the context origin  to the height of the image
-            mainContext.translateBy(x: 0.0, y: height)
-            mainContext.scaleBy(x: 1.0, y: -1.0)
-
-            // Draw the image into the bitmap context
-            guard let imageCGI = image.cgImage  else {
-                return nil
-            }
-            mainContext.draw(imageCGI, in: view.bounds)
-            
-            // Create CGImageRef
-            guard let imgReflectedRef = mainContext.makeImage() else {
-                return nil
-            }
-
-            // Convert to UIImage
-            return UIImage(cgImage: imgReflectedRef)
-        } else {
-            return nil
-        }
-    }
-
     /** Create blur effect image from original source. */
     public func darkBlur(_ radius: CGFloat = 20.0, saturationFactor saturation: CGFloat = 1.9) -> UIImage {
         let tintColor = UIColor(white: 0.1, alpha: 0.5)

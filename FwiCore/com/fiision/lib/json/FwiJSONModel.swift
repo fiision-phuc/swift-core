@@ -40,7 +40,7 @@ import Foundation
 
 
 @objc
-public protocol FwiJSONModel: NSObjectProtocol {
+public protocol FwiJSONModel {
 
     /** Define key mapper. */
     @objc optional func keyMapper() -> [String:String]

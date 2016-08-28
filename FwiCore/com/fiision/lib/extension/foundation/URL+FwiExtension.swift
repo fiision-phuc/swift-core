@@ -59,6 +59,10 @@ public func + (left: URL?, right: String?) -> URL? {
     guard let path = right else {
         return left
     }
+    
+    if left?.absoluteString.hasSuffix("/") == true && path.hasPrefix("/") {
+        return left?.appendingPathComponent(path.substring(startIndex: 1))
+    }
     return left?.appendingPathComponent(path)
 }
 public func += (left: inout URL?, right: String?) {

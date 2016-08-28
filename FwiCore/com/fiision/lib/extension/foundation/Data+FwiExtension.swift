@@ -75,7 +75,7 @@ public extension Data {
     }
     
     /** Convert data to string base on string encoding type. */
-    public func toString(_ encoding: String.Encoding = String.Encoding.utf8) -> String? {
+    public func toString(stringEncoding encoding: String.Encoding = .utf8) -> String? {
         /* Condition validation */
         if count <= 0 {
             return nil

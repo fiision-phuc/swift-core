@@ -41,7 +41,7 @@ import Foundation
 
 
 open class FwiOperation: Operation {
-
+    
     // MARK: Class's constructors
     public override init() {
         super.init()
@@ -52,13 +52,28 @@ open class FwiOperation: Operation {
     public lazy var identifier: String = {
         return String.randomIdentifier() ?? ""
     }()
-
+    
+    fileprivate var opFinished = false {
+        willSet {
+            willChangeValue(forKey: "isExecuting")
+        }
+        didSet {
+            didChangeValue(forKey: "isExecuting")
+        }
+    }
+    fileprivate var opExecuting = false {
+        willSet {
+            willChangeValue(forKey: "isFinished")
+        }
+        didSet {
+            didChangeValue(forKey: "isFinished")
+        }
+    }
     fileprivate var userInfo: [String: AnyObject]?
     fileprivate var bgTask: UIBackgroundTaskIdentifier?
-
+    
     // MARK: Class's public methods
     open func businessLogic() {
-        preconditionFailure("This function must be overridden.")
     }
 
     // MARK: Class's private methods
@@ -86,6 +101,9 @@ open class FwiOperation: Operation {
 
     /** Called when operation completed. */
     fileprivate func operationCompleted() {
+        opExecuting = false
+        opFinished = true
+        
         // Terminate background task
         if let task = bgTask, bgTask != UIBackgroundTaskInvalid {
             UIApplication.shared.endBackgroundTask(task)
@@ -95,28 +113,25 @@ open class FwiOperation: Operation {
 
     // MARK: NSOperation's members
     open override var isAsynchronous: Bool {
-        get {
-            return true
-        }
+        return true
+    }
+    open override var isExecuting: Bool {
+        return opExecuting
+    }
+    open override var isFinished: Bool {
+        return opFinished
     }
     open override var isReady: Bool {
-        get {
-            return true
-        }
+        return true
     }
 
     open override func start() {
         autoreleasepool { () -> () in
-            // Always check for cancellation before launching the task.
-            if isCancelled {
-                operationCompleted()
-            } else {
-                // Process business
+            if !isCancelled {
+                opExecuting = true
                 businessLogic()
-
-                // Terminate background task
-                operationCompleted()
             }
+            operationCompleted()
         }
     }
 }

@@ -41,37 +41,48 @@ import Foundation
 
 public final class FwiReflector {
 
-    // MARK: Class's constructors
-    public init(mirrorName: String, mirrorValue value: Any) {
-        self.mirrorName = mirrorName
+    /// MARK: Class's constructors
+    public init(mirrorName name: String, mirrorValue value: Any) {
+        mirrorName = name
         mirrorType = Mirror(reflecting: value)
         
     }
 
-
-    // MARK: Class's properties
-    public lazy var isOptional: Bool = {
-        return self.mirrorType.displayStyle == Mirror.DisplayStyle.optional
+    /// MARK: Class's properties
+    public private (set) var mirrorName: String
+    public private (set) var mirrorType: Mirror
+    
+    /// Check whether the subject's type is optional type or not
+    public lazy private (set) var isOptional: Bool = {
+        return self.mirrorType.displayStyle == .optional
     }()
-
+    
+    /// Check whether the subject's type is enum or not. Currently, this property could not verify
+    /// the optional enum.
     public lazy var isEnum: Bool = {
         if !self.isOptional {
-            return self.mirrorType.displayStyle == Mirror.DisplayStyle.enum
+            return self.mirrorType.displayStyle == .enum
         } else {
             return false
         }
     }()
-    public lazy var isTuple: Bool = {
+    
+    /// Check whether the subject's type is tuple or not.
+    public lazy private (set) var isTuple: Bool = {
         if !self.isOptional {
-            return self.mirrorType.displayStyle == Mirror.DisplayStyle.tuple
+            return self.mirrorType.displayStyle == .tuple
         }
 
         let type = self.extractType()
         return (type[type.startIndex] == "(" && type[type.characters.index(type.endIndex, offsetBy: -1)] == ")")
     }()
-    public lazy var isStruct: Bool = {
+    
+    /// Check whether the subject's type is struct or not.
+    public lazy private (set) var isStruct: Bool = {
         if !self.isOptional {
-            if let style = self.mirrorType.displayStyle , style == .struct {
+            return self.mirrorType.displayStyle == .`struct`
+            /*
+            if let style = self.mirrorType.displayStyle, style == .`struct` {
                 let nTest: String = "\(self.mirrorType.subjectType)"
                 let result: (Bool, Bool) = (nTest == "URL", nTest == "Date")
                 switch result {
@@ -82,10 +93,11 @@ public final class FwiReflector {
                     self.structType = Date.self
                     return true
                 default:
-                    return false
+                    return true
                 }
             }
             return false
+            */
         }
         
         let m = self.mirrorType.displayStyle
@@ -101,105 +113,73 @@ public final class FwiReflector {
         default:
             return false
         }
-        
     }()
     
-    public var structType: Any.Type = String.self
-
-    public lazy var propertyName: String = {
-        return self.mirrorName
-    }()
-
-    // Primitive type
-    public lazy var isPrimitive: Bool = {
+    public private (set) var structType: Any.Type = String.self
+    
+    /// Check whether the subject's type is primitive or not. If subject's type is primitive then
+    /// it should return the unwrap subject's type.
+    public lazy private (set) var isPrimitive: Bool = {
         let type = self.mirrorType.subjectType
         
-        if !self.isOptional {
-            if  type == Bool.self ||
-                type == Int.self || type == Int8.self || type == Int16.self || type == Int32.self || type == Int64.self ||
-                type == UInt.self || type == UInt8.self || type == UInt16.self || type == UInt32.self || type == UInt64.self ||
-                type == Float.self || type == Float32.self || type == Float64.self ||
-                type == Double.self ||
-                // type == Character.self || type == String.self || type == nsStringType || type == nsMutablestringType {
-                type == Character.self || type == String.self || type == NSString.self || type == NSMutableString.self {
-                return true
-            }
-        } else {
-            if  type == Optional<Bool>.self ||
-                type == Optional<Int>.self || type == Optional<Int8>.self || type == Optional<Int16>.self || type == Optional<Int32>.self || type == Optional<Int64>.self ||
-                type == Optional<UInt>.self || type == Optional<UInt8>.self || type == Optional<UInt16>.self || type == Optional<UInt32>.self || type == Optional<UInt64>.self ||
-                type == Optional<Float>.self || type == Optional<Float32>.self || type == Optional<Float64>.self ||
-                type == Optional<Double>.self ||
-                type == Optional<Character>.self || type == Optional<String>.self || type == Optional<NSString>.self || type == Optional<NSMutableString>.self {
-                return true
-            }
-        }
-        return false
+        var isPrimitive = self.isType(type, typeCheck: Bool.self)
+        isPrimitive = isPrimitive || self.isType(type, typeCheck: Int.self)  || self.isType(type, typeCheck: Int8.self)  || self.isType(type, typeCheck: Int16.self)  || self.isType(type, typeCheck: Int32.self)  || self.isType(type, typeCheck: Int64.self)
+        isPrimitive = isPrimitive || self.isType(type, typeCheck: UInt.self) || self.isType(type, typeCheck: UInt8.self) || self.isType(type, typeCheck: UInt16.self) || self.isType(type, typeCheck: UInt32.self) || self.isType(type, typeCheck: UInt64.self)
+        isPrimitive = isPrimitive || self.isType(type, typeCheck: Float.self) || self.isType(type, typeCheck: Float32.self) || self.isType(type, typeCheck: Float64.self)
+        isPrimitive = isPrimitive || self.isType(type, typeCheck: Double.self)
+        isPrimitive = isPrimitive || self.isType(type, typeCheck: Character.self) || self.isType(type, typeCheck: String.self)
+        
+        return isPrimitive
     }()
-    public lazy var primitiveType: Any.Type? = {
+    public lazy private (set) var primitiveType: Any.Type? = {
         /* Condition validation */
         if !self.isPrimitive {
             return nil
         }
         let type = self.mirrorType.subjectType
         
-        // Bool
-        if type == Bool.self || type == Optional<Bool>.self {
+        if self.isType(type, typeCheck: Bool.self) {
             return Bool.self
-        }
-
-            // Int
-        else if type == Int.self || type == Optional<Int>.self {
+        } else if self.isType(type, typeCheck: Int.self) {
             return Int.self
-        } else if type == Int8.self || type == Optional<Int8>.self {
+        } else if self.isType(type, typeCheck: Int8.self) {
             return Int8.self
-        } else if type == Int16.self || type == Optional<Int16>.self {
+        } else if self.isType(type, typeCheck: Int16.self) {
             return Int16.self
-        } else if type == Int32.self || type == Optional<Int32>.self {
+        } else if self.isType(type, typeCheck: Int32.self) {
             return Int32.self
-        } else if type == Int64.self || type == Optional<Int64>.self {
+        } else if self.isType(type, typeCheck: Int64.self) {
             return Int64.self
-        }
-
-            // UInt
-        else if type == UInt.self || type == Optional<UInt>.self {
+        } else if self.isType(type, typeCheck: UInt.self) {
             return UInt.self
-        } else if type == UInt8.self || type == Optional<UInt8>.self {
+        } else if self.isType(type, typeCheck: UInt8.self) {
             return UInt8.self
-        } else if type == UInt16.self || type == Optional<UInt16>.self {
+        } else if self.isType(type, typeCheck: UInt16.self) {
             return UInt16.self
-        } else if type == UInt32.self || type == Optional<UInt32>.self {
+        } else if self.isType(type, typeCheck: UInt32.self) {
             return UInt32.self
-        } else if type == UInt64.self || type == Optional<UInt64>.self {
+        } else if self.isType(type, typeCheck: UInt64.self) {
             return UInt64.self
-        }
-
-            // Float
-        else if type == Float.self || type == Optional<Float>.self {
+        } else if self.isType(type, typeCheck: Float.self) {
             return Float.self
-        } else if type == Float32.self || type == Optional<Float32>.self {
+        } else if self.isType(type, typeCheck: Float32.self) {
             return Float32.self
-        } else if type == Float64.self || type == Optional<Float64>.self {
+        } else if self.isType(type, typeCheck: Float64.self) {
             return Float64.self
-        }
-
-            // Double
-        else if type == Double.self || type == Optional<Double>.self {
+        } else if self.isType(type, typeCheck: Double.self) {
             return Double.self
-        }
-
-            // Character
-        else if type == Character.self || type == Optional<Character>.self {
+        } else if self.isType(type, typeCheck: Character.self) {
             return Character.self
         } else {
             return String.self
         }
     }()
 
-    // Object type
+    /// Check whether the subject's type is class or not, can be ObjC's class or Swift's class. If
+    /// subject's type is class then it should return the unwrap subject's class.
     public lazy var isClass: Bool = {
         if !self.isOptional {
-            return self.mirrorType.displayStyle == Mirror.DisplayStyle.class
+            return self.mirrorType.displayStyle == .class
         }
 
         if let clazz = self.classType {
@@ -207,7 +187,7 @@ public final class FwiReflector {
         }
         return false
     }()
-    public lazy var isObject: Bool = {
+    public lazy var isObject: Bool = {  /// Check whether the subject's type is ObjC's class or not.
         if let clazz = self.classType {
             return (clazz is NSObject.Type)
         }
@@ -215,16 +195,13 @@ public final class FwiReflector {
     }()
     public lazy var classType: AnyClass? = {
         let type = self.extractType()
-        return self.lookupClassType(type)
+        return self.lookupClass(type)
     }()
 
-    // Collection type
+    /// Check whether the subject's type is set or not.
     public lazy var isSet: Bool = {
         if !self.isOptional {
-            if let style = self.mirrorType.displayStyle , style == .set {
-                return true
-            }
-            return false
+            return self.mirrorType.displayStyle == .set
         }
 
         let type = self.extractType()
@@ -235,10 +212,7 @@ public final class FwiReflector {
     }()
     public lazy var isCollection: Bool = {
         if !self.isOptional {
-            if let style = self.mirrorType.displayStyle , style == .collection {
-                return true
-            }
-            return false
+            return self.mirrorType.displayStyle == .collection
         }
 
         let type = self.extractType()
@@ -300,9 +274,6 @@ public final class FwiReflector {
         return (key, value)
     }()
 
-    fileprivate var mirrorName: String
-    fileprivate var mirrorType: Mirror
-
     // MARK: Class's public methods
 
     // MARK: Class's private methods
@@ -338,6 +309,9 @@ public final class FwiReflector {
 
         return (key, value)
     }
+    
+    /// Extract type from optional string description. Currently, there is no other available method
+    /// to find subject's type from optional.
     fileprivate func extractType() -> String {
         var subjectType = "\(self.mirrorType.subjectType)"
         
@@ -354,24 +328,30 @@ public final class FwiReflector {
         } else {
             subjectType = subjectType.substring(startIndex: 9, reverseIndex: -1)
         }
-        
-//        // Remove private pattern
-//        if subjectType.matchPattern("\\(\\w+\\sin\\s_[a-zA-Z0-9]{32}\\)") {
-//            subjectType = subjectType.substring(startIndex: 1, reverseIndex: -38)
-//        }
         return subjectType
     }
 
     fileprivate func generateReflector(_ type: String) -> FwiReflector? {
-        if let clazz = self.lookupClassType(type) {
+        if let clazz = self.lookupClass(type) {
             return FwiReflector(mirrorName: type, mirrorValue: clazz)
-        } else if let primitiveType = self.lookupPrimitiveType(type) {
+        } else if let primitiveType = self.lookupPrimitive(type) {
             return FwiReflector(mirrorName: type, mirrorValue: primitiveType)
         }
         return nil
     }
-
-    fileprivate func lookupClassType(_ className: String) -> AnyClass? {
+    
+    /// Validate if subject's type is right type that we are looking for, either optional or non
+    /// optional.
+    fileprivate func isType<T>(_ type: Any.Type, typeCheck check: T.Type) -> Bool {
+        if type == T.self || type == Optional<T>.self {
+            return true
+        }
+        return false
+    }
+    
+    /// Lookup subject's class from all loaded bundle. Currently there is no other way to detect if
+    /// class's name belong to which bundle.
+    fileprivate func lookupClass(_ className: String) -> AnyClass? {
         /* Condition validation */
         if className.characters.count <= 0 {
             return nil
@@ -381,11 +361,8 @@ public final class FwiReflector {
             return clazz
         } else {
             for bundle in Bundle.allBundles {
-                if let module = bundle.bundleIdentifier?.split(".").last , bundle.load() {
-                    let clazzName = "\(module).\(className)"
-                    
-                    let clazz: AnyClass? = NSClassFromString(clazzName)
-                    if clazz != nil {
+                if let module = bundle.bundleIdentifier?.split(".").last, bundle.load() {
+                    if let clazz = NSClassFromString("\(module).\(className)") {
                         return clazz
                     }
                 }
@@ -394,7 +371,7 @@ public final class FwiReflector {
         return nil
     }
 
-    public func lookupPrimitiveType(_ primitiveType: String) -> Any? {
+    public func lookupPrimitive(_ primitiveType: String) -> Any? {
         // Convert from string to Any.Type
         switch primitiveType {
 
@@ -483,6 +460,15 @@ public extension FwiReflector {
             }
         }
         return properties
+    }
+}
+
+
+// Legacy
+public extension FwiReflector {
+    
+    public var propertyName: String {
+        return mirrorName
     }
 }
 

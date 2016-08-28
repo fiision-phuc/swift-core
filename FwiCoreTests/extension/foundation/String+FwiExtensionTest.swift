@@ -89,6 +89,11 @@ class StringFwiExtensionTest: XCTestCase {
         let text = "FwiCore/FWICORE"
         XCTAssertEqual(text.split("/"), ["FwiCore", "FWICORE"], "\(text) should become array after split.")
     }
+    
+    func testSubstringToIndex() {
+        let text = "FwiCore"
+        XCTAssertEqual(text.substring(endIndex: 5), "FwiCo", "\(text) should become 'FwiCo' after sub string.")
+    }
     func testSubstring() {
         let text = "FwiCore"
         XCTAssertEqual(text.substring(startIndex: 0, reverseIndex: 1), "", "\(text) should become '' after sub string.")
