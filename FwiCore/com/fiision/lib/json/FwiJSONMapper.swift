@@ -87,7 +87,7 @@ open class FwiJSONMapper: NSObject {
             if p.isPrimitive {
                 // Find Type Primitive
                 if let primitiveType = p.primitiveType {
-                    var value = p.lookupPrimitiveType("\(primitiveType)")
+                    var value = p.lookupPrimitive("\(primitiveType)")
 
                     // Convert value first
                     value <- valueJson
