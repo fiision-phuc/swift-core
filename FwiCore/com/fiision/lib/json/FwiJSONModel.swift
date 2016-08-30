@@ -44,6 +44,9 @@ public protocol FwiJSONModel {
 
     /** Define key mapper. */
     @objc optional func keyMapper() -> [String:String]
+    
+    /** Convert json for mapper */
+    @objc optional func convertJson(from original:[String: AnyObject]) -> [String: AnyObject]
 
     /** Validate optional properties. */
     @objc optional func propertyIsOptional() -> [String]
