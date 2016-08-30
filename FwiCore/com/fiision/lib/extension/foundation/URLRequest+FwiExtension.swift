@@ -52,17 +52,28 @@ public enum FwiRequestType {
 
         case .Raw(let url, let requestMethod, let extraHeaders, let rawParam):
             var r = URLRequest(url: url, requestMethod: requestMethod, extraHeaders: extraHeaders)
-            r.generateRawForm(rawParam)
+            if requestMethod == .patch || requestMethod == .post || requestMethod == .put {
+                r.generateRawForm(rawParam)
+            }
             return r
 
         case .URLEncode(let url, let requestMethod, let extraHeaders, let queryParams):
-            var r = URLRequest(url: url, requestMethod: requestMethod, extraHeaders: extraHeaders)
-            r.generateURLEncodedForm(queryParams: queryParams)
-            return r
+            if requestMethod == .patch || requestMethod == .post || requestMethod == .put {
+                var r = URLRequest(url: url, requestMethod: requestMethod, extraHeaders: extraHeaders)
+                r.generateURLEncodedForm(queryParams: queryParams)
+                return r
+            } else {
+                guard let u = url + queryParams, requestMethod == .get else {
+                    return URLRequest(url: url, requestMethod: requestMethod, extraHeaders: extraHeaders)
+                }
+                return URLRequest(url: u, requestMethod: requestMethod, extraHeaders: extraHeaders)
+            }
 
         case .Multipart(let url, let requestMethod, let extraHeaders, let queryParams, let fileParams):
             var r = URLRequest(url: url, requestMethod: requestMethod, extraHeaders: extraHeaders)
-            r.generateMultipartForm(queryParams: queryParams, fileParams: fileParams)
+            if requestMethod == .patch || requestMethod == .post || requestMethod == .put {
+                r.generateMultipartForm(queryParams: queryParams, fileParams: fileParams)
+            }
             return r
         }
     }
