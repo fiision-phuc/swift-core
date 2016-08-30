@@ -70,20 +70,20 @@ public func FwiConvertToRadian(degreeValue degree: Double) -> Double {
 // MARK: Custom Operator
 infix operator <-
 
-func <- <T>(left: inout T, right: AnyObject?) {
+public func <- <T>(left: inout T, right: AnyObject?) {
     if let value = right as? T {
         left = value
     }
 }
-func <- <T>(left: inout T?, right: AnyObject?) {
+public func <- <T>(left: inout T?, right: AnyObject?) {
     left = right as? T
 }
 
-func <- <T: NSObject>(left: inout T, right: AnyObject?) {
+public func <- <T: NSObject>(left: inout T, right: AnyObject?) {
     let _ = FwiJSONMapper.mapObjectToModel(right, model: &left)
 }
 
-func <- <T>(left: inout [T], right: [AnyObject]?) {
+public func <- <T>(left: inout [T], right: [AnyObject]?) {
     if let arrValue = right {
         var temp = [T]()
 
@@ -98,7 +98,7 @@ func <- <T>(left: inout [T], right: [AnyObject]?) {
         }
     }
 }
-func <- <T>(left: inout [T]?, right: [AnyObject]?) {
+public func <- <T>(left: inout [T]?, right: [AnyObject]?) {
     if let arrValue = right {
         var temp = [T]()
 
