@@ -308,10 +308,10 @@ open class FwiJSONMapper: NSObject {
 }
 
 // Creation
-extension FwiJSONMapper {
+public extension FwiJSONMapper {
 
     // MARK: Class's static constructors
-    class func mapObjectToModel<T: NSObject>(_ object: Any?, model m: inout T) -> NSError? {
+    public class func mapObjectToModel<T: NSObject>(_ object: Any?, model m: inout T) -> NSError? {
         if let dictionary = object as? [String: AnyObject] {
             return FwiJSONMapper().mapDictionaryToModel(dictionary, model: &m)
         }
@@ -319,7 +319,7 @@ extension FwiJSONMapper {
         return NSError(domain: NSURLErrorKey, code: NSURLErrorUnknown, userInfo: [NSLocalizedDescriptionKey: "Parse object to dictionary error !!!"])
     }
 
-    class func toDictionary<T: NSObject>(_ object: T) -> [String: Any] {
+    public class func toDictionary<T: NSObject>(_ object: T) -> [String: Any] {
         var result: [String: Any] = [:]
 
         // Create Mirror Value Follow Properties
