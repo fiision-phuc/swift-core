@@ -124,3 +124,21 @@ public extension Data {
         }
     }
 }
+
+// Open file
+public extension Data {
+    /** Open file at url */
+    public static func openFile(atURL url: URL?, readingMode: Data.ReadingOptions = []) -> Data? {
+        guard let url = url, url.isFileURL else {
+            return nil
+        }
+        
+        do{
+            return try Data(contentsOf: url, options: readingMode)
+        }catch {
+            return nil
+        }
+        
+    }
+}
+
