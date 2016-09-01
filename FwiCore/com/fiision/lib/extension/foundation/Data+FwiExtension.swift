@@ -156,3 +156,20 @@ public extension Data {
     }
 }
 
+// NSCoding
+extension NSCoding {
+    /** Using archive to data*/
+    public func archiveToData() -> Data {
+        return NSKeyedArchiver.archivedData(withRootObject: self)
+    }
+    
+    /** Saving object to userdefault*/
+    @discardableResult
+    public func saveToUserDefault(forKey k: String) -> Bool {
+        let userDefault = UserDefaults.standard
+        userDefault.set(archiveToData(), forKey: k)
+        return userDefault.synchronize()
+    }
+}
+
+
