@@ -157,7 +157,7 @@ public extension Data {
 }
 
 // NSCoding
-extension NSCoding {
+public extension NSCoding {
     /** Using archive to data*/
     public func archiveToData() -> Data {
         return NSKeyedArchiver.archivedData(withRootObject: self)
