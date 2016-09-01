@@ -170,6 +170,16 @@ public extension NSCoding {
         userDefault.set(archiveToData(), forKey: k)
         return userDefault.synchronize()
     }
+    /** Saving object to userdefault*/
+    public static func loadFromUserDefault(with key:String) -> Self? {
+       let userDefault = UserDefaults.standard
+        guard let data = userDefault.value(forKey: key) as? Data , data.count > 0 else {
+            return nil
+        }
+        
+        return NSKeyedUnarchiver.unarchiveObject(with: data) as? Self
+    }
+    
 }
 
 
