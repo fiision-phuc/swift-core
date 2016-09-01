@@ -54,7 +54,7 @@ public extension FwiCoreData where Self: NSManagedObject {
             return nil
         }
 
-        var entities = [Self]()
+        var entities: [Self]?
         c.performAndWait {
             let request = NSFetchRequest<Self>(entityName: NSStringFromClass(self))
 
@@ -75,21 +75,11 @@ public extension FwiCoreData where Self: NSManagedObject {
             }
 
             // Perform fetch
-            do {
-                let result = try c.fetch(request)
-                result.forEach({ (obj) in
-                    entities.append(obj)
-                })
-            } catch let err as NSError {
-                FwiLog("There was an error when fetch all entities (\(err))!")
-            }
+            entities = try? c.fetch(request)
         }
 
         // Return result
-        if entities.count > 0 {
-            return entities
-        }
-        return nil
+        return entities
     }
 
     /** Fetch an entity base on search condition. Create new if necessary. */
