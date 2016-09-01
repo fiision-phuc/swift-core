@@ -140,5 +140,19 @@ public extension Data {
         }
         
     }
+    
+    @discardableResult
+    public func write(toUrl url: URL?, options: Data.WritingOptions = []) -> Error? {
+        guard let url = url, url.isFileURL else {
+            return NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: nil)
+        }
+        
+        do {
+            try self.write(to: url, options: options)
+            return nil
+        } catch let error {
+            return error
+        }
+    }
 }
 
