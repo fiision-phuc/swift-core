@@ -50,6 +50,9 @@
 		BE9C00DA1D6D3A370052F634 /* Data+FwiBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9C00D31D6D3A370052F634 /* Data+FwiBase64.swift */; };
 		BE9C00DC1D6D3A370052F634 /* String+FwiBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9C00D51D6D3A370052F634 /* String+FwiBase64.swift */; };
 		BEA6D1E41A1D2090005021BB /* FwiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA6D1D81A1D2090005021BB /* FwiCore.framework */; };
+		BEB887501D7C312E0067EDA3 /* FwiEntityCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB8874F1D7C312E0067EDA3 /* FwiEntityCollectionViewModel.swift */; };
+		BEB887521D7C31A30067EDA3 /* FwiEntityTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB887511D7C31A30067EDA3 /* FwiEntityTableViewModel.swift */; };
+		BEB887581D7C8B980067EDA3 /* FwiEntityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB887571D7C8B980067EDA3 /* FwiEntityViewModel.swift */; };
 		BEFAAA8A1D70947D004B8B11 /* URL+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFAAA891D70947D004B8B11 /* URL+FwiExtensionTest.swift */; };
 		BEFAAA8C1D712773004B8B11 /* FileManager+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFAAA8B1D712773004B8B11 /* FileManager+FwiExtensionTest.swift */; };
 		BEFAAA8E1D7288C7004B8B11 /* FwiJSONMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFAAA8D1D7288C7004B8B11 /* FwiJSONMapper.swift */; };
@@ -112,6 +115,9 @@
 		BEA6D1DC1A1D2090005021BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BEA6D1E31A1D2090005021BB /* FwiCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FwiCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEA6D1E91A1D2090005021BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BEB8874F1D7C312E0067EDA3 /* FwiEntityCollectionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiEntityCollectionViewModel.swift; sourceTree = "<group>"; };
+		BEB887511D7C31A30067EDA3 /* FwiEntityTableViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiEntityTableViewModel.swift; sourceTree = "<group>"; };
+		BEB887571D7C8B980067EDA3 /* FwiEntityViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiEntityViewModel.swift; sourceTree = "<group>"; };
 		BEFAAA891D70947D004B8B11 /* URL+FwiExtensionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+FwiExtensionTest.swift"; sourceTree = "<group>"; };
 		BEFAAA8B1D712773004B8B11 /* FileManager+FwiExtensionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+FwiExtensionTest.swift"; sourceTree = "<group>"; };
 		BEFAAA8D1D7288C7004B8B11 /* FwiJSONMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONMapper.swift; sourceTree = "<group>"; };
@@ -225,6 +231,7 @@
 				BE5ED6DB1D6F03C0004A87D6 /* operation */,
 				BE5ED6DD1D6F03C0004A87D6 /* persistent */,
 				BE5ED6E01D6F03C0004A87D6 /* reachability */,
+				BEB8874E1D7C312E0067EDA3 /* view_model */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -423,6 +430,16 @@
 			name = supporting_files;
 			sourceTree = "<group>";
 		};
+		BEB8874E1D7C312E0067EDA3 /* view_model */ = {
+			isa = PBXGroup;
+			children = (
+				BEB887571D7C8B980067EDA3 /* FwiEntityViewModel.swift */,
+				BEB8874F1D7C312E0067EDA3 /* FwiEntityCollectionViewModel.swift */,
+				BEB887511D7C31A30067EDA3 /* FwiEntityTableViewModel.swift */,
+			);
+			path = view_model;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -539,6 +556,7 @@
 				BE79BE531D6F36750092E191 /* NSNumber+FwiExtension.swift in Sources */,
 				BE5ED6E61D6F03C0004A87D6 /* FwiMultipartParam.swift in Sources */,
 				BE337FB41D6EFA380078AE84 /* FwiJSONModel.swift in Sources */,
+				BEB887581D7C8B980067EDA3 /* FwiEntityViewModel.swift in Sources */,
 				BE5ED6E41D6F03C0004A87D6 /* FwiDataParam.swift in Sources */,
 				BE5ED6E91D6F03C0004A87D6 /* FwiPersistentManager.swift in Sources */,
 				BE79BE5B1D6F36750092E191 /* UISplitViewController+FwiExtension.swift in Sources */,
@@ -549,6 +567,7 @@
 				BE79BE501D6F36750092E191 /* Data+FwiExtension.swift in Sources */,
 				BE5ED6E51D6F03C0004A87D6 /* FwiFormParam.swift in Sources */,
 				BE9C00DA1D6D3A370052F634 /* Data+FwiBase64.swift in Sources */,
+				BEB887501D7C312E0067EDA3 /* FwiEntityCollectionViewModel.swift in Sources */,
 				BE79BE541D6F36750092E191 /* String+FwiExtension.swift in Sources */,
 				BE64B3351D7A8D3100EC8CBD /* UIViewController+FwiExtension.swift in Sources */,
 				BE5ED6E71D6F03C0004A87D6 /* FwiOperation.swift in Sources */,
@@ -558,6 +577,7 @@
 				BE79BE511D6F36750092E191 /* FileManager+FwiExtension.swift in Sources */,
 				BE79BE551D6F36750092E191 /* URL+FwiExtension.swift in Sources */,
 				BE337F891D6E94560078AE84 /* String+FwiHex.swift in Sources */,
+				BEB887521D7C31A30067EDA3 /* FwiEntityTableViewModel.swift in Sources */,
 				BE79BE5C1D6F36750092E191 /* UITableViewController+FwiExtension.swift in Sources */,
 				BE79BE5D1D6F36750092E191 /* UIView+FwiExtension.swift in Sources */,
 				BE79BE581D6F36750092E191 /* UIColor+FwiExtension.swift in Sources */,
