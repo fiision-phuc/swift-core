@@ -125,24 +125,26 @@ public extension Data {
     }
 }
 
-// Open file
+/// MARK: Open file
 public extension Data {
-    /** Open file at url */
-    public static func openFile(atURL url: URL?, readingMode: Data.ReadingOptions = []) -> Data? {
+    
+    /// Read data from file.
+    public static func readFromFile(atURL url: URL?, readingMode: Data.ReadingOptions = []) -> Data? {
         guard let url = url, url.isFileURL else {
             return nil
         }
         
-        do{
+        do {
             return try Data(contentsOf: url, options: readingMode)
-        }catch {
-            return nil
+        } catch _ {
+            // Ignore all error and return nil
         }
-        
+        return nil
     }
     
+    /// Write data to file.
     @discardableResult
-    public func write(toUrl url: URL?, options: Data.WritingOptions = []) -> Error? {
+    public func writeToFile(toUrl url: URL?, options: Data.WritingOptions = []) -> Error? {
         guard let url = url, url.isFileURL else {
             return NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: nil)
         }
@@ -150,37 +152,8 @@ public extension Data {
         do {
             try self.write(to: url, options: options)
             return nil
-        } catch let error {
+        } catch let error as NSError {
             return error
         }
     }
 }
-
-// NSCoding
-public extension NSCoding {
-    /** Using archive to data*/
-    public func archiveToData() -> Data {
-        return NSKeyedArchiver.archivedData(withRootObject: self)
-    }
-    
-    /** Saving object to userdefault*/
-    @discardableResult
-    public func saveToUserDefault(forKey k: String) -> Bool {
-        let userDefault = UserDefaults.standard
-        userDefault.set(archiveToData(), forKey: k)
-        return userDefault.synchronize()
-    }
-    
-    /** Load object from userdefault*/
-    public static func loadFromUserDefault(with key:String) -> Self? {
-       let userDefault = UserDefaults.standard
-        guard let data = userDefault.value(forKey: key) as? Data , data.count > 0 else {
-            return nil
-        }
-        
-        return NSKeyedUnarchiver.unarchiveObject(with: data) as? Self
-    }
-    
-}
-
-
