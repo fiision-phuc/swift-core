@@ -115,20 +115,27 @@ open class Test5: NSObject {
 
 class FwiReflectorTests: XCTestCase {
 
-
-    // MARK: Class's properties
-
-
-    // MARK: Initialize test case
+    // MARK: Setup
     override func setUp() {
         super.setUp()
     }
+
+    // MARK: Teardown
     override func tearDown() {
         super.tearDown()
     }
 
+    // MARK: Test cases
+    func testProperties() {
+        var properties = FwiReflector.properties(withClass: Test1.self, baseClass: NSObject.self)
+        XCTAssertEqual(properties.count, 0, "Expected 4 but found \(properties.count).")
 
-    // MARK: Test logics
+        properties = FwiReflector.properties(withClass: Test4.self, baseClass: NSObject.self)
+        XCTAssertEqual(properties.count, 4, "Expected 4 but found \(properties.count).")
+        XCTAssertEqual(properties[0].mirrorName, "object1", "Expected 'object1' but found '\(properties[0].mirrorName)'.")
+        XCTAssertTrue(properties[1].structType == Data.self, "Expected \"\(Data.self)\" but found \"\(properties[1].structType)\".")
+    }
+    
     func testNonOptional() {
         let intValue: Int = 100
         var r = FwiReflector(mirrorName: "intValue", mirrorValue: intValue)

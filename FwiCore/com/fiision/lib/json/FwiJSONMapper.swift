@@ -53,7 +53,7 @@ open class FwiJSONMapper: NSObject {
     open func mapDictionaryToModel<T: NSObject>(_ dictionary: [String: AnyObject], model m: inout T) -> NSError? {
         var dictionary =  (m as? FwiJSONModel)?.convertJson?(from: dictionary) ?? dictionary
         let optionalProperties = (m as? FwiJSONModel)?.propertyIsOptional?() ?? []
-        var properties = FwiReflector.propertiesWithClass(type(of: m))
+        var properties = FwiReflector.properties(withClass: type(of: m))
         var errorUserInfo: [String: Any] = [:]
 
         // Override dictionary if neccessary
@@ -326,7 +326,7 @@ public extension FwiJSONMapper {
         let mirror = Mirror(reflecting: object)
 
         // Reflector Object To Identify Type Properties
-        let reflectorItems = FwiReflector.propertiesWithClass(type(of: object))
+        let reflectorItems = FwiReflector.properties(withClass: type(of: object))
 
         // Create dictionary from object
         var dictionaryKey: [String: String] = [:]

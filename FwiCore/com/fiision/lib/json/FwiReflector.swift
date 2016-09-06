@@ -93,7 +93,7 @@ public final class FwiReflector {
     }()
     public lazy private (set) var structType: Any.Type? = {
         /* Condition validation */
-        if !self.isPrimitive {
+        if !self.isStruct {
             return nil
         }
 
@@ -457,22 +457,20 @@ public final class FwiReflector {
 public extension FwiReflector {
 
     // MARK: Class's static constructors
-    public class func propertiesWithClass(_ classType: AnyClass) -> [FwiReflector] {
-        return FwiReflector.propertiesWithClass(classType, baseClass: NSObject.self)
+    public class func properties(withClass classType: AnyClass) -> [FwiReflector] {
+        return FwiReflector.properties(withClass: classType, baseClass: NSObject.self)
     }
-    public class func propertiesWithClass<T: NSObject>(_ classType: AnyClass, baseClass: T.Type) -> [FwiReflector] {
-        var typeClass: AnyClass = classType
+    public class func properties<T: NSObject>(withClass classType: AnyClass, baseClass: T.Type) -> [FwiReflector] {
         var properties = [FwiReflector]()
 
-        while typeClass != T.self {
-            /* Condition validation: validate class type */
-            guard let aClass = typeClass as? T.Type else {
-                break
-            }
+        /* Condition validation: Validate class type */
+        guard let aClass = classType as? T.Type else {
+            return properties
+        }
 
-            // Scan class's properties
-            let o = aClass.init()
-            let mirror = Mirror(reflecting: o)
+        let o = aClass.init()
+        var mirror = Mirror(reflecting: o)
+        repeat {
             properties = mirror.children.reduce(properties, { (property, child) -> [FwiReflector] in
                 var property = property
                 if let label = child.label {
@@ -482,13 +480,13 @@ public extension FwiReflector {
                 return property
             })
 
-            // Lookup super class
-            if let parentClass = aClass.superclass() {
-                typeClass = parentClass
+            if let superMirror = mirror.superclassMirror {
+                mirror = superMirror
             } else {
                 break
             }
         }
+        while mirror.subjectType != NSObject.self
         return properties
     }
 }
