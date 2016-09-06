@@ -41,7 +41,7 @@ import CoreData
 import Foundation
 
 
-public final class FwiEntityTableViewModel<T: NSManagedObject> : FwiEntityViewModel<T> {
+public final class FwiEntityTableViewModel<T: NSFetchRequestResult> : FwiEntityViewModel<T> {
 
     /// MARK: Class's constructors
     public convenience init(_ tableView: UITableView?, context c: NSManagedObjectContext?) {

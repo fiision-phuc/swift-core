@@ -41,7 +41,7 @@ import CoreData
 import Foundation
 
 
-open class FwiEntityViewModel<T: NSManagedObject> : NSObject, NSFetchedResultsControllerDelegate {
+open class FwiEntityViewModel<T: NSFetchRequestResult> : NSObject, NSFetchedResultsControllerDelegate {
 
     /// MARK: Class's constructors
     public convenience init(_ context: NSManagedObjectContext?) {

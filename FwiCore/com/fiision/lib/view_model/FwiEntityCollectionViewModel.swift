@@ -41,7 +41,7 @@ import CoreData
 import Foundation
 
 
-public final class FwiEntityCollectionViewModel<T: NSManagedObject> : FwiEntityViewModel<T> {
+public final class FwiEntityCollectionViewModel<T: NSFetchRequestResult> : FwiEntityViewModel<T> {
 
     /// MARK: Class's constructors
     public convenience init(_ collectionView: UICollectionView?, context c: NSManagedObjectContext?) {
