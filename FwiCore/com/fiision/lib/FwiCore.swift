@@ -67,66 +67,19 @@ public func FwiConvertToRadian(degreeValue degree: Double) -> Double {
     return radian
 }
 
-// MARK: Custom Operator
-infix operator <-
-
-public func <- <T>(left: inout T, right: AnyObject?) {
-    if let value = right as? T {
-        left = value
-    }
-}
-public func <- <T>(left: inout T?, right: AnyObject?) {
-    left = right as? T
-}
-
-public func <- <T: NSObject>(left: inout T, right: AnyObject?) {
-    let _ = FwiJSONMapper.mapObjectToModel(right, model: &left)
-}
-
-public func <- <T>(left: inout [T], right: [AnyObject]?) {
-    if let arrValue = right {
-        var temp = [T]()
-
-        arrValue.forEach {
-            if let value = $0 as? T {
-                temp.append(value)
-            }
-        }
-
-        if temp.count > 0 {
-            left = temp
-        }
-    }
-}
-public func <- <T>(left: inout [T]?, right: [AnyObject]?) {
-    if let arrValue = right {
-        var temp = [T]()
-
-        arrValue.forEach {
-            if let value = $0 as? T {
-                temp.append(value)
-            }
-        }
-
-        if temp.count > 0 {
-            left = temp
-        }
-    }
-}
-
 // MARK: HTTP Network
-public enum FwiHttpMethod: UInt8 {
-    case copy    = 0x00
-    case delete  = 0x01
-    case get     = 0x02
-    case head    = 0x03
-    case link    = 0x04
-    case options = 0x05
-    case patch   = 0x06
-    case post    = 0x07
-    case purge   = 0x08
-    case put     = 0x09
-    case unlink  = 0x0a
+public enum FwiHttpMethod {
+    case copy
+    case delete
+    case get
+    case head
+    case link
+    case options
+    case patch
+    case post
+    case purge
+    case put
+    case unlink
 }
 
 public func FwiNetworkStatusIsSuccces(_ networkStatus: FwiNetworkStatus) -> Bool {

@@ -41,15 +41,17 @@ import Foundation
 
 public final class FwiReflector {
 
-    /// MARK: Class's constructors
+    // MARK: Class's constructors
     public init(mirrorName name: String, mirrorValue value: Any) {
         mirrorName = name
         mirrorType = Mirror(reflecting: value)
         
     }
 
-    /// MARK: Class's properties
+    // MARK: Class's properties
+    /// Return subject's name.
     public private (set) var mirrorName: String
+    /// Return subject's reflector.
     public private (set) var mirrorType: Mirror
     
     /// Check whether the subject's type is optional type or not
@@ -59,7 +61,7 @@ public final class FwiReflector {
     
     /// Check whether the subject's type is enum or not. Currently, this property could not verify
     /// the optional enum.
-    public lazy var isEnum: Bool = {
+    public lazy private (set) var isEnum: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .enum
         } else {
@@ -129,6 +131,11 @@ public final class FwiReflector {
         isPrimitive = isPrimitive || self.isType(type, typeCheck: Double.self)
         isPrimitive = isPrimitive || self.isType(type, typeCheck: Character.self) || self.isType(type, typeCheck: String.self)
         
+        /* Condition validation: Check special case for NSString or NSMutableString */
+        isPrimitive = isPrimitive || (type == objcStringMirror.subjectType)
+        isPrimitive = isPrimitive || (type == objcOptionalStringMirror.subjectType)
+        isPrimitive = isPrimitive || (type == objcOptionalMutableStringMirror.subjectType)
+        
         return isPrimitive
     }()
     public lazy private (set) var primitiveType: Any.Type? = {
@@ -177,7 +184,7 @@ public final class FwiReflector {
 
     /// Check whether the subject's type is class or not, can be ObjC's class or Swift's class. If
     /// subject's type is class then it should return the unwrap subject's class.
-    public lazy var isClass: Bool = {
+    public lazy private (set) var isClass: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .class
         }
@@ -187,19 +194,20 @@ public final class FwiReflector {
         }
         return false
     }()
-    public lazy var isObject: Bool = {  /// Check whether the subject's type is ObjC's class or not.
+    /// Check whether the subject's type is ObjC's class or not.
+    public lazy private (set) var isObject: Bool = {
         if let clazz = self.classType {
             return (clazz is NSObject.Type)
         }
         return false
     }()
-    public lazy var classType: AnyClass? = {
+    public lazy private (set) var classType: AnyClass? = {
         let type = self.extractType()
         return self.lookupClass(type)
     }()
 
     /// Check whether the subject's type is set or not.
-    public lazy var isSet: Bool = {
+    public lazy private (set) var isSet: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .set
         }
@@ -210,7 +218,7 @@ public final class FwiReflector {
         }
         return false
     }()
-    public lazy var isCollection: Bool = {
+    public lazy private (set) var isCollection: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .collection
         }
@@ -221,7 +229,7 @@ public final class FwiReflector {
         }
         return false
     }()
-    public lazy var collectionType: FwiReflector? = {
+    public lazy private (set) var collectionType: FwiReflector? = {
         /* Condition validation */
         if !(self.isSet || self.isCollection) {
             return nil
@@ -238,7 +246,7 @@ public final class FwiReflector {
     }()
 
     // Dictionary type
-    public lazy var isDictionary: Bool = {
+    public lazy private (set) var isDictionary: Bool = {
         if !self.isOptional {
             if let style = self.mirrorType.displayStyle , style == .dictionary {
                 return true
@@ -252,7 +260,7 @@ public final class FwiReflector {
         }
         return false
     }()
-    public lazy var dictionaryType: (key: FwiReflector, value: FwiReflector)? = {
+    public lazy private (set) var dictionaryType: (key: FwiReflector, value: FwiReflector)? = {
         /* Condition validation */
         if !self.isDictionary {
             return nil
@@ -486,5 +494,6 @@ fileprivate let setName = "Set"
 fileprivate let nsSetName = "NSSet"
 fileprivate let nsMutableSetName = "NSMutableSet"
 // Mirror types
-fileprivate let nsStringType = Mirror(reflecting: NSString()).subjectType
-fileprivate let nsMutablestringType = Mirror(reflecting: NSMutableString()).subjectType
+fileprivate let objcStringMirror = Mirror(reflecting: NSMutableString())
+fileprivate let objcOptionalStringMirror = Mirror(reflecting: NSMutableString() as NSString?)
+fileprivate let objcOptionalMutableStringMirror = Mirror(reflecting: NSMutableString() as NSMutableString?)

@@ -486,3 +486,50 @@ public extension FwiJSONMapper {
 
     // MARK: Class's constructors
 }
+
+// MARK: Custom Operator
+infix operator <-
+
+public func <- <T>(left: inout T, right: AnyObject?) {
+    if let value = right as? T {
+        left = value
+    }
+}
+public func <- <T>(left: inout T?, right: AnyObject?) {
+    left = right as? T
+}
+
+public func <- <T: NSObject>(left: inout T, right: AnyObject?) {
+    let _ = FwiJSONMapper.mapObjectToModel(right, model: &left)
+}
+
+public func <- <T>(left: inout [T], right: [AnyObject]?) {
+    if let arrValue = right {
+        var temp = [T]()
+        
+        arrValue.forEach {
+            if let value = $0 as? T {
+                temp.append(value)
+            }
+        }
+        
+        if temp.count > 0 {
+            left = temp
+        }
+    }
+}
+public func <- <T>(left: inout [T]?, right: [AnyObject]?) {
+    if let arrValue = right {
+        var temp = [T]()
+        
+        arrValue.forEach {
+            if let value = $0 as? T {
+                temp.append(value)
+            }
+        }
+        
+        if temp.count > 0 {
+            left = temp
+        }
+    }
+}
