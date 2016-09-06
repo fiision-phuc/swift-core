@@ -64,9 +64,8 @@ public final class FwiReflector {
     public lazy private (set) var isEnum: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .enum
-        } else {
-            return false
         }
+        return false
     }()
     
     /// Check whether the subject's type is tuple or not.
@@ -79,45 +78,37 @@ public final class FwiReflector {
         return (type[type.startIndex] == "(" && type[type.characters.index(type.endIndex, offsetBy: -1)] == ")")
     }()
     
-    /// Check whether the subject's type is struct or not.
+    /// Check whether the subject's type is struct or not. If subject's type is struct then it
+    /// should return the unwrap subject's struct.
     public lazy private (set) var isStruct: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .`struct`
-            /*
-            if let style = self.mirrorType.displayStyle, style == .`struct` {
-                let nTest: String = "\(self.mirrorType.subjectType)"
-                let result: (Bool, Bool) = (nTest == "URL", nTest == "Date")
-                switch result {
-                case (true, false):
-                    self.structType = URL.self
-                    return true
-                case (false, true):
-                    self.structType = Date.self
-                    return true
-                default:
-                    return true
-                }
-            }
-            return false
-            */
         }
-        
-        let m = self.mirrorType.displayStyle
-        let nTest: String = "\(self.mirrorType.subjectType)"
-        let result: (Bool, Bool) = (nTest.contains("<URL>"), nTest.contains("<Date>"))
-        switch result {
-        case (true, false):
-            self.structType = URL.self
+
+        let type = self.mirrorType.subjectType
+        if type == optionalDataMirror.subjectType || type == optionalDateMirror.subjectType || type == optionalUrlMirror.subjectType {
             return true
-        case (false, true):
-            self.structType = Date.self
-            return true
-        default:
-            return false
         }
+        return false
     }()
-    
-    public private (set) var structType: Any.Type = String.self
+    public lazy private (set) var structType: Any.Type? = {
+        /* Condition validation */
+        if !self.isPrimitive {
+            return nil
+        }
+
+        let type = self.mirrorType.subjectType
+        if type == dataMirror.subjectType || type == optionalDataMirror.subjectType {
+            return dataMirror.subjectType
+        }
+        else if type == dateMirror.subjectType || type == optionalDateMirror.subjectType {
+            return dateMirror.subjectType
+        }
+        else if type == urlMirror.subjectType || type == optionalUrlMirror.subjectType {
+            return urlMirror.subjectType
+        }
+        return nil
+    }()
     
     /// Check whether the subject's type is primitive or not. If subject's type is primitive then
     /// it should return the unwrap subject's type.
@@ -185,17 +176,22 @@ public final class FwiReflector {
     /// Check whether the subject's type is class or not, can be ObjC's class or Swift's class. If
     /// subject's type is class then it should return the unwrap subject's class.
     public lazy private (set) var isClass: Bool = {
-        if !self.isOptional {
-            return self.mirrorType.displayStyle == .class
-        }
-
         if let clazz = self.classType {
             return true
         }
         return false
     }()
-    /// Check whether the subject's type is ObjC's class or not.
     public lazy private (set) var isObject: Bool = {
+        // Validate ObjC Collection
+        let type = self.mirrorType.subjectType
+        if  type == objcArrayMirror.subjectType || type == objcOptionalArrayMirror.subjectType || type == objcOptionalMutableArrayMirror.subjectType ||
+            type == objcDictionaryMirror.subjectType || type == objcOptionalDictionaryMirror.subjectType || type == objcOptionalMutableDictionaryMirror.subjectType ||
+            type == objcSetMirror.subjectType || type == objcOptionalSetMirror.subjectType || type == objcOptionalMutableSetMirror.subjectType
+        {
+            return true
+        }
+
+        // Validate Swift
         if let clazz = self.classType {
             return (clazz is NSObject.Type)
         }
@@ -212,36 +208,47 @@ public final class FwiReflector {
             return self.mirrorType.displayStyle == .set
         }
 
-        let type = self.extractType()
-        if type == nsSetName || type == nsMutableSetName || type.hasPrefix(setName) {
+        // Validate ObjC
+        let type = self.mirrorType.subjectType
+        if type == objcOptionalSetMirror.subjectType || type == objcOptionalMutableSetMirror.subjectType {
             return true
         }
-        return false
+
+        // Validate Swift
+        let swiftType = self.extractType()
+        return swiftType.hasPrefix(setName)
     }()
     public lazy private (set) var isCollection: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .collection
         }
 
-        let type = self.extractType()
-        if type == nsArrayName || type == nsMutableArrayName || type.hasPrefix(arrayName) {
+        // Validate ObjC
+        let type = self.mirrorType.subjectType
+        if type == objcOptionalArrayMirror.subjectType || type == objcOptionalMutableArrayMirror.subjectType {
             return true
         }
-        return false
+
+        // Validate Swift
+        let swiftType = self.extractType()
+        return swiftType.hasPrefix(arrayName)
     }()
     public lazy private (set) var collectionType: FwiReflector? = {
         /* Condition validation */
         if !(self.isSet || self.isCollection) {
             return nil
         }
-        let type = self.extractType()
 
-        // Validate ObjC type first
-        if type == nsArrayName || type == nsMutableArrayName || type == nsSetName || type == nsMutableSetName {
-            return FwiReflector(mirrorName: type, mirrorValue: NSObject())
+        // Validate ObjC
+        let type = self.mirrorType.subjectType
+        if type == objcArrayMirror.subjectType || type == objcOptionalArrayMirror.subjectType || type == objcOptionalMutableArrayMirror.subjectType || type == objcOptionalSetMirror.subjectType || type == objcOptionalMutableSetMirror.subjectType {
+            return FwiReflector(mirrorName: "", mirrorValue: NSObject())
         }
 
-        let collectionType = self.extractCollectionType(type)
+        // Validate Swift
+        let swiftType = self.extractType()
+        let collectionType = self.extractCollectionType(swiftType)
+
         return self.generateReflector(collectionType)
     }()
 
@@ -254,8 +261,15 @@ public final class FwiReflector {
             return false
         }
 
-        let type = self.extractType()
-        if type == nsDictionaryName || type == nsMutableDictionaryName || type.hasPrefix(dictionaryName) {
+        // Validate ObjC
+        let type = self.mirrorType.subjectType
+        if type == objcOptionalDictionaryMirror.subjectType || type == objcOptionalMutableDictionaryMirror.subjectType {
+            return true
+        }
+
+        // Validate Swift
+        let swiftType = self.extractType()
+        if swiftType.hasPrefix(dictionaryName) {
             return true
         }
         return false
@@ -265,20 +279,25 @@ public final class FwiReflector {
         if !self.isDictionary {
             return nil
         }
-        let type = self.extractType()
 
-        // Validate ObjC type first
-        if type == nsDictionaryName || type == nsMutableDictionaryName {
-            let key = FwiReflector(mirrorName: type, mirrorValue: NSObject())
-            let value = FwiReflector(mirrorName: type, mirrorValue: NSObject())
-
+        // Validate ObjC
+        let type = self.mirrorType.subjectType
+        if type == objcDictionaryMirror.subjectType || type == objcOptionalDictionaryMirror.subjectType || type == objcOptionalMutableDictionaryMirror.subjectType {
+            let value = FwiReflector(mirrorName: "", mirrorValue: NSObject())
+            let key = FwiReflector(mirrorName: "", mirrorValue: NSObject())
             return (key, value)
         }
 
-        let dictionaryType = self.extractDictionaryType(type)
+        // Validate Swift
+        let swiftType = self.extractType()
+        let dictionaryType = self.extractDictionaryType(swiftType)
 
-        guard let value = self.generateReflector(dictionaryType.value) else { return nil }
-        guard let key = self.generateReflector(dictionaryType.key) else { return nil }
+        guard let value = self.generateReflector(dictionaryType.value) else {
+            return nil
+        }
+        guard let key = self.generateReflector(dictionaryType.key) else {
+            return nil
+        }
         return (key, value)
     }()
 
@@ -328,11 +347,6 @@ public final class FwiReflector {
             if subjectType.hasPrefix("__") {
                 subjectType = subjectType.substring(startIndex: 2, reverseIndex: -1)
             }
-
-            // Remove Type
-            if subjectType.hasSuffix(".Type") {
-                subjectType = subjectType.substring(to: subjectType.index(subjectType.endIndex, offsetBy: -5))
-            }
         } else {
             subjectType = subjectType.substring(startIndex: 9, reverseIndex: -1)
         }
@@ -340,10 +354,11 @@ public final class FwiReflector {
     }
 
     fileprivate func generateReflector(_ type: String) -> FwiReflector? {
-        if let clazz = self.lookupClass(type) {
-            return FwiReflector(mirrorName: type, mirrorValue: clazz)
-        } else if let primitiveType = self.lookupPrimitive(type) {
-            return FwiReflector(mirrorName: type, mirrorValue: primitiveType)
+        if let clazz = self.lookupClass(type), let type = clazz as? NSObject.Type {
+            return FwiReflector(mirrorName: "", mirrorValue: type.init())
+        }
+        else if let primitiveType = self.lookupPrimitive(type) {
+            return FwiReflector(mirrorName: "", mirrorValue: primitiveType)
         }
         return nil
     }
@@ -364,10 +379,17 @@ public final class FwiReflector {
         if className.characters.count <= 0 {
             return nil
         }
-        
+
         if let clazz = NSClassFromString(className) {
             return clazz
         } else {
+            // Try to look for class from current first
+            let nameClass = "\(self)"
+            if let nameBundle = nameClass.split(".").first, let clazz = NSClassFromString("\(nameBundle).\(className)") {
+                return clazz
+            }
+
+            // If not good, try to look from all loaded bundle
             for bundle in Bundle.allBundles {
                 if let module = bundle.bundleIdentifier?.split(".").last, bundle.load() {
                     if let clazz = NSClassFromString("\(module).\(className)") {
@@ -387,39 +409,39 @@ public final class FwiReflector {
             return false
 
         case "Int":
-            return Int(0)
+            return 0 as Int
         case "Int8":
-            return Int8(0)
+            return 0 as Int8
         case "Int16":
-            return Int16(0)
+            return 0 as Int16
         case "Int32":
-            return Int32(0)
+            return 0 as Int32
         case "Int64":
-            return Int64(0)
+            return 0 as Int64
 
         case "UInt":
-            return UInt(0)
+            return 0 as UInt
         case "UInt8":
-            return UInt8(0)
+            return 0 as UInt8
         case "UInt16":
-            return UInt16(0)
+            return 0 as UInt16
         case "UInt32":
-            return UInt32(0)
+            return 0 as UInt32
         case "UInt64":
-            return UInt64(0)
+            return 0 as UInt64
 
         case "Float":
-            return Float(0)
+            return 0 as Float
         case "Float32":
-            return Float32(0)
+            return 0 as Float32
         case "Float64":
-            return Float64(0)
+            return 0 as Float64
 
         case "Double":
-            return Double(0)
+            return 0 as Double
 
         case "Character":
-            return Character("a")
+            return " " as Character
 
         case "String", "NSString", "NSMutableString":
             return ""
@@ -494,6 +516,27 @@ fileprivate let setName = "Set"
 fileprivate let nsSetName = "NSSet"
 fileprivate let nsMutableSetName = "NSMutableSet"
 // Mirror types
+fileprivate let objcArrayMirror = Mirror(reflecting: NSArray())
+fileprivate let objcOptionalArrayMirror = Mirror(reflecting: NSArray() as NSArray?)
+fileprivate let objcOptionalMutableArrayMirror = Mirror(reflecting: NSMutableArray() as NSMutableArray?)
+
+fileprivate let objcDictionaryMirror = Mirror(reflecting: NSDictionary())
+fileprivate let objcOptionalDictionaryMirror = Mirror(reflecting: NSDictionary() as NSDictionary?)
+fileprivate let objcOptionalMutableDictionaryMirror = Mirror(reflecting: NSMutableDictionary() as NSMutableDictionary?)
+
+fileprivate let objcSetMirror = Mirror(reflecting: NSSet())
+fileprivate let objcOptionalSetMirror = Mirror(reflecting: NSSet() as NSSet?)
+fileprivate let objcOptionalMutableSetMirror = Mirror(reflecting: NSMutableSet() as NSMutableSet?)
+
 fileprivate let objcStringMirror = Mirror(reflecting: NSMutableString())
 fileprivate let objcOptionalStringMirror = Mirror(reflecting: NSMutableString() as NSString?)
 fileprivate let objcOptionalMutableStringMirror = Mirror(reflecting: NSMutableString() as NSMutableString?)
+
+fileprivate let dataMirror = Mirror(reflecting: Data())
+fileprivate let optionalDataMirror = Mirror(reflecting: Data() as Data?)
+
+fileprivate let dateMirror = Mirror(reflecting: Date())
+fileprivate let optionalDateMirror = Mirror(reflecting: Date() as Date?)
+
+fileprivate let urlMirror = Mirror(reflecting: URL(fileURLWithPath: ""))
+fileprivate let optionalUrlMirror = Mirror(reflecting: URL(string: "https://www.apple.com"))

@@ -313,9 +313,17 @@ class FwiReflectorTests: XCTestCase {
     }
 
     func testIsStruct() {
+        let url = URL(string: "https://google.com")
+        let optionalURL: URL? = URL(string: "https://google.com")
+        var r = FwiReflector(mirrorName: "url", mirrorValue: url)
+        XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
+        r = FwiReflector(mirrorName: "optionalURL", mirrorValue: optionalURL)
+        XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
+        XCTAssertTrue(r.structType == URL.self, "Expected true but found \(r.isStruct).")
+
         let struct1 = Struct1()
         let optionalStruct1: Struct1? = Struct1()
-        var r = FwiReflector(mirrorName: "struct1", mirrorValue: struct1)
+        r = FwiReflector(mirrorName: "struct1", mirrorValue: struct1)
         XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
         r = FwiReflector(mirrorName: "optionalStruct1", mirrorValue: optionalStruct1)
         XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
@@ -384,9 +392,6 @@ class FwiReflectorTests: XCTestCase {
         r = FwiReflector(mirrorName: "setObject", mirrorValue: setObject)
         XCTAssertTrue(r.collectionType?.isObject == true, "Expected true but found \(r.collectionType?.isObject).")
         XCTAssertTrue(r.collectionType?.classType == Test4.self, "Expected \"\(Test4.self)\" but found \(r.collectionType?.classType).")
-
-        // Optional Test2 will never happen due to compile time error
-//        let setOptionalObject = Set<Test2?>()
     }
 
     func testIsCollection() {
