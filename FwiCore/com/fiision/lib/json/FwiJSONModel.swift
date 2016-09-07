@@ -42,12 +42,20 @@ import Foundation
 @objc
 public protocol FwiJSONModel {
 
-    /** Define key mapper. */
+    /// Define keys mapper.
     @objc optional func keyMapper() -> [String:String]
-    
-    /** Convert json for mapper */
+
+    /// Validate ignored properties.
+    @objc optional func ignoreProperties() -> [String]
+
+    /// Define optional properties.
+    @objc optional func optionalProperties() -> [String]
+
+    /// Convert json for mapper.
     @objc optional func convertJson(from original:[String: AnyObject]) -> [String: AnyObject]
 
+    
+    /// Legacy
     /** Validate optional properties. */
     @objc optional func propertyIsOptional() -> [String]
 

@@ -53,7 +53,9 @@ public final class FwiReflector {
     public private (set) var mirrorName: String
     /// Return subject's reflector.
     public private (set) var mirrorType: Mirror
-    
+    /// Define if a property is optional or not
+    public var optionalProperty = false
+
     /// Check whether the subject's type is optional type or not
     public lazy private (set) var isOptional: Bool = {
         return self.mirrorType.displayStyle == .optional
@@ -490,6 +492,24 @@ public extension FwiReflector {
         return properties
     }
 }
+
+//// MARK: Custom Operator
+//public func < (left: FwiReflector?, right: FwiReflector?) -> Bool {
+//    /* Condition validation: Validate left nil */
+//    if left == nil && right != nil {
+//        return true
+//    }
+//
+//    /* Condition validation: Validate right nil */
+//    if left != nil && right == nil {
+//        return false
+//    }
+//
+//    guard let l = left, let r = right else {
+//        return false
+//    }
+//    return l.mirrorName < r.mirrorName
+//}
 
 
 // Legacy

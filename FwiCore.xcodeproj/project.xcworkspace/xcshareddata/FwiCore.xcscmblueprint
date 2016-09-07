@@ -4,12 +4,12 @@
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "9368F2928D2CC6FCCC28FA28CD1F2155FA5618C4" : 9223372036854775807,
+    "E41ABC42C9AAEEA0C5EE4024648B895B9ED0AF27" : 9223372036854775807,
     "4B9F33DD39F3A1E31BB679D5CEA49DB06F5AC90F" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "5A9F8C5D-1637-4A03-B415-9E5AC1D73B1F",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "9368F2928D2CC6FCCC28FA28CD1F2155FA5618C4" : "..",
+    "E41ABC42C9AAEEA0C5EE4024648B895B9ED0AF27" : "..",
     "4B9F33DD39F3A1E31BB679D5CEA49DB06F5AC90F" : "FwiCore\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "FwiCore",
@@ -24,7 +24,7 @@
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "ssh:\/\/stash.audiencemedia.com:7999\/mob\/mobile.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9368F2928D2CC6FCCC28FA28CD1F2155FA5618C4"
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E41ABC42C9AAEEA0C5EE4024648B895B9ED0AF27"
     }
   ]
 }
