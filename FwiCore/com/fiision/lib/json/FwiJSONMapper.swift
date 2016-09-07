@@ -40,251 +40,14 @@ import UIKit
 import Foundation
 
 
-@objc(JSONMapper)
-open class FwiJSONMapper: NSObject {
+public final class FwiJSONMapper {
 
     // MARK: Class's constructors
-    public override init() {
-        super.init()
+    public init() {
     }
 
     // MARK: Class's public methods
-    /** Map Dictionary To Model. */
-    open func mapDictionaryToModel<T: NSObject>(_ dictionary: [String: AnyObject], model m: inout T) -> NSError? {
-        var dictionary =  (m as? FwiJSONModel)?.convertJson?(from: dictionary) ?? dictionary
-        let optionalProperties = (m as? FwiJSONModel)?.propertyIsOptional?() ?? []
-        var properties = FwiReflector.properties(withClass: type(of: m))
-        var errorUserInfo: [String: Any] = [:]
-
-        // Override dictionary if neccessary
-        if let json = m as? FwiJSONModel {
-            if let keyMapper = json.keyMapper?() {
-                for (k, v) in keyMapper {
-                    dictionary[v] = dictionary[k]
-                    dictionary.removeValue(forKey: k)
-                }
-            }
-
-            // Filter Ignore property
-            properties = properties.filter({ (json.propertyIsIgnored?($0.propertyName) ?? false) == false })
-        }
-
-        // Map values to properties
-        for p in properties {
-            // Find Value In Json
-            let valueJson = dictionary[p.propertyName]
-
-            // Check property is optional
-            let isOptional = optionalProperties.contains(p.propertyName)
-
-            /* Condition validation: Validate nullable value */
-            if valueJson == nil || valueJson is NSNull {
-                if !isOptional { errorUserInfo[p.propertyName] = "Not Find Value For Key" }
-                continue
-            }
-
-            // Check primitiveType first , because it's basic and easy
-            if p.isPrimitive {
-                // Find Type Primitive
-                if let primitiveType = p.primitiveType {
-                    var value = p.lookupPrimitive("\(primitiveType)")
-
-                    // Convert value first
-                    value <- valueJson
-
-                    // Check value nil and not optional
-                    if value == nil && isOptional == false {
-                        errorUserInfo[p.propertyName] = "Not Find Value For Key"
-                    } else {
-
-                        // Check exsist set key value
-                        if m.responds(to: NSSelectorFromString(p.propertyName)) {
-                            m.setValue(value, forKey: p.propertyName)
-                        } else {
-                            fatalError("Not Support Property Optional Bool, Int , Double!!!! , Try to don't using Optional")
-                        }
-                    }
-                } else {
-                    errorUserInfo[p.propertyName] = "Not found type for key"
-                }
-
-            } else {
-                // Check Other Type
-                if p.isStruct {
-                    // only date , url other not recognize
-                    
-                    if p.structType == URL.self {
-                        var value: URL?
-                        if let path = valueJson as? String {
-                            // Valid URL
-                            let validUrl = path.encodeHTML()
-                            value = URL(string: validUrl)
-                        }
-                        
-                        if value == nil && isOptional == false {
-                            errorUserInfo[p.propertyName] = "Not Find Value For Key"
-                        } else {
-                            m.setValue(value, forKey: p.propertyName)
-                        }
-                    }
-                        // NSDate
-                    else if p.structType == Date.self {
-                        var value: Date?
-                        
-                        value = self.transformDate(valueJson) as? Date
-                        
-                        if value == nil && isOptional == false {
-                            errorUserInfo[p.propertyName] = "Not Find Value For Key"
-                        } else {
-                            m.setValue(value, forKey: p.propertyName)
-                        }
-                    }else {
-                        fatalError("Not support , only url and date")
-                    }
-                    
-                }
-                /* Object */
-                else if p.isObject {
-                    // NSURL
-                    if p.classType == NSURL.self || p.classType == NSURL?.self {
-                        var value: NSURL?
-                        if let path = valueJson as? String {
-                            // Valid URL
-                            let validUrl = path.encodeHTML()
-                            value = NSURL(string: validUrl)
-                        }
-
-                        if value == nil && isOptional == false {
-                            errorUserInfo[p.propertyName] = "Not Find Value For Key"
-                        } else {
-                            m.setValue(value, forKey: p.propertyName)
-                        }
-                    }
-                    // NSDate
-                    else if p.classType == NSDate.self || p.classType == NSDate?.self {
-                        var value: NSDate?
-
-                        value = self.transformDate(valueJson)
-
-                        if value == nil && isOptional == false {
-                            errorUserInfo[p.propertyName] = "Not Find Value For Key"
-                        } else {
-                            m.setValue(value, forKey: p.propertyName)
-                        }
-                    }
-                    // Try Other
-                    else {
-                        var value: AnyObject?
-                        if let classaz = p.classType as? NSObject.Type {
-                            var obj = classaz.init()
-                            obj <- valueJson
-                            value = obj
-                            
-
-                            if value == nil && isOptional == false {
-                                errorUserInfo[p.propertyName] = "Not Find Value For Key"
-                            } else {
-                                m.setValue(value, forKey: p.propertyName)
-                            }
-                        }
-                    }
-                }
-                /* Class */
-                else if p.isClass {
-                    if let classaz = p.classType as? NSObject.Type {
-                        var obj = classaz.init()
-                        if let error = FwiJSONMapper.mapObjectToModel(valueJson, model: &obj) {
-                            errorUserInfo[p.propertyName] = error.userInfo
-                        } else {
-                            m.setValue(obj, forKey: p.propertyName)
-                        }
-
-                    }
-                }
-                /* Dictionary */
-                else if p.isDictionary {
-                    var value: [String: AnyObject] = [:]
-                    defer {
-                        if value.keys.count > 0 {
-                            
-//                            m.setValue(value, forKey: p.propertyName)
-                            m.setValue(NSDictionary(dictionary: value), forKey: p.propertyName)
-                        } else {
-                            if !isOptional {
-                                errorUserInfo[p.propertyName] = "Not Find Value For Key"
-                            }
-                        }
-                    }
-
-                    if let type = p.dictionaryType {
-                        if let classaz = type.value.classType as? NSObject.Type {
-                            if type.key.isPrimitive {
-                                if let dictItem = valueJson as? [String: AnyObject] {
-                                    for (newKey, valueItem) in dictItem {
-                                        var obj = classaz.init()
-                                        if let error = FwiJSONMapper.mapObjectToModel(valueItem, model: &obj) {
-                                            errorUserInfo[newKey] = error.userInfo
-                                        } else {
-                                            value[newKey] = obj
-                                        }
-                                    }
-
-                                }
-                            }
-                        } else {
-                            // try set value normal
-                            value <- valueJson
-                        }
-
-                    } else {
-                        // try set value normal
-                        value <- valueJson
-                    }
-
-                }
-                /* Collection */
-                else if p.isCollection {
-                    var temp: [AnyObject] = []
-                    defer {
-                        if temp.count > 0 {
-                            m.setValue(temp, forKey: p.propertyName)
-                        } else {
-                            if !isOptional {
-                                errorUserInfo[p.propertyName] = "Not Find Value For Key"
-                            }
-                        }
-                    }
-                    if let type = p.collectionType {
-                        if let classaz = type.classType as? NSObject.Type {
-                            if let arrValue = valueJson as? [AnyObject] {
-                                for (index, obj) in arrValue.enumerated() {
-                                    var newObj = classaz.init()
-                                    if let error = FwiJSONMapper.mapObjectToModel(obj, model: &newObj) {
-                                        errorUserInfo["value\(index)"] = error.userInfo
-                                    } else {
-                                        temp.append(newObj)
-                                    }
-
-                                }
-
-                            }
-                        } else {
-                            temp <- (valueJson as? [AnyObject])
-                        }
-
-                    } else {
-                        // try set value normal
-                        temp <- (valueJson as? [AnyObject])
-                    }
-                }
-            }
-        }
-
-        if errorUserInfo.keys.count > 0 {
-            return NSError(domain: NSURLErrorKey, code: NSURLErrorUnknown, userInfo: errorUserInfo)
-        }
-        return nil
-    }
+    
 
     // MARK: Class's private methods
     /** Convert value to NSDate*/
@@ -486,6 +249,248 @@ public extension FwiJSONMapper {
 
     // MARK: Class's constructors
 }
+
+// Legacy
+public extension FwiJSONMapper {
+    
+    /** Map Dictionary To Model. */
+    public func mapDictionaryToModel<T: NSObject>(_ dictionary: [String: AnyObject], model m: inout T) -> NSError? {
+        var dictionary =  (m as? FwiJSONModel)?.convertJson?(from: dictionary) ?? dictionary
+        let optionalProperties = (m as? FwiJSONModel)?.propertyIsOptional?() ?? []
+        var properties = FwiReflector.properties(withClass: type(of: m))
+        var errorUserInfo: [String: Any] = [:]
+        
+        // Override dictionary if neccessary
+        if let json = m as? FwiJSONModel {
+            if let keyMapper = json.keyMapper?() {
+                for (k, v) in keyMapper {
+                    dictionary[v] = dictionary[k]
+                    dictionary.removeValue(forKey: k)
+                }
+            }
+            
+            // Filter Ignore property
+            properties = properties.filter({ (json.propertyIsIgnored?($0.mirrorName) ?? false) == false })
+        }
+        
+        // Map values to properties
+        for p in properties {
+            // Find Value In Json
+            let valueJson = dictionary[p.propertyName]
+            
+            // Check property is optional
+            let isOptional = optionalProperties.contains(p.propertyName)
+            
+            /* Condition validation: Validate nullable value */
+            if valueJson == nil || valueJson is NSNull {
+                if !isOptional { errorUserInfo[p.propertyName] = "Not Find Value For Key" }
+                continue
+            }
+            
+            // Check primitiveType first , because it's basic and easy
+            if p.isPrimitive {
+                // Find Type Primitive
+                if let primitiveType = p.primitiveType {
+                    var value = p.lookupPrimitive("\(primitiveType)")
+                    
+                    // Convert value first
+                    value <- valueJson
+                    
+                    // Check value nil and not optional
+                    if value == nil && isOptional == false {
+                        errorUserInfo[p.propertyName] = "Not Find Value For Key"
+                    } else {
+                        
+                        // Check exsist set key value
+                        if m.responds(to: NSSelectorFromString(p.propertyName)) {
+                            m.setValue(value, forKey: p.propertyName)
+                        } else {
+                            fatalError("Not Support Property Optional Bool, Int , Double!!!! , Try to don't using Optional")
+                        }
+                    }
+                } else {
+                    errorUserInfo[p.propertyName] = "Not found type for key"
+                }
+                
+            } else {
+                // Check Other Type
+                if p.isStruct {
+                    // only date , url other not recognize
+                    
+                    if p.structType == URL.self {
+                        var value: URL?
+                        if let path = valueJson as? String {
+                            // Valid URL
+                            let validUrl = path.encodeHTML()
+                            value = URL(string: validUrl)
+                        }
+                        
+                        if value == nil && isOptional == false {
+                            errorUserInfo[p.propertyName] = "Not Find Value For Key"
+                        } else {
+                            m.setValue(value, forKey: p.propertyName)
+                        }
+                    }
+                        // NSDate
+                    else if p.structType == Date.self {
+                        var value: Date?
+                        
+                        value = self.transformDate(valueJson) as? Date
+                        
+                        if value == nil && isOptional == false {
+                            errorUserInfo[p.propertyName] = "Not Find Value For Key"
+                        } else {
+                            m.setValue(value, forKey: p.propertyName)
+                        }
+                    }else {
+                        fatalError("Not support , only url and date")
+                    }
+                    
+                }
+                    /* Object */
+                else if p.isObject {
+                    // NSURL
+                    if p.classType == NSURL.self || p.classType == NSURL?.self {
+                        var value: NSURL?
+                        if let path = valueJson as? String {
+                            // Valid URL
+                            let validUrl = path.encodeHTML()
+                            value = NSURL(string: validUrl)
+                        }
+                        
+                        if value == nil && isOptional == false {
+                            errorUserInfo[p.propertyName] = "Not Find Value For Key"
+                        } else {
+                            m.setValue(value, forKey: p.propertyName)
+                        }
+                    }
+                        // NSDate
+                    else if p.classType == NSDate.self || p.classType == NSDate?.self {
+                        var value: NSDate?
+                        
+                        value = self.transformDate(valueJson)
+                        
+                        if value == nil && isOptional == false {
+                            errorUserInfo[p.propertyName] = "Not Find Value For Key"
+                        } else {
+                            m.setValue(value, forKey: p.propertyName)
+                        }
+                    }
+                        // Try Other
+                    else {
+                        var value: AnyObject?
+                        if let classaz = p.classType as? NSObject.Type {
+                            var obj = classaz.init()
+                            obj <- valueJson
+                            value = obj
+                            
+                            
+                            if value == nil && isOptional == false {
+                                errorUserInfo[p.propertyName] = "Not Find Value For Key"
+                            } else {
+                                m.setValue(value, forKey: p.propertyName)
+                            }
+                        }
+                    }
+                }
+                    /* Class */
+                else if p.isClass {
+                    if let classaz = p.classType as? NSObject.Type {
+                        var obj = classaz.init()
+                        if let error = FwiJSONMapper.mapObjectToModel(valueJson, model: &obj) {
+                            errorUserInfo[p.propertyName] = error.userInfo
+                        } else {
+                            m.setValue(obj, forKey: p.propertyName)
+                        }
+                        
+                    }
+                }
+                    /* Dictionary */
+                else if p.isDictionary {
+                    var value: [String: AnyObject] = [:]
+                    defer {
+                        if value.keys.count > 0 {
+                            
+                            //                            m.setValue(value, forKey: p.propertyName)
+                            m.setValue(NSDictionary(dictionary: value), forKey: p.propertyName)
+                        } else {
+                            if !isOptional {
+                                errorUserInfo[p.propertyName] = "Not Find Value For Key"
+                            }
+                        }
+                    }
+                    
+                    if let type = p.dictionaryType {
+                        if let classaz = type.value.classType as? NSObject.Type {
+                            if type.key.isPrimitive {
+                                if let dictItem = valueJson as? [String: AnyObject] {
+                                    for (newKey, valueItem) in dictItem {
+                                        var obj = classaz.init()
+                                        if let error = FwiJSONMapper.mapObjectToModel(valueItem, model: &obj) {
+                                            errorUserInfo[newKey] = error.userInfo
+                                        } else {
+                                            value[newKey] = obj
+                                        }
+                                    }
+                                    
+                                }
+                            }
+                        } else {
+                            // try set value normal
+                            value <- valueJson
+                        }
+                        
+                    } else {
+                        // try set value normal
+                        value <- valueJson
+                    }
+                    
+                }
+                    /* Collection */
+                else if p.isCollection {
+                    var temp: [AnyObject] = []
+                    defer {
+                        if temp.count > 0 {
+                            m.setValue(temp, forKey: p.propertyName)
+                        } else {
+                            if !isOptional {
+                                errorUserInfo[p.propertyName] = "Not Find Value For Key"
+                            }
+                        }
+                    }
+                    if let type = p.collectionType {
+                        if let classaz = type.classType as? NSObject.Type {
+                            if let arrValue = valueJson as? [AnyObject] {
+                                for (index, obj) in arrValue.enumerated() {
+                                    var newObj = classaz.init()
+                                    if let error = FwiJSONMapper.mapObjectToModel(obj, model: &newObj) {
+                                        errorUserInfo["value\(index)"] = error.userInfo
+                                    } else {
+                                        temp.append(newObj)
+                                    }
+                                    
+                                }
+                                
+                            }
+                        } else {
+                            temp <- (valueJson as? [AnyObject])
+                        }
+                        
+                    } else {
+                        // try set value normal
+                        temp <- (valueJson as? [AnyObject])
+                    }
+                }
+            }
+        }
+        
+        if errorUserInfo.keys.count > 0 {
+            return NSError(domain: NSURLErrorKey, code: NSURLErrorUnknown, userInfo: errorUserInfo)
+        }
+        return nil
+    }
+}
+
 
 // MARK: Custom Operator
 infix operator <-

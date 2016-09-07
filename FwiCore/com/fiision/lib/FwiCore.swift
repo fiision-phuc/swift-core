@@ -39,7 +39,7 @@
 import Foundation
 
 
-// Degree/Radians constant
+/// Degree/Radians constant
 public let FLT_EPSILON: Float = 1.19209e-07
 public let Metric_Circle: Float = 6.28319 // (360 degree)
 public let Metric_DegreeToRadian: Double = 0.0174532925199432957
