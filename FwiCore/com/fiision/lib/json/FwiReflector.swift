@@ -463,15 +463,40 @@ public extension FwiReflector {
         return FwiReflector.properties(withClass: classType, baseClass: NSObject.self)
     }
     public class func properties<T: NSObject>(withClass classType: AnyClass, baseClass: T.Type) -> [FwiReflector] {
-        var properties = [FwiReflector]()
-
         /* Condition validation: Validate class type */
         guard let aClass = classType as? T.Type else {
-            return properties
+            return [FwiReflector]()
         }
 
         let o = aClass.init()
+        return properties(withObject: o)
+//        var mirror = Mirror(reflecting: o)
+//
+//        var properties = [FwiReflector]()
+//        repeat {
+//            properties = mirror.children.reduce(properties, { (property, child) -> [FwiReflector] in
+//                var property = property
+//                if let label = child.label {
+//                    let reflector = FwiReflector(mirrorName: label, mirrorValue: child.value)
+//                    property.append(reflector)
+//                }
+//                return property
+//            })
+//
+//            if let superMirror = mirror.superclassMirror {
+//                mirror = superMirror
+//            } else {
+//                break
+//            }
+//        }
+//        while mirror.subjectType != NSObject.self
+//        return properties
+    }
+
+    internal class func properties<T: NSObject>(withObject o: T) -> [FwiReflector] {
         var mirror = Mirror(reflecting: o)
+
+        var properties = [FwiReflector]()
         repeat {
             properties = mirror.children.reduce(properties, { (property, child) -> [FwiReflector] in
                 var property = property
@@ -489,6 +514,7 @@ public extension FwiReflector {
             }
         }
         while mirror.subjectType != NSObject.self
+
         return properties
     }
 }
