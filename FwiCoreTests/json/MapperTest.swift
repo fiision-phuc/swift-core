@@ -50,7 +50,7 @@ class Test: NSObject, FwiJSONModel {
     var a: Int = 0
     var z: URLTest?
     var d: [String: AnyObject]?
-    var m: [String: URLTest]?
+//    var m: [String: URLTest]?
     var arr: [URLTest]?
     var arrNormal: [Int]?
     var arrString: [String]?
@@ -89,7 +89,7 @@ class MapperTest: XCTestCase {
         let dict = ["test1": 5,
                     "test2": ["url": "https://www.google.com/?gws_rd=ssl"],
                     "test3" : ["testDict" : "abc"],
-                    "test4": ["key" : ["url": "https://www.google.com/?gws_rd=ssl"]],
+//                    "test4": ["key" : ["url": "https://www.google.com/?gws_rd=ssl"]],
                     "test5": [["url": "https://www.google.com/?gws_rd=ssl"],
                         ["url": "https://www.google.com/?gws_rd=ssl"],
                         ["url": "https://www.google.com/?gws_rd=ssl"]],

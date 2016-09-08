@@ -459,43 +459,35 @@ public final class FwiReflector {
 public extension FwiReflector {
 
     // MARK: Class's static constructors
+    /// Return class's property list and its super class.
+    ///
+    /// parameter class (required): Any derives class from NSObject.
     public class func properties(withClass classType: AnyClass) -> [FwiReflector] {
         return FwiReflector.properties(withClass: classType, baseClass: NSObject.self)
     }
-    public class func properties<T: NSObject>(withClass classType: AnyClass, baseClass: T.Type) -> [FwiReflector] {
+    
+    /// Return class's property list and its super class. However, the lookup super class process
+    /// will stop at the defined base class.
+    ///
+    /// parameter class (required): Any derives class from NSObject.
+    /// parameter baseClass (required): Define base class to stop the look up super class process.
+    public class func properties<T: NSObject>(withClass classType: AnyClass, baseClass b: T.Type) -> [FwiReflector] {
         /* Condition validation: Validate class type */
         guard let aClass = classType as? T.Type else {
             return [FwiReflector]()
         }
 
         let o = aClass.init()
-        return properties(withObject: o)
-//        var mirror = Mirror(reflecting: o)
-//
-//        var properties = [FwiReflector]()
-//        repeat {
-//            properties = mirror.children.reduce(properties, { (property, child) -> [FwiReflector] in
-//                var property = property
-//                if let label = child.label {
-//                    let reflector = FwiReflector(mirrorName: label, mirrorValue: child.value)
-//                    property.append(reflector)
-//                }
-//                return property
-//            })
-//
-//            if let superMirror = mirror.superclassMirror {
-//                mirror = superMirror
-//            } else {
-//                break
-//            }
-//        }
-//        while mirror.subjectType != NSObject.self
-//        return properties
+        return properties(withObject: o, baseClass: b)
     }
-
-    internal class func properties<T: NSObject>(withObject o: T) -> [FwiReflector] {
+    
+    /// Return object's property list and its super object.
+    ///
+    /// parameter object (required): Any instance of NSObject.
+    /// parameter baseClass (optional): Define base class to stop the look up super class process.
+    public class func properties<T: NSObject>(withObject o: T, baseClass b: NSObject.Type = NSObject.self) -> [FwiReflector] {
         var mirror = Mirror(reflecting: o)
-
+        
         var properties = [FwiReflector]()
         repeat {
             properties = mirror.children.reduce(properties, { (property, child) -> [FwiReflector] in
@@ -506,36 +498,18 @@ public extension FwiReflector {
                 }
                 return property
             })
-
+            
             if let superMirror = mirror.superclassMirror {
                 mirror = superMirror
             } else {
                 break
             }
         }
-        while mirror.subjectType != NSObject.self
-
+            while mirror.subjectType != b
+        
         return properties
     }
 }
-
-//// MARK: Custom Operator
-//public func < (left: FwiReflector?, right: FwiReflector?) -> Bool {
-//    /* Condition validation: Validate left nil */
-//    if left == nil && right != nil {
-//        return true
-//    }
-//
-//    /* Condition validation: Validate right nil */
-//    if left != nil && right == nil {
-//        return false
-//    }
-//
-//    guard let l = left, let r = right else {
-//        return false
-//    }
-//    return l.mirrorName < r.mirrorName
-//}
 
 
 // Legacy
@@ -550,15 +524,9 @@ public extension FwiReflector {
 
 
 // Constants
-fileprivate let arrayName = "Array"
-fileprivate let nsArrayName = "NSArray"
-fileprivate let nsMutableArrayName = "NSMutableArray"
-fileprivate let dictionaryName = "Dictionary"
-fileprivate let nsDictionaryName = "NSDictionary"
-fileprivate let nsMutableDictionaryName = "NSMutableDictionary"
 fileprivate let setName = "Set"
-fileprivate let nsSetName = "NSSet"
-fileprivate let nsMutableSetName = "NSMutableSet"
+fileprivate let arrayName = "Array"
+fileprivate let dictionaryName = "Dictionary"
 // Mirror types
 fileprivate let objcArrayMirror = Mirror(reflecting: NSArray())
 fileprivate let objcOptionalArrayMirror = Mirror(reflecting: NSArray() as NSArray?)
@@ -583,4 +551,4 @@ fileprivate let dateMirror = Mirror(reflecting: Date())
 fileprivate let optionalDateMirror = Mirror(reflecting: Date() as Date?)
 
 fileprivate let urlMirror = Mirror(reflecting: URL(fileURLWithPath: ""))
-fileprivate let optionalUrlMirror = Mirror(reflecting: URL(string: "https://www.apple.com"))
+fileprivate let optionalUrlMirror = Mirror(reflecting: URL(fileURLWithPath: "") as URL?)

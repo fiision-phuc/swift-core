@@ -52,7 +52,7 @@ public final class FwiJSONMapper {
     /// - Parameter model: a class which contains a set of properties to be mapped.
     @discardableResult
     public func mapDictionary<T: NSObject>(dictionary d: [String:Any], toModel m: inout T) -> NSError? {
-        var properties = FwiReflector.properties(withClass: type(of: m))
+        var properties = FwiReflector.properties(withObject: m)
         var userInfo = [String:Any]()
         var dictionary = d
 
@@ -92,48 +92,75 @@ public final class FwiJSONMapper {
             
             var value = valueJSON
             var canAssign = false
-            if let a = valueJSON as? [Any], p.isObject && (p.isCollection || p.isSet) && p.collectionType?.isObject == true {
-                FwiLog("a: \(a)")
-            }
-            else if let d = valueJSON as? [String:Any], p.isObject && !p.isDictionary {
-                if let c = p.classType as? NSObject.Type {
-                    var o = c.init()
-                    
-                    guard mapDictionary(dictionary: d, toModel: &o) == nil else {
-                        userInfo[p.mirrorName] = "\(p.mirrorName) has invalid data."
-                        continue
+            if let a = valueJSON as? [Any], p.isCollection || p.isSet {
+                if let objects = a as? [[String:Any]], let collectionType = p.collectionType, collectionType.isObject == true {
+                    if let c = collectionType.classType as? NSObject.Type {
+                        var array = [Any]()
+                        
+                        for d in objects {
+                            var o = c.init()
+                            guard mapDictionary(dictionary: d, toModel: &o) == nil else {
+                                userInfo[p.mirrorName] = "\(p.mirrorName) has invalid data."
+                                continue
+                            }
+                            array.append(o)
+                        }
+                        value = array
+                        canAssign = true
                     }
-                    value = o
+                }
+                else {
                     canAssign = true
                 }
             }
-            
-            if let primitiveType = p.primitiveType {
-                if let string = value as? String, primitiveType != String.self {
-                    value = numberFormat.number(from: string)
-                }
-                canAssign = (type(of: value) == primitiveType)
-            }
-            else if let structType = p.structType, let string = value as? String {
-                if structType == URL.self {
-                    if let url = URL(string: string.encodeHTML()) {
-                        value = url
+            else if let d = valueJSON as? [String:Any], p.isDictionary || p.isObject {
+                if p.isObject {
+                    if let c = p.classType as? NSObject.Type {
+                        var o = c.init()
+                        
+                        guard mapDictionary(dictionary: d, toModel: &o) == nil else {
+                            userInfo[p.mirrorName] = "\(p.mirrorName) has invalid data."
+                            continue
+                        }
+                        value = o
                         canAssign = true
                     }
                 }
-                else if structType == Date.self {
-                    if let date = self.transformDate(value as AnyObject?) as? Date {
-                        value = date
-                        canAssign = true
+                else {
+                    canAssign = true
+                }
+            }
+            else {
+                if let primitiveType = p.primitiveType {
+                    if let string = value as? String, primitiveType != String.self {
+                        value = numberFormat.number(from: string)
+                    }
+                    canAssign = (type(of: value) == primitiveType)
+                }
+                else if let structType = p.structType, let string = value as? String {
+                    if structType == URL.self {
+                        if let url = URL(string: string.encodeHTML()) {
+                            value = url
+                            canAssign = true
+                        }
+                    }
+                    else if structType == Date.self {
+                        if let date = self.transformDate(value as AnyObject?) as? Date {
+                            value = date
+                            canAssign = true
+                        }
                     }
                 }
             }
-            else if p.isObject {
+            
+            // Assign value to property if can
+            if canAssign {
+                if m.responds(to: NSSelectorFromString(p.mirrorName)) {
+                    m.setValue(value, forKey: p.mirrorName)
+                }
             }
-            
-            
-            if canAssign && m.responds(to: NSSelectorFromString(p.mirrorName)) {
-                m.setValue(value, forKey: p.mirrorName)
+            else {
+                userInfo[p.mirrorName] = "\(p.mirrorName) has data's type conflict."
             }
         }
         
