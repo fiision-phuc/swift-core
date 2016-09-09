@@ -486,28 +486,17 @@ public extension FwiReflector {
     /// parameter object (required): Any instance of NSObject.
     /// parameter baseClass (optional): Define base class to stop the look up super class process.
     public class func properties<T: NSObject>(withObject o: T, baseClass b: NSObject.Type = NSObject.self) -> [FwiReflector] {
-        var mirror = Mirror(reflecting: o)
         
-        var properties = [FwiReflector]()
-        repeat {
-            properties = mirror.children.reduce(properties, { (property, child) -> [FwiReflector] in
-                var property = property
-                if let label = child.label {
-                    let reflector = FwiReflector(mirrorName: label, mirrorValue: child.value)
-                    property.append(reflector)
+        return sequence(first: Mirror(reflecting: o), next: {
+            $0.superclassMirror?.subjectType == b ? nil : $0.superclassMirror
+        }).flatMap {
+            $0.children.flatMap({
+                guard let label = $0.label else {
+                    return nil
                 }
-                return property
+                return FwiReflector(mirrorName: label, mirrorValue: $0.value)
             })
-            
-            if let superMirror = mirror.superclassMirror {
-                mirror = superMirror
-            } else {
-                break
-            }
         }
-            while mirror.subjectType != b
-        
-        return properties
     }
 }
 
