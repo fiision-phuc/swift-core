@@ -244,10 +244,10 @@ public extension FwiJSONMapper {
         // Loop in Dictionary Key To Find Result
         for (keyJson, nameProperty) in dictionaryKey {
             // Find Value Of Properties
-            let value = mirror.children.filter({ $0.label == nameProperty }).first?.value
+            let value = mirror.children.first(where: {$0.label == nameProperty})?.value
 
             // Find Reflector of property
-            guard let reflector = reflectorItems.filter({ $0.propertyName == nameProperty }).first else {
+            guard let reflector = reflectorItems.first(where: { $0.propertyName == nameProperty }) else {
                 // nil , it can't identify
                 continue
             }
