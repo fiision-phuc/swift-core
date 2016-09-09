@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : FwiReflectorTests.swift
+//  File name   : FwiReflectorTest.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 6/14/16

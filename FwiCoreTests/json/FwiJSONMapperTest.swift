@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : JSONMapperTest.swift
+//  File name   : FwiJSONMapper.swift
 //
 //  Author      : Dung Vu
 //  Created date: 6/14/16

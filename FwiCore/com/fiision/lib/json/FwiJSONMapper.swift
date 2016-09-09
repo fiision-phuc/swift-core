@@ -47,9 +47,34 @@ public final class FwiJSONMapper {
     }
 
     // MARK: Class's public methods
+    /// Build a list of objects.
+    ///
+    /// - parameter array (required): a list of keys-values.
+    /// - parameter model (required): a class which contains a set of properties to be mapped.
+    @discardableResult
+    public func mapArray<T>(array a: [[String:Any]], toModel m: T.Type) -> ([Any]?, NSError?) {
+        if let c = m as? NSObject.Type {
+            var array = [Any]()
+
+            for d in a {
+                var o = c.init()
+                guard mapDictionary(dictionary: d, toModel: &o) == nil else {
+//                    userInfo[p.mirrorName] = "\(p.mirrorName) has invalid data."
+                    continue
+                }
+                array.append(o)
+            }
+//            value = array
+//            canAssign = true
+        }
+
+        return (nil, nil)
+    }
+
     /// Map dictionary to model.
-    /// - Parameter dictionary: set of keys-values.
-    /// - Parameter model: a class which contains a set of properties to be mapped.
+    ///
+    /// - parameter dictionary (required): set of keys-values.
+    /// - parameter model (required): a class which contains a set of properties to be mapped.
     @discardableResult
     public func mapDictionary<T: NSObject>(dictionary d: [String:Any], toModel m: inout T) -> NSError? {
         var properties = FwiReflector.properties(withObject: m)
@@ -89,25 +114,27 @@ public final class FwiJSONMapper {
                 }
                 continue
             }
-            
             var value = valueJSON
             var canAssign = false
+
+            // Try to convert raw data to right format
             if let a = valueJSON as? [Any], p.isCollection || p.isSet {
-                if let objects = a as? [[String:Any]], let collectionType = p.collectionType, collectionType.isObject == true {
-                    if let c = collectionType.classType as? NSObject.Type {
-                        var array = [Any]()
-                        
-                        for d in objects {
-                            var o = c.init()
-                            guard mapDictionary(dictionary: d, toModel: &o) == nil else {
-                                userInfo[p.mirrorName] = "\(p.mirrorName) has invalid data."
-                                continue
-                            }
-                            array.append(o)
-                        }
-                        value = array
-                        canAssign = true
-                    }
+                if let objects = a as? [[String:Any]], let collectionType = p.collectionType, collectionType.isObject == true, let c = collectionType.classType as? NSObject.Type {
+                    mapArray(array: objects, toModel: c)
+//                    if let c = collectionType.classType as? NSObject.Type {
+//                        var array = [Any]()
+//                        
+//                        for d in objects {
+//                            var o = c.init()
+//                            guard mapDictionary(dictionary: d, toModel: &o) == nil else {
+//                                userInfo[p.mirrorName] = "\(p.mirrorName) has invalid data."
+//                                continue
+//                            }
+//                            array.append(o)
+//                        }
+//                        value = array
+//                        canAssign = true
+//                    }
                 }
                 else {
                     canAssign = true

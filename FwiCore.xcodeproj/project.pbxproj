@@ -13,8 +13,8 @@
 		BE337FB51D6EFA380078AE84 /* FwiReflector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE337FB21D6EFA380078AE84 /* FwiReflector.swift */; };
 		BE337FC71D6F03080078AE84 /* Data+FwiBase64Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE337FBD1D6F03080078AE84 /* Data+FwiBase64Test.swift */; };
 		BE337FC81D6F03080078AE84 /* Data+FwiHexTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE337FBF1D6F03080078AE84 /* Data+FwiHexTest.swift */; };
-		BE337FCC1D6F03080078AE84 /* FwiReflectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE337FC51D6F03080078AE84 /* FwiReflectorTests.swift */; };
-		BE337FCD1D6F03080078AE84 /* MapperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE337FC61D6F03080078AE84 /* MapperTest.swift */; };
+		BE337FCC1D6F03080078AE84 /* FwiReflectorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE337FC51D6F03080078AE84 /* FwiReflectorTest.swift */; };
+		BE337FCD1D6F03080078AE84 /* FwiJSONMapperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE337FC61D6F03080078AE84 /* FwiJSONMapperTest.swift */; };
 		BE5ED6D31D6F0397004A87D6 /* FwiLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5ED6D21D6F0397004A87D6 /* FwiLocalization.swift */; };
 		BE5ED6E41D6F03C0004A87D6 /* FwiDataParam.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5ED6D81D6F03C0004A87D6 /* FwiDataParam.swift */; };
 		BE5ED6E51D6F03C0004A87D6 /* FwiFormParam.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5ED6D91D6F03C0004A87D6 /* FwiFormParam.swift */; };
@@ -75,8 +75,8 @@
 		BE337FB21D6EFA380078AE84 /* FwiReflector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiReflector.swift; sourceTree = "<group>"; };
 		BE337FBD1D6F03080078AE84 /* Data+FwiBase64Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiBase64Test.swift"; sourceTree = "<group>"; };
 		BE337FBF1D6F03080078AE84 /* Data+FwiHexTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiHexTest.swift"; sourceTree = "<group>"; };
-		BE337FC51D6F03080078AE84 /* FwiReflectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiReflectorTests.swift; sourceTree = "<group>"; };
-		BE337FC61D6F03080078AE84 /* MapperTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapperTest.swift; sourceTree = "<group>"; };
+		BE337FC51D6F03080078AE84 /* FwiReflectorTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiReflectorTest.swift; sourceTree = "<group>"; };
+		BE337FC61D6F03080078AE84 /* FwiJSONMapperTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONMapperTest.swift; sourceTree = "<group>"; };
 		BE5ED6D21D6F0397004A87D6 /* FwiLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiLocalization.swift; sourceTree = "<group>"; };
 		BE5ED6D81D6F03C0004A87D6 /* FwiDataParam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiDataParam.swift; sourceTree = "<group>"; };
 		BE5ED6D91D6F03C0004A87D6 /* FwiFormParam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiFormParam.swift; sourceTree = "<group>"; };
@@ -197,8 +197,8 @@
 		BE337FC41D6F03080078AE84 /* json */ = {
 			isa = PBXGroup;
 			children = (
-				BE337FC51D6F03080078AE84 /* FwiReflectorTests.swift */,
-				BE337FC61D6F03080078AE84 /* MapperTest.swift */,
+				BE337FC51D6F03080078AE84 /* FwiReflectorTest.swift */,
+				BE337FC61D6F03080078AE84 /* FwiJSONMapperTest.swift */,
 			);
 			path = json;
 			sourceTree = "<group>";
@@ -596,9 +596,9 @@
 				BEFAAA8A1D70947D004B8B11 /* URL+FwiExtensionTest.swift in Sources */,
 				BE61F2CD1D704B43007CA66B /* URLRequest+FwiExtensionTest.swift in Sources */,
 				BE61F2CA1D704B43007CA66B /* Data+FwiExtensionTest.swift in Sources */,
-				BE337FCD1D6F03080078AE84 /* MapperTest.swift in Sources */,
+				BE337FCD1D6F03080078AE84 /* FwiJSONMapperTest.swift in Sources */,
 				BE61F2CB1D704B43007CA66B /* NSNumber+FwiExtensionTest.swift in Sources */,
-				BE337FCC1D6F03080078AE84 /* FwiReflectorTests.swift in Sources */,
+				BE337FCC1D6F03080078AE84 /* FwiReflectorTest.swift in Sources */,
 				BE5ED6F01D6F0448004A87D6 /* FwiOperationTest.swift in Sources */,
 				BE337FC81D6F03080078AE84 /* Data+FwiHexTest.swift in Sources */,
 				BE337FC71D6F03080078AE84 /* Data+FwiBase64Test.swift in Sources */,

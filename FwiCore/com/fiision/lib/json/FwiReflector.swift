@@ -49,17 +49,17 @@ public final class FwiReflector {
     }
 
     // MARK: Class's properties
+    /// Define if a property is optional or not
+    public var optionalProperty = false
     /// Return subject's name.
     public private (set) var mirrorName: String
     /// Return subject's reflector.
     public private (set) var mirrorType: Mirror
-    /// Define if a property is optional or not
-    public var optionalProperty = false
 
     /// Check whether the subject's type is optional type or not
-    public lazy private (set) var isOptional: Bool = {
+    public var isOptional: Bool {
         return self.mirrorType.displayStyle == .optional
-    }()
+    }
     
     /// Check whether the subject's type is enum or not. Currently, this property could not verify
     /// the optional enum.
@@ -303,8 +303,6 @@ public final class FwiReflector {
         return (key, value)
     }()
 
-    // MARK: Class's public methods
-
     // MARK: Class's private methods
     fileprivate func extractCollectionType(_ type: String) -> String {
         var collectionType = type
@@ -470,7 +468,7 @@ public extension FwiReflector {
     /// will stop at the defined base class.
     ///
     /// parameter class (required): Any derives class from NSObject.
-    /// parameter baseClass (required): Define base class to stop the look up super class process.
+    /// parameter baseClass (required): Define base class to stop the lookup super class process.
     public class func properties<T: NSObject>(withClass classType: AnyClass, baseClass b: T.Type) -> [FwiReflector] {
         /* Condition validation: Validate class type */
         guard let aClass = classType as? T.Type else {
@@ -483,20 +481,20 @@ public extension FwiReflector {
     
     /// Return object's property list and its super object.
     ///
-    /// parameter object (required): Any instance of NSObject.
-    /// parameter baseClass (optional): Define base class to stop the look up super class process.
-    public class func properties<T: NSObject>(withObject o: T, baseClass b: NSObject.Type = NSObject.self) -> [FwiReflector] {
-        
-        return sequence(first: Mirror(reflecting: o), next: {
-            $0.superclassMirror?.subjectType == b ? nil : $0.superclassMirror
-        }).flatMap {
-            $0.children.flatMap({
-                guard let label = $0.label else {
-                    return nil
-                }
-                return FwiReflector(mirrorName: label, mirrorValue: $0.value)
-            })
-        }
+    /// parameter object (required): Any instance.
+    /// parameter baseClass (optional): Define base class to stop the lookup super class process.
+    public class func properties<T>(withObject o: T, baseClass b: Any.Type = NSObject.self) -> [FwiReflector] {
+        return sequence(first: Mirror(reflecting: o),
+                        next: {
+                            $0.superclassMirror?.subjectType == b ? nil : $0.superclassMirror
+                        }).flatMap {
+                            $0.children.flatMap({
+                                guard let label = $0.label else {
+                                    return nil
+                                }
+                                return FwiReflector(mirrorName: label, mirrorValue: $0.value)
+                            })
+                        }
     }
 }
 

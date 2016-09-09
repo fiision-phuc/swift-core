@@ -46,16 +46,13 @@ public let Metric_DegreeToRadian: Double = 0.0174532925199432957
 public let Metric_RadianToDegree: Double = 57.295779513082320876
 
 // MARK: Log Function
-#if DEBUG
-    public func FwiLog(_ message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
-        if let name = className.split("/").last , name.length() > 0 {
+public func FwiLog(_ message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
+    #if DEBUG
+        if let name = className.split("/").last, name.length() > 0 {
             print("\(NSDate()) \(name) > [\(methodName) \(line)]: \(message)")
         }
-    }
-#else
-    public func FwiLog(_ message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
-    }
-#endif
+    #endif
+}
 
 // MARK: Metric Function
 public func FwiConvertToDegree(radianValue radian: Double) -> Double {
