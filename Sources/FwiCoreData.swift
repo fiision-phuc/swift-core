@@ -45,7 +45,7 @@ public protocol FwiCoreData {
 }
 
 
-public extension FwiCoreData where Self: NSManagedObject {
+public extension FwiCoreData where Self : NSManagedObject {
 
     /** Fetch all entities base on search condition. */
     static public func allEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [AnyObject]? = nil, limit l: Int = 0) -> [Self]? {
@@ -94,13 +94,13 @@ public extension FwiCoreData where Self: NSManagedObject {
         var entity = entities?.first
 
         if entity == nil && create {
-            entity = newEntityWithContext(context)
+            entity = newEntity(withContext: context)
         }
         return entity
     }
 
     /** Insert new entity into database. */
-    static public func newEntityWithContext(_ context: NSManagedObjectContext?) -> Self? {
+    static public func newEntity(withContext context: NSManagedObjectContext?) -> Self? {
         /* Condition validation */
         guard let c = context else {
             return nil
@@ -109,7 +109,7 @@ public extension FwiCoreData where Self: NSManagedObject {
     }
 
     /** Delete all entities from database. */
-    static public func deleteAllEntitiesWithContext(_ context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) {
+    static public func deleteAllEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) {
         let entities = allEntities(fromContext: context, predicate: p)
         entities?.forEach({
             $0.remove()

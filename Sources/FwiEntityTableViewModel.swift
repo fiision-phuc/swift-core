@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : FwiEntityCollectionViewModel.swift
+//  File name   : FwiEntityTableViewModel.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 9/4/16
@@ -37,58 +37,55 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import UIKit
-import CoreData
 import Foundation
+import CoreData
 
 
-public final class FwiEntityCollectionViewModel<T: NSFetchRequestResult> : FwiEntityViewModel<T> {
+public final class FwiEntityTableViewModel<T: NSFetchRequestResult> : FwiEntityViewModel<T> {
 
     /// MARK: Class's constructors
-    public convenience init(_ collectionView: UICollectionView?, context c: NSManagedObjectContext?) {
+    public convenience init(_ tableView: UITableView?, context c: NSManagedObjectContext?) {
         self.init(c)
-        self.collectionView = collectionView
+        self.tableView = tableView
     }
     
     /// MARK: Class's properties
-    fileprivate weak var collectionView: UICollectionView?
+    fileprivate weak var tableView: UITableView?
     
     /// MARK: Class's private methods
     internal override func performFetch() {
         super.performFetch()
         DispatchQueue.main.async { [weak self] in
-            self?.collectionView?.reloadData()
+            self?.tableView?.reloadData()
         }
     }
     
     /// MARK: NSFetchedResultsControllerDelegate's members
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         DispatchQueue.main.async { [weak self] in
-            self?.collectionView?.performBatchUpdates({
-                if let array = self?.deleteArrays {
-                    self?.collectionView?.deleteItems(at: array)
-                }
-                if let array = self?.insertArrays {
-                    self?.collectionView?.insertItems(at: array)
-                }
-                if let array = self?.deleteArrays {
-                    self?.collectionView?.reloadItems(at: array)
-                }
-            }, completion: { _ in
-                self?.deleteArrays = nil
-                self?.insertArrays = nil
-                self?.reloadArrays = nil
-            })
+            if let array = self?.deleteArrays {
+                self?.tableView?.deleteRows(at: array, with: .fade)
+            }
+            if let array = self?.insertArrays {
+                self?.tableView?.insertRows(at: array, with: .fade)
+            }
+            if let array = self?.reloadArrays {
+                self?.tableView?.reloadRows(at: array, with:.fade)
+            }
+            self?.deleteArrays = nil
+            self?.insertArrays = nil
+            self?.reloadArrays = nil
         }
     }
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         DispatchQueue.main.async { [weak self] in
             switch type {
             case .insert:
-                self?.collectionView?.insertSections(IndexSet(integer: sectionIndex))
+                self?.tableView?.insertSections(IndexSet(integer: sectionIndex), with: .fade)
                 break
                 
             case .delete:
-                self?.collectionView?.deleteSections(IndexSet(integer: sectionIndex))
+                self?.tableView?.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
                 break
                 
             default:

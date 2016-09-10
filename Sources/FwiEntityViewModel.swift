@@ -37,8 +37,8 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import UIKit
-import CoreData
 import Foundation
+import CoreData
 
 
 open class FwiEntityViewModel<T: NSFetchRequestResult> : NSObject, NSFetchedResultsControllerDelegate {
