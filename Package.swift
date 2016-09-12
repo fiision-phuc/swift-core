@@ -2,5 +2,16 @@ import PackageDescription
 
 
 let package = Package(
-    name: "FwiCore"
+    name: "FwiCore",
+    targets: [
+        Target(
+            name: "FwiCore"
+        ),
+        Target(
+            name: "FwiCoreTests",
+            dependencies: [
+                .Target(name: "FwiCore")
+            ]
+        )
+    ]
 )
