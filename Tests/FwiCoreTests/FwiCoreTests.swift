@@ -1,6 +1,7 @@
 import XCTest
 @testable import FwiCore
 
+
 class FwiCoreTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.

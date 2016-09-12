@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : FwiJSONMapper.swift
+//  File name   : FwiJSONMapperTest.swift
 //
 //  Author      : Dung Vu
 //  Created date: 6/14/16
@@ -46,7 +46,6 @@ class URLTest: NSObject {
 
 class Test: NSObject, FwiJSONModel {
 
-
     var a: Int = 0
     var z: URLTest?
     var d: [String: AnyObject]?
@@ -73,17 +72,115 @@ class Test: NSObject, FwiJSONModel {
 
 }
 
+class TestJSON1: NSObject {
 
-class MapperTest: XCTestCase {
+    var a: Int = 0
+    var b: Float = 0
+    var c: Double = 0
+    var d: String = ""
 
+    var e: UInt = 0
+    var f: Float = 0
+}
+
+class TestJSON2: NSObject {
+
+    var a: Int?
+    var b: Float?
+    var c: Double?
+    var d: String?
+
+    var e: UInt?
+    var f: Float?
+    var g: Double?
+}
+
+class TestJSON3: TestJSON1 {
+
+    var url: URL?
+    var data1: Data?
+    var data2: Data?
+    var date1: Date?
+    var date2: Date?
+}
+
+class FwiJSONMapperTest: XCTestCase {
+
+    // MARK: Setup
     override func setUp() {
         super.setUp()
     }
 
+    // MARK: Teardown
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
+
+    // MARK: Test cases
+    func testMapDictionaryToNonOptionalProperties() {
+        let d: [String : Any] = ["a":NSNumber(value: 1), "b":NSNumber(value: 2), "c":NSNumber(value: 3), "d":"Hello world", "e":"10", "f":"10.15"]
+        let (o, _) = FwiJSONMapper().mapDictionary(dictionary: d, toModel: TestJSON1.self)
+
+        guard let model = o else {
+            XCTFail("Expected o is not null.")
+            return
+        }
+        XCTAssertEqual(model.a, 1, "Expected '1' but found: '\(model.a)'.")
+        XCTAssertEqual(model.b, 2, "Expected '2' but found: '\(model.b)'.")
+        XCTAssertEqual(model.c, 3, "Expected '3' but found: '\(model.c)'.")
+        XCTAssertEqual(model.e, 10, "Expected '10' but found: '\(model.e)'.")
+        XCTAssertEqual(model.d, "Hello world", "Expected 'Hello world' but found: '\(model.d)'.")
+    }
+
+    func testMapDictionaryToOptionalProperties() {
+        let d: [String : Any] = ["a":NSNumber(value: 1), "b":NSNumber(value: 2), "c":NSNumber(value: 3), "d":"Hello world", "e":"10", "f":"10.15"]
+        let (o, _) = FwiJSONMapper().mapDictionary(dictionary: d, toModel: TestJSON2.self)
+
+        guard let model = o else {
+            XCTFail("Expected o is not null.")
+            return
+        }
+        XCTAssertEqual(model.a, 1, "Expected '1' but found: '\(model.a)'.")
+        XCTAssertEqual(model.b, 2, "Expected '2' but found: '\(model.b)'.")
+        XCTAssertEqual(model.c, 3, "Expected '3' but found: '\(model.c)'.")
+        XCTAssertEqual(model.e, 10, "Expected '10' but found: '\(model.e)'.")
+        XCTAssertEqual(model.d, "Hello world", "Expected 'Hello world' but found: '\(model.d)'.")
+        XCTAssertNil(model.g, "Expected nil but found: '\(model.g)'.")
+    }
+
+    func testMapDictionary() {
+        let d: [String : Any] = ["a":NSNumber(value: 1),
+                                 "b":NSNumber(value: 2),
+                                 "c":NSNumber(value: 3),
+                                 "d":"Hello world",
+                                 "e":"10",
+                                 "f":"10.15",
+                                 "url": "https://www.google.com/?gws_rd=ssl",
+                                 "data1": "RndpQ29yZQ==",
+                                 "data2": "2012-04-23T18:25:43.511Z",
+                                 "date1": 1464768697,
+                                 "date2": "2012-04-23T18:25:43.511Z"]
+        let (o, _) = FwiJSONMapper().mapDictionary(dictionary: d, toModel: TestJSON3.self)
+
+        guard let model = o else {
+            XCTFail("Expected o is not null.")
+            return
+        }
+        XCTAssertEqual(model.a, 1, "Expected '1' but found: '\(model.a)'.")
+        XCTAssertEqual(model.b, 2, "Expected '2' but found: '\(model.b)'.")
+        XCTAssertEqual(model.c, 3, "Expected '3' but found: '\(model.c)'.")
+        XCTAssertEqual(model.e, 10, "Expected '10' but found: '\(model.e)'.")
+
+        XCTAssertEqual(model.d, "Hello world", "Expected 'Hello world' but found: '\(model.d)'.")
+        XCTAssertNotNil(model.url, "Expected not nil but found: '\(model.url)'.")
+        XCTAssertEqual(model.url?.absoluteString, "https://www.google.com/?gws_rd=ssl", "Expected 'https://www.google.com/?gws_rd=ssl' but found: '\(model.url?.absoluteString)'.")
+        XCTAssertNotNil(model.data1, "Expected not nil but found: '\(model.data1)'.")
+        XCTAssertNotNil(model.data2, "Expected not nil but found: '\(model.data2)'.")
+        XCTAssertNotNil(model.date1, "Expected not nil but found: '\(model.date1)'.")
+        XCTAssertNotNil(model.date2, "Expected not nil but found: '\(model.date2)'.")
+    }
+
+
 
     func testExample() {
         let dict = ["test1": 5,
@@ -103,8 +200,8 @@ class MapperTest: XCTestCase {
 //        let c = JSONMapper1.mapClassWithDictionary(Test.self, dict: dict).object
 
         var c = Test()
-        FwiJSONMapper().mapDictionary(dictionary: dict, toModel: &c)
-//        let error = FwiJSONMapper.mapObjectToModel(dict, model: &c)
+//        FwiJSONMapper().mapDictionary(dictionary: dict, toModel: &c)
+        let error = FwiJSONMapper.mapObjectToModel(dict, model: &c)
 
 
         let dict1 = FwiJSONMapper.toDictionary(c)

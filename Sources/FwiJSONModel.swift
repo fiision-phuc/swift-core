@@ -39,26 +39,46 @@
 import Foundation
 
 
-@objc
+/// FwiJSONModel represents a JSON model. This protocol is required in order to let FwiReflector
+/// working properly.
 public protocol FwiJSONModel {
 
     /// Define keys mapper.
-    @objc optional func keyMapper() -> [String:String]
+    var keyMapper: [String:String]? { get }
 
-    /// Validate ignored properties.
-    @objc optional func ignoreProperties() -> [String]
+    /// Define ignored properties.
+    var ignoreProperties: [String]? { get }
 
     /// Define optional properties.
-    @objc optional func optionalProperties() -> [String]
+    var optionalProperties: [String]? { get }
 
-    /// Convert json for mapper.
-    @objc optional func convertJson(from original:[String: AnyObject]) -> [String: AnyObject]
+    /// Allow developer to interact directly with json dictionary before mapping process.
+    ///
+    /// parameter original (required): original json dictionary
+    func convertJSON(fromOriginal original: [String:Any]) -> [String:Any]
+}
 
-    
-    /// Legacy
-    /** Validate optional properties. */
-    @objc optional func propertyIsOptional() -> [String]
 
-    /** Validate ignored properties. */
-    @objc optional func propertyIsIgnored(_ property: String) -> Bool
+/// An extension to help FwiReflector and FwiJSONMapper.
+public extension FwiJSONModel where Self: FwiJSONModel {
+
+    /// Default implementation for keys mapper.
+    public var keyMapper: [String:String]? {
+        return nil
+    }
+
+    /// Default implementation for ignored properties.
+    public var ignoreProperties: [String]? {
+        return nil
+    }
+
+    /// Default implementation for optional properties.
+    public var optionalProperties: [String]? {
+        return nil
+    }
+
+    /// Default implementation for convertJSON function.
+    public func convertJSON(fromOriginal original: [String:Any]) -> [String:Any] {
+        return original
+    }
 }

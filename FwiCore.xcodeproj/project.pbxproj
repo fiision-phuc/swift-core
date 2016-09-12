@@ -222,9 +222,9 @@
 		BE8BF1311D832E8700F710CB /* json */ = {
 			isa = PBXGroup;
 			children = (
-				__PBXFileRef_Sources/FwiJSONMapper.swift /* FwiJSONMapper.swift */,
-				__PBXFileRef_Sources/FwiJSONModel.swift /* FwiJSONModel.swift */,
 				__PBXFileRef_Sources/FwiReflector.swift /* FwiReflector.swift */,
+				__PBXFileRef_Sources/FwiJSONModel.swift /* FwiJSONModel.swift */,
+				__PBXFileRef_Sources/FwiJSONMapper.swift /* FwiJSONMapper.swift */,
 			);
 			name = json;
 			sourceTree = "<group>";
@@ -312,8 +312,8 @@
 		BE8BF13D1D84652500F710CB /* json */ = {
 			isa = PBXGroup;
 			children = (
-				BE8BF1561D84663100F710CB /* FwiJSONMapperTest.swift */,
 				BE8BF1571D84663100F710CB /* FwiReflectorTest.swift */,
+				BE8BF1561D84663100F710CB /* FwiJSONMapperTest.swift */,
 			);
 			name = json;
 			sourceTree = "<group>";
@@ -618,11 +618,8 @@
 /* Begin XCBuildConfiguration section */
 		_ReleaseConf_FwiCore /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE8BF1391D83DC8E00F710CB /* Release.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				INFOPLIST_FILE = FwiCore.xcodeproj/FwiCore_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -632,22 +629,16 @@
 		};
 		_ReleaseConf_FwiCoreTests /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE8BF1391D83DC8E00F710CB /* Release.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				INFOPLIST_FILE = FwiCore.xcodeproj/FwiCoreTests_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 			};
 			name = Release;
 		};
 		"___DebugConf_FwiCore" /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE8BF1381D83DC8E00F710CB /* Debug.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				INFOPLIST_FILE = FwiCore.xcodeproj/FwiCore_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -657,11 +648,8 @@
 		};
 		"___DebugConf_FwiCoreTests" /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE8BF1381D83DC8E00F710CB /* Debug.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				INFOPLIST_FILE = FwiCore.xcodeproj/FwiCoreTests_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};

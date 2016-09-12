@@ -66,14 +66,16 @@ public struct Struct2 {
 //private struct Struct3 {
 //}
 
-class Test1 {
+class Test1: FwiJSONModel {
+
     var value1 = 0
     var value2: UInt = 0
     var value3: Int?
     var value4: UInt?
     var value5: NSNumber?
 }
-open class Test2 {
+open class Test2: FwiJSONModel {
+
     var value1 = 0
     var value2: UInt = 0
     var value3: Int?
@@ -89,14 +91,16 @@ open class Test2 {
 //}
 
 @objc(Test4)
-class Test4: NSObject {
+class Test4: NSObject, FwiJSONModel {
+
     var object1: String?
     var object2: Data?
     var object3: Date?
     var object4: URL?
 }
 @objc(Test5)
-open class Test5: NSObject {
+open class Test5: NSObject, FwiJSONModel {
+
     var object1: String?
     var object2: Data?
     var object3: Date?
@@ -127,10 +131,7 @@ class FwiReflectorTests: XCTestCase {
 
     // MARK: Test cases
     func testProperties() {
-        var properties = FwiReflector.properties(withClass: Test1.self, baseClass: NSObject.self)
-        XCTAssertEqual(properties.count, 0, "Expected 4 but found \(properties.count).")
-
-        properties = FwiReflector.properties(withClass: Test4.self, baseClass: NSObject.self)
+        let (_, properties) = FwiReflector.properties(withModel: Test4.self)
         XCTAssertEqual(properties.count, 4, "Expected 4 but found \(properties.count).")
         XCTAssertEqual(properties[0].mirrorName, "object1", "Expected 'object1' but found '\(properties[0].mirrorName)'.")
         XCTAssertTrue(properties[1].structType == Data.self, "Expected \"\(Data.self)\" but found \"\(properties[1].structType)\".")
