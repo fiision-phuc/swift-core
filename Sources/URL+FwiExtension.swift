@@ -70,28 +70,33 @@ public func += (left: inout URL?, right: String?) {
 }
 
 public func + (left: URL?, right: [String:String]?) -> URL? {
-    if let url = left?.absoluteString, let params = right, params.count > 0 {
-        var form = [FwiFormParam]()
-        params.forEach({
-            form.append(FwiFormParam(key: $0, value: $1))
-        })
-        form = form.sorted(by: <)
-        
-        let p = form[0]
-        if p.key[p.key.startIndex] == "#" {
-            repeat {
-                form.removeFirst()
-            } while form[0].key[form[0].key.startIndex] == "#"
-            
-            
-            let query = form.map{$0.description}.joined(separator: "&")
-            return URL(string: "\(url)\(p.description)?\(query)")
-        } else {
-            let query = form.map{$0.description}.joined(separator: "&")
-            return URL(string: "\(url)?\(query)")
-        }
+    guard let url = left else {
+        return left
     }
-    return left
+    
+    let form = right?.map({ URLQueryItem(name: $0, value: $1) })
+    var urlComponent = URLComponents(url: url, resolvingAgainstBaseURL: true)
+    urlComponent?.queryItems = form
+    return urlComponent?.url
+    
+//    if let url = left, let params = right, params.count > 0 {
+//        let form = params.map({ FwiFormParam(key: $0, value: $1) })
+//        form = form.sorted(by: <)
+//        let p = form.first
+//        if p.key[p.key.startIndex] == "#" {
+//            repeat {
+//                form.removeFirst()
+//            } while form[0].key[form[0].key.startIndex] == "#"
+//            
+//            
+//            let query = form.map{$0.description}.joined(separator: "&")
+//            return URL(string: "\(url)\(p.description)?\(query)")
+//        } else {
+//            let query = form.map{$0.description}.joined(separator: "&")
+//            return URL(string: "\(url)?\(query)")
+//        }
+//    }
+//    return left
 }
 public func += (left: inout URL?, right: [String:String]?) {
     left = left + right
