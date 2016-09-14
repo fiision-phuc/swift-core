@@ -463,7 +463,9 @@ public extension FwiReflector {
     /// parameter baseType (optional): Define base type to stop the lookup super model process
     public class func properties<T: NSObject>(withModel model: T.Type, baseType b: Any.Type = NSObject.self) -> (T?, [FwiReflector]) {
         let o = model.init()
-        return (o, properties(withObject: o, baseType: b))
+        let properties = FwiReflector.properties(withObject: o)
+        
+        return (o, properties)
     }
     
     /// Return object's property list and its super model. However, the lookup super model process

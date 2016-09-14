@@ -40,6 +40,7 @@ import XCTest
 @testable import FwiCore
 
 
+@objc(URLTest)
 class URLTest: NSObject {
     var url: URL?
 }
@@ -104,6 +105,27 @@ class TestJSON3: TestJSON1 {
     var date2: Date?
 }
 
+class TestJSON4: TestJSON1 {
+    
+    var urls1: [String:String]?
+    var urls2: [String:URL]?
+    var urls3: [String:Int]?
+    var urls4: [String:Int]?
+    var urlTest: URLTest?
+}
+
+class TestJSON5: NSObject, FwiJSONModel {
+    
+    var array: [URLTest]?
+    
+    var arrayInt1: [Int]?
+    var arrayString1: [String]?
+    
+    var arrayInt2: [Int]?
+    var arrayString2: [String]?
+}
+
+
 class FwiJSONMapperTest: XCTestCase {
 
     // MARK: Setup
@@ -117,41 +139,66 @@ class FwiJSONMapperTest: XCTestCase {
     }
 
     // MARK: Test cases
-    func testMapDictionaryToNonOptionalProperties() {
+    func testMapArray1() {
+        let array = [
+            ["url": "https://www.google.com/?gws_rd=ssl"],
+            ["url": "https://www.google.com/?gws_rd=ssl"]
+        ]
+        
+        let (objects, err) = FwiJSONMapper().map(array: array, toModel: URLTest.self)
+        XCTAssertNil(err, "Expected nil but found: '\(err)'.")
+        XCTAssertEqual(objects.count, 2, "Expected '\(array.count)' but found: '\(objects.count)'.")
+        XCTAssertEqual(objects[0].url?.absoluteString, "https://www.google.com/?gws_rd=ssl", "Expected 'https://www.google.com/?gws_rd=ssl' but found: '\(objects[0].url?.absoluteString)'.")
+    }
+    
+    func testMapArray2() {
+        let d: [String : Any] = [
+            "array":[["url": "https://www.google.com/?gws_rd=ssl"], ["url": "https://www.google.com/?gws_rd=ssl"]],
+            "arrayInt1":[2, 4, 6],
+            "arrayString1":["2", "4", "6"],
+            "arrayInt2":["2", "4", "6"],
+            "arrayString2":[2, 4, 6]
+        ]
+        
+        var o = TestJSON5()
+        let err = FwiJSONMapper().map(dictionary: d, toModel: &o)
+        
+        XCTAssertNil(err, "Expected nil but found: '\(err)'.")
+//        XCTAssertEqual(objects.count, 2, "Expected '\(array.count)' but found: '\(objects.count)'.")
+//        XCTAssertEqual(objects[0].url?.absoluteString, "https://www.google.com/?gws_rd=ssl", "Expected 'https://www.google.com/?gws_rd=ssl' but found: '\(objects[0].url?.absoluteString)'.")
+    }
+    
+    func testMapDictionary1() {
         let d: [String : Any] = ["a":NSNumber(value: 1), "b":NSNumber(value: 2), "c":NSNumber(value: 3), "d":"Hello world", "e":"10", "f":"10.15"]
-        let (o, _) = FwiJSONMapper().mapDictionary(dictionary: d, toModel: TestJSON1.self)
-
-        guard let model = o else {
-            XCTFail("Expected o is not null.")
-            return
-        }
-        XCTAssertEqual(model.a, 1, "Expected '1' but found: '\(model.a)'.")
-        XCTAssertEqual(model.b, 2, "Expected '2' but found: '\(model.b)'.")
-        XCTAssertEqual(model.c, 3, "Expected '3' but found: '\(model.c)'.")
-        XCTAssertEqual(model.e, 10, "Expected '10' but found: '\(model.e)'.")
-        XCTAssertEqual(model.d, "Hello world", "Expected 'Hello world' but found: '\(model.d)'.")
+        
+        var o = TestJSON1()
+        let _ = FwiJSONMapper().map(dictionary: d, toModel: &o)
+        
+        XCTAssertEqual(o.a, 1, "Expected '1' but found: '\(o.a)'.")
+        XCTAssertEqual(o.b, 2, "Expected '2' but found: '\(o.b)'.")
+        XCTAssertEqual(o.c, 3, "Expected '3' but found: '\(o.c)'.")
+        XCTAssertEqual(o.e, 10, "Expected '10' but found: '\(o.e)'.")
+        XCTAssertEqual(o.d, "Hello world", "Expected 'Hello world' but found: '\(o.d)'.")
     }
 
-    func testMapDictionaryToOptionalProperties() {
+    func testMapDictionary2() {
         let d: [String : Any] = ["a":NSNumber(value: 1), "b":NSNumber(value: 2), "c":NSNumber(value: 3), "d":"Hello world", "e":"10", "f":"10.15"]
-        let (o, _) = FwiJSONMapper().mapDictionary(dictionary: d, toModel: TestJSON2.self)
-
-        guard let model = o else {
-            XCTFail("Expected o is not null.")
-            return
-        }
-        XCTAssertEqual(model.a, 1, "Expected '1' but found: '\(model.a)'.")
-        XCTAssertEqual(model.b, 2, "Expected '2' but found: '\(model.b)'.")
-        XCTAssertEqual(model.c, 3, "Expected '3' but found: '\(model.c)'.")
-        XCTAssertEqual(model.e, 10, "Expected '10' but found: '\(model.e)'.")
-        XCTAssertEqual(model.d, "Hello world", "Expected 'Hello world' but found: '\(model.d)'.")
-        XCTAssertNil(model.g, "Expected nil but found: '\(model.g)'.")
+        
+        var o = TestJSON2()
+        let _ = FwiJSONMapper().map(dictionary: d, toModel: &o)
+        
+        XCTAssertEqual(o.a, 1, "Expected '1' but found: '\(o.a)'.")
+        XCTAssertEqual(o.b, 2, "Expected '2' but found: '\(o.b)'.")
+        XCTAssertEqual(o.c, 3, "Expected '3' but found: '\(o.c)'.")
+        XCTAssertEqual(o.e, 10, "Expected '10' but found: '\(o.e)'.")
+        XCTAssertEqual(o.d, "Hello world", "Expected 'Hello world' but found: '\(o.d)'.")
+        XCTAssertNil(o.g, "Expected nil but found: '\(o.g)'.")
     }
 
-    func testMapDictionary() {
-        let d: [String : Any] = ["a":NSNumber(value: 1),
-                                 "b":NSNumber(value: 2),
-                                 "c":NSNumber(value: 3),
+    func testMapDictionary3() {
+        let d: [String : Any] = ["a":1,
+                                 "b":2,
+                                 "c":3,
                                  "d":"Hello world",
                                  "e":"10",
                                  "f":"10.15",
@@ -160,53 +207,76 @@ class FwiJSONMapperTest: XCTestCase {
                                  "data2": "2012-04-23T18:25:43.511Z",
                                  "date1": 1464768697,
                                  "date2": "2012-04-23T18:25:43.511Z"]
-        let (o, _) = FwiJSONMapper().mapDictionary(dictionary: d, toModel: TestJSON3.self)
+        var o = TestJSON3()
+        let _ = FwiJSONMapper().map(dictionary: d, toModel: &o)
+        
+        XCTAssertEqual(o.a, 1, "Expected '1' but found: '\(o.a)'.")
+        XCTAssertEqual(o.b, 2, "Expected '2' but found: '\(o.b)'.")
+        XCTAssertEqual(o.c, 3, "Expected '3' but found: '\(o.c)'.")
+        XCTAssertEqual(o.e, 10, "Expected '10' but found: '\(o.e)'.")
 
-        guard let model = o else {
-            XCTFail("Expected o is not null.")
-            return
-        }
-        XCTAssertEqual(model.a, 1, "Expected '1' but found: '\(model.a)'.")
-        XCTAssertEqual(model.b, 2, "Expected '2' but found: '\(model.b)'.")
-        XCTAssertEqual(model.c, 3, "Expected '3' but found: '\(model.c)'.")
-        XCTAssertEqual(model.e, 10, "Expected '10' but found: '\(model.e)'.")
-
-        XCTAssertEqual(model.d, "Hello world", "Expected 'Hello world' but found: '\(model.d)'.")
-        XCTAssertNotNil(model.url, "Expected not nil but found: '\(model.url)'.")
-        XCTAssertEqual(model.url?.absoluteString, "https://www.google.com/?gws_rd=ssl", "Expected 'https://www.google.com/?gws_rd=ssl' but found: '\(model.url?.absoluteString)'.")
-        XCTAssertNotNil(model.data1, "Expected not nil but found: '\(model.data1)'.")
-        XCTAssertNotNil(model.data2, "Expected not nil but found: '\(model.data2)'.")
-        XCTAssertNotNil(model.date1, "Expected not nil but found: '\(model.date1)'.")
-        XCTAssertNotNil(model.date2, "Expected not nil but found: '\(model.date2)'.")
+        XCTAssertEqual(o.d, "Hello world", "Expected 'Hello world' but found: '\(o.d)'.")
+        XCTAssertNotNil(o.url, "Expected not nil but found: '\(o.url)'.")
+        XCTAssertEqual(o.url?.absoluteString, "https://www.google.com/?gws_rd=ssl", "Expected 'https://www.google.com/?gws_rd=ssl' but found: '\(o.url?.absoluteString)'.")
+        XCTAssertNotNil(o.data1, "Expected not nil but found: '\(o.data1)'.")
+        XCTAssertEqual(o.data1?.toString(), "FwiCore", "Expected 'FwiCore' but found: '\(o.data1?.toString())'.")
+        XCTAssertNotNil(o.data2, "Expected not nil but found: '\(o.data2)'.")
+        XCTAssertEqual(o.data2?.toString(), "2012-04-23T18:25:43.511Z", "Expected '2012-04-23T18:25:43.511Z' but found: '\(o.data2?.toString())'.")
+        XCTAssertNotNil(o.date1, "Expected not nil but found: '\(o.date1)'.")
+        XCTAssertNotNil(o.date2, "Expected not nil but found: '\(o.date2)'.")
+    }
+    
+    func testMapDictionary4() {
+        let d: [String : Any] = ["a":1,
+                                 "b":2,
+                                 "c":3,
+                                 "d":"Hello world",
+                                 "e":"10",
+                                 "f":"10.15",
+                                 "urls1":["url": "https://www.google.com/?gws_rd=ssl"],
+                                 "urls2":["url": "https://www.google.com/?gws_rd=ssl"],
+                                 "urls3":["url": "https://www.google.com/?gws_rd=ssl"],
+                                 "urls4":["url": 40],
+                                 "urlTest":["url": "https://www.google.com/?gws_rd=ssl"]]
+        var o = TestJSON4()
+        let _ = FwiJSONMapper().map(dictionary: d, toModel: &o)
+        
+        XCTAssertNotNil(o.urls1, "Expected not nil but found: '\(o.urls1)'.")
+        XCTAssertNil(o.urls2, "Expected nil but found: '\(o.urls2)'.")
+        XCTAssertNil(o.urls3, "Expected nil but found: '\(o.urls3)'.")
+        XCTAssertNotNil(o.urls4, "Expected not nil but found: '\(o.urls4)'.")
+        
+        XCTAssertNotNil(o.urlTest, "Expected not nil but found: '\(o.urlTest)'.")
+        XCTAssertNotNil(o.urlTest?.url, "Expected not nil but found: '\(o.urlTest?.url)'.")
+        XCTAssertEqual(o.urlTest?.url?.absoluteString, "https://www.google.com/?gws_rd=ssl", "Expected 'https://www.google.com/?gws_rd=ssl' but found: '\(o.urlTest?.url?.absoluteString)'.")
     }
 
 
 
-    func testExample() {
-        let dict = ["test1": 5,
-                    "test2": ["url": "https://www.google.com/?gws_rd=ssl"],
-                    "test3" : ["testDict" : "abc"],
-//                    "test4": ["key" : ["url": "https://www.google.com/?gws_rd=ssl"]],
-                    "test5": [["url": "https://www.google.com/?gws_rd=ssl"],
-                        ["url": "https://www.google.com/?gws_rd=ssl"],
-                        ["url": "https://www.google.com/?gws_rd=ssl"]],
-                    "test6": [2, 4, 6],
-                    "test7": ["adad", "dadada", "duadgaud"],
-                    "test8": 1464768697,
-                    "test9": "2012-10-01T094500GMT"
-
-        ] as [String : Any]
-
-//        let c = JSONMapper1.mapClassWithDictionary(Test.self, dict: dict).object
-
-        var c = Test()
-//        FwiJSONMapper().mapDictionary(dictionary: dict, toModel: &c)
-        let error = FwiJSONMapper.mapObjectToModel(dict, model: &c)
-
-
-        let dict1 = FwiJSONMapper.toDictionary(c)
-        print(dict1)
-
-    }
-
+//    func testExample() {
+//        let dict = ["test1": 5,
+//                    "test2": ["url": "https://www.google.com/?gws_rd=ssl"],
+//                    "test3" : ["testDict" : "abc"],
+////                    "test4": ["key" : ["url": "https://www.google.com/?gws_rd=ssl"]],
+//                    "test5": [["url": "https://www.google.com/?gws_rd=ssl"],
+//                        ["url": "https://www.google.com/?gws_rd=ssl"],
+//                        ["url": "https://www.google.com/?gws_rd=ssl"]],
+//                    "test6": [2, 4, 6],
+//                    "test7": ["adad", "dadada", "duadgaud"],
+//                    "test8": 1464768697,
+//                    "test9": "2012-10-01T094500GMT"
+//
+//        ] as [String : Any]
+//
+////        let c = JSONMapper1.mapClassWithDictionary(Test.self, dict: dict).object
+//
+//        var c = Test()
+////        FwiJSONMapper().mapDictionary(dictionary: dict, toModel: &c)
+//        let error = FwiJSONMapper.mapObjectToModel(dict, model: &c)
+//
+//
+//        let dict1 = FwiJSONMapper.toDictionary(c)
+//        print(dict1)
+//
+//    }
 }
