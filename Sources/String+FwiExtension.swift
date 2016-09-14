@@ -151,9 +151,9 @@ public extension String {
 
 extension String {
     /** Subscript get character at index */
-    public subscript(index: Int) -> Character {
+    public subscript(index: Int) -> Character? {
         guard !(index < 0 || index >= characters.count) else {
-            return Character(" ")
+            return nil
         }
         return self[characters.index(self.startIndex, offsetBy: index)]
     }
