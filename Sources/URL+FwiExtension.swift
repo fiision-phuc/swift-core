@@ -79,13 +79,16 @@ public func + (left: URL?, right: [String: String]?) -> URL? {
         return left
     }
     
+    // Convert to form
     let forms = right?.map({ FwiFormParam(key: $0, value: $1) })
-    // filter tag
-    let hashtag = forms?.filter({ $0.key[$0.key.startIndex] == "#"}).sorted(by: <).first?.description
-    // Query
-    let query = forms?.filter({ $0.key[$0.key.startIndex] != "#"}).sorted(by: <).map({ $0.description }).joined(separator: "&")
     
-    return URL(string: "\(url)\(hashtag ?? "")?\(query ?? "")")
+    // filter tag
+    let hashtag = forms?.filter({ $0.key[$0.key.startIndex] == "#"}).sorted(by: <).first?.description ?? ""
+    
+    // Query
+    let query = forms?.filter({ $0.key[$0.key.startIndex] != "#"}).sorted(by: <).map({ $0.description }).joined(separator: "&") ?? ""
+    
+    return URL(string: "\(url)\(hashtag)?\(query)")
     
 //    if let url = left, let params = right, params.count > 0 {
 //        var form = params.map({ FwiFormParam(key: $0, value: $1) })
