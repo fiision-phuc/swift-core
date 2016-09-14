@@ -52,23 +52,18 @@ public final class FwiJSONMapper {
     /// - parameter array (required): a list of keys-values.
     /// - parameter model (required): a class which contains a set of properties to be mapped.
     @discardableResult
-    public func mapArray<T: NSObject>(array a: [[String:Any]], toModel m: T.Type) -> ([T]?, NSError?) {
-        if let c = m as? FwiJSONModel.Type {
-            var array = [Any]()
-
+    public func map<T: NSObject>(array a: [[String:Any]], toModel m: T.Type) -> ([T], NSError?) {
+            var array = [T]()
             for d in a {
-//                var o = c.init()
-//                guard mapDictionary(dictionary: d, toModel: &o) == nil else {
-////                    userInfo[p.mirrorName] = "\(p.mirrorName) has invalid data."
-//                    continue
-//                }
-//                array.append(o)
+                var o = m.init()
+                
+                guard map(dictionary: d, toModel: &o) == nil else {
+//                    userInfo[p.mirrorName] = "\(p.mirrorName) has invalid data."
+                    continue
+                }
+                array.append(o)
             }
-//            value = array
-//            canAssign = true
-        }
-
-        return (nil, nil)
+        return (array, nil)
     }
 
     /// Map dictionary to model.
@@ -76,13 +71,13 @@ public final class FwiJSONMapper {
     /// - parameter dictionary (required): set of keys-values.
     /// - parameter model (required): a class which contains a set of properties to be mapped.
     @discardableResult
-    public func mapDictionary<T: NSObject>(dictionary d: [String:Any], toModel m: T.Type) -> (T?, NSError?) {
-        var (o, properties) = FwiReflector.properties(withModel: m)
+    public func map<T: NSObject>(dictionary d: [String:Any], toModel m: inout T) -> NSError? {
+        var properties = FwiReflector.properties(withObject: m)
         var userInfo = [String:Any]()
         var dictionary = d
 
         // Override dictionary if model implement FwiJSONModel
-        if let j = o as? FwiJSONModel {
+        if let j = m as? FwiJSONModel {
             // Apply key map
             if let keyMapper = j.keyMapper {
                 for (k, v) in keyMapper {
@@ -123,43 +118,44 @@ public final class FwiJSONMapper {
             // Try to convert raw data to right format
             var value = valueJSON
             var canAssign = false
-            if let a = valueJSON as? [Any], p.isCollection || p.isSet {
-                if let objects = a as? [[String:Any]], let collectionType = p.collectionType, collectionType.isObject == true, let c = collectionType.classType as? NSObject.Type {
-                    mapArray(array: objects, toModel: c)
-//                    if let c = collectionType.classType as? NSObject.Type {
-//                        var array = [Any]()
-//                        
-//                        for d in objects {
-//                            var o = c.init()
-//                            guard mapDictionary(dictionary: d, toModel: &o) == nil else {
-//                                userInfo[p.mirrorName] = "\(p.mirrorName) has invalid data."
-//                                continue
-//                            }
-//                            array.append(o)
-//                        }
-//                        value = array
-//                        canAssign = true
-//                    }
-                }
-                else {
-                    canAssign = true
-                }
-            }
-            else if let d = valueJSON as? [String:Any], p.isDictionary || p.isObject {
-                if p.isObject {
-                    if let c = p.classType as? NSObject.Type {
-                        var o = c.init()
-                        
-//                        guard mapDictionary(dictionary: d, toModel: &o) == nil else {
-//                            userInfo[p.mirrorName] = "\(p.mirrorName) has invalid data."
-//                            continue
-//                        }
-                        value = o
+            if let a = value as? [Any], p.isCollection || p.isSet {
+                if let objects = a as? [[String:Any]], let collectionType = p.collectionType, let c = collectionType.classType as? NSObject.Type {
+                    let (list, err) = map(array: objects, toModel: c)
+                    if err != nil {
+                        FwiLog("\(err)")
+                    }
+                    else {
+                        value = list
                         canAssign = true
                     }
                 }
                 else {
                     canAssign = true
+                }
+            }
+            else if let d = value as? [String:Any], p.isDictionary || p.isObject {
+                if p.isObject {
+                    if let c = p.classType as? NSObject.Type {
+                        var child = c.init()
+                        
+                        if let err = map(dictionary: d, toModel: &child) {
+                            FwiLog("\(err)")
+                        }
+                        else {
+                            value = child
+                            canAssign = true
+                        }
+                    }
+                }
+                else {
+                    let validKey = (p.dictionaryType?.key.primitiveType == String.self)
+                    
+                    if let _ = d as? [String:NSNumber], p.dictionaryType?.value.primitiveType != String.self {
+                        canAssign = (validKey && true)
+                    }
+                    else if let _ = d as? [String:String], p.dictionaryType?.value.primitiveType == String.self {
+                        canAssign = (validKey && true)
+                    }
                 }
             }
             else {
@@ -200,18 +196,18 @@ public final class FwiJSONMapper {
             }
             
             // Assign value to property if can
-            if canAssign && o?.responds(to: NSSelectorFromString(p.mirrorName)) == true {
-                o?.setValue(value, forKey: p.mirrorName)
+            if canAssign && m.responds(to: NSSelectorFromString(p.mirrorName)) == true {
+                m.setValue(value, forKey: p.mirrorName)
             }
             else {
-                userInfo[p.mirrorName] = "\(p.mirrorName) has data's type conflict."
+                userInfo[p.mirrorName] = "could not map '\(value)' to this property due to data's type conflict."
             }
         }
         
 //        if errorUserInfo.keys.count > 0 {
 //            return NSError(domain: NSURLErrorKey, code: NSURLErrorUnknown, userInfo: errorUserInfo)
 //        }
-        return (o, nil)
+        return nil
     }
 
     // MARK: Class's private methods
