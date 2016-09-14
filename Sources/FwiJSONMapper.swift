@@ -262,7 +262,7 @@ public extension FwiJSONMapper {
         let mirror = Mirror(reflecting: object)
 
         // Reflector Object To Identify Type Properties
-//        let reflectorItems = FwiReflector.properties(withModel: type(of: object))
+        let reflectorItems = FwiReflector.properties(withModel: type(of: object))
 
         // Create dictionary from object
         var dictionaryKey: [String: String] = [:]
