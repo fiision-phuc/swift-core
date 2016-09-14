@@ -52,6 +52,10 @@ public extension URL {
         let array = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return array.first
     }
+    
+    public func addHashTag(with hashTag: String?) -> URL? {
+        return URL(string: "\(self)" + (hashTag ?? ""))
+    }
 }
 
 // MARK: Custom Operator
@@ -70,19 +74,20 @@ public func += (left: inout URL?, right: String?) {
 }
 
 public func + (left: URL?, right: [String:String]?) -> URL? {
-    guard let url = left else {
+   
+    guard let url = left, (right?.count ?? 0) > 0 else {
         return left
     }
+    // filter tag
+    let hashtag = right?.filter({ $0.key[$0.key.startIndex] == "#"}).map({ FwiFormParam(key: $0, value: $1) }).sorted(by: <).first?.description
+    let querys = right?.filter({ $0.key[$0.key.startIndex] != "#"}).map({ FwiFormParam(key: $0, value: $1).description }).sorted(by: <).joined(separator: "&")
     
-    let form = right?.map({ URLQueryItem(name: $0, value: $1) })
-    var urlComponent = URLComponents(url: url, resolvingAgainstBaseURL: true)
-    urlComponent?.queryItems = form
-    return urlComponent?.url
+    return URL(string: "\(url)\(hashtag ?? "")?\(querys ?? "")")
     
 //    if let url = left, let params = right, params.count > 0 {
-//        let form = params.map({ FwiFormParam(key: $0, value: $1) })
+//        var form = params.map({ FwiFormParam(key: $0, value: $1) })
 //        form = form.sorted(by: <)
-//        let p = form.first
+//        let p = form.first!
 //        if p.key[p.key.startIndex] == "#" {
 //            repeat {
 //                form.removeFirst()
