@@ -40,24 +40,20 @@ import UIKit
 import Foundation
 
 
-public final class FwiJSONMapper {
-
-    // MARK: Class's constructors
-    public init() {
-    }
+public struct FwiJSONMapper {
 
     // MARK: Class's public methods
     /// Build a list of objects.
     ///
-    /// - parameter array (required): a list of keys-values.
-    /// - parameter model (required): a class which contains a set of properties to be mapped.
+    /// - parameter array (required): a list of keys-values
+    /// - parameter model (required): a class which contains a set of properties to be mapped
     @discardableResult
-    public func map<T: NSObject>(array a: [[String:Any]], toModel m: T.Type) -> ([T], NSError?) {
+    public static func map<T: NSObject>(array a: [[String : Any]], toModel m: T.Type) -> ([T], NSError?) {
             var array = [T]()
             for d in a {
                 var o = m.init()
                 
-                guard map(dictionary: d, toModel: &o) == nil else {
+                guard map(dictionary: d, toObject: &o) == nil else {
 //                    userInfo[p.mirrorName] = "\(p.mirrorName) has invalid data."
                     continue
                 }
@@ -65,53 +61,54 @@ public final class FwiJSONMapper {
             }
         return (array, nil)
     }
-
-    /// Map dictionary to model.
+    
+    /// Create instance of a model and map dictionary to that instance.
     ///
-    /// - parameter dictionary (required): set of keys-values.
-    /// - parameter model (required): a class which contains a set of properties to be mapped.
+    /// - parameter dictionary (required): set of keys-values
+    /// - parameter model (required): a class to be initialize for mapping
+    public static func map<T: NSObject>(dictionary d: [String : Any], toModel m: T) -> (T?, NSError?) {
+        return (nil, nil)
+    }
+    
+    /// Map dictionary to object.
+    ///
+    /// - parameter dictionary (required): set of keys-values
+    /// - parameter object (required): an object which contains a set of properties to be mapped
     @discardableResult
-    public func map<T: NSObject>(dictionary d: [String:Any], toModel m: inout T) -> NSError? {
+    public static func map<T: NSObject>(dictionary d: [String : Any], toObject m: inout T) -> NSError? {
         var properties = FwiReflector.properties(withObject: m)
-        var userInfo = [String:Any]()
+        var errorInfo = [String : Any]()
         var dictionary = d
 
         // Override dictionary if model implement FwiJSONModel
         if let j = m as? FwiJSONModel {
-            // Apply key map
-            if let keyMapper = j.keyMapper {
-                for (k, v) in keyMapper {
-                    dictionary[v] = dictionary[k]
-                    dictionary.removeValue(forKey: k)
-                }
-            }
-
-            // Remove ignore properties
+            j.keyMapper?.forEach({
+                dictionary[$1] = dictionary[$0]
+                dictionary.removeValue(forKey: $0)
+            })
+            
             if let ignoreProperties = j.ignoreProperties {
                 properties = properties.filter({ ignoreProperties.contains($0.mirrorName) == false })
             }
-
-            // Apply optional properties 
-            if let optionalProperties = j.optionalProperties {
-                properties.forEach({
-                    if optionalProperties.contains($0.mirrorName) {
-                        $0.optionalProperty = true
-                    }
-                })
-            }
+ 
+            properties.forEach({
+                if j.optionalProperties?.contains($0.mirrorName) == true {
+                    $0.optionalProperty = true
+                }
+            })
         }
 
         // Inject data into object's properties
         for p in properties {
             /* Condition validation: validate json type */
-            guard let valueJSON = dictionary[p.mirrorName], valueJSON is NSNull || valueJSON is NSNumber || valueJSON is String || valueJSON is [Any] || valueJSON is [String:Any] else {
-                userInfo[p.mirrorName] = "Could not map 'value' to property: '\(p.mirrorName)' because of incorrect JSON grammar: '\(dictionary[p.mirrorName])'"
+            guard let valueJSON = dictionary[p.mirrorName], valueJSON is NSNull || valueJSON is NSNumber || valueJSON is String || valueJSON is [Any] || valueJSON is [String : Any] else {
+                errorInfo[p.mirrorName] = "Could not map 'value' to property: '\(p.mirrorName)' because of incorrect JSON grammar: '\(dictionary[p.mirrorName])'"
                 continue
             }
 
             /* Condition validation: validate optional property */
             if !p.optionalProperty && valueJSON is NSNull {
-                userInfo[p.mirrorName] = "\(p.mirrorName) is missing."
+                errorInfo[p.mirrorName] = "\(p.mirrorName) is missing."
                 continue
             }
 
@@ -119,7 +116,7 @@ public final class FwiJSONMapper {
             var value = valueJSON
             var canAssign = false
             if let a = value as? [Any], p.isCollection || p.isSet {
-                if let objects = a as? [[String:Any]], let collectionType = p.collectionType, let c = collectionType.classType as? NSObject.Type {
+                if let objects = a as? [[String : Any]], let collectionType = p.collectionType, let c = collectionType.classType as? NSObject.Type {
                     let (list, err) = map(array: objects, toModel: c)
                     if err != nil {
                         FwiLog("\(err)")
@@ -128,20 +125,18 @@ public final class FwiJSONMapper {
                         value = list
                         canAssign = true
                     }
-                }
-                else {
+                } else {
                     canAssign = true
                 }
             }
-            else if let d = value as? [String:Any], p.isDictionary || p.isObject {
+            else if let d = value as? [String : Any], p.isDictionary || p.isObject {
                 if p.isObject {
                     if let c = p.classType as? NSObject.Type {
                         var child = c.init()
                         
-                        if let err = map(dictionary: d, toModel: &child) {
+                        if let err = map(dictionary: d, toObject: &child) {
                             FwiLog("\(err)")
-                        }
-                        else {
+                        } else {
                             value = child
                             canAssign = true
                         }
@@ -152,8 +147,7 @@ public final class FwiJSONMapper {
                     
                     if let _ = d as? [String:NSNumber], p.dictionaryType?.value.primitiveType != String.self {
                         canAssign = (validKey && true)
-                    }
-                    else if let _ = d as? [String:String], p.dictionaryType?.value.primitiveType == String.self {
+                    } else if let _ = d as? [String:String], p.dictionaryType?.value.primitiveType == String.self {
                         canAssign = (validKey && true)
                     }
                 }
@@ -165,8 +159,7 @@ public final class FwiJSONMapper {
                             value = number
                             canAssign = true
                         }
-                    }
-                    else {
+                    } else {
                         canAssign = true
                     }
                 }
@@ -179,14 +172,12 @@ public final class FwiJSONMapper {
                             value = data
                             canAssign = true
                         }
-                    }
-                    else if structType == Date.self {
+                    } else if structType == Date.self {
                         if let date = self.transformDate(value) {
                             value = date
                             canAssign = true
                         }
-                    }
-                    else if structType == URL.self {
+                    } else if structType == URL.self {
                         if let string = value as? String, let url = URL(string: string.encodeHTML()) {
                             value = url
                             canAssign = true
@@ -198,9 +189,8 @@ public final class FwiJSONMapper {
             // Assign value to property if can
             if canAssign && m.responds(to: NSSelectorFromString(p.mirrorName)) == true {
                 m.setValue(value, forKey: p.mirrorName)
-            }
-            else {
-                userInfo[p.mirrorName] = "could not map '\(value)' to this property due to data's type conflict."
+            } else {
+                errorInfo[p.mirrorName] = "could not map '\(value)' to this property due to data's type conflict."
             }
         }
         
@@ -211,7 +201,7 @@ public final class FwiJSONMapper {
     }
 
     // MARK: Class's private methods
-    fileprivate var numberFormat: NumberFormatter = {
+    fileprivate static var numberFormat: NumberFormatter = {
         let numberFormat = NumberFormatter()
 
         numberFormat.locale = Locale(identifier: "en_US")
@@ -227,7 +217,7 @@ public final class FwiJSONMapper {
     ///
     /// parameter value (required): JSON date, can be either in string form or number form
     /// parameter format (optional): format string to convert string to date
-    fileprivate func transformDate(_ value: Any?, format: String = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") -> Date? {
+    fileprivate static func transformDate(_ value: Any?, format: String = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") -> Date? {
         if let number = value as? NSNumber {
             return Date(timeIntervalSince1970: number.doubleValue)
         }
@@ -247,23 +237,23 @@ public final class FwiJSONMapper {
 public extension FwiJSONMapper {
 
     // MARK: Class's static constructors
-    public class func mapObjectToModel<T: NSObject>(_ object: Any?, model m: inout T) -> NSError? {
+    public static func mapObjectToModel<T: NSObject>(_ object: Any?, model m: inout T) -> NSError? {
         if let dictionary = object as? [String: AnyObject] {
-            return FwiJSONMapper().mapDictionaryToModel(dictionary, model: &m)
+            return FwiJSONMapper.mapDictionaryToModel(dictionary, model: &m)
         }
 
         return NSError(domain: NSURLErrorKey, code: NSURLErrorUnknown, userInfo: [NSLocalizedDescriptionKey: "Parse object to dictionary error !!!"])
     }
 
-    public class func toDictionary<T: NSObject>(_ object: T) -> [String: Any] {
+    public static func toDictionary<T: NSObject>(_ object: T) -> [String: Any] {
         var result: [String: Any] = [:]
 
         // Create Mirror Value Follow Properties
         let mirror = Mirror(reflecting: object)
 
         // Reflector Object To Identify Type Properties
-        let reflectorItems = FwiReflector.properties(withModel: type(of: object))
-
+        let reflectorItems = FwiReflector.properties(withObject: object)
+        
         // Create dictionary from object
         var dictionaryKey: [String: String] = [:]
         dictionaryKey = mirror.children.reduce(dictionaryKey, { (temp, child) -> [String: String] in
@@ -278,144 +268,144 @@ public extension FwiJSONMapper {
         // Tracking if it has swap key
         if let jsonModel = object as? FwiJSONModel {
             // Check It Has KeyMapper
-//            if let keyMapper = jsonModel.keyMapper?() {
-//                // Swap Key
-//                for (key, value) in keyMapper {
-//                    if dictionaryKey[value] != nil {
-//                        dictionaryKey.removeValue(forKey: value)
-//                        dictionaryKey[key] = value
-//                    }
-//                }
-//            }
+            if let keyMapper = jsonModel.keyMapper {
+                // Swap Key
+                for (key, value) in keyMapper {
+                    if dictionaryKey[value] != nil {
+                        dictionaryKey.removeValue(forKey: value)
+                        dictionaryKey[key] = value
+                    }
+                }
+            }
         }
 
-//        // Loop in Dictionary Key To Find Result
-//        for (keyJson, nameProperty) in dictionaryKey {
-//            // Find Value Of Properties
-//            let value = mirror.children.first(where: {$0.label == nameProperty})?.value
-//
-//            // Find Reflector of property
-//            guard let reflector = reflectorItems.first(where: { $0.propertyName == nameProperty }) else {
+        // Loop in Dictionary Key To Find Result
+        for (keyJson, nameProperty) in dictionaryKey {
+            // Find Value Of Properties
+            let value = mirror.children.first(where: {$0.label == nameProperty})?.value
+
+            // Find Reflector of property
+            guard let reflector = reflectorItems.first(where: { $0.propertyName == nameProperty }) else {
 //                // nil , it can't identify
-//                continue
-//            }
-//
-//            // if it is primity type
-//            if reflector.isPrimitive {
-//                result[keyJson] = value
-//            } else {
-//                // Object
-//                if reflector.isObject {
-//                    // NSURL
-//                    if let url = value as? URL {
-//                        // Return a absolute string of url
-//                        result[keyJson] = url.absoluteString
-//                    }
-//                    // NSDate
-//                    else if let date = value as? Date {
-//                        // Return a double value
-//                        result[keyJson] = date.timeIntervalSince1970
-//                    }
-//                    // Try other
-//                    else if let obj = value {
-//                        result[keyJson] = obj
-//                    }
-//                }
-//                // Class
-//                else if reflector.isClass {
-//                    //
-//                    if let obj = value as? NSObject {
-//                        // Tracking If Object has Init Function
-//                        if obj.responds(to: #selector(type(of: obj).init)) {
-//                            let newDict = FwiJSONMapper.toDictionary(obj)
-//                            result[keyJson] = newDict
-//                        }
-//                    }
-//                }
-//                // Dictionary
-//                else if reflector.isDictionary {
-//                    // Create a dictionay temp
-//                    var temp: [String: Any] = [:]
-//
-//                    defer {
-//                        if temp.keys.count > 0 {
-//                            result[keyJson] = temp
-//                        }
-//                    }
-//
-//                    // Cast to choice dictionary type
-//                    if let newDict = value as? [String: AnyObject] {
-//                        // Loop in new dict to find value
-//                        for (key, newValue) in newDict {
-//                            // Check Value type
-//                            let reflectItem = FwiReflector(mirrorName: key, mirrorValue: newValue)
-//                            if reflectItem.isPrimitive || newValue is String || newValue is NSNumber {
-//                                temp[key] = newValue
-//                            } else {
-//                                // Other
-//                                if let objDict = newValue as? NSObject {
-//                                    // Tracking If Object has Init Function
-//                                    if objDict.responds(to: #selector(type(of: objDict).init)) {
-//                                        let dictObj = FwiJSONMapper.toDictionary(objDict)
-//                                        temp[key] = dictObj
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                    // Try to NSDictionary
-//                    else if let newDict = value as? NSDictionary {
-//                        // Loop in new dict to find value
-//                        for (key, newValue) in newDict {
-//                            if let keyPath = key as? String {
-//                                // Loop in new dict to find value
-//                                // Check Value type
-//                                let reflectItem = FwiReflector(mirrorName: keyPath, mirrorValue: newValue)
-//                                if reflectItem.isPrimitive || newValue is String || newValue is NSNumber {
-//                                    temp[keyPath] = newValue
-//                                } else {
-//                                    // Other
-//                                    if let objDict = newValue as? NSObject {
-//                                        // Tracking If Object has Init Function
-//                                        if objDict.responds(to: #selector(type(of: objDict).init)) {
-//                                            let dictObj = FwiJSONMapper.toDictionary(objDict)
-//                                            temp[keyPath] = dictObj
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                // Collection
-//                else if reflector.isCollection {
-//                    // Create Array temp
-//                    var temp: [AnyObject] = []
-//                    defer {
-//                        if temp.count > 0 {
-//                            result[keyJson] = temp
-//                        }
-//                    }
-//
-//                    if let arrItem = value as? NSArray {
-//                        for valueItem in arrItem {
-//                            let reflect = FwiReflector(mirrorName: "", mirrorValue: valueItem)
-//                            if reflect.isPrimitive || valueItem is String || valueItem is NSNumber {
-//                                temp.append(valueItem as AnyObject)
-//                            } else {
-//                                if let newItem = valueItem as? NSObject {
-//                                    // Tracking If Object has Init Function
-//                                    if newItem.responds(to: #selector(type(of: newItem).init)) {
-//                                        let newDict = FwiJSONMapper.toDictionary(newItem)
-//                                        temp.append(newDict as AnyObject)
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
+                continue
+            }
+
+            // if it is primity type
+            if reflector.isPrimitive {
+                result[keyJson] = value
+            } else {
+                // Object
+                if reflector.isObject {
+                    // NSURL
+                    if let url = value as? URL {
+                        // Return a absolute string of url
+                        result[keyJson] = url.absoluteString
+                    }
+                    // NSDate
+                    else if let date = value as? Date {
+                        // Return a double value
+                        result[keyJson] = date.timeIntervalSince1970
+                    }
+                    // Try other
+                    else if let obj = value {
+                        result[keyJson] = obj
+                    }
+                }
+                // Class
+                else if reflector.isClass {
+                    //
+                    if let obj = value as? NSObject {
+                        // Tracking If Object has Init Function
+                        if obj.responds(to: #selector(type(of: obj).init)) {
+                            let newDict = FwiJSONMapper.toDictionary(obj)
+                            result[keyJson] = newDict
+                        }
+                    }
+                }
+                // Dictionary
+                else if reflector.isDictionary {
+                    // Create a dictionay temp
+                    var temp: [String: Any] = [:]
+
+                    defer {
+                        if temp.keys.count > 0 {
+                            result[keyJson] = temp
+                        }
+                    }
+
+                    // Cast to choice dictionary type
+                    if let newDict = value as? [String: AnyObject] {
+                        // Loop in new dict to find value
+                        for (key, newValue) in newDict {
+                            // Check Value type
+                            let reflectItem = FwiReflector(mirrorName: key, mirrorValue: newValue)
+                            if reflectItem.isPrimitive || newValue is String || newValue is NSNumber {
+                                temp[key] = newValue
+                            } else {
+                                // Other
+                                if let objDict = newValue as? NSObject {
+                                    // Tracking If Object has Init Function
+                                    if objDict.responds(to: #selector(type(of: objDict).init)) {
+                                        let dictObj = FwiJSONMapper.toDictionary(objDict)
+                                        temp[key] = dictObj
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // Try to NSDictionary
+                    else if let newDict = value as? NSDictionary {
+                        // Loop in new dict to find value
+                        for (key, newValue) in newDict {
+                            if let keyPath = key as? String {
+                                // Loop in new dict to find value
+                                // Check Value type
+                                let reflectItem = FwiReflector(mirrorName: keyPath, mirrorValue: newValue)
+                                if reflectItem.isPrimitive || newValue is String || newValue is NSNumber {
+                                    temp[keyPath] = newValue
+                                } else {
+                                    // Other
+                                    if let objDict = newValue as? NSObject {
+                                        // Tracking If Object has Init Function
+                                        if objDict.responds(to: #selector(type(of: objDict).init)) {
+                                            let dictObj = FwiJSONMapper.toDictionary(objDict)
+                                            temp[keyPath] = dictObj
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                // Collection
+                else if reflector.isCollection {
+                    // Create Array temp
+                    var temp: [AnyObject] = []
+                    defer {
+                        if temp.count > 0 {
+                            result[keyJson] = temp
+                        }
+                    }
+
+                    if let arrItem = value as? NSArray {
+                        for valueItem in arrItem {
+                            let reflect = FwiReflector(mirrorName: "", mirrorValue: valueItem)
+                            if reflect.isPrimitive || valueItem is String || valueItem is NSNumber {
+                                temp.append(valueItem as AnyObject)
+                            } else {
+                                if let newItem = valueItem as? NSObject {
+                                    // Tracking If Object has Init Function
+                                    if newItem.responds(to: #selector(type(of: newItem).init)) {
+                                        let newDict = FwiJSONMapper.toDictionary(newItem)
+                                        temp.append(newDict as AnyObject)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         return result
     }
@@ -427,7 +417,7 @@ public extension FwiJSONMapper {
 public extension FwiJSONMapper {
     
     /** Map Dictionary To Model. */
-    public func mapDictionaryToModel<T: NSObject>(_ dictionary: [String: AnyObject], model m: inout T) -> NSError? {
+    public static func mapDictionaryToModel<T: NSObject>(_ dictionary: [String: AnyObject], model m: inout T) -> NSError? {
         var dictionary =  (m as? FwiJSONModel)?.convertJSON(fromOriginal: dictionary) ?? dictionary
         let optionalProperties = (m as? FwiJSONModel)?.optionalProperties ?? []
         var (_, properties) = FwiReflector.properties(withModel: type(of: m))
@@ -514,7 +504,7 @@ public extension FwiJSONMapper {
                     else if p.structType == Date.self {
                         var value: Date?
                         
-                        value = self.transformDate(valueJson)
+                        value = transformDate(valueJson)
                         
                         if value == nil && isOptional == false {
                             errorUserInfo[p.propertyName] = "Not Find Value For Key"
@@ -547,7 +537,7 @@ public extension FwiJSONMapper {
                     else if p.classType == NSDate.self || p.classType == NSDate?.self {
                         var value: NSDate?
                         
-                        value = self.transformDate(valueJson) as NSDate?
+                        value = transformDate(valueJson) as NSDate?
                         
                         if value == nil && isOptional == false {
                             errorUserInfo[p.propertyName] = "Not Find Value For Key"

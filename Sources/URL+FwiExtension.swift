@@ -74,7 +74,6 @@ public func += (left: inout URL?, right: String?) {
 }
 
 public func + (left: URL?, right: [String: String]?) -> URL? {
-   
     guard let url = left, (right?.count ?? 0) > 0 else {
         return left
     }
@@ -89,25 +88,6 @@ public func + (left: URL?, right: [String: String]?) -> URL? {
     let query = forms?.filter({ $0.key[0] != "#"}).sorted(by: <).map({ $0.description }).joined(separator: "&") ?? ""
  
     return URL(string: "\(url)\(hashtag)?\(query)")
-    
-//    if let url = left, let params = right, params.count > 0 {
-//        var form = params.map({ FwiFormParam(key: $0, value: $1) })
-//        form = form.sorted(by: <)
-//        let p = form.first!
-//        if p.key[p.key.startIndex] == "#" {
-//            repeat {
-//                form.removeFirst()
-//            } while form[0].key[form[0].key.startIndex] == "#"
-//            
-//            
-//            let query = form.map{$0.description}.joined(separator: "&")
-//            return URL(string: "\(url)\(p.description)?\(query)")
-//        } else {
-//            let query = form.map{$0.description}.joined(separator: "&")
-//            return URL(string: "\(url)?\(query)")
-//        }
-//    }
-//    return left
 }
 
 public func += (left: inout URL?, right: [String:String]?) {

@@ -51,12 +51,10 @@ public final class FwiPersistentManager {
         NotificationCenter.default.addObserver(self, selector: #selector(FwiPersistentManager.handleContextDidSaveNotification(_:)), name: NSNotification.Name.NSManagedObjectContextDidSave, object: nil)
     }
 
-
     // MARK: Cleanup memory
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-
 
     // MARK: Class's properties
     public fileprivate (set) lazy var managedModel: NSManagedObjectModel = {
@@ -95,14 +93,16 @@ public final class FwiPersistentManager {
                 // try (storeURL3 as URL).setResourceValues([URLResourceKey.isExcludedFromBackupKey: true as AnyObject])
                 break
 
-            } catch _ {
+            }
+            catch _ {
                 // Note: If the first time fail, we remove everything but not second time.
                 if i == 0 {
                     let fileManager = FileManager.default
                     fileManager.removeFile(atURL: storeURL1)
                     fileManager.removeFile(atURL: storeURL2)
                     fileManager.removeFile(atURL: storeURL3)
-                } else {
+                }
+                else {
                     fatalError("Could not create persistent store coordinator for \(self.dataModel) model!")
                 }
             }

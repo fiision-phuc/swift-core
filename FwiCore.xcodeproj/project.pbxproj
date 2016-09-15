@@ -70,8 +70,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		BE8BF1381D83DC8E00F710CB /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = FwiCore.xcodeproj/Configs/Debug.xcconfig; sourceTree = "<group>"; };
-		BE8BF1391D83DC8E00F710CB /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = FwiCore.xcodeproj/Configs/Release.xcconfig; sourceTree = "<group>"; };
+		BE1735B61D89C13B00738B1F /* lib-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "lib-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/lib-debug.xcconfig"; sourceTree = "<group>"; };
+		BE1735B71D89C13B00738B1F /* lib-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "lib-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/lib-release.xcconfig"; sourceTree = "<group>"; };
+		BE1735B81D89C13B00738B1F /* project-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "project-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/project-debug.xcconfig"; sourceTree = "<group>"; };
+		BE1735B91D89C13B00738B1F /* project-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "project-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/project-release.xcconfig"; sourceTree = "<group>"; };
+		BE1735BA1D89C13B00738B1F /* test-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "test-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/test-debug.xcconfig"; sourceTree = "<group>"; };
+		BE1735BB1D89C13B00738B1F /* test-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "test-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/test-release.xcconfig"; sourceTree = "<group>"; };
 		BE8BF1461D8465BC00F710CB /* Data+FwiBase64Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiBase64Test.swift"; sourceTree = "<group>"; };
 		BE8BF1481D8465CE00F710CB /* Data+FwiHexTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiHexTest.swift"; sourceTree = "<group>"; };
 		BE8BF14A1D84661C00F710CB /* Data+FwiExtensionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiExtensionTest.swift"; sourceTree = "<group>"; };
@@ -425,8 +429,12 @@
 		"_____Configs_" /* Configs */ = {
 			isa = PBXGroup;
 			children = (
-				BE8BF1381D83DC8E00F710CB /* Debug.xcconfig */,
-				BE8BF1391D83DC8E00F710CB /* Release.xcconfig */,
+				BE1735B61D89C13B00738B1F /* lib-debug.xcconfig */,
+				BE1735B71D89C13B00738B1F /* lib-release.xcconfig */,
+				BE1735B81D89C13B00738B1F /* project-debug.xcconfig */,
+				BE1735B91D89C13B00738B1F /* project-release.xcconfig */,
+				BE1735BA1D89C13B00738B1F /* test-debug.xcconfig */,
+				BE1735BB1D89C13B00738B1F /* test-release.xcconfig */,
 			);
 			name = Configs;
 			sourceTree = "<group>";
@@ -618,6 +626,7 @@
 /* Begin XCBuildConfiguration section */
 		_ReleaseConf_FwiCore /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE1735B71D89C13B00738B1F /* lib-release.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = FwiCore.xcodeproj/FwiCore_Info.plist;
 				OTHER_LDFLAGS = "$(inherited)";
@@ -629,6 +638,7 @@
 		};
 		_ReleaseConf_FwiCoreTests /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE1735BB1D89C13B00738B1F /* test-release.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = FwiCore.xcodeproj/FwiCoreTests_Info.plist;
 				OTHER_LDFLAGS = "$(inherited)";
@@ -637,6 +647,7 @@
 		};
 		"___DebugConf_FwiCore" /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE1735B61D89C13B00738B1F /* lib-debug.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = FwiCore.xcodeproj/FwiCore_Info.plist;
 				OTHER_LDFLAGS = "$(inherited)";
@@ -648,6 +659,7 @@
 		};
 		"___DebugConf_FwiCoreTests" /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE1735BA1D89C13B00738B1F /* test-debug.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = FwiCore.xcodeproj/FwiCoreTests_Info.plist;
 				OTHER_LDFLAGS = "$(inherited)";
@@ -657,14 +669,14 @@
 		};
 		"_____Release_" /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE8BF1391D83DC8E00F710CB /* Release.xcconfig */;
+			baseConfigurationReference = BE1735B91D89C13B00738B1F /* project-release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		"_______Debug_" /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE8BF1381D83DC8E00F710CB /* Debug.xcconfig */;
+			baseConfigurationReference = BE1735B81D89C13B00738B1F /* project-debug.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
