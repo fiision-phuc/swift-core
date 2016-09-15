@@ -433,6 +433,10 @@ public extension FwiJSONMapper {
             }
             
             // Filter Ignore property
+            if let ignoreProperties = json.ignoreProperties {
+                properties = properties.filter({ ignoreProperties.contains($0.mirrorName) == false })
+            }
+            
             if let optionalProperties = json.optionalProperties {
                 properties.forEach({
                     if optionalProperties.contains($0.mirrorName) {
