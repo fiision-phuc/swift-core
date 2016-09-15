@@ -87,7 +87,7 @@ public func + (left: URL?, right: [String: String]?) -> URL? {
     // Query
     let query = forms?.filter({ $0.key[0] != "#"}).sorted(by: <).map({ $0.description }).joined(separator: "&") ?? ""
  
-    return URL(string: "\(url)\(hashtag)?\(query)")
+    return query.characters.count > 0 ? URL(string: "\(url)\(hashtag)?\(query)") : URL(string: "\(url)\(hashtag)")
 }
 
 public func += (left: inout URL?, right: [String:String]?) {
