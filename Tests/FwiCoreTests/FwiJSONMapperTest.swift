@@ -79,6 +79,7 @@ class TestJSON1: NSObject {
     var b: Float = 0
     var c: Double = 0
     var d: String = ""
+    var g: String?
 
     var e: UInt = 0
     var f: Float = 0
@@ -180,7 +181,7 @@ class FwiJSONMapperTest: XCTestCase {
     }
     
     func testMapDictionary1() {
-        let d: [String : Any] = ["a":NSNumber(value: 1), "b":NSNumber(value: 2), "c":NSNumber(value: 3), "d":"Hello world", "e":"10", "f":"10.15"]
+        let d: [String : Any] = ["a":NSNumber(value: 1), "b":NSNumber(value: 2), "c":NSNumber(value: 3), "d":"Hello world", "e":"10", "f":"10.15", "g":"Hello world"]
         
         var o = TestJSON1()
         let _ = FwiJSONMapper.map(dictionary: d, toObject: &o)
@@ -190,6 +191,7 @@ class FwiJSONMapperTest: XCTestCase {
         XCTAssertEqual(o.c, 3, "Expected '3' but found: '\(o.c)'.")
         XCTAssertEqual(o.e, 10, "Expected '10' but found: '\(o.e)'.")
         XCTAssertEqual(o.d, "Hello world", "Expected 'Hello world' but found: '\(o.d)'.")
+        XCTAssertEqual(o.g, "Hello world", "Expected 'Hello world' but found: '\(o.g)'.")
     }
 
     func testMapDictionary2() {

@@ -66,8 +66,11 @@ public struct FwiJSONMapper {
     ///
     /// - parameter dictionary (required): set of keys-values
     /// - parameter model (required): a class to be initialize for mapping
-    public static func map<T: NSObject>(dictionary d: [String : Any], toModel m: T) -> (T?, NSError?) {
-        return (nil, nil)
+    public static func map<T: NSObject>(dictionary d: [String : Any], toModel m: T.Type) -> (T?, NSError?) {
+        var o = m.init()
+        let err = map(dictionary: d, toObject: &o)
+
+        return (o, err)
     }
     
     /// Map dictionary to object.
