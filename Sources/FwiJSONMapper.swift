@@ -245,6 +245,16 @@ public extension FwiJSONMapper {
         return NSError(domain: NSURLErrorKey, code: NSURLErrorUnknown, userInfo: [NSLocalizedDescriptionKey: "Parse object to dictionary error !!!"])
     }
 
+    // Using for avoid Optional in string
+    fileprivate static func convertValueToString(from value: Any) -> String{
+        let tMirror = Mirror(reflecting: value)
+        var result = ""
+        tMirror.children.forEach {
+            result += "\($0.value)"
+        }
+        return result
+    }
+    
     public static func toDictionary<T: NSObject>(_ object: T) -> [String: Any] {
         var result: [String: Any] = [:]
 
@@ -282,33 +292,50 @@ public extension FwiJSONMapper {
         // Loop in Dictionary Key To Find Result
         for (keyJson, nameProperty) in dictionaryKey {
             // Find Value Of Properties
-            let value = mirror.children.first(where: {$0.label == nameProperty})?.value
+//            let value = mirror.children.first(where: {$0.label == nameProperty})?.value
 
             // Find Reflector of property
-            guard let reflector = reflectorItems.first(where: { $0.propertyName == nameProperty }) else {
+            guard let reflector = reflectorItems.first(where: { $0.propertyName == nameProperty }), let value = mirror.children.first(where: {$0.label == nameProperty})?.value else {
 //                // nil , it can't identify
                 continue
             }
 
             // if it is primity type
             if reflector.isPrimitive {
-                result[keyJson] = value
+                result[keyJson] = self.convertValueToString(from: value)
             } else {
-                // Object
-                if reflector.isObject {
+                // Struct
+                if reflector.isStruct {
                     // NSURL
                     if let url = value as? URL {
                         // Return a absolute string of url
                         result[keyJson] = url.absoluteString
                     }
-                    // NSDate
+                        // NSDate
                     else if let date = value as? Date {
                         // Return a double value
                         result[keyJson] = date.timeIntervalSince1970
                     }
+                        // Try other
+                    else {
+                        result[keyJson] = value
+                    }
+                }
+                // Object
+                else if reflector.isObject {
+                    // NSURL
+                    if let url = value as? NSURL {
+                        // Return a absolute string of url
+                        result[keyJson] = url.absoluteString
+                    }
+                    // NSDate
+                    else if let date = value as? NSDate {
+                        // Return a double value
+                        result[keyJson] = date.timeIntervalSince1970
+                    }
                     // Try other
-                    else if let obj = value {
-                        result[keyJson] = obj
+                    else {
+                        result[keyJson] = value
                     }
                 }
                 // Class
