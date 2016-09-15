@@ -248,11 +248,7 @@ public extension FwiJSONMapper {
     // Using for avoid Optional in string
     fileprivate static func convertValueToString(from value: Any) -> String{
         let tMirror = Mirror(reflecting: value)
-        var result = ""
-        tMirror.children.forEach {
-            result += "\($0.value)"
-        }
-        return result
+        return tMirror.children.map({ "\($0.value)" }).joined()
     }
     
     public static func toDictionary<T: NSObject>(_ object: T) -> [String: Any] {
