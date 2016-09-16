@@ -69,6 +69,7 @@ public final class FwiPersistentManager {
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = self.persistentCoordinator
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
+        
         return managedObjectContext
     }()
     public fileprivate (set) lazy var persistentCoordinator: NSPersistentStoreCoordinator = {

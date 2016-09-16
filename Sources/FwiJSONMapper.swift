@@ -49,16 +49,16 @@ public struct FwiJSONMapper {
     /// - parameter model (required): a class which contains a set of properties to be mapped
     @discardableResult
     public static func map<T: NSObject>(array a: [[String : Any]], toModel m: T.Type) -> ([T], NSError?) {
-            var array = [T]()
-            for d in a {
-                var o = m.init()
-                
-                guard map(dictionary: d, toObject: &o) == nil else {
+        var array = [T]()
+        for d in a {
+            var o = m.init()
+            
+            guard map(dictionary: d, toObject: &o) == nil else {
 //                    userInfo[p.mirrorName] = "\(p.mirrorName) has invalid data."
-                    continue
-                }
-                array.append(o)
+                continue
             }
+            array.append(o)
+        }
         return (array, nil)
     }
     
@@ -80,7 +80,7 @@ public struct FwiJSONMapper {
     @discardableResult
     public static func map<T: NSObject>(dictionary d: [String : Any], toObject m: inout T) -> NSError? {
         var properties = FwiReflector.properties(withObject: m)
-        var errorInfo = [String : Any]()
+        var userInfo = [String : Any]()
         var dictionary = d
 
         // Override dictionary if model implement FwiJSONModel
@@ -105,13 +105,13 @@ public struct FwiJSONMapper {
         for p in properties {
             /* Condition validation: validate json type */
             guard let valueJSON = dictionary[p.mirrorName], valueJSON is NSNull || valueJSON is NSNumber || valueJSON is String || valueJSON is [Any] || valueJSON is [String : Any] else {
-                errorInfo[p.mirrorName] = "Could not map 'value' to property: '\(p.mirrorName)' because of incorrect JSON grammar: '\(dictionary[p.mirrorName])'"
+                userInfo[p.mirrorName] = "Could not map 'value' to property: '\(p.mirrorName)' because of incorrect JSON grammar: '\(dictionary[p.mirrorName])'"
                 continue
             }
 
             /* Condition validation: validate optional property */
             if !p.optionalProperty && valueJSON is NSNull {
-                errorInfo[p.mirrorName] = "\(p.mirrorName) is missing."
+                userInfo[p.mirrorName] = "\(p.mirrorName) is missing."
                 continue
             }
 
@@ -129,7 +129,11 @@ public struct FwiJSONMapper {
                         canAssign = true
                     }
                 } else {
-                    canAssign = true
+                    if let _ = a as? [String], let collectionType = p.collectionType, collectionType.primitiveType == String.self {
+                        canAssign = true
+                    } else if let _ = a as? [NSNumber], let collectionType = p.collectionType, collectionType.primitiveType != String.self {
+                        canAssign = true
+                    }
                 }
             }
             else if let d = value as? [String : Any], p.isDictionary || p.isObject {
@@ -193,13 +197,20 @@ public struct FwiJSONMapper {
             if canAssign && m.responds(to: NSSelectorFromString(p.mirrorName)) == true {
                 m.setValue(value, forKey: p.mirrorName)
             } else {
-                errorInfo[p.mirrorName] = "could not map '\(value)' to this property due to data's type conflict."
+                userInfo[p.mirrorName] = "could not map '\(value)' to this property due to data's type conflict."
             }
         }
         
-//        if errorUserInfo.keys.count > 0 {
-//            return NSError(domain: NSURLErrorKey, code: NSURLErrorUnknown, userInfo: errorUserInfo)
-//        }
+        // Summary error
+        if userInfo.keys.count > 0 {
+            var message = "\nThere is an error when trying to map data into model: \(NSStringFromClass(type(of: m)))\n"
+            userInfo.forEach({
+                message += "-> [\($0)] \($1)\n"
+            })
+            FwiLog(message)
+            
+            return NSError(domain: "FwiJSONMapper", code: -1, userInfo: userInfo)
+        }
         return nil
     }
 
