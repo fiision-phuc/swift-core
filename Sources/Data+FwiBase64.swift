@@ -57,8 +57,8 @@ public extension Data {
             let octet1 = self[i]
             let octet2 = self[end]
             
-            isBase64 = isBase64 && (octet1 == UTF8.CodeUnit(ascii: "=") || octet1 < UInt8(decodingTable.count))
-            isBase64 = isBase64 && (octet2 == UTF8.CodeUnit(ascii: "=") || octet2 < UInt8(decodingTable.count))
+            isBase64 = isBase64 && (octet1 == UTF8.CodeUnit(ascii: "=") || (octet1 < UInt8(decodingTable.count) && decodingTable[Int(octet1)] != 0))
+            isBase64 = isBase64 && (octet2 == UTF8.CodeUnit(ascii: "=") || (octet2 < UInt8(decodingTable.count) && decodingTable[Int(octet2)] != 0))
             if !isBase64 {
                 break
             }
