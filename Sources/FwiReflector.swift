@@ -42,11 +42,19 @@ import Foundation
 public final class FwiReflector {
 
     // MARK: Class's constructors
-    public init(mirrorName name: String, mirrorValue value: Any) {
+    public init(mirrorName name: String = "", mirrorValue value: Any) {
         mirrorName = name
         mirrorType = Mirror(reflecting: value)
+        debugPrint(mirrorType.subjectType, to: &mirrorDescription)
+        
+        mirrorDescription = mirrorDescription.trim()
+        if isOptional {
+            mirrorDescription = mirrorDescription.substring(startIndex: 15, reverseIndex: -1)
+        }
     }
-
+    
+    
+    
     // MARK: Class's properties
     /// Define if a property is optional or not
     public var optionalProperty = false
@@ -54,6 +62,8 @@ public final class FwiReflector {
     public private (set) var mirrorName: String
     /// Return subject's reflector.
     public private (set) var mirrorType: Mirror
+    /// Return subject's reflector description.
+    public private (set) var mirrorDescription = ""
 
     /// Check whether the subject's type is optional type or not
     public var isOptional: Bool {
@@ -113,8 +123,8 @@ public final class FwiReflector {
     
     /// Check whether the subject's type is primitive or not. If subject's type is primitive then
     /// it should return the unwrap subject's type.
-    public lazy private (set) var isPrimitive: Bool = {
-        let type = self.mirrorType.subjectType
+    public var isPrimitive: Bool {
+        let type = mirrorType.subjectType
         
         var isPrimitive = self.isType(type, typeCheck: Bool.self)
         isPrimitive = isPrimitive || self.isType(type, typeCheck: Int.self)  || self.isType(type, typeCheck: Int8.self)  || self.isType(type, typeCheck: Int16.self)  || self.isType(type, typeCheck: Int32.self)  || self.isType(type, typeCheck: Int64.self)
@@ -129,7 +139,7 @@ public final class FwiReflector {
         isPrimitive = isPrimitive || (type == objcOptionalMutableStringMirror.subjectType)
         
         return isPrimitive
-    }()
+    }
     public lazy private (set) var primitiveType: Any.Type? = {
         /* Condition validation */
         if !self.isPrimitive {
@@ -281,11 +291,12 @@ public final class FwiReflector {
             return nil
         }
 
+        
         // Validate ObjC
         let type = self.mirrorType.subjectType
         if type == objcDictionaryMirror.subjectType || type == objcOptionalDictionaryMirror.subjectType || type == objcOptionalMutableDictionaryMirror.subjectType {
-            let value = FwiReflector(mirrorName: "", mirrorValue: NSObject())
-            let key = FwiReflector(mirrorName: "", mirrorValue: NSObject())
+            let value = FwiReflector(mirrorValue: NSObject())
+            let key = FwiReflector(mirrorValue: NSObject())
             return (key, value)
         }
 
@@ -488,6 +499,18 @@ public extension FwiReflector {
     }
 }
 
+fileprivate struct TextStream : TextOutputStream {
+    
+    var output = ""
+    
+    // MARK: TextOutputStream's members
+    public mutating func write(_ string: String) {
+        let s = string.trim()
+        if s != "" {
+            output = s
+        }
+    }
+}
 
 // Legacy
 public extension FwiReflector {

@@ -61,15 +61,23 @@ public struct FwiJSONMapper {
     /// - parameter array (required): a list of keys-values
     /// - parameter model (required): a class which contains a set of properties to be mapped
     @discardableResult
-    public static func map<T: NSObject>(array a: [[String : Any]], toModel m: T.Type) -> ([T], NSError?) {
+    public static func map<T: NSObject>(array a: [[String : Any]], toModel m: T.Type) -> ([T]?, NSError?) {
+        var userInfo = [String]()
         var array = [T]()
-        for d in a {
+        
+        for (idx, d) in a.enumerated() {
             var o = m.init()
             
             guard map(dictionary: d, toObject: &o) == nil else {
+                userInfo.append("Could not create 'object' at index: \(idx)")
                 continue
             }
             array.append(o)
+        }
+        
+        // Summary error
+        if userInfo.count > 0 {
+            return (nil, NSError(domain: "FwiJSONMapper", code: -1, userInfo: ["userInfo":userInfo]))
         }
         return (array, nil)
     }
@@ -103,7 +111,7 @@ public struct FwiJSONMapper {
 
         // Inject data into object's properties
         for p in properties {
-            /* Condition validation: validate json type */
+            /* Condition validation: validate JSON base on https://tools.ietf.org/html/rfc7159#section-2 */
             guard let valueJSON = dictionary[p.mirrorName], !(valueJSON is NSNull) || valueJSON is NSNumber || valueJSON is String || valueJSON is [Any] || valueJSON is [String : Any] else {
                 if !p.optionalProperty {
                     userInfo[p.mirrorName] = "Could not map 'value' to property: '\(p.mirrorName)' because of incorrect JSON grammar: '\(dictionary[p.mirrorName])'"
@@ -118,13 +126,14 @@ public struct FwiJSONMapper {
             if let a = value as? [Any], p.isCollection || p.isSet {
                 if let objects = a as? [[String : Any]], let collectionType = p.collectionType, let c = collectionType.classType as? NSObject.Type {
                     let (list, _) = map(array: objects, toModel: c)
-                    value = list
-                    canAssign = true
+                    if let l = list {
+                        value = l
+                        canAssign = true
+                    }
                 }
                 else {
-                    if let _ = a as? [String], let collectionType = p.collectionType, collectionType.primitiveType == String.self {
-                        canAssign = true
-                    } else if let _ = a as? [NSNumber], let collectionType = p.collectionType, collectionType.primitiveType != String.self {
+                    if let array = a + p {
+                        value = array
                         canAssign = true
                     }
                 }
@@ -132,23 +141,17 @@ public struct FwiJSONMapper {
             else if let d = value as? [String : Any], p.isDictionary || p.isObject {
                 if p.isObject {
                     if let c = p.classType as? NSObject.Type {
-                        var child = c.init()
-                        
-                        if let err = map(dictionary: d, toObject: &child) {
-                            FwiLog("\(err)")
-                        } else {
-                            value = child
+                        let (child, _) = map(dictionary: d, toModel: c)
+                        if let c = child {
+                            value = c
                             canAssign = true
                         }
                     }
                 }
                 else {
-                    let validKey = (p.dictionaryType?.key.primitiveType == String.self)
-                    
-                    if let _ = d as? [String:NSNumber], p.dictionaryType?.value.primitiveType != String.self {
-                        canAssign = (validKey && true)
-                    } else if let _ = d as? [String:String], p.dictionaryType?.value.primitiveType == String.self {
-                        canAssign = (validKey && true)
+                    if let dictionary = d + p {
+                        value = dictionary
+                        canAssign = true
                     }
                 }
             }
@@ -194,7 +197,7 @@ public struct FwiJSONMapper {
     ///
     /// parameter value (required): JSON date, can be either in string form or number form
     /// parameter format (optional): format string to convert string to date
-    fileprivate static func transformDate(_ value: Any?, format: String = "yyyy-MM-dd'T'HH:mm:ssZ") -> Date? {
+    fileprivate static func transformDate(_ value: Any?, format: String = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") -> Date? {
         if let number = value as? NSNumber {
             return Date(timeIntervalSince1970: number.doubleValue)
         }
@@ -717,24 +720,34 @@ public func <- <T>(left: inout [T]?, right: [AnyObject]?) {
 /// parameter left (required): an original data in string form
 /// parameter right (required): a property description from model
 fileprivate func + (left: [Any], right: FwiReflector) -> [Any]? {
-//    if let primitiveType = right.primitiveType, primitiveType != String.self {
-//        return FwiJSONMapper.numberFormat.number(from: left.trim())
-//    }
-//    else if let structType = right.structType {
-//        if structType == Data.self {
-//            return left.decodeBase64Data() ?? left.toData()
-//        }
-//        else if structType == Date.self {
-//            return FwiJSONMapper.transformDate(left)
-//        }
-//        else if structType == URL.self {
-//            return URL(string: left.encodeHTML())
-//        }
-//    }
+    if let a = left as? [String], let collectionType = right.collectionType, collectionType.primitiveType == String.self {
+        return a
+    }
+    else if let a = left as? [NSNumber], let collectionType = right.collectionType, collectionType.primitiveType != String.self {
+        return a
+    }
     return nil
 }
 
-/// Transform data type from string form to other form.
+/// Transform dictionary.
+///
+/// parameter left (required): an original data in string form
+/// parameter right (required): a property description from model
+fileprivate func + (left: [String : Any], right: FwiReflector) -> [String : Any]? {
+    guard let dictionaryType = right.dictionaryType else {
+        return nil
+    }
+    let validKey = (dictionaryType.key.primitiveType == String.self)
+    print("\(dictionaryType.value.mirrorType.subjectType)")
+    if let _ = left as? [String:NSNumber], validKey && dictionaryType.value.primitiveType != String.self {
+        return left
+    } else if let _ = left as? [String:String], validKey && dictionaryType.value.primitiveType == String.self {
+        return left
+    }
+    return nil
+}
+
+/// Transform string.
 ///
 /// parameter left (required): an original data in string form
 /// parameter right (required): a property description from model
