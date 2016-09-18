@@ -48,7 +48,10 @@ public final class FwiPersistentManager {
         self.dataModel = dataModel
 
         // Register core data changed notification
-        NotificationCenter.default.addObserver(self, selector: #selector(FwiPersistentManager.handleContextDidSaveNotification(_:)), name: NSNotification.Name.NSManagedObjectContextDidSave, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(FwiPersistentManager.handleContextDidSaveNotification(_:)),
+                                               name: NSNotification.Name.NSManagedObjectContextDidSave,
+                                               object: nil)
     }
 
     // MARK: Cleanup memory
