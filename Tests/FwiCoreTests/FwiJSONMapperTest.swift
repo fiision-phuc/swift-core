@@ -96,6 +96,11 @@ class TestJSON5: NSObject, FwiJSONModel {
     
     var arrayInt2: [Int]?
     var arrayString2: [String]?
+    
+    var arrayAny1: [Any]?
+    var arrayAny2: [Any]?
+    
+    var arrayUrls: [URL]?
 }
 
 class TestJSON6: NSObject, FwiJSONModel {
@@ -155,13 +160,16 @@ class FwiJSONMapperTest: XCTestCase {
             "arrayInt1":[2, 4, 6],
             "arrayString1":["2", "4", "6"],
             "arrayInt2":["2", "4", "6"],
-            "arrayString2":[2, 4, 6]
+            "arrayString2":[2, 4, 6],
+            "arrayAny1":["2", "4", "6"],
+            "arrayAny2":[2, 4, 6],
+            "arrayUrls":["https://www.google.com/?gws_rd=ssl", "https://www.google.com/?gws_rd=ssl"]
         ]
         
         var o = TestJSON5()
         let err = FwiJSONMapper.map(dictionary: d, toObject: &o)
         
-        XCTAssertNil(err, "Expected nil but found: '\(err)'.")
+        XCTAssertNotNil(err, "Expected not nil but found: '\(err)'.")
         
         XCTAssertNotNil(o.array, "Expected not nil but found: '\(o.array)'")
         XCTAssertEqual(o.array?.count, 2, "Expected '2' but found: '\(o.array?.count)'.")
@@ -173,8 +181,14 @@ class FwiJSONMapperTest: XCTestCase {
         XCTAssertNotNil(o.arrayString1, "Expected not nil but found: '\(o.arrayString1)'")
         XCTAssertEqual(o.arrayString1?.count, 3, "Expected '3' but found: '\(o.arrayString1?.count)'.")
         
-        XCTAssertNil(o.arrayInt2, "Expected nil but found: '\(o.arrayInt2)'.")
+        XCTAssertNotNil(o.arrayInt2, "Expected not nil but found: '\(o.arrayInt2)'.")
+        XCTAssertEqual(o.arrayInt2?[0], 2, "Expected '2' but found: '\(o.arrayInt2?[0])'.")
+        
         XCTAssertNil(o.arrayString2, "Expected nil but found: '\(o.arrayString2)'.")
+        
+        XCTAssertNotNil(o.arrayAny1, "Expected not nil but found: '\(o.arrayAny1)'.")
+        XCTAssertNotNil(o.arrayAny2, "Expected not nil but found: '\(o.arrayAny2)'.")
+        XCTAssertNotNil(o.arrayUrls, "Expected not nil but found: '\(o.arrayUrls)'.")
     }
     
     func testMapDictionary1() {
@@ -196,7 +210,7 @@ class FwiJSONMapperTest: XCTestCase {
         
         var o = TestJSON2()
         let _ = FwiJSONMapper.map(dictionary: d, toObject: &o)
-        o.setValue(NSNumber(value: 1), forKey: "a")
+        
         XCTAssertEqual(o.a, 1, "Expected '1' but found: '\(o.a)'.")
         XCTAssertEqual(o.b, 2, "Expected '2' but found: '\(o.b)'.")
         XCTAssertEqual(o.c, 3, "Expected '3' but found: '\(o.c)'.")
@@ -252,7 +266,7 @@ class FwiJSONMapperTest: XCTestCase {
         let _ = FwiJSONMapper.map(dictionary: d, toObject: &o)
         
         XCTAssertNotNil(o.urls1, "Expected not nil but found: '\(o.urls1)'.")
-        XCTAssertNil(o.urls2, "Expected nil but found: '\(o.urls2)'.")
+        XCTAssertNotNil(o.urls2, "Expected nil but found: '\(o.urls2)'.")
         XCTAssertNil(o.urls3, "Expected nil but found: '\(o.urls3)'.")
         XCTAssertNotNil(o.urls4, "Expected not nil but found: '\(o.urls4)'.")
         
@@ -262,24 +276,22 @@ class FwiJSONMapperTest: XCTestCase {
     }
 
     func testJSONModel() {
-        let dict = ["test1": 5,
-                    "test2": ["url": "https://www.google.com/?gws_rd=ssl"],
-                    "test3" : ["testDict" : "abc"],
-                    "test5": [
-                        ["url": "https://www.google.com/?gws_rd=ssl"],
-                        ["url": "https://www.google.com/?gws_rd=ssl"],
-                        ["url": "https://www.google.com/?gws_rd=ssl"]
-                    ],
-                    "test6": [2, 4, 6],
-                    "test7": ["adad", "dadada", "duadgaud"],
-                    "test8": 1464768697,
-                    "test9": "2012-10-01T094500GMT"
-                   ] as [String : Any]
-        
-        //        let c = JSONMapper1.mapClassWithDictionary(Test.self, dict: dict).object
+        let dictionary = ["test1": 5,
+                          "test2": ["url": "https://www.google.com/?gws_rd=ssl"],
+                          "test3" : ["testDict" : "abc"],
+                          "test5": [
+                            ["url": "https://www.google.com/?gws_rd=ssl"],
+                            ["url": "https://www.google.com/?gws_rd=ssl"],
+                            ["url": "https://www.google.com/?gws_rd=ssl"]
+                          ],
+                          "test6": [2, 4, 6],
+                          "test7": ["adad", "dadada", "duadgaud"],
+                          "test8": 1464768697,
+                          "test9": "2012-10-01T094500GMT"
+                         ] as [String : Any]
         
         var o = TestJSON6()
-        FwiJSONMapper.map(dictionary: dict, toObject: &o)
+        FwiJSONMapper.map(dictionary: dictionary, toObject: &o)
         
         XCTAssertEqual(o.a, 5, "Expected '1' but found: '\(o.a)'.")
         XCTAssertNotNil(o.z, "Expected not nil but found: '\(o.z)'.")
@@ -287,9 +299,25 @@ class FwiJSONMapperTest: XCTestCase {
         XCTAssertNotNil(o.d, "Expected not nil but found: '\(o.d)'.")
         XCTAssertNotNil(o.arr, "Expected not nil but found: '\(o.arr)'.")
         XCTAssertNotNil(o.dateStr, "Expected not nil but found: '\(o.dateStr)'.")
+    }
+    
+    func testPerformance() {
+        let dictionary = ["test1": 5,
+                          "test2": ["url": "https://www.google.com/?gws_rd=ssl"],
+                          "test3" : ["testDict" : "abc"],
+                          "test5": [
+                            ["url": "https://www.google.com/?gws_rd=ssl"],
+                            ["url": "https://www.google.com/?gws_rd=ssl"],
+                            ["url": "https://www.google.com/?gws_rd=ssl"]
+                          ],
+                          "test6": [2, 4, 6],
+                          "test7": ["adad", "dadada", "duadgaud"],
+                          "test8": 1464768697,
+                          "test9": "2012-10-01T094500GMT"
+                         ] as [String : Any]
         
-//        let dict1 = FwiJSONMapper.toDictionary(c)
-//        print(dict1)
-        
+        measure {
+            let (_, _) = FwiJSONMapper.map(dictionary: dictionary, toModel: TestJSON6.self)
+        }
     }
 }
