@@ -181,27 +181,11 @@ public extension FwiReachability {
         address.sa_len = UInt8(MemoryLayout.size(ofValue: address))
         address.sa_family = sa_family_t(AF_INET)
         
-        var localWifiAddress: sockaddr_in = sockaddr_in(sin_len: __uint8_t(0), sin_family: sa_family_t(0), sin_port: in_port_t(0), sin_addr: in_addr(s_addr: 0), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
-        localWifiAddress.sin_len = UInt8(MemoryLayout.size(ofValue: localWifiAddress))
-        localWifiAddress.sin_family = sa_family_t(AF_INET)
-        
-        // IN_LINKLOCALNETNUM is defined in <netinet/in.h> as 169.254.0.0
-        let addr: Int64 = 0xA9FE0000
-        localWifiAddress.sin_addr.s_addr = in_addr_t(addr.bigEndian)
-        
-        return nil
-//        var localWifiAddress: sockaddr_in = sockaddr_in(sin_len: __uint8_t(0), sin_family: sa_family_t(0), sin_port: in_port_t(0), sin_addr: in_addr(s_addr: 0), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
-//        localWifiAddress.sin_len = UInt8(sizeofValue(localWifiAddress))
-//        localWifiAddress.sin_family = sa_family_t(AF_INET)
-//
-//        // IN_LINKLOCALNETNUM is defined in <netinet/in.h> as 169.254.0.0
-//        let address: Int64 = 0xA9FE0000
-//        localWifiAddress.sin_addr.s_addr = in_addr_t(address.bigEndian)
-//        
-//        let ref = withUnsafePointer(&localWifiAddress) {
-//            SCNetworkReachabilityCreateWithAddress(kCFAllocatorDefault, UnsafePointer($0)).takeRetainedValue()
-//        }
-//        return Reachability(reachabilityRef: ref)
+        // Create reachability
+        guard let reachability = SCNetworkReachabilityCreateWithAddress(kCFAllocatorDefault, &address) else {
+            return nil
+        }
+        return FwiReachability(reachability: reachability, shouldReturnWiFiState: true)
     }
     
     /// Create reachability for a given hostname.
