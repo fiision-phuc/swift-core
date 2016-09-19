@@ -197,7 +197,7 @@ public struct FwiJSONMapper {
     ///
     /// parameter value (required): JSON date, can be either in string form or number form
     /// parameter format (optional): format string to convert string to date
-    internal static func transformDate(_ value: Any?, formats: [String] = ["yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd'T'HHmmss'GMT'"]) -> Date? {
+    internal static func transformDate(_ value: Any?, formats: [String] = ["yyyy-MM-dd'T'HH:mm:ssZ","yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd'T'HHmmss'GMT'"]) -> Date? {
         if let number = value as? TimeInterval {
             return Date(timeIntervalSince1970: number)
         }
