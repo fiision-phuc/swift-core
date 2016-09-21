@@ -40,12 +40,12 @@ import Foundation
 import CoreData
 
 
-@objc
+//@objc
 public protocol FwiCoreData {
 }
 
 
-public extension FwiCoreData where Self : NSManagedObject {
+public extension FwiCoreData where Self: NSManagedObject {
 
     /** Fetch all entities base on search condition. */
     static public func allEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [AnyObject]? = nil, limit l: Int = 0) -> [Self]? {
