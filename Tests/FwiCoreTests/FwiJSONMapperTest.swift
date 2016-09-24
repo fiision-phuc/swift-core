@@ -159,7 +159,7 @@ class FwiJSONMapperTest: XCTestCase {
             "array":[["url": "https://www.google.com/?gws_rd=ssl"], ["url": "https://www.google.com/?gws_rd=ssl"]],
             "arrayInt1":[2, 4, 6],
             "arrayString1":["2", "4", "6"],
-            "arrayInt2":["2", "4", "6"],
+            "arrayInt2":["2", "4", "6", "Null"],
             "arrayString2":[2, 4, 6],
             "arrayAny1":["2", "4", "6"],
             "arrayAny2":[2, 4, 6],

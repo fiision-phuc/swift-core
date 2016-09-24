@@ -64,6 +64,15 @@ public struct FwiJSONMapper {
     public static func map<T: NSObject>(array a: [[String : Any]], toModel m: T.Type) -> ([T]?, NSError?) {
         var userInfo = [String]()
         var array = [T]()
+//        a.map {
+//            let (o, _) = map(dictionary: $0, toModel: m)
+//            return o ?? NSNull()
+////            if let object = o {
+////                return object
+////            }
+////            return NSNull()
+//        }
+////            .filter { !($0 is NSNull) }
         
         for (idx, d) in a.enumerated() {
             var o = m.init()
@@ -276,13 +285,8 @@ fileprivate func + (left: [Any], right: FwiReflector) -> [Any]? {
             return a
         }
         else {
-            var array = [Any]()
-            a.forEach({
-                if let v = $0 + collectionType {
-                    array.append(v)
-                }
-            })
-            return array.count > 0 ? array : nil
+            return a.map { ($0 + collectionType ?? NSNull()) }
+                    .filter { !($0 is NSNull) }
         }
     }
     return nil
@@ -307,6 +311,7 @@ fileprivate func + (left: [String : Any], right: FwiReflector) -> [String : Any]
         }
         else {
             var dictionary = [String : Any]()
+            
             l.forEach({
                 if let v = $1 + dictionaryType.value {
                     dictionary[$0] = v
