@@ -117,14 +117,13 @@ public extension FwiCoreData where Self: NSManagedObject {
         guard let c = context, let entityName = NSStringFromClass(self).split(".").last else {
             return 0
         }
-        
+
         var counter = 0
         c.performAndWait {
             let request = NSFetchRequest<Self>(entityName: entityName)
-            
-            // Apply standard condition
-            request.predicate = p
+            request.includesPropertyValues = false
             request.includesSubentities = false
+            request.predicate = p
             
             do {
                 counter = try c.count(for: request)
