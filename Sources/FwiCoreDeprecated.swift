@@ -306,7 +306,15 @@ public extension FwiJSONMapper {
                         
                         // Check exsist set key value
                         if m.responds(to: NSSelectorFromString(p.propertyName)) {
-                            m.setValue(value, forKey: p.propertyName)
+                            if p.mirrorType.subjectType == Bool.self {
+                                // set base on error http://stackoverflow.com/questions/31267325/bool-with-64-bit-on-ios/31270249#31270249
+                                let b = value as? Bool ?? false
+                                let number = NSNumber(value: b)
+                                m.setValue(number, forKey: p.propertyName)
+                            }else {
+                                m.setValue(value, forKey: p.propertyName)
+                            }
+                            
                         } else {
                             fatalError("Not Support Property Optional Bool, Int , Double!!!! , Try to don't using Optional")
                         }
