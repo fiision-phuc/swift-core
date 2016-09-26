@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BE0903401D8E69B900ECF980 /* FwiReachabilityTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE09033F1D8E69B900ECF980 /* FwiReachabilityTest.swift */; };
+		BE78D9441D98D8DA00091D5D /* Dictionary+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE78D91D1D98D0F800091D5D /* Dictionary+FwiExtension.swift */; };
 		BE8BF1471D8465BC00F710CB /* Data+FwiBase64Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF1461D8465BC00F710CB /* Data+FwiBase64Test.swift */; };
 		BE8BF1491D8465CE00F710CB /* Data+FwiHexTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF1481D8465CE00F710CB /* Data+FwiHexTest.swift */; };
 		BE8BF1501D84661C00F710CB /* Data+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF14A1D84661C00F710CB /* Data+FwiExtensionTest.swift */; };
@@ -84,6 +85,7 @@
 		BE1735B91D89C13B00738B1F /* project-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "project-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/project-release.xcconfig"; sourceTree = "<group>"; };
 		BE1735BA1D89C13B00738B1F /* test-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "test-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/test-debug.xcconfig"; sourceTree = "<group>"; };
 		BE1735BB1D89C13B00738B1F /* test-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "test-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/test-release.xcconfig"; sourceTree = "<group>"; };
+		BE78D91D1D98D0F800091D5D /* Dictionary+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+FwiExtension.swift"; sourceTree = "<group>"; };
 		BE8BF1461D8465BC00F710CB /* Data+FwiBase64Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiBase64Test.swift"; sourceTree = "<group>"; };
 		BE8BF1481D8465CE00F710CB /* Data+FwiHexTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiHexTest.swift"; sourceTree = "<group>"; };
 		BE8BF14A1D84661C00F710CB /* Data+FwiExtensionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiExtensionTest.swift"; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				"__PBXFileRef_Sources/Data+FwiExtension.swift" /* Data+FwiExtension.swift */,
+				BE78D91D1D98D0F800091D5D /* Dictionary+FwiExtension.swift */,
 				"__PBXFileRef_Sources/FileManager+FwiExtension.swift" /* FileManager+FwiExtension.swift */,
 				"__PBXFileRef_Sources/NSCoding+FwiExtension.swift" /* NSCoding+FwiExtension.swift */,
 				"__PBXFileRef_Sources/NSManagedObject+FwiExtension.swift" /* NSManagedObject+FwiExtension.swift */,
@@ -614,6 +617,7 @@
 				__src_cc_ref_Sources/FwiEntityCollectionViewModel.swift /* FwiEntityCollectionViewModel.swift in Sources */,
 				__src_cc_ref_Sources/FwiEntityTableViewModel.swift /* FwiEntityTableViewModel.swift in Sources */,
 				__src_cc_ref_Sources/FwiEntityViewModel.swift /* FwiEntityViewModel.swift in Sources */,
+				BE78D9441D98D8DA00091D5D /* Dictionary+FwiExtension.swift in Sources */,
 				__src_cc_ref_Sources/FwiFormParam.swift /* FwiFormParam.swift in Sources */,
 				__src_cc_ref_Sources/FwiJSONModel.swift /* FwiJSONModel.swift in Sources */,
 				__src_cc_ref_Sources/FwiLocalization.swift /* FwiLocalization.swift in Sources */,

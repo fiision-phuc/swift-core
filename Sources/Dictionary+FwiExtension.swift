@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : URL+FwiExtension.swift
+//  File name   : Dictionary+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/22/14
+//  Created date: 9/26/16
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -39,52 +39,27 @@
 import Foundation
 
 
-public extension URL {
+public extension Dictionary {
 
-    /** URL to main cache folder. */
-    public static func cacheDirectory() -> URL? {
-        let array = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
-        return array.first
+    /// Load dictionary from plist.
+    ///
+    /// parameter plistname (required): the plist's name
+    /// parameter plistFormat (optional): the plist's format, default is xml
+    /// parameter bundle (optional): which bundle contains the plist file
+    public static func loadPlist(withPlistname n: String, plistFormat f: PropertyListSerialization.PropertyListFormat = .xml, fromBundle b: Bundle = Bundle.main) -> [String : Any]? {
+        if let url = Bundle.main.url(forResource: n, withExtension: "plist") {
+            do {
+                let data = try Data(contentsOf: url)
+
+                guard let dictionary = try PropertyListSerialization.propertyList(from: data, options: .mutableContainers, format: nil) as? [String : Any] else {
+                    return nil
+                }
+                return dictionary
+            }
+            catch _ {
+                // Ignore error.
+            }
+        }
+        return nil
     }
-
-    /** URL to main document folder. */
-    public static func documentDirectory() -> URL? {
-        let array = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return array.first
-    }
-    
-    public func addHashTag(with hashTag: String?) -> URL? {
-        return URL(string: "\(self)" + (hashTag ?? ""))
-    }
-}
-
-// MARK: Custom Operator
-public func + (left: URL?, right: String?) -> URL? {
-    guard let path = right else {
-        return left
-    }
-    
-    if left?.absoluteString.hasSuffix("/") == true && path.hasPrefix("/") {
-        return left?.appendingPathComponent(path.substring(startIndex: 1))
-    }
-    return left?.appendingPathComponent(path)
-}
-public func += (left: inout URL?, right: String?) {
-    left = left + right
-}
-
-public func + (left: URL?, right: [String: String]?) -> URL? {
-    guard let url = left?.absoluteString, (right?.count ?? 0) > 0 else {
-        return left
-    }
-    let forms = right?.map({ FwiFormParam(key: $0, value: $1) })
-
-    let query = forms?.filter({ $0.key[0] != "#"}).sorted(by: <).map({ $0.description }).joined(separator: "&") ?? ""
-    let hashtag = forms?.filter({ $0.key[0] == "#"}).sorted(by: <).first?.description ?? ""
-
-    return hashtag.characters.count > 0 ? URL(string: "\(url)\(hashtag)?\(query)") : URL(string: "\(url)?\(query)")
-}
-
-public func += (left: inout URL?, right: [String:String]?) {
-    left = left + right
 }
