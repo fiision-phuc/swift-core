@@ -212,11 +212,18 @@ public struct FwiJSONMapper {
         }
         
         if let dateString = value as? String {
-            let dateFormatter = DateFormatter()
-            for format in formats {
-                dateFormatter.dateFormat = format
-                if let date = dateFormatter.date(from: dateString) {
-                    return date
+            if dateString.matchPattern("^\\d+$") {
+                if let number = numberFormat.number(from: dateString) as? TimeInterval {
+                    return Date(timeIntervalSince1970: number)
+                }
+            }
+            else {
+                let dateFormatter = DateFormatter()
+                for format in formats {
+                    dateFormatter.dateFormat = format
+                    if let date = dateFormatter.date(from: dateString) {
+                        return date
+                    }
                 }
             }
         }
