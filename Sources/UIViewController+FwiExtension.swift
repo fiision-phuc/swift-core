@@ -37,6 +37,7 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import UIKit
+import Foundation
 
 
 public extension UIViewController {
