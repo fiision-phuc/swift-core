@@ -6,12 +6,6 @@ let package = Package(
     targets: [
         Target(
             name: "FwiCore"
-        ),
-        Target(
-            name: "FwiCoreTests",
-            dependencies: [
-                .Target(name: "FwiCore")
-            ]
         )
     ],
     exclude: [
