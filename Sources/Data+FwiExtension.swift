@@ -55,8 +55,8 @@ public extension Data {
     @discardableResult
     public func decodeJSONWithModel<T: NSObject>(model m: inout T) -> NSError? {
         do {
-            let json = try JSONSerialization.jsonObject(with: self, options: [])
-            if let error = FwiJSONMapper.mapObjectToModel(json, model: &m) {
+
+            if let json = try JSONSerialization.jsonObject(with: self, options: []) as? [String:Any], let error = FwiJSONMapper.mapObjectToModel(json, model: &m) {
                 throw error
             } else {
                 return nil

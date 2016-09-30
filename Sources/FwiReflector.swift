@@ -39,33 +39,46 @@
 import Foundation
 
 
-public final class FwiReflector {
+public final class FwiReflector: CustomDebugStringConvertible, CustomStringConvertible {
 
-    // MARK: Class's constructors
-    public init(mirrorName name: String, mirrorValue value: Any) {
+    // MARK: Struct's constructors
+    public init(mirrorName name: String = "", mirrorValue value: Any) {
         mirrorName = name
         mirrorType = Mirror(reflecting: value)
     }
-
-    // MARK: Class's properties
+    
+    // MARK: Struct's properties
     /// Define if a property is optional or not
     public var optionalProperty = false
     /// Return subject's name.
     public private (set) var mirrorName: String
     /// Return subject's reflector.
     public private (set) var mirrorType: Mirror
-
-    /// Check whether the subject's type is optional type or not
-    public var isOptional: Bool {
-        return mirrorType.displayStyle == .optional
-    }
     
-    /// Check whether the subject's type is enum or not. Currently, this property could not verify
-    /// the optional enum.
+    /// Return subject's reflector description.
+    public lazy private (set) var mirrorDescription: String = {
+        var string = ""
+        
+        debugPrint(self.mirrorType.subjectType, to: &string)
+        string = string.trim()
+        if self.isOptional {
+            string = string.substring(startIndex: 15, reverseIndex: -1)
+        }
+        return string
+    }()
+
+    /// Check whether the subject's type is optional type or not.
+    public lazy private (set) var isOptional: Bool = {
+        return self.mirrorType.displayStyle == .optional
+    }()
+    
+    /// Check whether the subject's type is enum or not.
     public lazy private (set) var isEnum: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .enum
         }
+        
+        // Current implementation does not support optional enum. Thus, always return false
         return false
     }()
     
@@ -74,11 +87,11 @@ public final class FwiReflector {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .tuple
         }
-
-        let type = self.extractType()
-        return (type[type.startIndex] == "(" && type[type.characters.index(type.endIndex, offsetBy: -1)] == ")")
+        
+        let end = self.mirrorDescription.length() - 1
+        return (self.mirrorDescription[0] == "(" && self.mirrorDescription[end] == ")")
     }()
-    
+
     /// Check whether the subject's type is struct or not. If subject's type is struct then it
     /// should return the unwrap subject's struct.
     public lazy private (set) var isStruct: Bool = {
@@ -183,181 +196,116 @@ public final class FwiReflector {
         return false
     }()
     public lazy private (set) var isObject: Bool = {
-        // Validate ObjC Collection
-        let type = self.mirrorType.subjectType
-        if  type == objcArrayMirror.subjectType || type == objcOptionalArrayMirror.subjectType || type == objcOptionalMutableArrayMirror.subjectType ||
-            type == objcDictionaryMirror.subjectType || type == objcOptionalDictionaryMirror.subjectType || type == objcOptionalMutableDictionaryMirror.subjectType ||
-            type == objcSetMirror.subjectType || type == objcOptionalSetMirror.subjectType || type == objcOptionalMutableSetMirror.subjectType
-        {
+        if let clazz = self.classType, clazz is NSObject.Type {
             return true
-        }
-
-        // Validate Swift
-        if let clazz = self.classType {
-            return (clazz is NSObject.Type)
         }
         return false
     }()
     public lazy private (set) var classType: AnyClass? = {
-        let type = self.extractType()
-        return self.lookupClass(type)
+        return FwiReflector.lookup(classType: self.mirrorDescription)
     }()
 
-    /// Check whether the subject's type is set or not.
+    /// Check whether the subject's type is collection, set or not. If subject's type is collection
+    /// or set then it should return the unwrap collection's type.
     public lazy private (set) var isSet: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .set
         }
 
-        // Validate ObjC
-        let type = self.mirrorType.subjectType
-        if type == objcOptionalSetMirror.subjectType || type == objcOptionalMutableSetMirror.subjectType {
+        if self.mirrorType.subjectType == objcOptionalSetMirror.subjectType ||
+           self.mirrorType.subjectType == objcOptionalMutableSetMirror.subjectType
+        {
             return true
         }
-
-        // Validate Swift
-        let swiftType = self.extractType()
-        return swiftType.hasPrefix(setName)
+        return self.mirrorDescription.hasPrefix(setName)
     }()
     public lazy private (set) var isCollection: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .collection
         }
 
-        // Validate ObjC
-        let type = self.mirrorType.subjectType
-        if type == objcOptionalArrayMirror.subjectType || type == objcOptionalMutableArrayMirror.subjectType {
+        if self.mirrorType.subjectType == objcOptionalArrayMirror.subjectType ||
+           self.mirrorType.subjectType == objcOptionalMutableArrayMirror.subjectType
+        {
             return true
         }
-
-        // Validate Swift
-        let swiftType = self.extractType()
-        return swiftType.hasPrefix(arrayName)
+        return self.mirrorDescription.hasPrefix(arrayName)
     }()
     public lazy private (set) var collectionType: FwiReflector? = {
         /* Condition validation */
         if !(self.isSet || self.isCollection) {
             return nil
         }
-
+        
         // Validate ObjC
-        let type = self.mirrorType.subjectType
-        if type == objcArrayMirror.subjectType || type == objcOptionalArrayMirror.subjectType || type == objcOptionalMutableArrayMirror.subjectType || type == objcOptionalSetMirror.subjectType || type == objcOptionalMutableSetMirror.subjectType {
-            return FwiReflector(mirrorName: "", mirrorValue: NSObject())
+        if self.mirrorType.subjectType == objcArrayMirror.subjectType ||
+           self.mirrorType.subjectType == objcOptionalArrayMirror.subjectType ||
+           self.mirrorType.subjectType == objcOptionalMutableArrayMirror.subjectType ||
+            
+           self.mirrorType.subjectType == objcSetMirror.subjectType ||
+           self.mirrorType.subjectType == objcOptionalSetMirror.subjectType ||
+           self.mirrorType.subjectType == objcOptionalMutableSetMirror.subjectType
+        {
+            return FwiReflector(mirrorValue: NSObject())
         }
-
+        
         // Validate Swift
-        let swiftType = self.extractType()
-        let collectionType = self.extractCollectionType(swiftType)
-
-        return self.generateReflector(collectionType)
+        return self.generateReflector(type: self.extractCollectionType())
     }()
-
-    // Dictionary type
+    
+    /// Check whether the subject's type is dictionary or not.
     public lazy private (set) var isDictionary: Bool = {
         if !self.isOptional {
-            if let style = self.mirrorType.displayStyle , style == .dictionary {
-                return true
-            }
-            return false
+            return self.mirrorType.displayStyle == .dictionary
         }
 
-        // Validate ObjC
-        let type = self.mirrorType.subjectType
-        if type == objcOptionalDictionaryMirror.subjectType || type == objcOptionalMutableDictionaryMirror.subjectType {
+        if self.mirrorType.subjectType == objcOptionalDictionaryMirror.subjectType ||
+           self.mirrorType.subjectType == objcOptionalMutableDictionaryMirror.subjectType
+        {
             return true
         }
-
-        // Validate Swift
-        let swiftType = self.extractType()
-        if swiftType.hasPrefix(dictionaryName) {
-            return true
-        }
-        return false
+        return self.mirrorDescription.hasPrefix(dictionaryName)
     }()
     public lazy private (set) var dictionaryType: (key: FwiReflector, value: FwiReflector)? = {
         /* Condition validation */
         if !self.isDictionary {
             return nil
         }
-
+        
+        
         // Validate ObjC
         let type = self.mirrorType.subjectType
         if type == objcDictionaryMirror.subjectType || type == objcOptionalDictionaryMirror.subjectType || type == objcOptionalMutableDictionaryMirror.subjectType {
-            let value = FwiReflector(mirrorName: "", mirrorValue: NSObject())
-            let key = FwiReflector(mirrorName: "", mirrorValue: NSObject())
+            let value = FwiReflector(mirrorValue: NSObject())
+            let key = FwiReflector(mirrorValue: NSObject())
             return (key, value)
         }
-
+        
         // Validate Swift
-        let swiftType = self.extractType()
-        let dictionaryType = self.extractDictionaryType(swiftType)
-
-        guard let value = self.generateReflector(dictionaryType.value) else {
-            return nil
-        }
-        guard let key = self.generateReflector(dictionaryType.key) else {
+        let dictionaryType = self.extractDictionaryType()
+        
+        guard let key = self.generateReflector(type: dictionaryType.key), let value = self.generateReflector(type: dictionaryType.value) else {
             return nil
         }
         return (key, value)
     }()
-
-    // MARK: Class's private methods
-    fileprivate func extractCollectionType(_ type: String) -> String {
-        var collectionType = type
-
-        if collectionType.hasPrefix(arrayName) {
-            collectionType = collectionType.substring(startIndex: 6, reverseIndex: -1)
-        } else if collectionType.hasPrefix(setName) {
-            collectionType = collectionType.substring(startIndex: 4, reverseIndex: -1)
-        }
-
-        if collectionType.hasPrefix("Optional") {
-            collectionType = collectionType.substring(startIndex: 9, reverseIndex: -1)
-        }
-
-        return collectionType
-    }
-    fileprivate func extractDictionaryType(_ type: String) -> (key: String, value: String) {
-        var dictionaryType = type
-
-        if dictionaryType.hasPrefix(dictionaryName) {
-            dictionaryType = dictionaryType.substring(startIndex: 11, reverseIndex: -1)
-        }
-
-        let tokens = dictionaryType.components(separatedBy: ", ")
-        let key   = tokens[0]
-        var value = tokens[1]
-
-        if value.hasPrefix("Optional") {
-            value = value.substring(startIndex: 9, reverseIndex: -1)
-        }
-
-        return (key, value)
-    }
     
-    /// Extract type from optional string description. Currently, there is no other available method
-    /// to find subject's type from optional.
-    fileprivate func extractType() -> String {
-        var subjectType = "\(self.mirrorType.subjectType)"
-        
-        if !self.isOptional {
-            // Remove ObjC tag
-            if subjectType.hasPrefix("__") {
-                subjectType = subjectType.substring(startIndex: 2, reverseIndex: -1)
-            }
-        } else {
-            subjectType = subjectType.substring(startIndex: 9, reverseIndex: -1)
+    // MARK: Struct's private methods
+    /// Create sub reflector. Mainly used for collection type or dictionary type.
+    ///
+    /// parameter type (required): A string represents for subject's type
+    fileprivate func generateReflector(type t: String) -> FwiReflector? {
+        if let primitiveType = FwiReflector.lookup(primitiveType: t) {
+            return FwiReflector(mirrorValue: primitiveType)
         }
-        return subjectType
-    }
-
-    fileprivate func generateReflector(_ type: String) -> FwiReflector? {
-        if let clazz = self.lookupClass(type), let type = clazz as? NSObject.Type {
-            return FwiReflector(mirrorName: "", mirrorValue: type.init())
+        else if let structType = FwiReflector.lookup(structType: t) {
+            return FwiReflector(mirrorValue: structType)
         }
-        else if let primitiveType = self.lookupPrimitive(type) {
-            return FwiReflector(mirrorName: "", mirrorValue: primitiveType)
+        else if let clazz = FwiReflector.lookup(classType: t) as? NSObject.Type {
+            return FwiReflector(mirrorValue: clazz.init())
+        }
+        else if t == "Any" {
+            return FwiReflector(mirrorValue: Any.self)
         }
         return nil
     }
@@ -371,83 +319,141 @@ public final class FwiReflector {
         return false
     }
     
-    /// Lookup subject's class from all loaded bundle. Currently there is no other way to detect if
-    /// class's name belong to which bundle.
-    fileprivate func lookupClass(_ className: String) -> AnyClass? {
+    /// Extract collection type from mirror's description.
+    fileprivate func extractCollectionType() -> String {
+        var collectionType = mirrorDescription
+        
+        if collectionType.hasPrefix(arrayName) {
+            collectionType = collectionType.substring(startIndex: 12, reverseIndex: -1)
+        }
+        else if collectionType.hasPrefix(setName) {
+            collectionType = collectionType.substring(startIndex: 10, reverseIndex: -1)
+        }
+        
+        if collectionType.hasPrefix("Swift.Optional") {
+            collectionType = collectionType.substring(startIndex: 15, reverseIndex: -1)
+        }
+        return collectionType
+    }
+    
+    /// Extract dictionary type from mirror's description.
+    fileprivate func extractDictionaryType() -> (key: String, value: String) {
+        var dictionaryType = mirrorDescription
+        
+        if dictionaryType.hasPrefix(dictionaryName) {
+            dictionaryType = dictionaryType.substring(startIndex: 17, reverseIndex: -1)
+        }
+        
+        let tokens = dictionaryType.components(separatedBy: ", ")
+        let key   = tokens[0]
+        var value = tokens[1]
+        
+        if value.hasPrefix("Swift.Optional") {
+            value = value.substring(startIndex: 15, reverseIndex: -1)
+        }
+        return (key, value)
+    }
+    
+    /// Lookup subject's class type.
+    ///
+    /// parameter className (required): A string represents a class type
+    internal static func lookup(classType c: String) -> AnyClass? {
         /* Condition validation */
-        if className.characters.count <= 0 {
+        if c.length() <= 0 {
             return nil
         }
-
-        if let clazz = NSClassFromString(className) {
+        
+        if let clazz = NSClassFromString(c) {
             return clazz
-        } else {
-            // Try to look for class from current first
-            let nameClass = "\(self)"
-            if let nameBundle = nameClass.split(".").first, let clazz = NSClassFromString("\(nameBundle).\(className)") {
-                return clazz
-            }
-
-            // If not good, try to look from all loaded bundle
-            for bundle in Bundle.allBundles {
-                if let module = bundle.bundleIdentifier?.split(".").last, bundle.load() {
-                    if let clazz = NSClassFromString("\(module).\(className)") {
-                        return clazz
-                    }
-                }
-            }
+        }
+        else if let name = c.split(".").last, let clazz = NSClassFromString(name) {
+            return clazz
         }
         return nil
     }
-
-    public func lookupPrimitive(_ primitiveType: String) -> Any? {
+    
+    /// Lookup subject's primitive type.
+    ///
+    /// parameter primitiveType (required): A string represents a primitive form
+    internal static func lookup(primitiveType p: String) -> Any? {
         // Convert from string to Any.Type
-        switch primitiveType {
+        switch p {
 
-        case "Bool":
+        case "Swift.Bool":
             return false
 
-        case "Int":
+        case "Swift.Int":
             return 0 as Int
-        case "Int8":
+        case "Swift.Int8":
             return 0 as Int8
-        case "Int16":
+        case "Swift.Int16":
             return 0 as Int16
-        case "Int32":
+        case "Swift.Int32":
             return 0 as Int32
-        case "Int64":
+        case "Swift.Int64":
             return 0 as Int64
 
-        case "UInt":
+        case "Swift.UInt":
             return 0 as UInt
-        case "UInt8":
+        case "Swift.UInt8":
             return 0 as UInt8
-        case "UInt16":
+        case "Swift.UInt16":
             return 0 as UInt16
-        case "UInt32":
+        case "Swift.UInt32":
             return 0 as UInt32
-        case "UInt64":
+        case "Swift.UInt64":
             return 0 as UInt64
 
-        case "Float":
+        case "Swift.Float":
             return 0 as Float
-        case "Float32":
+        case "Swift.Float32":
             return 0 as Float32
-        case "Float64":
+        case "Swift.Float64":
             return 0 as Float64
 
-        case "Double":
+        case "Swift.Double":
             return 0 as Double
 
-        case "Character":
+        case "Swift.Character":
             return " " as Character
 
-        case "String", "NSString", "NSMutableString":
+        case "Swift.String", "NSString", "NSMutableString":
             return ""
 
         default:
             return nil
         }
+    }
+    
+    /// Lookup subject's primitive type.
+    ///
+    /// parameter primitiveType (required): A string represents a primitive form
+    internal static func lookup(structType s: String) -> Any? {
+        // Convert from string to Any.Type
+        switch s {
+            
+        case "Foundation.Data":
+            return Data()
+        
+        case "Foundation.Date":
+            return Date()
+            
+        case "Foundation.URL":
+            return URL(fileURLWithPath: "")
+            
+        default:
+            return nil
+        }
+    }
+    
+    // MARK: CustomDebugStringConvertible's members
+    public var debugDescription: String {
+        return "Reflector for: \(mirrorDescription)"
+    }
+    
+    // MARK: CustomStringConvertible's members
+    public var description: String {
+        return "Reflector for: \(mirrorDescription)"
     }
 }
 
@@ -461,7 +467,7 @@ public extension FwiReflector {
     ///
     /// parameter model (required): any class or struct
     /// parameter baseType (optional): Define base type to stop the lookup super model process
-    public class func properties<T: NSObject>(withModel model: T.Type, baseType b: Any.Type = NSObject.self) -> (T?, [FwiReflector]) {
+    public static func properties<T: NSObject>(withModel model: T.Type, baseType b: Any.Type = NSObject.self) -> (T?, [FwiReflector]) {
         let o = model.init()
         let properties = FwiReflector.properties(withObject: o)
         
@@ -473,7 +479,7 @@ public extension FwiReflector {
     ///
     /// parameter object (required): Any instance
     /// parameter baseType (optional): Define base type to stop the lookup super model process
-    public class func properties<T: NSObject>(withObject o: T, baseType b: Any.Type = NSObject.self) -> [FwiReflector] {
+    public static func properties<T: NSObject>(withObject o: T, baseType b: Any.Type = NSObject.self) -> [FwiReflector] {
         return sequence(first: Mirror(reflecting: o),
                         next: {
                             $0.superclassMirror?.subjectType == b ? nil : $0.superclassMirror
@@ -489,21 +495,12 @@ public extension FwiReflector {
 }
 
 
-// Legacy
-public extension FwiReflector {
-    
-    public var propertyName: String {
-        return mirrorName
-    }
-}
-
-
 
 
 // Constants
-fileprivate let setName = "Set"
-fileprivate let arrayName = "Array"
-fileprivate let dictionaryName = "Dictionary"
+fileprivate let setName = "Swift.Set"
+fileprivate let arrayName = "Swift.Array"
+fileprivate let dictionaryName = "Swift.Dictionary"
 // Mirror types
 fileprivate let objcArrayMirror = Mirror(reflecting: NSArray())
 fileprivate let objcOptionalArrayMirror = Mirror(reflecting: NSArray() as NSArray?)

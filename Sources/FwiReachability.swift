@@ -35,148 +35,179 @@
 //  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
-//
-//import Foundation
-//import SystemConfiguration
-//
-//
-//public enum FwiReachabilityState : UInt8 {
-//    case None = 0x00
-//    case WiFi = 0x01
-//    case WWAN = 0x02
-//}
-//
-//public let Notification_ReachabilityStateChanged = "Notification_ReachabilityStateChanged"
-//
-//func FwiPrintFlags(flags: SCNetworkReachabilityFlags) {
-//    var message = "Reachability Status: "
-//
-//    message += flags & SCNetworkReachabilityFlags(kSCNetworkReachabilityFlagsIsWWAN)               != 0 ? "W" : "-"    // Can be reached via an EDGE, GPRS, or other "cell" connection.
-//    message += flags & SCNetworkReachabilityFlags(kSCNetworkReachabilityFlagsReachable)            != 0 ? "R" : "-"    // Can be reached using the current network configuration.
-//    message += " "
-//    message += flags & SCNetworkReachabilityFlags(kSCNetworkReachabilityFlagsTransientConnection)  != 0 ? "t" : "-"    // Can be reached via a transient connection, such as PPP.
-//    message += flags & SCNetworkReachabilityFlags(kSCNetworkReachabilityFlagsConnectionRequired)   != 0 ? "c" : "-"    // Can be reached using the current network configuration, but a connection must first be established, such as dialup.
-//    message += flags & SCNetworkReachabilityFlags(kSCNetworkReachabilityFlagsConnectionOnTraffic)  != 0 ? "C" : "-"    // Can be reached using the current network configuration, but a connection must first be established. Any traffic directed to the specified name or address will initiate the connection.
-//    message += flags & SCNetworkReachabilityFlags(kSCNetworkReachabilityFlagsInterventionRequired) != 0 ? "i" : "-"    // Can be reached using the current network configuration, but a connection must first be established. In addition, some forms will be required to establish this connection.
-//    message += flags & SCNetworkReachabilityFlags(kSCNetworkReachabilityFlagsConnectionOnDemand)   != 0 ? "D" : "-"    // Can be reached using the current network configuration, but a connection must first be established. The connection will be established "On Demand".
-//    message += flags & SCNetworkReachabilityFlags(kSCNetworkReachabilityFlagsIsLocalAddress)       != 0 ? "l" : "-"    // The specified nodename or address is one associated with a network interface on the current system.
-//    message += flags & SCNetworkReachabilityFlags(kSCNetworkReachabilityFlagsIsDirect)             != 0 ? "d" : "-"    // The specified nodename or address will be routed directly to one of the interfaces in the system.
-//
-//    FwiLog("\(message)")
-//}
-//func callback(target: SCNetworkReachability!, flags: SCNetworkReachabilityFlags, info: UnsafeMutablePointer<Void>) {
-//    FwiPrintFlags(flags)
-//    NSNotificationCenter.defaultCenter().postNotificationName(Notification_ReachabilityStateChanged, object: nil)
-//}
-//
-//public class FwiReachability : NSObject {
-//
-//    // MARK: Class's constructors
-//    override public init() {
-//        super.init()
-//
-//        reachability  = nil
-//        returnWiFiStatus = false
-//    }
-//    convenience init(reachability: SCNetworkReachability) {
-//        self.init()
-//        self.reachability = reachability
-//    }
-//
-//
-//    // MARK: Class's properties
-//    public var connectionRequired: Bool {
-//        get {
-//            /* Condition validation */
-//            if (reachability == nil) {
-//                return false
-//            }
-//
-//            var flags: SCNetworkReachabilityFlags = 0
-//            SCNetworkReachabilityGetFlags(reachability, &flags)
-//            return (flags & SCNetworkReachabilityFlags(kSCNetworkReachabilityFlagsConnectionRequired) != 0)
-//        }
-//    }
-//    public var reachabilityState: FwiReachabilityState {
-//        get {
-//            /* Condition validation */
-//            if (reachability == nil) {
-//                return .None
-//            }
-//
-//            var flags: SCNetworkReachabilityFlags = 0
-//            var status = FwiReachabilityState.None
-//
-//            if (SCNetworkReachabilityGetFlags(reachability, &flags) != 0) {
-//                status = (returnWiFiStatus == true ? self.statusWiFiWithFlags(flags) : self.statusInternetWithFlags(flags))
-//            }
-//            return status
-//        }
-//    }
-//
-//    var returnWiFiStatus: Bool?
-//    var reachability: SCNetworkReachability?
-//
-//
-//    // MARK: Class's public methods
-//    public func start() {
-//        /* Condition validation */
-//        if (reachability == nil) {
-//            return
-//        }
-//
-//        // Create UnsafeMutablePointer and initialise with callback
-//        let p = UnsafeMutablePointer<(SCNetworkReachability!, SCNetworkReachabilityFlags, UnsafeMutablePointer<Void>) -> Void>.alloc(1)
-//        p.initialize(callback)
-//
-//        // convert UnsafeMutablePointer to COpaquePointer
-//        let cp = COpaquePointer(p)
-//
-//        // convert COppaquePointer to CFunctionPointer
-//        let fp = CFunctionPointer<(SCNetworkReachability!, SCNetworkReachabilityFlags, UnsafeMutablePointer<Void>) -> Void>(cp)
-//
-//        if SCNetworkReachabilitySetCallback(reachability, fp, nil) == 0 {
-//
-//            println(SCError()) // SCError() is returning 0
-//            return
-//        }
-//
-//        // Add to default runloop
-//        SCNetworkReachabilityScheduleWithRunLoop(reachability!, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode)
-//    }
-//    public func stop() {
-//    }
-//
-//
-//    // MARK: Class's private methods
-//    func statusWiFiWithFlags(flags: SCNetworkReachabilityFlags) -> FwiReachabilityState {
-//        return .None
-//    }
-//    func statusInternetWithFlags(flags: SCNetworkReachabilityFlags) -> FwiReachabilityState {
-//        return .None
-//    }
-//}
-//
-//
-//// Creation
-//public extension FwiReachability {
-//
-//    /** Check the reachability of a given IP address. */
-//    class public func reachabilityWithAddress(address: sockaddr_in) -> FwiReachability? {
-//        return nil
-//    }
-//    /** Check the reachability of a given host name. */
-//    class public func reachabilityWithHostname(hostname: String) -> FwiReachability? {
-//        var reachability = SCNetworkReachabilityCreateWithName(kCFAllocatorDefault, (hostname as NSString).UTF8String).takeRetainedValue()
-//        return FwiReachability(reachability: reachability)
-//    }
-//
-//    /** Checks whether the default route is available. Should be used by applications that do not connect to any particular host. */
-//    class public func reachabilityForInternet() -> FwiReachability? {
-//        return nil
-//    }
-//    /** Checks whether a local WiFi connection is available. */
-//    class public func reachabilityForWiFi() -> FwiReachability? {
-//        return nil
-//    }
-//}
+
+import Foundation
+import SystemConfiguration
+
+
+/// Define reachability notification.
+public let reachabilityStateChanged = NSNotification.Name(rawValue: "ReachabilityStateChanged")
+
+/// Define reachability state.
+public enum FwiReachabilityState {
+    case none
+    case wifi
+    case wwan
+}
+
+
+public struct FwiReachability {
+
+    // MARK: Struct's constructors
+    public init(reachability r: SCNetworkReachability, shouldReturnWiFiState s: Bool = false) {
+        target = r
+        shouldReturnWiFiState = s
+    }
+
+    // MARK: Class's properties
+    /// Check if network connection is required or not?
+    public var connectionRequired: Bool {
+        var networkFlags = SCNetworkReachabilityFlags(rawValue: 0)
+        
+        if SCNetworkReachabilityGetFlags(target, &networkFlags) {
+            return networkFlags.contains(.connectionRequired)
+        }
+        return false
+    }
+    
+    /// Return network's state.
+    public var reachabilityState: FwiReachabilityState {
+        var networkFlags = SCNetworkReachabilityFlags(rawValue: 0)
+        var status = FwiReachabilityState.none
+        
+        if SCNetworkReachabilityGetFlags(target, &networkFlags) {
+            status = (shouldReturnWiFiState ? statusWiFi(withFlags: networkFlags) : statusInternet(withFlags: networkFlags))
+        }
+        return status
+    }
+    
+    /// Should return wifi state or not.
+    fileprivate var shouldReturnWiFiState: Bool
+    
+    /// Network reachability target.
+    fileprivate var target: SCNetworkReachability
+    
+    /// Define closure to handle network event.
+    fileprivate lazy var callBack: SystemConfiguration.SCNetworkReachabilityCallBack = {
+        let callBack: SystemConfiguration.SCNetworkReachabilityCallBack = { (target, networkFlags, info) in
+            let w  = networkFlags.contains(.isWWAN)               ? "W" : "-"   // Can be reached via an EDGE, GPRS, or other "cell" connection.
+            let r  = networkFlags.contains(.reachable)            ? "R" : "-"   // Can be reached using the current network configuration.
+            
+            let t  = networkFlags.contains(.transientConnection)  ? "t" : "-"   // Can be reached via a transient connection, such as PPP.
+            let c1 = networkFlags.contains(.connectionRequired)   ? "c" : "-"   // Can be reached using the current network configuration, but a connection must first be established, such as dialup.
+            let c2 = networkFlags.contains(.connectionOnTraffic)  ? "C" : "-"   // Can be reached using the current network configuration, but a connection must first be established. Any traffic directed to the specified name or address will initiate the connection.
+            let i  = networkFlags.contains(.interventionRequired) ? "i" : "-"   // Can be reached using the current network configuration, but a connection must first be established. In addition, some forms will be required to establish this connection.
+            let d1 = networkFlags.contains(.connectionOnDemand)   ? "D" : "-"   // Can be reached using the current network configuration, but a connection must first be established. The connection will be established "On Demand".
+            let l  = networkFlags.contains(.isLocalAddress)       ? "l" : "-"   // The specified nodename or address is one associated with a network interface on the current system.
+            let d2 = networkFlags.contains(.isDirect)             ? "d" : "-"   // The specified nodename or address will be routed directly to one of the interfaces in the system.
+            print("Reachability Status: \(w)\(r) \(t)\(c1)\(c2)\(i)\(d1)\(l)\(d2)")
+            
+            // Post notification
+            if let p = info?.bindMemory(to: FwiReachability.self, capacity: 1) {
+                NotificationCenter.default.post(name: reachabilityStateChanged, object: p.pointee)
+            }
+        }
+        return callBack
+    }()
+    
+    // MARK: Class's public methods
+    /// Start monitoring network.
+    public mutating func start() {
+        var context = SCNetworkReachabilityContext(version: 0, info: &self, retain: nil, release: nil, copyDescription: nil)
+        if !SCNetworkReachabilitySetCallback(target, callBack, &context) {
+            FwiLog("\(SCError())")
+            return
+        }
+        SCNetworkReachabilityScheduleWithRunLoop(target, CFRunLoopGetMain(), CFRunLoopMode.defaultMode.rawValue)
+    }
+    
+    /// Stop monitoring network.
+    public func stop() {
+        SCNetworkReachabilityUnscheduleFromRunLoop(target, CFRunLoopGetMain(), CFRunLoopMode.defaultMode.rawValue)
+    }
+
+    // MARK: Class's private methods
+    /// Check Internet's state with network flags.
+    ///
+    /// parameter flags (required): Network's flags obtains from target
+    fileprivate func statusInternet(withFlags networkFlags: SCNetworkReachabilityFlags) -> FwiReachabilityState {
+        /* Condition validation */
+        guard !networkFlags.contains(.reachable) else {
+            return .none
+        }
+        
+        var status = networkFlags.contains(.connectionRequired) ? FwiReachabilityState.none : FwiReachabilityState.wifi
+        if networkFlags.contains(.isWWAN) {
+            status = .wwan
+        }
+        return status
+    }
+    
+    /// Check WiFi's state with network flags.
+    ///
+    /// parameter flags (required): Network's flags obtains from target
+    fileprivate func statusWiFi(withFlags networkFlags: SCNetworkReachabilityFlags) -> FwiReachabilityState {
+        let isReachable = networkFlags.contains(.reachable) && networkFlags.contains(.isDirect)
+        return (isReachable ? .wifi : .none)
+    }
+}
+
+
+// Creation
+public extension FwiReachability {
+
+    /// Create reachability to monitor Internet.
+    public static func forInternet() -> FwiReachability? {
+        var address = sockaddr(sa_len: __uint8_t(0),
+                               sa_family: sa_family_t(0),
+                               sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+        
+        address.sa_len = UInt8(MemoryLayout.size(ofValue: address))
+        address.sa_family = sa_family_t(AF_INET)
+        
+        // Create reachability
+        guard let reachability = SCNetworkReachabilityCreateWithAddress(kCFAllocatorDefault, &address) else {
+            return nil
+        }
+        return FwiReachability(reachability: reachability)
+    }
+    
+    /// Create reachability to monitor WiFi.
+    public static func forWiFi() -> FwiReachability? {
+        var address = sockaddr(sa_len: __uint8_t(0),
+                               sa_family: sa_family_t(0),
+                               sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+        
+        address.sa_len = UInt8(MemoryLayout.size(ofValue: address))
+        address.sa_family = sa_family_t(AF_INET)
+        
+        // Create reachability
+        guard let reachability = SCNetworkReachabilityCreateWithAddress(kCFAllocatorDefault, &address) else {
+            return nil
+        }
+        return FwiReachability(reachability: reachability, shouldReturnWiFiState: true)
+    }
+    
+    /// Create reachability for a given hostname.
+    ///
+    /// parameter hostname (required): string represents a hostname (e.g. www.apple.com)
+    public init?(withHostname h: String) {
+        let cs = h.utf8CString
+        
+        // Convert hostname to CString
+        let hostname = UnsafeMutablePointer<Int8>.allocate(capacity: cs.count)
+        for (idx, c) in cs.enumerated() {
+            hostname[idx] = c
+        }
+        
+        // Create reachability
+        guard let reachability = SCNetworkReachabilityCreateWithName(nil, hostname) else {
+            return nil
+        }
+        self.init(reachability: reachability)
+    }
+    
+    public static func reachabilityWithAddress(address: sockaddr_in) -> FwiReachability? {
+        return nil
+    }
+}

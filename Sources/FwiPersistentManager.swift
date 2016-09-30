@@ -40,70 +40,114 @@ import Foundation
 import CoreData
 
 
+/// Define persistent store's type.
+public enum FwiPersistentType {
+    case binary
+    case memory
+    case sqlite
+
+    var store: String {
+        switch self {
+
+        case .binary:
+            return NSBinaryStoreType
+
+        case .memory:
+            return NSInMemoryStoreType
+
+        case .sqlite:
+            return NSSQLiteStoreType
+        }
+    }
+}
+
+
 public final class FwiPersistentManager {
 
     // MARK: Class's constructors
-    public init(dataModel: String, modelBundle bundle: Bundle = Bundle.main) {
-        self.bundle = bundle
-        self.dataModel = dataModel
+    /// Create persistent manager.
+    ///
+    /// parameter model (required): name of model schema without momd extension
+    /// parameter bundle (optional): the bundle contains the model schema. Default is main bundle
+    /// parameter storeType (optional): the persistent's type. Default is SQLite
+    /// parameter rootLocation (optional): the location to stored database. Default is cache folder
+    public init(withModel m: String, fromBundle b: Bundle = Bundle.main, storeType t: FwiPersistentType = .sqlite, rootLocation l: URL? = URL.cacheDirectory()) {
+        bundle = b
+        dataModel = m
+        storeType = t
+        rootLocation = l
 
         // Register core data changed notification
-        NotificationCenter.default.addObserver(self, selector: #selector(FwiPersistentManager.handleContextDidSaveNotification(_:)), name: NSNotification.Name.NSManagedObjectContextDidSave, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(FwiPersistentManager.handleContextDidSaveNotification(_:)),
+                                               name: NSNotification.Name.NSManagedObjectContextDidSave,
+                                               object: nil)
     }
-
 
     // MARK: Cleanup memory
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
 
-
     // MARK: Class's properties
+    /// Return managed object model instance.
     public fileprivate (set) lazy var managedModel: NSManagedObjectModel = {
-        if let modelURL = self.bundle.url(forResource: self.dataModel, withExtension: "momd"),
-           let managedModel = NSManagedObjectModel(contentsOf: modelURL)
-        {
-            return managedModel
+        guard let modelURL = self.bundle.url(forResource: self.dataModel, withExtension: "momd"), let managedModel = NSManagedObjectModel(contentsOf: modelURL) else {
+            fatalError("\(self.dataModel) model is not available!")
         }
-        fatalError("\(self.dataModel) model is not available!")
+        return managedModel
     }()
+
+    /// Return main managed object context.
     public fileprivate (set) lazy var managedContext: NSManagedObjectContext = {
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = self.persistentCoordinator
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
+        
         return managedObjectContext
     }()
+
+    /// Return persistent store coordinator.
     public fileprivate (set) lazy var persistentCoordinator: NSPersistentStoreCoordinator = {
-        let (storeDB1, storeDB2, storeDB3) = ("\(self.dataModel).sqlite", "\(self.dataModel).sqlite-shm", "\(self.dataModel).sqlite-wal")
-        guard let storeURL1 = URL.cacheDirectory() + storeDB1,
-              let storeURL2 = URL.cacheDirectory() + storeDB2,
-              let storeURL3 = URL.cacheDirectory() + storeDB3
-        else {
-            fatalError("Cache directory could not be found!")
-        }
-        
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedModel)
-        let options = [NSSQLitePragmasOption:["journal_mode":"WAL"],
-                       NSInferMappingModelAutomaticallyOption:true,
-                       NSMigratePersistentStoresAutomaticallyOption:true] as [String : Any]
-
-        for i in 0 ... 1 {
+        
+        if self.storeType == .memory {
             do {
-                try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL1, options: options)
-                // try (storeURL1 as URL).setResourceValues([URLResourceKey.isExcludedFromBackupKey: true as AnyObject])
-                // try (storeURL2 as URL).setResourceValues([URLResourceKey.isExcludedFromBackupKey: true as AnyObject])
-                // try (storeURL3 as URL).setResourceValues([URLResourceKey.isExcludedFromBackupKey: true as AnyObject])
-                break
-
-            } catch _ {
-                // Note: If the first time fail, we remove everything but not second time.
-                if i == 0 {
-                    let fileManager = FileManager.default
-                    fileManager.removeFile(atURL: storeURL1)
-                    fileManager.removeFile(atURL: storeURL2)
-                    fileManager.removeFile(atURL: storeURL3)
-                } else {
-                    fatalError("Could not create persistent store coordinator for \(self.dataModel) model!")
+                try coordinator.addPersistentStore(ofType: self.storeType.store, configurationName: nil, at: nil, options: nil)
+            }
+            catch _ {
+                fatalError("Could not create persistent store coordinator for \(self.dataModel) model!")
+            }
+        }
+        else {
+            let storeDB1 = "\(self.dataModel).sqlite"
+            let storeDB2 = "\(self.dataModel).sqlite-shm"
+            let storeDB3 = "\(self.dataModel).sqlite-wal"
+            let options: [String : Any] = [NSSQLitePragmasOption:["journal_mode":"WAL"],
+                                           NSInferMappingModelAutomaticallyOption:true,
+                                           NSMigratePersistentStoresAutomaticallyOption:true]
+            
+            guard let storeURL1 = self.rootLocation + storeDB1, let storeURL2 = self.rootLocation + storeDB2, let storeURL3 = self.rootLocation + storeDB3 else {
+                fatalError("Cache directory could not be found!")
+            }
+            
+            // Try to map schema
+            for i in 0 ... 1 {
+                do {
+                    try coordinator.addPersistentStore(ofType: self.storeType.store, configurationName: nil, at: storeURL1, options: options)
+                    break
+                }
+                catch _ {
+                    // Note: If the first time fail, we remove everything but not second time.
+                    if i == 0 {
+                        let fileManager = FileManager.default
+                        fileManager.removeFile(atURL: storeURL1)
+                        fileManager.removeFile(atURL: storeURL2)
+                        fileManager.removeFile(atURL: storeURL3)
+                    }
+                    else {
+                        fatalError("Could not create persistent store coordinator for \(self.dataModel) model!")
+                    }
                 }
             }
         }
@@ -112,6 +156,8 @@ public final class FwiPersistentManager {
 
     fileprivate var bundle: Bundle
     fileprivate var dataModel: String
+    fileprivate var rootLocation: URL?
+    fileprivate var storeType: FwiPersistentType
 
 
     // MARK: Class's public methods
@@ -128,7 +174,7 @@ public final class FwiPersistentManager {
         return error
     }
 
-    /** Return a sub managed object context that had been optimized to serve the update data process. */
+    /// Return a sub managed object context that had been optimized to serve the update data process.
     public func importContext() -> NSManagedObjectContext {
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = self.persistentCoordinator

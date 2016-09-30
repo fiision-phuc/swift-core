@@ -47,7 +47,7 @@ public enum FwiRequestType {
 
 
     // Generate request
-    var request: URLRequest {
+    public var request: URLRequest {
         switch self {
 
         case .Raw(let url, let requestMethod, let extraHeaders, let rawParam):

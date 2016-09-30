@@ -37,6 +37,7 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import UIKit
+import Foundation
 
 
 public extension UIViewController {
@@ -51,6 +52,7 @@ public extension UIViewController {
         }
         
         controller.view.translatesAutoresizingMaskIntoConstraints = false
+        self.addChildViewController(controller)
         view.addSubview(subView)
         
         let views = ["subView":subView]
@@ -58,6 +60,9 @@ public extension UIViewController {
         let constraints2 = NSLayoutConstraint.constraints(withVisualFormat: "V:|[subView]|", options: .alignAllLeading, metrics: nil, views: views)
         view.addConstraints(constraints1)
         view.addConstraints(constraints2)
+        
+        controller.willMove(toParentViewController: self)
+        controller.didMove(toParentViewController: self)
         return controller
     }
 }

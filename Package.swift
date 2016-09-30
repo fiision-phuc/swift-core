@@ -13,5 +13,8 @@ let package = Package(
                 .Target(name: "FwiCore")
             ]
         )
+    ],
+    exclude: [
+        "Tests/Resources"
     ]
 )

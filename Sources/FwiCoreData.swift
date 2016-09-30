@@ -40,23 +40,28 @@ import Foundation
 import CoreData
 
 
-@objc
 public protocol FwiCoreData {
 }
 
 
-public extension FwiCoreData where Self : NSManagedObject {
+public extension FwiCoreData where Self: NSManagedObject {
 
-    /** Fetch all entities base on search condition. */
-    static public func allEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [AnyObject]? = nil, limit l: Int = 0) -> [Self]? {
+    /// Fetch all entities.
+    ///
+    /// parameter context (required): a managed object context to search
+    /// parameter predicate (optional): to filter entity list
+    /// parameter sortDescriptor (optional): to sort entity list
+    /// parameter groupBy (optional): to group entity list into smaller list
+    /// parameter limit (optional): to limit the number of entities within the list
+    public static func allEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [AnyObject]? = nil, limit l: Int = 0) -> [Self]? {
         /* Condition validation */
-        guard let c = context else {
+        guard let c = context, let entityName = NSStringFromClass(self).split(".").last else {
             return nil
         }
 
         var entities: [Self]?
         c.performAndWait {
-            let request = NSFetchRequest<Self>(entityName: NSStringFromClass(self))
+            let request = NSFetchRequest<Self>(entityName: entityName)
 
             // Apply standard condition
             request.predicate = p
@@ -82,15 +87,19 @@ public extension FwiCoreData where Self : NSManagedObject {
         return entities
     }
 
-    /** Fetch an entity base on search condition. Create new if necessary. */
-    static public func entity(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, shouldCreate create: Bool = false) -> Self? {
+    /// Fetch an entity base on search condition. Create new if necessary.
+    ///
+    /// parameter context (required): a managed object context to search
+    /// parameter predicate (optional): to filter entity list
+    /// parameter shouldCreate (optional): create new entity if necessary
+    public static func entity(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, shouldCreate create: Bool = false) -> Self? {
         /* Condition validation */
         guard let c = context else {
             return nil
         }
 
         // Find before create
-        let entities = allEntities(fromContext: c, predicate: p)
+        let entities = allEntities(fromContext: c, predicate: p, limit: 1)
         var entity = entities?.first
 
         if entity == nil && create {
@@ -98,18 +107,50 @@ public extension FwiCoreData where Self : NSManagedObject {
         }
         return entity
     }
-
-    /** Insert new entity into database. */
-    static public func newEntity(withContext context: NSManagedObjectContext?) -> Self? {
+    
+    /// Count all entities.
+    ///
+    /// parameter context (required): a managed object context to count
+    /// parameter predicate (optional): to filter entity list
+    public static func count(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) -> Int {
         /* Condition validation */
-        guard let c = context else {
+        guard let c = context, let entityName = NSStringFromClass(self).split(".").last else {
+            return 0
+        }
+
+        var counter = 0
+        c.performAndWait {
+            let request = NSFetchRequest<Self>(entityName: entityName)
+            request.includesPropertyValues = false
+            request.includesSubentities = false
+            request.predicate = p
+            
+            do {
+                counter = try c.count(for: request)
+            }
+            catch _ {
+                counter = 0
+            }
+        }
+        return counter
+    }
+    
+    /// Insert new entity.
+    ///
+    /// parameter context (required): a managed object context to insert
+    public static func newEntity(withContext context: NSManagedObjectContext?) -> Self? {
+        /* Condition validation */
+        guard let c = context, let entityName = NSStringFromClass(self).split(".").last else {
             return nil
         }
-        return NSEntityDescription.insertNewObject(forEntityName: NSStringFromClass(self), into: c) as? Self
+        return NSEntityDescription.insertNewObject(forEntityName: entityName, into: c) as? Self
     }
 
-    /** Delete all entities from database. */
-    static public func deleteAllEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) {
+    /// Delete all entities.
+    ///
+    /// parameter context (required): a managed object context to delete
+    /// parameter predicate (optional): to filter entities when deleting
+    public static func deleteAllEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) {
         let entities = allEntities(fromContext: context, predicate: p)
         entities?.forEach({
             $0.remove()

@@ -122,6 +122,15 @@ class URLFwiExtensionTest: XCTestCase {
             XCTFail("Invalid url.")
         }
         
+        // Case Empty Query
+        params = ["#string1":"value1"]
+        url1 = url + params
+        if let path = url1?.absoluteString {
+            XCTAssertEqual(path,"https://google.com#string1=value1","Expected 'https://google.com#string1=value1'  but found '\(path)'.")
+        } else {
+            XCTFail("Invalid url.")
+        }
+        
         params = ["#string1":"value1", "string2":"value2", "string3":"value3"]
         url += params
         if let path = url?.absoluteString {
@@ -129,5 +138,7 @@ class URLFwiExtensionTest: XCTestCase {
         } else {
             XCTFail("Invalid url.")
         }
+        
+        
     }
 }
