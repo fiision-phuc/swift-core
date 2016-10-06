@@ -43,7 +43,7 @@ import XCTest
 class FwiNetworkManagerTest: XCTestCase {
     
     
-    fileprivate lazy var instance  = FwiNetworkManager.sharedInstance()
+    fileprivate lazy var instance  = FwiNetworkManager.instance
     fileprivate lazy var baseHTTP  = URL(string: "http://httpbin.org")
     fileprivate lazy var baseHTTPS = URL(string: "https://httpbin.org")
     

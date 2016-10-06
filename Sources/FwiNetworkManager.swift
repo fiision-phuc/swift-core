@@ -38,16 +38,24 @@
 
 import UIKit
 import Foundation
+import RxSwift
 
 
 public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate {
-
+    // MARK: Completion definition
+    public typealias DownloadCompletion = (_ location: URL?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
+    public typealias RequestCompletion = (_ data: Data?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
+    
+    // MARK: Singleton instance
+    public static let instance = FwiNetworkManager()
+    
     // MARK: Class's properties
     fileprivate var networkCounter: NSInteger = 0 {
         didSet {
             if networkCounter > 0 {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = true
-            } else {
+            }
+            else {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
             }
         }
@@ -58,7 +66,9 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
     }()
 
     fileprivate lazy var session: Foundation.URLSession = {
-        return Foundation.URLSession(configuration: self.configuration, delegate: self, delegateQueue: operationQueue)
+        return Foundation.URLSession(configuration: self.configuration,
+                                     delegate: self,
+                                     delegateQueue: operationQueue)
     }()
 
     fileprivate lazy var configuration: URLSessionConfiguration = {
@@ -76,7 +86,6 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
         return config
     }()
-
 
     // MARK: Class's public methods
     public func sendRequest(_ request: URLRequest, completion c: RequestCompletion? = nil) {
@@ -198,19 +207,30 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
 
     // MARK: Class's private methods
+    /// Output error to console.
+    ///
+    /// parameter request (required): request
+    /// parameter data (required): response's data
+    /// parameter error (required): response's error
+    /// parameter statusCode (required): network's status
     fileprivate func consoleError(_ request: URLRequest, data d: Data?, error e: NSError?, statusCode s: FwiNetworkStatus) {
-        if let err = e, let url = request.url, let host = url.host, let method = request.httpMethod {
-            let domain     = "Domain     : \(host)\n"
-            let url        = "HTTP Url   : \(url)\n"
-            let method     = "HTTP Method: \(method)\n"
-            let status     = "HTTP Status: \(s.rawValue) (\(err.localizedDescription))\n"
-            let dataString = "\(d?.toString() ?? "")"
-
-            FwiLog("\n\(domain)\(url)\(method)\(status)\(dataString)")
+        guard let err = e, let url = request.url, let host = url.host, let method = request.httpMethod else {
+            return
         }
+        
+        let domain     = "Domain     : \(host)\n"
+        let urlString  = "HTTP Url   : \(url)\n"
+        let httpMethod = "HTTP Method: \(method)\n"
+        let status     = "HTTP Status: \(s.rawValue) (\(err.localizedDescription))\n"
+        let dataString = "\(d?.toString() ?? "")"
+        
+        FwiLog("\n\(domain)\(urlString)\(httpMethod)\(status)\(dataString)")
     }
 
-    /** Generate network error. */
+    /// Generate network error.
+    ///
+    /// parameter request (required): request
+    /// parameter statusCode (required): network's status
     fileprivate func generateError(_ request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
         let userInfo = [NSURLErrorFailingURLErrorKey:request.url?.description ?? "",
                         NSURLErrorFailingURLStringErrorKey:request.url?.description ?? "",
@@ -219,16 +239,13 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
         return NSError(domain: NSURLErrorDomain, code: Int(s.rawValue), userInfo: userInfo)
     }
 
-
     // MARK: NSURLSessionDelegate's members
     public func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
         if let err = error {
             FwiLog("\(err)")
         }
     }
-    
-   
-    @nonobjc public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: (Foundation.URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         if let serverTrust = challenge.protectionSpace.serverTrust , challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
             let credential = URLCredential(trust: serverTrust)
             completionHandler(.useCredential, credential)
@@ -237,25 +254,11 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
         }
     }
 
-
     // MARK: NSURLSessionTaskDelegate's members
-    @nonobjc public func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: (URLRequest) -> Void) {
+    public func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
         completionHandler(request)
     }
-}
-
-
-// MARK: Singleton
-public extension FwiNetworkManager {
-    fileprivate static let instance = FwiNetworkManager()
-
-    /** Get singleton network manager. */
-    public class func sharedInstance() -> FwiNetworkManager {
-        return instance
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, willCacheResponse proposedResponse: CachedURLResponse, completionHandler: @escaping (CachedURLResponse?) -> Void) {
+        FwiLog("Cache Response")
     }
 }
-
-
-// MARK: Completion definition
-public typealias RequestCompletion = (_ data: Data?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> ()
-public typealias DownloadCompletion = (_ location: URL?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> ()
