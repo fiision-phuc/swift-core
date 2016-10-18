@@ -40,18 +40,22 @@
     import UIKit
 #endif
 import Foundation
-import RxSwift
+#if !RX_NO_MODULE
+    import RxCocoa
+    import RxSwift
+#endif
 
 
 public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate {
     // MARK: Completion definition
     public typealias DownloadCompletion = (_ location: URL?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
-    public typealias RequestCompletion = (_ data: Data?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
+    public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
     
     // MARK: Singleton instance
     public static let instance = FwiNetworkManager()
     
     // MARK: Class's properties
+    fileprivate var cache = URLCache.shared
     fileprivate var networkCounter: NSInteger = 0 {
         didSet {
             #if os(iOS)
@@ -63,17 +67,11 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
             #endif
         }
     }
-
-    fileprivate lazy var cache: URLCache = {
-        return URLCache.shared
+    
+    fileprivate lazy var session: URLSession = {
+        return Foundation.URLSession(configuration: self.configuration, delegate: self, delegateQueue: operationQueue)
     }()
-
-    fileprivate lazy var session: Foundation.URLSession = {
-        return Foundation.URLSession(configuration: self.configuration,
-                                     delegate: self,
-                                     delegateQueue: operationQueue)
-    }()
-
+    
     fileprivate lazy var configuration: URLSessionConfiguration = {
         let config = URLSessionConfiguration.default
 
@@ -91,57 +89,60 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
     }()
 
     // MARK: Class's public methods
-    public func sendRequest(_ request: URLRequest, completion c: RequestCompletion? = nil) {
-        var request = request
-
+    public func send(_ request: URLRequest, completion c: @escaping RequestCompletion) {
+        // Turn on activity indicator
+        networkCounter += 1
+        
         // Add additional content negotiation
-        if let cached = cache.cachedResponse(for: request)?.response as? HTTPURLResponse, let modifiedSince = cached.allHeaderFields["Date"] as? String {
+        var request = request
+        if
+            let cached = cache.cachedResponse(for: request)?.response as? HTTPURLResponse,
+            let modifiedSince = cached.allHeaderFields["Date"] as? String
+        {
             request.setValue(modifiedSince, forHTTPHeaderField: "If-Modified-Since")
         }
 
-        // Turn on activity indicator
-        networkCounter += 1
-
         // Create new task
-        let task = session.dataTask(with: request) { [weak self] (data, response, error) in
-            var statusCode = FwiNetworkStatus.Unknown
-            var error = error
-            
+        let task = session.dataTask(with: request) { [weak self] (data, response, err) in
             // Turn off activity indicator if neccessary
             self?.networkCounter -= 1
+            var err = err
             
-            // Obtain HTTP status
-            if let err = error as? NSError {
-                statusCode = FwiNetworkStatus(rawValue: Int32(err.code))
-            }
-            
-            /* Condition validation: Validate HTTP response instance */
+            // Perform casting
             guard let httpResponse = response as? HTTPURLResponse else {
-                c?(nil, error as NSError?, statusCode, nil)
+                c(nil, err, FwiNetworkStatus.BadServerResponse, nil)
                 return
             }
-            statusCode = FwiNetworkStatus(rawValue: Int32(httpResponse.statusCode))
+            
+            // Obtain HTTP status
+            var statusCode = FwiNetworkStatus.Unknown
+            if let err = err as? NSError {
+                statusCode = FwiNetworkStatus(rawValue: Int32(err.code))
+            } else {
+                statusCode = FwiNetworkStatus(rawValue: Int32(httpResponse.statusCode))
+            }
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
-                error = self?.generateError(request as URLRequest, statusCode: statusCode)
+                err = self?.generateError(request, statusCode: statusCode)
             }
-            self?.consoleError(request as URLRequest, data: data, error: error as NSError?, statusCode: statusCode)
+            self?.consoleError(request, data: data, error: err, statusCode: statusCode)
             
-            // Validate content negotiation
-          
-            if let d = data, let cacheControl = (httpResponse.allHeaderFields["Cache-Control"] as? String)?.lowercased() , cacheControl.hasPrefix("public") && statusCode.rawValue != 304 {
-                // Remove previous cache, remove it anyways
-                self?.cache.removeCachedResponse(for: request as URLRequest)
-                self?.cache.storeCachedResponse(CachedURLResponse(response: httpResponse, data: d), for: request as URLRequest)
+            // Remove previous cache, remove it anyways
+            if
+                let d = data,
+                let cacheControl = (httpResponse.allHeaderFields["Cache-Control"] as? String)?.lowercased() , cacheControl.hasPrefix("public") && statusCode.rawValue != 304
+            {
+                self?.cache.removeCachedResponse(for: request)
+                self?.cache.storeCachedResponse(CachedURLResponse(response: httpResponse, data: d), for: request)
             }
             
             // Load cache if http status is 304 or offline
-            if let cached = self?.cache.cachedResponse(for: request as URLRequest) , statusCode == .NotConnectedToInternet || statusCode.rawValue == 304 {
-                c?(cached.data, nil, FwiNetworkStatus(rawValue: 200), httpResponse)
+            if let cached = self?.cache.cachedResponse(for: request) , statusCode == .NotConnectedToInternet || statusCode.rawValue == 304 {
+                c(cached.data, err, FwiNetworkStatus(rawValue: 200), httpResponse)
                 return
             }
-            c?(data, error as NSError?, statusCode, httpResponse)
+            c(data, err, statusCode, httpResponse)
         }
         
         task.resume()
@@ -177,7 +178,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
             if !FwiNetworkStatusIsSuccces(statusCode) {
                 error = self?.generateError(request as URLRequest, statusCode: statusCode)
             }
-            self?.consoleError(request as URLRequest, data: nil, error: error as NSError?, statusCode: statusCode)
+            self?.consoleError(request as URLRequest, data: nil, error: error, statusCode: statusCode)
             c?(location, error as NSError?, statusCode, httpResponse)
         }
         task.resume()
@@ -212,12 +213,12 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
     // MARK: Class's private methods
     /// Output error to console.
     ///
-    /// parameter request (required): request
-    /// parameter data (required): response's data
-    /// parameter error (required): response's error
-    /// parameter statusCode (required): network's status
-    fileprivate func consoleError(_ request: URLRequest, data d: Data?, error e: NSError?, statusCode s: FwiNetworkStatus) {
-        guard let err = e, let url = request.url, let host = url.host, let method = request.httpMethod else {
+    /// - parameter request (required): request
+    /// - parameter data (required): response's data
+    /// - parameter error (required): response's error
+    /// - parameter statusCode (required): network's status
+    fileprivate func consoleError(_ request: URLRequest, data d: Data?, error e: Error?, statusCode s: FwiNetworkStatus) {
+        guard let err = e as? NSError, let url = request.url, let host = url.host, let method = request.httpMethod else {
             return
         }
         
@@ -232,8 +233,8 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
     /// Generate network error.
     ///
-    /// parameter request (required): request
-    /// parameter statusCode (required): network's status
+    /// - parameter request (required): request
+    /// - parameter statusCode (required): network's status
     fileprivate func generateError(_ request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
         let userInfo = [NSURLErrorFailingURLErrorKey:request.url?.description ?? "",
                         NSURLErrorFailingURLStringErrorKey:request.url?.description ?? "",
@@ -265,10 +266,3 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
         FwiLog("Cache Response")
     }
 }
-
-
-
-
-// MARK: Completion definition
-public typealias RequestCompletion = (_ data: Data?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
-public typealias DownloadCompletion = (_ location: URL?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void

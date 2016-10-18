@@ -9,7 +9,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .Package(url: "https://github.com/ReactiveX/RxSwift.git", Version(3, 0, 0, prereleaseIdentifiers: ["beta", "1"])),
+        .Package(url: "https://github.com/ReactiveX/RxSwift.git", Version(3, 0, 0, prereleaseIdentifiers: ["rc", "1"])),
     ],
     exclude: [
         "Tests/Resources"

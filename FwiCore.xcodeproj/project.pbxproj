@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		BE0903401D8E69B900ECF980 /* FwiReachabilityTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE09033F1D8E69B900ECF980 /* FwiReachabilityTest.swift */; };
+		BE30A07B1DB681B600B81801 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE30A05C1DB6819F00B81801 /* RxCocoa.framework */; };
+		BE30A07C1DB681B600B81801 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE30A0541DB6819F00B81801 /* RxSwift.framework */; };
+		BE30A07D1DB681C200B81801 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE30A0641DB6819F00B81801 /* RxBlocking.framework */; };
+		BE30A07E1DB681C200B81801 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE30A05C1DB6819F00B81801 /* RxCocoa.framework */; };
+		BE30A07F1DB681C200B81801 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE30A0541DB6819F00B81801 /* RxSwift.framework */; };
+		BE30A0801DB681C200B81801 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE30A06C1DB6819F00B81801 /* RxTest.framework */; };
 		BE78D9441D98D8DA00091D5D /* Dictionary+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE78D91D1D98D0F800091D5D /* Dictionary+FwiExtension.swift */; };
 		BE8BF1471D8465BC00F710CB /* Data+FwiBase64Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF1461D8465BC00F710CB /* Data+FwiBase64Test.swift */; };
 		BE8BF1491D8465CE00F710CB /* Data+FwiHexTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF1481D8465CE00F710CB /* Data+FwiHexTest.swift */; };
@@ -23,12 +29,6 @@
 		BEA221C31D8E26C60001761E /* FwiJSONMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C21D8E26C60001761E /* FwiJSONMapper.swift */; };
 		BEA221C61D8E27C10001761E /* FwiJSONMapperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C41D8E26D10001761E /* FwiJSONMapperTest.swift */; };
 		BEA221C81D8E40110001761E /* FwiCoreDeprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C71D8E40110001761E /* FwiCoreDeprecated.swift */; };
-		BEE547D91DA412280069D820 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE547BA1DA411880069D820 /* RxCocoa.framework */; };
-		BEE547DA1DA412280069D820 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE547B21DA411880069D820 /* RxSwift.framework */; };
-		BEE547DB1DA4123B0069D820 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE547C21DA411880069D820 /* RxBlocking.framework */; };
-		BEE547DC1DA4123B0069D820 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE547BA1DA411880069D820 /* RxCocoa.framework */; };
-		BEE547DD1DA4123B0069D820 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE547B21DA411880069D820 /* RxSwift.framework */; };
-		BEE547DE1DA4123B0069D820 /* RxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE547CA1DA411880069D820 /* RxTests.framework */; };
 		BEF4FFDC1D9293D0008B9BFE /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BEF4FFDA1D9293D0008B9BFE /* Sample.xcdatamodeld */; };
 		BEF4FFE41D929509008B9BFE /* Person+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF4FFE21D929509008B9BFE /* Person+CoreDataClass.swift */; };
 		BEF4FFE51D929509008B9BFE /* Person+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF4FFE31D929509008B9BFE /* Person+CoreDataProperties.swift */; };
@@ -74,152 +74,152 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		BE8BF1291D832B3600F710CB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = __RootObject_ /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "______Target_FwiCore";
-			remoteInfo = FwiCore;
-		};
-		BEE547B11DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0531DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C8A56AD71AD7424700B4673B;
 			remoteInfo = "RxSwift-iOS";
 		};
-		BEE547B31DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0551DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C88BB8711B07E5ED0064D411;
 			remoteInfo = "RxSwift-OSX";
 		};
-		BEE547B51DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0571DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = D2EA280C1BB9B5A200880ED3;
 			remoteInfo = "RxSwift-tvOS";
 		};
-		BEE547B71DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0591DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C8F0C0021BBBFB8B001B112F;
 			remoteInfo = "RxSwift-watchOS";
 		};
-		BEE547B91DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A05B1DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C809396D1B8A71760088E94D;
 			remoteInfo = "RxCocoa-iOS";
 		};
-		BEE547BB1DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A05D1DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C80939E71B8A71840088E94D;
 			remoteInfo = "RxCocoa-OSX";
 		};
-		BEE547BD1DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A05F1DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = D2138C751BB9BE9800339B5C;
 			remoteInfo = "RxCocoa-tvOS";
 		};
-		BEE547BF1DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0611DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C8F0C04B1BBBFBB9001B112F;
 			remoteInfo = "RxCocoa-watchOS";
 		};
-		BEE547C11DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0631DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C8093BC71B8A71F00088E94D;
 			remoteInfo = "RxBlocking-iOS";
 		};
-		BEE547C31DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0651DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C8093C451B8A71FC0088E94D;
 			remoteInfo = "RxBlocking-OSX";
 		};
-		BEE547C51DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0671DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = D2EBEB811BB9B99D003A27DC;
 			remoteInfo = "RxBlocking-tvOS";
 		};
-		BEE547C71DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0691DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C8F0C0581BBBFBCE001B112F;
 			remoteInfo = "RxBlocking-watchOS";
 		};
-		BEE547C91DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A06B1DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C88FA50C1C25C44800CCFEA4;
-			remoteInfo = "RxTests-iOS";
+			remoteInfo = "RxTest-iOS";
 		};
-		BEE547CB1DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A06D1DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C88FA51D1C25C4B500CCFEA4;
-			remoteInfo = "RxTests-OSX";
+			remoteInfo = "RxTest-OSX";
 		};
-		BEE547CD1DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A06F1DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C88FA52E1C25C4C000CCFEA4;
-			remoteInfo = "RxTests-tvOS";
+			remoteInfo = "RxTest-tvOS";
 		};
-		BEE547CF1DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0711DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C88FA53F1C25C4CC00CCFEA4;
-			remoteInfo = "RxTests-watchOS";
+			remoteInfo = "RxTest-watchOS";
 		};
-		BEE547D11DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0731DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C83508C31C386F6F0027C24C;
 			remoteInfo = "AllTests-iOS";
 		};
-		BEE547D31DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0751DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C83509841C38740E0027C24C;
 			remoteInfo = "AllTests-tvOS";
 		};
-		BEE547D51DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0771DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C83509941C38742C0027C24C;
 			remoteInfo = "AllTests-OSX";
 		};
-		BEE547D71DA411880069D820 /* PBXContainerItemProxy */ = {
+		BE30A0791DB6819F00B81801 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C85BA04B1C3878740075D68E;
 			remoteInfo = PerformanceTests;
+		};
+		BE8BF1291D832B3600F710CB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = __RootObject_ /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "______Target_FwiCore";
+			remoteInfo = FwiCore;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -246,7 +246,7 @@
 		BEA221C21D8E26C60001761E /* FwiJSONMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONMapper.swift; sourceTree = "<group>"; };
 		BEA221C41D8E26D10001761E /* FwiJSONMapperTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONMapperTest.swift; sourceTree = "<group>"; };
 		BEA221C71D8E40110001761E /* FwiCoreDeprecated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiCoreDeprecated.swift; sourceTree = "<group>"; };
-		BEE5479A1DA411870069D820 /* Rx.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Rx.xcodeproj; path = "Packages/RxSwift-3.0.0-beta.1/Rx.xcodeproj"; sourceTree = "<group>"; };
+		BEE5479A1DA411870069D820 /* Rx.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Rx.xcodeproj; path = "Packages/RxSwift-3.0.0-rc.1/Rx.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		BEF4FFDB1D9293D0008B9BFE /* Sample.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sample.xcdatamodel; sourceTree = "<group>"; };
 		BEF4FFE21D929509008B9BFE /* Person+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataClass.swift"; sourceTree = "<group>"; };
 		BEF4FFE31D929509008B9BFE /* Person+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -297,8 +297,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				BEE547D91DA412280069D820 /* RxCocoa.framework in Frameworks */,
-				BEE547DA1DA412280069D820 /* RxSwift.framework in Frameworks */,
+				BE30A07B1DB681B600B81801 /* RxCocoa.framework in Frameworks */,
+				BE30A07C1DB681B600B81801 /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,10 +306,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				BEE547DB1DA4123B0069D820 /* RxBlocking.framework in Frameworks */,
-				BEE547DC1DA4123B0069D820 /* RxCocoa.framework in Frameworks */,
-				BEE547DD1DA4123B0069D820 /* RxSwift.framework in Frameworks */,
-				BEE547DE1DA4123B0069D820 /* RxTests.framework in Frameworks */,
+				BE30A07D1DB681C200B81801 /* RxBlocking.framework in Frameworks */,
+				BE30A07E1DB681C200B81801 /* RxCocoa.framework in Frameworks */,
+				BE30A07F1DB681C200B81801 /* RxSwift.framework in Frameworks */,
+				BE30A0801DB681C200B81801 /* RxTest.framework in Frameworks */,
 				_LinkFileRef_FwiCore_via_FwiCoreTests /* FwiCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -317,6 +317,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BE30A03D1DB6819E00B81801 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BE30A0541DB6819F00B81801 /* RxSwift.framework */,
+				BE30A0561DB6819F00B81801 /* RxSwift.framework */,
+				BE30A0581DB6819F00B81801 /* RxSwift.framework */,
+				BE30A05A1DB6819F00B81801 /* RxSwift.framework */,
+				BE30A05C1DB6819F00B81801 /* RxCocoa.framework */,
+				BE30A05E1DB6819F00B81801 /* RxCocoa.framework */,
+				BE30A0601DB6819F00B81801 /* RxCocoa.framework */,
+				BE30A0621DB6819F00B81801 /* RxCocoa.framework */,
+				BE30A0641DB6819F00B81801 /* RxBlocking.framework */,
+				BE30A0661DB6819F00B81801 /* RxBlocking.framework */,
+				BE30A0681DB6819F00B81801 /* RxBlocking.framework */,
+				BE30A06A1DB6819F00B81801 /* RxBlocking.framework */,
+				BE30A06C1DB6819F00B81801 /* RxTest.framework */,
+				BE30A06E1DB6819F00B81801 /* RxTest.framework */,
+				BE30A0701DB6819F00B81801 /* RxTest.framework */,
+				BE30A0721DB6819F00B81801 /* RxTest.framework */,
+				BE30A0741DB6819F00B81801 /* AllTests-iOS.xctest */,
+				BE30A0761DB6819F00B81801 /* AllTests-tvOS.xctest */,
+				BE30A0781DB6819F00B81801 /* AllTests-OSX.xctest */,
+				BE30A07A1DB6819F00B81801 /* PerformanceTests.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		BE8BF12A1D832C4200F710CB /* codec */ = {
 			isa = PBXGroup;
 			children = (
@@ -577,33 +604,6 @@
 			name = Dependencies;
 			sourceTree = "<group>";
 		};
-		BEE5479B1DA411870069D820 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				BEE547B21DA411880069D820 /* RxSwift.framework */,
-				BEE547B41DA411880069D820 /* RxSwift.framework */,
-				BEE547B61DA411880069D820 /* RxSwift.framework */,
-				BEE547B81DA411880069D820 /* RxSwift.framework */,
-				BEE547BA1DA411880069D820 /* RxCocoa.framework */,
-				BEE547BC1DA411880069D820 /* RxCocoa.framework */,
-				BEE547BE1DA411880069D820 /* RxCocoa.framework */,
-				BEE547C01DA411880069D820 /* RxCocoa.framework */,
-				BEE547C21DA411880069D820 /* RxBlocking.framework */,
-				BEE547C41DA411880069D820 /* RxBlocking.framework */,
-				BEE547C61DA411880069D820 /* RxBlocking.framework */,
-				BEE547C81DA411880069D820 /* RxBlocking.framework */,
-				BEE547CA1DA411880069D820 /* RxTests.framework */,
-				BEE547CC1DA411880069D820 /* RxTests.framework */,
-				BEE547CE1DA411880069D820 /* RxTests.framework */,
-				BEE547D01DA411880069D820 /* RxTests.framework */,
-				BEE547D21DA411880069D820 /* AllTests-iOS.xctest */,
-				BEE547D41DA411880069D820 /* AllTests-tvOS.xctest */,
-				BEE547D61DA411880069D820 /* AllTests-OSX.xctest */,
-				BEE547D81DA411880069D820 /* PerformanceTests.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		BEF4FFD91D928C52008B9BFE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -774,7 +774,7 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = BEE5479B1DA411870069D820 /* Products */;
+					ProductGroup = BE30A03D1DB6819E00B81801 /* Products */;
 					ProjectRef = BEE5479A1DA411870069D820 /* Rx.xcodeproj */;
 				},
 			);
@@ -787,144 +787,144 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		BEE547B21DA411880069D820 /* RxSwift.framework */ = {
+		BE30A0541DB6819F00B81801 /* RxSwift.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RxSwift.framework;
-			remoteRef = BEE547B11DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A0531DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547B41DA411880069D820 /* RxSwift.framework */ = {
+		BE30A0561DB6819F00B81801 /* RxSwift.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RxSwift.framework;
-			remoteRef = BEE547B31DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A0551DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547B61DA411880069D820 /* RxSwift.framework */ = {
+		BE30A0581DB6819F00B81801 /* RxSwift.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RxSwift.framework;
-			remoteRef = BEE547B51DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A0571DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547B81DA411880069D820 /* RxSwift.framework */ = {
+		BE30A05A1DB6819F00B81801 /* RxSwift.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RxSwift.framework;
-			remoteRef = BEE547B71DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A0591DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547BA1DA411880069D820 /* RxCocoa.framework */ = {
+		BE30A05C1DB6819F00B81801 /* RxCocoa.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RxCocoa.framework;
-			remoteRef = BEE547B91DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A05B1DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547BC1DA411880069D820 /* RxCocoa.framework */ = {
+		BE30A05E1DB6819F00B81801 /* RxCocoa.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RxCocoa.framework;
-			remoteRef = BEE547BB1DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A05D1DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547BE1DA411880069D820 /* RxCocoa.framework */ = {
+		BE30A0601DB6819F00B81801 /* RxCocoa.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RxCocoa.framework;
-			remoteRef = BEE547BD1DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A05F1DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547C01DA411880069D820 /* RxCocoa.framework */ = {
+		BE30A0621DB6819F00B81801 /* RxCocoa.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RxCocoa.framework;
-			remoteRef = BEE547BF1DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A0611DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547C21DA411880069D820 /* RxBlocking.framework */ = {
+		BE30A0641DB6819F00B81801 /* RxBlocking.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RxBlocking.framework;
-			remoteRef = BEE547C11DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A0631DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547C41DA411880069D820 /* RxBlocking.framework */ = {
+		BE30A0661DB6819F00B81801 /* RxBlocking.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RxBlocking.framework;
-			remoteRef = BEE547C31DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A0651DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547C61DA411880069D820 /* RxBlocking.framework */ = {
+		BE30A0681DB6819F00B81801 /* RxBlocking.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RxBlocking.framework;
-			remoteRef = BEE547C51DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A0671DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547C81DA411880069D820 /* RxBlocking.framework */ = {
+		BE30A06A1DB6819F00B81801 /* RxBlocking.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RxBlocking.framework;
-			remoteRef = BEE547C71DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A0691DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547CA1DA411880069D820 /* RxTests.framework */ = {
+		BE30A06C1DB6819F00B81801 /* RxTest.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = RxTests.framework;
-			remoteRef = BEE547C91DA411880069D820 /* PBXContainerItemProxy */;
+			path = RxTest.framework;
+			remoteRef = BE30A06B1DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547CC1DA411880069D820 /* RxTests.framework */ = {
+		BE30A06E1DB6819F00B81801 /* RxTest.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = RxTests.framework;
-			remoteRef = BEE547CB1DA411880069D820 /* PBXContainerItemProxy */;
+			path = RxTest.framework;
+			remoteRef = BE30A06D1DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547CE1DA411880069D820 /* RxTests.framework */ = {
+		BE30A0701DB6819F00B81801 /* RxTest.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = RxTests.framework;
-			remoteRef = BEE547CD1DA411880069D820 /* PBXContainerItemProxy */;
+			path = RxTest.framework;
+			remoteRef = BE30A06F1DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547D01DA411880069D820 /* RxTests.framework */ = {
+		BE30A0721DB6819F00B81801 /* RxTest.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = RxTests.framework;
-			remoteRef = BEE547CF1DA411880069D820 /* PBXContainerItemProxy */;
+			path = RxTest.framework;
+			remoteRef = BE30A0711DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547D21DA411880069D820 /* AllTests-iOS.xctest */ = {
+		BE30A0741DB6819F00B81801 /* AllTests-iOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "AllTests-iOS.xctest";
-			remoteRef = BEE547D11DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A0731DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547D41DA411880069D820 /* AllTests-tvOS.xctest */ = {
+		BE30A0761DB6819F00B81801 /* AllTests-tvOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "AllTests-tvOS.xctest";
-			remoteRef = BEE547D31DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A0751DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547D61DA411880069D820 /* AllTests-OSX.xctest */ = {
+		BE30A0781DB6819F00B81801 /* AllTests-OSX.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "AllTests-OSX.xctest";
-			remoteRef = BEE547D51DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A0771DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BEE547D81DA411880069D820 /* PerformanceTests.app */ = {
+		BE30A07A1DB6819F00B81801 /* PerformanceTests.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
 			path = PerformanceTests.app;
-			remoteRef = BEE547D71DA411880069D820 /* PBXContainerItemProxy */;
+			remoteRef = BE30A0791DB6819F00B81801 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

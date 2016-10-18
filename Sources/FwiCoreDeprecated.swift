@@ -48,7 +48,7 @@ public extension FwiJSONMapper {
         if let dictionary = object as? [String: AnyObject] {
             return FwiJSONMapper.mapDictionaryToModel(dictionary, model: &m)
         }
-        MainScheduler.instance
+        
         return NSError(domain: NSURLErrorKey, code: NSURLErrorUnknown, userInfo: [NSLocalizedDescriptionKey: "Parse object to dictionary error !!!"])
     }
     
