@@ -41,7 +41,7 @@ import Foundation
 
 public extension Data {
 
-    /** Convert data to json */
+    /// Convert data to json.
     public func convertToJson(options otp: JSONSerialization.ReadingOptions = []) -> [String: AnyObject]? {
         do {
             let json = try JSONSerialization.jsonObject(with: self, options: otp)
@@ -75,7 +75,9 @@ public extension Data {
         return nil
     }
     
-    /** Convert data to string base on string encoding type. */
+    /// Convert data to string base on string encoding type.
+    ///
+    /// - parameter stringEncoding (optional): string encoding, default is UTF-8
     public func toString(stringEncoding encoding: String.Encoding = .utf8) -> String? {
         /* Condition validation */
         if count <= 0 {
@@ -84,7 +86,7 @@ public extension Data {
         return String(data: self, encoding: encoding)
     }
 
-    /** Clear all bytes data. */
+    /// Clear all bytes data.
     public mutating func clearBytes() {
         /* Condition validation */
         if count <= 0 {
@@ -106,7 +108,7 @@ public extension Data {
         }
     }
 
-    /** Reverse the order of bytes. */
+    /// Reverse the order of bytes.
     public mutating func reverseBytes() {
         /* Condition validation */
         if count <= 0 {
@@ -153,8 +155,8 @@ public extension Data {
         do {
             try self.write(to: url, options: options)
             return nil
-        } catch let error as NSError {
-            return error
+        } catch let err as NSError {
+            return err
         }
     }
 }
