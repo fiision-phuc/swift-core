@@ -36,7 +36,9 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import UIKit
+#if os(iOS)
+    import UIKit
+#endif
 import Foundation
 
 
@@ -45,11 +47,13 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
     // MARK: Class's properties
     fileprivate var networkCounter: NSInteger = 0 {
         didSet {
-            if networkCounter > 0 {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = true
-            } else {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            }
+            #if os(iOS)
+                if networkCounter > 0 {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = true
+                } else {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                }
+            #endif
         }
     }
 
@@ -173,8 +177,8 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
     /** Cancel all running Task. **/
     public func cancelTasks() {
-        if #available(iOS 9.0, *) {
-            session.getAllTasks { (tasks) in
+        if #available(OSX 10.11, iOS 9.0, *) {
+            self.session.getAllTasks { (tasks) in
                 tasks.forEach({
                     $0.cancel()
                 })
@@ -257,5 +261,5 @@ public extension FwiNetworkManager {
 
 
 // MARK: Completion definition
-public typealias RequestCompletion = (_ data: Data?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> ()
-public typealias DownloadCompletion = (_ location: URL?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> ()
+public typealias RequestCompletion = (_ data: Data?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
+public typealias DownloadCompletion = (_ location: URL?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
