@@ -98,7 +98,7 @@ public extension URLRequest {
         guard let url = url else {
             return nil
         }
-        self.init(url: url, requestMethod method: method, extraHeaders headers: headers)
+        self.init(url: url, requestMethod: method, extraHeaders: headers)
     }
     
     // MARK: Struct's public methods
