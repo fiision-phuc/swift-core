@@ -82,3 +82,13 @@ public extension FwiJSONModel where Self: FwiJSONModel {
         return original
     }
 }
+
+/// FwiJSONManual represents a manual JSON model where developer wish to perform custom mapping.
+public protocol FwiJSONManual {
+
+    /// Allow developer to perform custom map.
+    ///
+    /// parameter object (required): object json
+    @discardableResult
+    func map(object o: [String: Any]) -> NSError?
+}
