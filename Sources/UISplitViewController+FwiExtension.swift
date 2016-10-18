@@ -36,6 +36,7 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
+#if os(iOS)
 import UIKit
 import Foundation
 
@@ -69,3 +70,4 @@ extension UISplitViewController {
         return super.supportedInterfaceOrientations
     }
 }
+#endif

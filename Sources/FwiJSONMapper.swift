@@ -36,7 +36,6 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import UIKit
 import Foundation
 
 
@@ -64,15 +63,6 @@ public struct FwiJSONMapper {
     public static func map<T: NSObject>(array a: [[String : Any]], toModel m: T.Type) -> ([T]?, NSError?) {
         var userInfo = [String]()
         var array = [T]()
-//        a.map {
-//            let (o, _) = map(dictionary: $0, toModel: m)
-//            return o ?? NSNull()
-////            if let object = o {
-////                return object
-////            }
-////            return NSNull()
-//        }
-////            .filter { !($0 is NSNull) }
         
         for (idx, d) in a.enumerated() {
             var o = m.init()
@@ -108,6 +98,12 @@ public struct FwiJSONMapper {
     /// - parameter object (required): an object which contains a set of properties to be mapped
     @discardableResult
     public static func map<T: NSObject>(dictionary d: [String : Any], toObject m: inout T) -> NSError? {
+        /* Condition validation: should allow model to perform manual mapping or not */
+        if let j = m as? FwiJSONManual {
+            let err = j.map(object: d)
+            return err
+        }
+
         var properties = FwiReflector.properties(withObject: m)
         var userInfo = [String : Any]()
         var dictionary = d

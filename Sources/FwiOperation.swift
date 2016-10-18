@@ -36,7 +36,9 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import UIKit
+#if os(iOS)
+    import UIKit
+#endif
 import Foundation
 
 
@@ -70,8 +72,10 @@ open class FwiOperation: Operation {
         }
     }
     fileprivate var userInfo: [String: AnyObject]?
+    #if os(iOS)
     fileprivate var bgTask: UIBackgroundTaskIdentifier?
-    
+    #endif
+
     // MARK: Class's public methods
     open func businessLogic() {
     }
@@ -82,17 +86,19 @@ open class FwiOperation: Operation {
         if isCancelled {
             operationCompleted()
         } else {
-            // Register bgTask
-            bgTask = UIApplication.shared.beginBackgroundTask() {
-                /* Condition validatioN: Is long operation */
-                if self.isLongOperation {
-                    return
-                }
+            #if os(iOS)
+                // Register bgTask
+                bgTask = UIApplication.shared.beginBackgroundTask() {
+                    /* Condition validatioN: Is long operation */
+                    if self.isLongOperation {
+                        return
+                    }
 
-                // Cancel this operation
-                self.cancel()
-                self.operationCompleted()
-            }
+                    // Cancel this operation
+                    self.cancel()
+                    self.operationCompleted()
+                }
+            #endif
 
             // Add to operation queue
             operationQueue.addOperation(self)
@@ -103,12 +109,14 @@ open class FwiOperation: Operation {
     fileprivate func operationCompleted() {
         opExecuting = false
         opFinished = true
-        
-        // Terminate background task
-        if let task = bgTask, bgTask != UIBackgroundTaskInvalid {
-            UIApplication.shared.endBackgroundTask(task)
-            bgTask = UIBackgroundTaskInvalid
-        }
+
+        #if os(iOS)
+            // Terminate background task
+            if let task = bgTask, bgTask != UIBackgroundTaskInvalid {
+                UIApplication.shared.endBackgroundTask(task)
+                bgTask = UIBackgroundTaskInvalid
+            }
+        #endif
     }
 
     // MARK: NSOperation's members

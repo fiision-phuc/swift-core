@@ -90,7 +90,11 @@ public struct FwiReachability {
     /// Define closure to handle network event.
     fileprivate lazy var callBack: SystemConfiguration.SCNetworkReachabilityCallBack = {
         let callBack: SystemConfiguration.SCNetworkReachabilityCallBack = { (target, networkFlags, info) in
-            let w  = networkFlags.contains(.isWWAN)               ? "W" : "-"   // Can be reached via an EDGE, GPRS, or other "cell" connection.
+            #if os(iOS)
+                let w  = networkFlags.contains(.isWWAN)           ? "W" : "-"   // Can be reached via an EDGE, GPRS, or other "cell" connection.
+            #else
+                let w = "-"
+            #endif
             let r  = networkFlags.contains(.reachable)            ? "R" : "-"   // Can be reached using the current network configuration.
             
             let t  = networkFlags.contains(.transientConnection)  ? "t" : "-"   // Can be reached via a transient connection, such as PPP.
@@ -137,9 +141,11 @@ public struct FwiReachability {
         }
         
         var status = networkFlags.contains(.connectionRequired) ? FwiReachabilityState.none : FwiReachabilityState.wifi
-        if networkFlags.contains(.isWWAN) {
-            status = .wwan
-        }
+        #if os(iOS)
+            if networkFlags.contains(.isWWAN) {
+                status = .wwan
+            }
+        #endif
         return status
     }
     
