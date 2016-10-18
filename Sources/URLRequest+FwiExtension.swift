@@ -94,6 +94,12 @@ public extension URLRequest {
             setValue($1, forHTTPHeaderField: $0)
         })
     }
+    public init?(url: URL?, requestMethod method: FwiHttpMethod, extraHeaders headers: [String:String]? = nil) {
+        guard let url = url else {
+            return nil
+        }
+        self.init(url: url, requestMethod method: method, extraHeaders headers: headers)
+    }
     
     // MARK: Struct's public methods
     public mutating func generateRawForm(_ rawParam: FwiDataParam?) {
