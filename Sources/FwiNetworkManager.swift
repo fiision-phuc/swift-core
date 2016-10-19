@@ -49,7 +49,7 @@ import Foundation
 public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate {
     // MARK: Completion definition
     public typealias DownloadCompletion = (_ location: URL?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
-    public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
+//    public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
     
     // MARK: Singleton instance
     public static let instance = FwiNetworkManager()
@@ -89,7 +89,11 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
     }()
 
     // MARK: Class's public methods
-    public func send(_ request: URLRequest, completion c: @escaping RequestCompletion) {
+    /// Deliver request.
+    ///
+    /// - parameter request (required): request
+    /// - parameter completion (required): call back function
+    public func send(_ request: URLRequest, completion c: @escaping (_ data: Data?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void) {
         // Turn on activity indicator
         networkCounter += 1
         
@@ -101,26 +105,25 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
         {
             request.setValue(modifiedSince, forHTTPHeaderField: "If-Modified-Since")
         }
-
+        
         // Create new task
         let task = session.dataTask(with: request) { [weak self] (data, response, err) in
             // Turn off activity indicator if neccessary
             self?.networkCounter -= 1
             var err = err
             
-            // Perform casting
-            guard let httpResponse = response as? HTTPURLResponse else {
-                c(nil, err, FwiNetworkStatus.BadServerResponse, nil)
-                return
-            }
-            
             // Obtain HTTP status
             var statusCode = FwiNetworkStatus.Unknown
             if let err = err as? NSError {
                 statusCode = FwiNetworkStatus(rawValue: Int32(err.code))
-            } else {
-                statusCode = FwiNetworkStatus(rawValue: Int32(httpResponse.statusCode))
             }
+            
+            // Perform casting
+            guard let httpResponse = response as? HTTPURLResponse else {
+                c(nil, err, statusCode, nil)
+                return
+            }
+            statusCode = FwiNetworkStatus(rawValue: Int32(httpResponse.statusCode))
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
@@ -244,11 +247,6 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
     }
 
     // MARK: NSURLSessionDelegate's members
-    public func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
-        if let err = error {
-            FwiLog("\(err)")
-        }
-    }
     public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         if let serverTrust = challenge.protectionSpace.serverTrust , challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
             let credential = URLCredential(trust: serverTrust)
@@ -262,7 +260,30 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
     public func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
         completionHandler(request)
     }
-    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, willCacheResponse proposedResponse: CachedURLResponse, completionHandler: @escaping (CachedURLResponse?) -> Void) {
-        FwiLog("Cache Response")
+}
+
+// MARK: Reactive Extension
+public extension FwiNetworkManager {
+    /// Deliver request.
+    ///
+    /// - parameter request (required): request
+    public func loadData(withRequest request: URLRequest?) -> Observable<(statusCode: FwiNetworkStatus, data: Data?, response: HTTPURLResponse?)> {
+        return Observable.create({ [weak self] (result) -> Disposable in
+            if let request = request {
+                self?.send(request, completion: { (data, err, statusCode, response) in
+                    if let err = err {
+                        result.onError(err)
+                    }
+                    else {
+                        result.onNext((statusCode, data, response))
+                        result.onCompleted()
+                    }
+                })
+            }
+            else {
+                result.onError(NSError(domain: NSURLErrorDomain, code: Int(FwiNetworkStatus.BadRequest.rawValue), userInfo: nil))
+            }
+            return Disposables.create()
+            })
     }
 }

@@ -198,7 +198,7 @@ class FwiNetworkManagerTest: XCTestCase {
 
     func testStatus3xx() {
         let completedExpectation = self.expectation(description: "Operation completed.")
-        if let url = baseHTTP + "/redirect/5" {
+        if let url = baseHTTP + "/redirect-to" + ["url" : "https://www.google.com"] {
             let request = URLRequest(url: url)
 
             instance.send(request) { (data, error, statusCode, response) in
@@ -211,7 +211,7 @@ class FwiNetworkManagerTest: XCTestCase {
         }
 
         // Wait for timeout handler
-        self.waitForExpectations(timeout: 5.0) { (error) in
+        self.waitForExpectations(timeout: 60.0) { (error) in
             XCTAssertTrue(error == nil, "Operation could not finish.")
         }
     }
@@ -232,7 +232,7 @@ class FwiNetworkManagerTest: XCTestCase {
         }
         
         // Wait for timeout handler
-        self.waitForExpectations(timeout: 5.0) { (error) in
+        self.waitForExpectations(timeout: 60.0) { (error) in
             XCTAssertTrue(error == nil, "Operation could not finish.")
         }
     }
@@ -253,7 +253,7 @@ class FwiNetworkManagerTest: XCTestCase {
         }
         
         // Wait for timeout handler
-        self.waitForExpectations(timeout: 5.0) { (error) in
+        self.waitForExpectations(timeout: 60.0) { (error) in
             XCTAssertTrue(error == nil, "Operation could not finish.")
         }
     }
