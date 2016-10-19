@@ -128,6 +128,9 @@ class TestJSON6: NSObject, FwiJSONModel {
     }
 }
 
+class TestJSON7: NSObject, FwiJSONModel {
+    var test: URLTest?
+}
 
 class FwiJSONMapperTest: XCTestCase {
 
@@ -300,7 +303,16 @@ class FwiJSONMapperTest: XCTestCase {
         XCTAssertNotNil(o.arr, "Expected not nil but found: '\(o.arr)'.")
         XCTAssertNotNil(o.dateStr, "Expected not nil but found: '\(o.dateStr)'.")
     }
-    
+
+    func testAdditionalCase01() {
+        let dictionary = [
+            "test": "Hello World"
+        ] as [String : Any]
+
+        let (_, err) = FwiJSONMapper.map(dictionary: dictionary, toModel: TestJSON7.self)
+        XCTAssertNotNil(err, "Expected not nil but found: '\(err)'.")
+    }
+
     func testPerformance() {
         let dictionary = ["test1": 5,
                           "test2": ["url": "https://www.google.com/?gws_rd=ssl"],
