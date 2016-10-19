@@ -36,7 +36,9 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import UIKit
+#if os(iOS)
+    import UIKit
+#endif
 import Foundation
 
 
@@ -88,8 +90,10 @@ public extension URLRequest {
         
         defineHTTPMethod(method)
         definePrefixHeaders()
-        defineUserAgent()
-        
+        #if os(iOS)
+            defineUserAgent()
+        #endif
+
         headers?.forEach({
             setValue($1, forHTTPHeaderField: $0)
         })
@@ -238,7 +242,8 @@ public extension URLRequest {
         }
     }
 
-    /** Define user agent. */
+    #if os(iOS)
+    /// Define user agent.
     fileprivate mutating func defineUserAgent() {
         let deviceInfo = UIDevice.current
         let bundleInfo = Bundle.main.infoDictionary
@@ -248,4 +253,5 @@ public extension URLRequest {
         let userAgent = "\(bundleIdentifier)/\(bundleVersion) (\(deviceInfo.model); iOS \(deviceInfo.systemVersion); Scale/\(UIScreen.main.scale))"
         setValue(userAgent, forHTTPHeaderField: "User-Agent")
     }
+    #endif
 }

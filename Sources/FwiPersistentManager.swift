@@ -170,7 +170,7 @@ public final class FwiPersistentManager {
             } catch let err as NSError {
                 error = err
             }
-            })
+        })
         return error
     }
 

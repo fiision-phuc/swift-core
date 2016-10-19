@@ -36,7 +36,9 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import UIKit
+#if os(iOS)
+    import UIKit
+#endif
 import Foundation
 
 
@@ -45,11 +47,13 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
     // MARK: Class's properties
     fileprivate var networkCounter: NSInteger = 0 {
         didSet {
-            if networkCounter > 0 {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = true
-            } else {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            }
+            #if os(iOS)
+                if networkCounter > 0 {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = true
+                } else {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                }
+            #endif
         }
     }
 
@@ -79,7 +83,8 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
 
     // MARK: Class's public methods
-    public func sendRequest(_ request: URLRequest, completion c: RequestCompletion? = nil) {
+    @discardableResult
+    public func sendRequest(_ request: URLRequest, completion c: RequestCompletion? = nil) -> URLSessionDataTask {
         var request = request
 
         // Add additional content negotiation
@@ -133,10 +138,12 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
         }
         
         task.resume()
+        return task
     }
 
     /** Download resource from server. */
-    public func downloadResource(_ request: URLRequest, completion c: DownloadCompletion? = nil) {
+    @discardableResult
+    public func downloadResource(_ request: URLRequest, completion c: DownloadCompletion? = nil) -> URLSessionDownloadTask {
         // Turn on activity indicator
         networkCounter += 1
 
@@ -169,12 +176,13 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
             c?(location, error as NSError?, statusCode, httpResponse)
         }
         task.resume()
+        return task
     }
 
     /** Cancel all running Task. **/
     public func cancelTasks() {
-        if #available(iOS 9.0, *) {
-            session.getAllTasks { (tasks) in
+        if #available(OSX 10.11, iOS 9.0, *) {
+            self.session.getAllTasks { (tasks) in
                 tasks.forEach({
                     $0.cancel()
                 })
@@ -257,5 +265,5 @@ public extension FwiNetworkManager {
 
 
 // MARK: Completion definition
-public typealias RequestCompletion = (_ data: Data?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> ()
-public typealias DownloadCompletion = (_ location: URL?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> ()
+public typealias RequestCompletion = (_ data: Data?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
+public typealias DownloadCompletion = (_ location: URL?, _ error: NSError?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
