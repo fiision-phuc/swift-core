@@ -83,7 +83,8 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
 
     // MARK: Class's public methods
-    public func sendRequest(_ request: URLRequest, completion c: RequestCompletion? = nil) {
+    @discardableResult
+    public func sendRequest(_ request: URLRequest, completion c: RequestCompletion? = nil) -> URLSessionDataTask {
         var request = request
 
         // Add additional content negotiation
@@ -137,10 +138,12 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
         }
         
         task.resume()
+        return task
     }
 
     /** Download resource from server. */
-    public func downloadResource(_ request: URLRequest, completion c: DownloadCompletion? = nil) {
+    @discardableResult
+    public func downloadResource(_ request: URLRequest, completion c: DownloadCompletion? = nil) -> URLSessionDownloadTask {
         // Turn on activity indicator
         networkCounter += 1
 
@@ -173,6 +176,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
             c?(location, error as NSError?, statusCode, httpResponse)
         }
         task.resume()
+        return task
     }
 
     /** Cancel all running Task. **/
