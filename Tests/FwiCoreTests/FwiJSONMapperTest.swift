@@ -309,8 +309,9 @@ class FwiJSONMapperTest: XCTestCase {
             "test": "Hello World"
         ] as [String : Any]
 
-        let (_, err) = FwiJSONMapper.map(dictionary: dictionary, toModel: TestJSON7.self)
+        let (model, err) = FwiJSONMapper.map(dictionary: dictionary, toModel: TestJSON7.self)
         XCTAssertNotNil(err, "Expected not nil but found: '\(err)'.")
+        XCTAssertNotNil(model, "Expected not nil but found: '\(model)'.")
     }
 
     func testPerformance() {
