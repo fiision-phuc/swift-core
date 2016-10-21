@@ -38,9 +38,7 @@
 
 import Foundation
 
-import RxSwift
-// MARK: FwiJSONMapper
-// Creation
+
 public extension FwiJSONMapper {
     
     // MARK: Class's static constructors

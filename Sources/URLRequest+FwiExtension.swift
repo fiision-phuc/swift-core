@@ -85,7 +85,7 @@ public enum FwiRequestType {
 public extension URLRequest {
     
     // MARK: Struct's constructors
-    public init(url: URL, requestMethod method: FwiHttpMethod, extraHeaders headers: [String:String]? = nil, cachePolicy cache: CachePolicy = .useProtocolCachePolicy) {
+    public init(url: URL, requestMethod method: FwiHttpMethod, extraHeaders headers: [String:String]? = nil, cachePolicy cache: CachePolicy = .reloadIgnoringLocalCacheData) {
         self.init(url: url, cachePolicy: cache, timeoutInterval: 30.0)
         
         defineHTTPMethod(method)
@@ -96,7 +96,7 @@ public extension URLRequest {
             setValue($1, forHTTPHeaderField: $0)
         })
     }
-    public init?(url: URL?, requestMethod method: FwiHttpMethod, extraHeaders headers: [String:String]? = nil, cachePolicy cache: CachePolicy = .useProtocolCachePolicy) {
+    public init?(url: URL?, requestMethod method: FwiHttpMethod, extraHeaders headers: [String:String]? = nil, cachePolicy cache: CachePolicy = .reloadIgnoringLocalCacheData) {
         guard let url = url else {
             return nil
         }

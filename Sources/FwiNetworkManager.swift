@@ -40,10 +40,6 @@
     import UIKit
 #endif
 import Foundation
-#if !RX_NO_MODULE
-    import RxCocoa
-    import RxSwift
-#endif
 
 
 public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate {
@@ -308,98 +304,5 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
     // MARK: NSURLSessionTaskDelegate's members
     public func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
         completionHandler(request)
-    }
-}
-
-// MARK: Reactive Extension
-public extension FwiNetworkManager {
-
-    /// Download resource from server.
-    ///
-    /// - parameter request (required): request
-    public func downloadResource(withRequest request: URLRequest?) -> Observable<(statusCode: FwiNetworkStatus, location: URL?, response: HTTPURLResponse?)> {
-        return Observable.create() { [weak self] (result) -> Disposable in
-            var task: URLSessionDownloadTask?
-
-            if let request = request {
-                task = self?.download(resource: request, completion: { (location, err, statusCode, response) in
-                    if let err = err {
-                        result.onError(err)
-                    }
-                    else {
-                        result.onNext((statusCode, location, response))
-                        result.onCompleted()
-                    }
-                })
-            }
-            else {
-                result.onError(NSError(domain: NSURLErrorDomain, code: Int(FwiNetworkStatus.BadRequest.rawValue), userInfo: nil))
-            }
-            return Disposables.create {
-                task?.cancel()
-            }
-        }
-    }
-
-    /// Send request to server.
-    ///
-    /// - parameter request (required): request
-    public func loadData(withRequest request: URLRequest?) -> Observable<(statusCode: FwiNetworkStatus, data: Data?, response: HTTPURLResponse?)> {
-        return Observable.create() { [weak self] (result) -> Disposable in
-            var task: URLSessionDataTask?
-
-            if let request = request {
-                task = self?.send(request: request, completion: { (data, err, statusCode, response) in
-                    if let err = err {
-                        result.onError(err)
-                    }
-                    else {
-                        result.onNext((statusCode, data, response))
-                        result.onCompleted()
-                    }
-                })
-            }
-            else {
-                result.onError(NSError(domain: NSURLErrorDomain, code: Int(FwiNetworkStatus.BadRequest.rawValue), userInfo: nil))
-            }
-            return Disposables.create {
-                task?.cancel()
-            }
-        }
-    }
-
-    /// Send request to server, and then map to model.
-    ///
-    /// - parameter request (required): request
-    public func loadData<T: NSObject>(withRequest request: URLRequest?) -> Observable<(statusCode: FwiNetworkStatus, model: T?, response: HTTPURLResponse?)> {
-        return Observable.create() { [weak self] (result) -> Disposable in
-            var task: URLSessionDataTask?
-
-            if let request = request {
-                task = self?.send(request: request, completion: { (data, err, statusCode, response) in
-                    if let err = err {
-                        result.onError(err)
-                    }
-                    else {
-                        var model = T.init()
-                        let jsonError = data?.decodeJSONWithModel(model: &model)
-
-                        if let jsonError = jsonError {
-                            result.onError(jsonError)
-                        }
-                        else {
-                            result.onNext((statusCode, model, response))
-                            result.onCompleted()
-                        }
-                    }
-                })
-            }
-            else {
-                result.onError(NSError(domain: NSURLErrorDomain, code: Int(FwiNetworkStatus.BadRequest.rawValue), userInfo: nil))
-            }
-            return Disposables.create {
-                task?.cancel()
-            }
-        }
     }
 }
