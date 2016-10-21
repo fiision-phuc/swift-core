@@ -119,7 +119,6 @@ public struct FwiReachability {
     public mutating func start() {
         var context = SCNetworkReachabilityContext(version: 0, info: &self, retain: nil, release: nil, copyDescription: nil)
         if !SCNetworkReachabilitySetCallback(target, callBack, &context) {
-            FwiLog("\(SCError())")
             return
         }
         SCNetworkReachabilityScheduleWithRunLoop(target, CFRunLoopGetMain(), CFRunLoopMode.defaultMode.rawValue)

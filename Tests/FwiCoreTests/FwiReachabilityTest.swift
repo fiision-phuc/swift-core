@@ -34,7 +34,7 @@ class FwiReachabilityTest: XCTestCase {
         reachability = FwiReachability(withHostname: "www.google.com")
         reachability?.start()
         
-        waitForExpectations(timeout: 30.0) { [weak self] (err: Error?) in
+        waitForExpectations(timeout: 100.0) { [weak self] (err: Error?) in
             XCTAssertNotNil(self?.reachability, "Expected not nil but found: '\(self?.reachability)'")
             self?.reachability?.stop()
         }
@@ -42,7 +42,6 @@ class FwiReachabilityTest: XCTestCase {
     
     func testInternet() {
         let completedExpectation = expectation(description: "Operation completed.")
-        reachability = FwiReachability.forWiFi()
         reachability = FwiReachability.forInternet()
         XCTAssertNotNil(reachability, "Expected not nil but found: '\(reachability)'")
         

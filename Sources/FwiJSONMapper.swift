@@ -161,9 +161,11 @@ public struct FwiJSONMapper {
                 }
             }
             else {
-                if let s = value as? String, let v = s + p {
-                    value = v
-                    canAssign = true
+                if let s = value as? String {
+                    if let v = s + p {
+                        value = v
+                        canAssign = true
+                    }
                 }
                 else if let n = value as? NSNumber, p.isStruct && p.structType == Date.self {
                     if let d = transformDate(n) {

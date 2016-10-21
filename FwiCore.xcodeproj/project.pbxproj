@@ -416,6 +416,13 @@
 			name = foundation;
 			sourceTree = "<group>";
 		};
+		BEE547991DA411740069D820 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
 		BEF4FFD91D928C52008B9BFE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -451,6 +458,7 @@
 				"_______Tests_" /* Tests */,
 				"_____Configs_" /* Configs */,
 				"____Products_" /* Products */,
+				BEE547991DA411740069D820 /* Dependencies */,
 			);
 			sourceTree = "<group>";
 		};

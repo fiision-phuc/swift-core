@@ -63,7 +63,7 @@ public struct FwiFormParam: CustomDebugStringConvertible, CustomStringConvertibl
 
     // MARK: CustomStringConvertible's members
     public var description: String {
-        return "\(key)=\(value.encodeHTML())"
+        return "\(key.encodeHTML())=\(value.encodeHTML())"
     }
 }
 

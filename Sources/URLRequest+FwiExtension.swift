@@ -85,24 +85,22 @@ public enum FwiRequestType {
 public extension URLRequest {
     
     // MARK: Struct's constructors
-    public init(url: URL, requestMethod method: FwiHttpMethod, extraHeaders headers: [String:String]? = nil) {
-        self.init(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30.0)
+    public init(url: URL, requestMethod method: FwiHttpMethod, extraHeaders headers: [String:String]? = nil, cachePolicy cache: CachePolicy = .reloadIgnoringLocalCacheData) {
+        self.init(url: url, cachePolicy: cache, timeoutInterval: 30.0)
         
         defineHTTPMethod(method)
         definePrefixHeaders()
-        #if os(iOS)
-            defineUserAgent()
-        #endif
+        defineUserAgent()
 
         headers?.forEach({
             setValue($1, forHTTPHeaderField: $0)
         })
     }
-    public init?(url: URL?, requestMethod method: FwiHttpMethod, extraHeaders headers: [String:String]? = nil) {
+    public init?(url: URL?, requestMethod method: FwiHttpMethod, extraHeaders headers: [String:String]? = nil, cachePolicy cache: CachePolicy = .reloadIgnoringLocalCacheData) {
         guard let url = url else {
             return nil
         }
-        self.init(url: url, requestMethod: method, extraHeaders: headers)
+        self.init(url: url, requestMethod: method, extraHeaders: headers, cachePolicy: cache)
     }
     
     // MARK: Struct's public methods
@@ -117,7 +115,7 @@ public extension URLRequest {
     }
     
     /** Generate multipart/form-data. */
-    public mutating func generateMultipartForm(queryParams params: [String:String]?, fileParams files: [FwiMultipartParam]?, boundaryForm boundary: String = "----------\(Date().timeIntervalSince1970)") {
+    public mutating func generateMultipartForm(queryParams params: [String : String]?, fileParams files: [FwiMultipartParam]?, boundaryForm boundary: String = "----------\(Date().timeIntervalSince1970)") {
         /* Condition validation */
         if (params == nil && files == nil) || (params?.count == 0 && files?.count == 0) {
             return
@@ -160,7 +158,7 @@ public extension URLRequest {
     }
     
     /** Generate x-www-form-urlencoded. */
-    public mutating func generateURLEncodedForm(queryParams params: [String:String]?) {
+    public mutating func generateURLEncodedForm(queryParams params: [String : String]?) {
         guard let params = params, params.count > 0 else {
             return
         }
@@ -242,16 +240,16 @@ public extension URLRequest {
         }
     }
 
-    #if os(iOS)
     /// Define user agent.
     fileprivate mutating func defineUserAgent() {
-        let deviceInfo = UIDevice.current
-        let bundleInfo = Bundle.main.infoDictionary
-        let bundleVersion = (bundleInfo?[kCFBundleVersionKey as String] as? String) ?? ""
-        let bundleIdentifier = (bundleInfo?[kCFBundleIdentifierKey as String] as? String) ?? ""
-
-        let userAgent = "\(bundleIdentifier)/\(bundleVersion) (\(deviceInfo.model); iOS \(deviceInfo.systemVersion); Scale/\(UIScreen.main.scale))"
-        setValue(userAgent, forHTTPHeaderField: "User-Agent")
+        #if os(iOS)
+            let deviceInfo = UIDevice.current
+            let bundleInfo = Bundle.main.infoDictionary
+            let bundleVersion = (bundleInfo?[kCFBundleVersionKey as String] as? String) ?? ""
+            let bundleIdentifier = (bundleInfo?[kCFBundleIdentifierKey as String] as? String) ?? ""
+            
+            let userAgent = "\(bundleIdentifier)/\(bundleVersion) (\(deviceInfo.model); iOS \(deviceInfo.systemVersion); Scale/\(UIScreen.main.scale))"
+            setValue(userAgent, forHTTPHeaderField: "User-Agent")
+        #endif
     }
-    #endif
 }

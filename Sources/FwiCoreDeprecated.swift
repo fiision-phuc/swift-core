@@ -39,8 +39,6 @@
 import Foundation
 
 
-// MARK: FwiJSONMapper
-// Creation
 public extension FwiJSONMapper {
     
     // MARK: Class's static constructors

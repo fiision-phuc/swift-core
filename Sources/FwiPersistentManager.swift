@@ -67,10 +67,10 @@ public final class FwiPersistentManager {
     // MARK: Class's constructors
     /// Create persistent manager.
     ///
-    /// parameter model (required): name of model schema without momd extension
-    /// parameter bundle (optional): the bundle contains the model schema. Default is main bundle
-    /// parameter storeType (optional): the persistent's type. Default is SQLite
-    /// parameter rootLocation (optional): the location to stored database. Default is cache folder
+    /// - parameter model (required): name of model schema without momd extension
+    /// - parameter bundle (optional): the bundle contains the model schema. Default is main bundle
+    /// - parameter storeType (optional): the persistent's type. Default is SQLite
+    /// - parameter rootLocation (optional): the location to stored database. Default is cache folder
     public init(withModel m: String, fromBundle b: Bundle = Bundle.main, storeType t: FwiPersistentType = .sqlite, rootLocation l: URL? = URL.cacheDirectory()) {
         bundle = b
         dataModel = m

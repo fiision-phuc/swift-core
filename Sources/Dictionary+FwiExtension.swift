@@ -43,9 +43,9 @@ public extension Dictionary {
 
     /// Load dictionary from plist.
     ///
-    /// parameter plistname (required): the plist's name
-    /// parameter plistFormat (optional): the plist's format, default is xml
-    /// parameter bundle (optional): which bundle contains the plist file
+    /// - parameter plistname (required): the plist's name
+    /// - parameter plistFormat (optional): the plist's format, default is xml
+    /// - parameter bundle (optional): which bundle contains the plist file
     public static func loadPlist(withPlistname n: String, plistFormat f: PropertyListSerialization.PropertyListFormat = .xml, fromBundle b: Bundle = Bundle.main) -> [String : Any]? {
         if let url = Bundle.main.url(forResource: n, withExtension: "plist") {
             do {
