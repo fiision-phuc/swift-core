@@ -42,7 +42,7 @@ import CoreData
 
 public extension NSManagedObject {
 
-    /** Remove self from database. */
+    /// Remove self from database.
     public func remove() {
         managedObjectContext?.performAndWait() { [weak self] in
             /* Condition validation */
