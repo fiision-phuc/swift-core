@@ -108,7 +108,7 @@ public struct FwiReachability {
             
             // Post notification
             if let p = info?.bindMemory(to: FwiReachability.self, capacity: 1) {
-                NotificationCenter.default.post(name: reachabilityStateChanged, object: p.pointee)
+                NotificationCenter.default.post(name: reachabilityStateChanged, object: nil)
             }
         }
         return callBack
@@ -135,7 +135,7 @@ public struct FwiReachability {
     /// parameter flags (required): Network's flags obtains from target
     fileprivate func statusInternet(withFlags networkFlags: SCNetworkReachabilityFlags) -> FwiReachabilityState {
         /* Condition validation */
-        guard !networkFlags.contains(.reachable) else {
+        guard networkFlags.contains(.reachable) else {
             return .none
         }
         

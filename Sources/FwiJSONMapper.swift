@@ -333,8 +333,12 @@ fileprivate func + (left: [String : Any], right: FwiReflector) -> [String : Any]
 /// parameter left (required): an original data in string form
 /// parameter right (required): a property description from model
 fileprivate func + (left: String, right: FwiReflector) -> Any? {
-    if let primitiveType = right.primitiveType, primitiveType != String.self {
-        return FwiJSONMapper.numberFormat.number(from: left.trim())
+    if let primitiveType = right.primitiveType {
+        if primitiveType != String.self {
+            return FwiJSONMapper.numberFormat.number(from: left.trim())
+        } else {
+            return left
+        }
     }
     else if let structType = right.structType {
         if structType == Data.self {
