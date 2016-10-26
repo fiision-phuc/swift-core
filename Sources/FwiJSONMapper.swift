@@ -375,6 +375,7 @@ fileprivate func <- (left: inout [FwiReflector], right: FwiJSONModel) {
 /// parameter left (required): a dictionary that will be update
 /// parameter right (required): an instance of model that implemented FwiJSONModel
 fileprivate func <- (left: inout [String : Any], right: FwiJSONModel) {
+    left = right.convertJSON(fromOriginal: left)
     right.keyMapper?.forEach({
         left[$1] = left[$0]
         left.removeValue(forKey: $0)
