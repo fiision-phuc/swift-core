@@ -182,7 +182,10 @@ public struct FwiJSONMapper {
             if canAssign && m.responds(to: NSSelectorFromString(p.mirrorName)) == true {
                 m.setValue(value, forKey: p.mirrorName)
             } else {
-                userInfo[p.mirrorName] = "could not map '\(value)' to this property due to data's type conflict."
+                if !p.optionalProperty {
+                    userInfo[p.mirrorName] = "could not map '\(value)' to this property due to data's type conflict."
+                }
+
             }
         }
         
@@ -376,10 +379,14 @@ fileprivate func <- (left: inout [FwiReflector], right: FwiJSONModel) {
 /// parameter right (required): an instance of model that implemented FwiJSONModel
 fileprivate func <- (left: inout [String : Any], right: FwiJSONModel) {
     left = right.convertJSON(fromOriginal: left)
-    right.keyMapper?.forEach({
-        left[$1] = left[$0]
-        left.removeValue(forKey: $0)
-    })
+    right.keyMapper?
+        .filter({ (item) -> Bool in
+            return (item.key != item.value)
+        })
+        .forEach({
+            left[$0.value] = left[$0.key]
+            left.removeValue(forKey: $0.key)
+        })
 }
 
 
