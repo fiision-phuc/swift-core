@@ -132,6 +132,16 @@ class TestJSON7: NSObject, FwiJSONModel {
     var test: URLTest?
 }
 
+class TestJSON8: NSObject, FwiJSONModel {
+
+    var name: String?
+    var lastName: String?
+
+    var keyMapper: [String : String]? {
+        return ["name":"name", "last_name":"lastName"]
+    }
+}
+
 class FwiJSONMapperTest: XCTestCase {
 
     // MARK: Setup
@@ -312,6 +322,14 @@ class FwiJSONMapperTest: XCTestCase {
         let (model, err) = FwiJSONMapper.map(dictionary: dictionary, toModel: TestJSON7.self)
         XCTAssertNotNil(err, "Expected not nil but found: '\(err)'.")
         XCTAssertNotNil(model, "Expected not nil but found: '\(model)'.")
+    }
+
+    func testAdditionalCase02() {
+        let d: [String : Any] = ["name":"Hello world", "last_name":"last_name"]
+        var o = TestJSON8()
+        let _ = FwiJSONMapper.map(dictionary: d, toObject: &o)
+
+        XCTAssertEqual(o.name, "Hello world", "Expected \"Hello world\" but found: '\(o.name)'.")
     }
 
     func testPerformance() {
