@@ -61,18 +61,26 @@ public struct FwiJSONMapper {
     /// - parameter model (required): a class which contains a set of properties to be mapped
     @discardableResult
     public static func map<T: NSObject>(array a: [[String : Any]], toModel m: T.Type) -> ([T]?, NSError?) {
+        var idx = 0
         var userInfo = [String]()
-        var array = [T]()
-        
-        for (idx, d) in a.enumerated() {
-            var o = m.init()
+        let array = a.map { (item) -> T in
+            var o = T.init()
             
-            guard map(dictionary: d, toObject: &o) == nil else {
+            if map(dictionary: item, toObject: &o) != nil {
                 userInfo.append("Could not create 'object' at index: \(idx)")
-                continue
             }
-            array.append(o)
+            idx += 1
+            return o
         }
+//        for (idx, d) in a.enumerated() {
+//            var o = m.init()
+//            
+//            guard map(dictionary: d, toObject: &o) == nil else {
+//                userInfo.append("Could not create 'object' at index: \(idx)")
+//                continue
+//            }
+//            array.append(o)
+//        }
         
         // Summary error
         if userInfo.count > 0 {
