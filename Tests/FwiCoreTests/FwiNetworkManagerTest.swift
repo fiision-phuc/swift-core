@@ -158,7 +158,7 @@ class FwiNetworkManagerTest: XCTestCase {
             let request = URLRequest(url: url)
 
             instance.send(request: request) { (data, error, statusCode, response) in
-                XCTAssertTrue(statusCode == .UnsupportedURL, "Fail connection status should be \(FwiNetworkStatus.UnsupportedURL). But found \(statusCode)")
+                XCTAssertTrue(statusCode == .unsupportedURL, "Fail connection status should be \(FwiNetworkStatus.unsupportedURL). But found \(statusCode)")
                 XCTAssertNotNil(error, "Fail connection should not return error. But found \(error)");
                 XCTAssertNil(data, "Fail connection should return nil data. But found \(data)");
                 
@@ -180,7 +180,7 @@ class FwiNetworkManagerTest: XCTestCase {
             let request = URLRequest(url: url)
 
             instance.send(request: request) { (data, error, statusCode, response) in
-                XCTAssertTrue(statusCode == .CannotConnectToHost, "Cancelled connection status should be \(FwiNetworkStatus.CannotConnectToHost). But found \(statusCode)")
+                XCTAssertTrue(statusCode == .cannotConnectToHost, "Cancelled connection status should be \(FwiNetworkStatus.cannotConnectToHost). But found \(statusCode)")
                 XCTAssertNotNil(error, "Cancelled connection should return error. But found nil")
                 XCTAssertNil(data, "Cancelled connection should return nil data. But found \(data)")
                 
@@ -222,7 +222,7 @@ class FwiNetworkManagerTest: XCTestCase {
             let request = URLRequest(url: url)
 
             instance.send(request: request) { (data, error, statusCode, response) in
-                XCTAssertTrue(statusCode == .NotFound, "Status should be \(FwiNetworkStatus.NotFound). But found \(statusCode)")
+                XCTAssertTrue(statusCode == .notFound, "Status should be \(FwiNetworkStatus.notFound). But found \(statusCode)")
                 XCTAssertNotNil(error, "Connection should return error. But found nil")
                 
                 if error != nil {
@@ -243,7 +243,7 @@ class FwiNetworkManagerTest: XCTestCase {
             let request = URLRequest(url: url)
 
             instance.send(request: request) { (data, error, statusCode, response) in
-                XCTAssertTrue(statusCode == .InternalServerError, "Status should be \(FwiNetworkStatus.InternalServerError). But found \(statusCode)")
+                XCTAssertTrue(statusCode == .internalServerError, "Status should be \(FwiNetworkStatus.internalServerError). But found \(statusCode)")
                 XCTAssertNotNil(error, "Connection should return error. But found nil")
                 
                 if error != nil {

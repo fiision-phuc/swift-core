@@ -74,15 +74,32 @@ public func += (left: inout URL?, right: String?) {
 }
 
 public func + (left: URL?, right: [String: String]?) -> URL? {
-    guard let url = left?.absoluteString, (right?.count ?? 0) > 0 else {
+    guard let urlString = left?.absoluteString, let params = right, params.count > 0 else {
         return left
     }
-    let forms = right?.map({ FwiFormParam(key: $0, value: $1) })
+    let forms = params.map({ FwiFormParam(key: $0, value: $1) })
 
-    let query = forms?.filter({ $0.key[0] != "#"}).sorted(by: <).map({ $0.description }).joined(separator: "&") ?? ""
-    let hashtag = forms?.filter({ $0.key[0] == "#"}).sorted(by: <).first?.description ?? ""
+    // Define # if there is any
+    let hashtag = forms.filter({ $0.key[0] == "#"})
+                       .sorted(by: <)
+                       .first?.description ?? ""
 
-    return hashtag.characters.count > 0 ? URL(string: "\(url)\(hashtag)?\(query)") : URL(string: "\(url)?\(query)")
+    // Define query
+    let query = forms.filter({ $0.key[0] != "#" })
+                     .sorted(by: <)
+                     .map({ $0.description })
+                     .joined(separator: "&")
+
+    // Finalize url
+    if hashtag.length() > 0 && query.length() > 0 {
+        return URL(string: "\(urlString)\(hashtag)?\(query)")
+    }
+    else if hashtag.length() > 0 && query.length() <= 0 {
+        return URL(string: "\(urlString)\(hashtag)")
+    }
+    else {
+        return URL(string: "\(urlString)?\(query)")
+    }
 }
 
 public func += (left: inout URL?, right: [String:String]?) {

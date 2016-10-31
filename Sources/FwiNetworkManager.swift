@@ -111,7 +111,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
             // Turn off activity indicator if neccessary
             self?.networkCounter -= 1
 
-            var statusCode = FwiNetworkStatus.Unknown
+            var statusCode = FwiNetworkStatus.unknown
             var error = error
 
             /* Condition validation: Validate HTTP response instance */
@@ -122,9 +122,9 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
             // Obtain HTTP status
             if let err = error as? NSError {
-                statusCode = FwiNetworkStatus(rawValue: Int32(err.code))
+                statusCode = FwiNetworkStatus(rawValue: err.code)
             } else {
-                statusCode = FwiNetworkStatus(rawValue: Int32(httpResponse.statusCode))
+                statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
             }
 
             // Validate HTTP status
@@ -163,9 +163,9 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
             var err = err
             
             // Obtain HTTP status
-            var statusCode = FwiNetworkStatus.Unknown
+            var statusCode = FwiNetworkStatus.unknown
             if let err = err as? NSError {
-                statusCode = FwiNetworkStatus(rawValue: Int32(err.code))
+                statusCode = FwiNetworkStatus(rawValue: err.code)
             }
             
             // Perform casting
@@ -173,7 +173,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
                 c(nil, err, statusCode, nil)
                 return
             }
-            statusCode = FwiNetworkStatus(rawValue: Int32(httpResponse.statusCode))
+            statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
@@ -193,7 +193,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
             }
             
             // Load cache if http status is 304 or offline
-            if statusCode == .NotConnectedToInternet || statusCode.rawValue == 304 {
+            if statusCode == .notConnectedToInternet || statusCode.rawValue == 304 {
                 if let cached = self?.cache.cachedResponse(for: request) {
                     c(cached.data, err, FwiNetworkStatus(rawValue: 200), httpResponse)
                     return

@@ -63,6 +63,9 @@ public struct FwiFormParam: CustomDebugStringConvertible, CustomStringConvertibl
 
     // MARK: CustomStringConvertible's members
     public var description: String {
+        if key[0] == "#" {
+            return "#\(key.substring(startIndex: 1).encodeHTML())=\(value.encodeHTML())"
+        }
         return "\(key.encodeHTML())=\(value.encodeHTML())"
     }
 }

@@ -63,7 +63,6 @@ public struct FwiJSONMapper {
     public static func map<T: NSObject>(array a: [[String : Any]], toModel m: T.Type) -> ([T]?, NSError?) {
         var userInfo = [String]()
         var array = [T]()
-        
         for (idx, d) in a.enumerated() {
             var o = m.init()
             
@@ -73,7 +72,7 @@ public struct FwiJSONMapper {
             }
             array.append(o)
         }
-        
+
         // Summary error
         if userInfo.count > 0 {
             return (nil, NSError(domain: "FwiJSONMapper", code: -1, userInfo: ["userInfo":userInfo]))
@@ -210,6 +209,8 @@ public struct FwiJSONMapper {
     internal static func transformDate(_ value: Any?, formats: [String] = ["yyyy-MM-dd'T'HH:mm:ssZ","yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd'T'HHmmss'GMT'"]) -> Date? {
         if let number = value as? TimeInterval {
             return Date(timeIntervalSince1970: number)
+        } else if let number = value as? NSNumber {
+            return Date(timeIntervalSince1970: number.doubleValue)
         }
         
         if let dateString = value as? String {

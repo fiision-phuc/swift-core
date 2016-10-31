@@ -87,8 +87,7 @@ public extension URLRequest {
     // MARK: Struct's constructors
     public init(url: URL, requestMethod method: FwiHttpMethod, extraHeaders headers: [String:String]? = nil, cachePolicy cache: CachePolicy = .reloadIgnoringLocalCacheData) {
         self.init(url: url, cachePolicy: cache, timeoutInterval: 30.0)
-        
-        defineHTTPMethod(method)
+        httpMethod = method.rawValue
         definePrefixHeaders()
         defineUserAgent()
 
@@ -96,7 +95,7 @@ public extension URLRequest {
             setValue($1, forHTTPHeaderField: $0)
         })
     }
-    public init?(url: URL?, requestMethod method: FwiHttpMethod, extraHeaders headers: [String:String]? = nil, cachePolicy cache: CachePolicy = .reloadIgnoringLocalCacheData) {
+    public init?(url: URL?, requestMethod method: FwiHttpMethod = .get, extraHeaders headers: [String:String]? = nil, cachePolicy cache: CachePolicy = .reloadIgnoringLocalCacheData) {
         guard let url = url else {
             return nil
         }
@@ -114,7 +113,7 @@ public extension URLRequest {
         }
     }
     
-    /** Generate multipart/form-data. */
+    /// Generate multipart/form-data.
     public mutating func generateMultipartForm(queryParams params: [String : String]?, fileParams files: [FwiMultipartParam]?, boundaryForm boundary: String = "----------\(Date().timeIntervalSince1970)") {
         /* Condition validation */
         if (params == nil && files == nil) || (params?.count == 0 && files?.count == 0) {
@@ -157,7 +156,7 @@ public extension URLRequest {
         httpBody = body
     }
     
-    /** Generate x-www-form-urlencoded. */
+    /// Generate x-www-form-urlencoded.
     public mutating func generateURLEncodedForm(queryParams params: [String : String]?) {
         guard let params = params, params.count > 0 else {
             return
@@ -177,57 +176,9 @@ public extension URLRequest {
             httpBody = data
         }
     }
-    
+
     // MARK: Struct's private methods
-    fileprivate mutating func defineHTTPMethod(_ method: FwiHttpMethod) {
-        switch method {
-        case .copy:
-            httpMethod = "COPY"
-            break
-
-        case .delete:
-            httpMethod = "DELETE"
-            break
-
-        case .head:
-            httpMethod = "HEAD"
-            break
-
-        case .link:
-            httpMethod = "LINK"
-            break
-
-        case .options:
-            httpMethod = "OPTIONS"
-            break
-
-        case .patch:
-            httpMethod = "PATCH"
-            break
-
-        case .post:
-            httpMethod = "POST"
-            break
-
-        case .purge:
-            httpMethod = "PURGE"
-            break
-
-        case .put:
-            httpMethod = "PUT"
-            break
-
-        case .unlink:
-            httpMethod = "UNLINK"
-            break
-            
-        default:
-            httpMethod = "GET"
-            break
-        }
-    }
-
-    /** Define prefix HTTP headers. */
+    /// Define prefix HTTP headers.
     fileprivate mutating func definePrefixHeaders() {
         if value(forHTTPHeaderField: "Accept") == nil {
             setValue("*/*", forHTTPHeaderField: "Accept")
