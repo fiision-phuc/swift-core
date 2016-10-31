@@ -61,27 +61,18 @@ public struct FwiJSONMapper {
     /// - parameter model (required): a class which contains a set of properties to be mapped
     @discardableResult
     public static func map<T: NSObject>(array a: [[String : Any]], toModel m: T.Type) -> ([T]?, NSError?) {
-        var idx = 0
         var userInfo = [String]()
-        let array = a.map { (item) -> T in
-            var o = T.init()
+        var array = [T]()
+        for (idx, d) in a.enumerated() {
+            var o = m.init()
             
-            if map(dictionary: item, toObject: &o) != nil {
+            guard map(dictionary: d, toObject: &o) == nil else {
                 userInfo.append("Could not create 'object' at index: \(idx)")
+                continue
             }
-            idx += 1
-            return o
+            array.append(o)
         }
-//        for (idx, d) in a.enumerated() {
-//            var o = m.init()
-//            
-//            guard map(dictionary: d, toObject: &o) == nil else {
-//                userInfo.append("Could not create 'object' at index: \(idx)")
-//                continue
-//            }
-//            array.append(o)
-//        }
-        
+
         // Summary error
         if userInfo.count > 0 {
             return (nil, NSError(domain: "FwiJSONMapper", code: -1, userInfo: ["userInfo":userInfo]))
@@ -218,6 +209,8 @@ public struct FwiJSONMapper {
     internal static func transformDate(_ value: Any?, formats: [String] = ["yyyy-MM-dd'T'HH:mm:ssZ","yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd'T'HHmmss'GMT'"]) -> Date? {
         if let number = value as? TimeInterval {
             return Date(timeIntervalSince1970: number)
+        } else if let number = value as? NSNumber {
+            return Date(timeIntervalSince1970: number.doubleValue)
         }
         
         if let dateString = value as? String {

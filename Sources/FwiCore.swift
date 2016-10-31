@@ -41,9 +41,6 @@ import Foundation
 
 /// Degree/Radians constant
 public let FLT_EPSILON: Float = 1.19209e-07
-public let Metric_Circle: Float = 6.28319 // (360 degree)
-public let Metric_DegreeToRadian: Double = 0.0174532925199432957
-public let Metric_RadianToDegree: Double = 57.295779513082320876
 
 // MARK: Log Function
 public func FwiLog(_ message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
@@ -55,39 +52,52 @@ public func FwiLog(_ message: String = "", className: String = #file, methodName
 }
 
 // MARK: Metric Function
+public enum FwiMetric: Double {
+    case π         = 3.14159
+    case rad       = 6.28319  // = 2π
+    case oneDegree = 0.0174532925199432957
+    case oneRad    = 57.295779513082320876
+}
+
 public func FwiConvertToDegree(radianValue radian: Double) -> Double {
-    let degree = radian * Metric_RadianToDegree
+    let degree = radian * FwiMetric.oneRad.rawValue
     return degree
 }
 public func FwiConvertToRadian(degreeValue degree: Double) -> Double {
-    let radian = degree * Metric_DegreeToRadian
+    let radian = degree * FwiMetric.oneDegree.rawValue
     return radian
 }
 
 // MARK: HTTP Network
-public enum FwiHttpMethod {
-    case copy
-    case delete
-    case get
-    case head
-    case link
-    case options
-    case patch
-    case post
-    case purge
-    case put
-    case unlink
+public enum FwiHttpMethod: String {
+    case copy = "COPY"
+    case delete = "DELETE"
+    case get = "GET"
+    case head = "HEAD"
+    case link = "LINK"
+    case options = "OPTIONS"
+    case patch = "PATCH"
+    case post = "POST"
+    case purge = "PURGE"
+    case put = "PUT"
+    case unlink = "UNLINK"
 }
 
 public func FwiNetworkStatusIsSuccces(_ networkStatus: FwiNetworkStatus) -> Bool {
-    return 200 ..< 300 ~= networkStatus.rawValue || 304 == networkStatus.rawValue
+    return FwiNetworkStatus.ok.rawValue ..< FwiNetworkStatus.multipleChoices.rawValue ~= networkStatus.rawValue ||
+           FwiNetworkStatus.notModified.rawValue == networkStatus.rawValue
 }
 
 
 
 public struct FwiNetworkStatus: OptionSet, CustomDebugStringConvertible, CustomStringConvertible {
     public typealias RawValue = Int
-    
+
+    public let rawValue: RawValue
+    public init(rawValue: RawValue) {
+        self.rawValue = rawValue
+    }
+
     public static let unknown = FwiNetworkStatus(rawValue: RawValue(CFNetworkErrors.cfurlErrorUnknown.rawValue))
     public static let cancelled = FwiNetworkStatus(rawValue: RawValue(CFNetworkErrors.cfurlErrorCancelled.rawValue))
     public static let badURL = FwiNetworkStatus(rawValue: RawValue(CFNetworkErrors.cfurlErrorBadURL.rawValue))
@@ -192,128 +202,6 @@ public struct FwiNetworkStatus: OptionSet, CustomDebugStringConvertible, CustomS
     public static let loopDetected = FwiNetworkStatus(rawValue: 508)
     public static let networkAuthenticationRequired = FwiNetworkStatus(rawValue: 511)
 
-
-    public let rawValue: RawValue
-    public init(rawValue: RawValue) {
-        self.rawValue = rawValue
-
-            
-//        case 400:
-//            statusDescription = "Bad request."
-//            break
-//        case 401:
-//            statusDescription = "Unauthorized access."
-//            break
-//        case 402:
-//            statusDescription = "Payment required."
-//            break
-//        case 403:
-//            statusDescription = "Forbidden."
-//            break
-//        case 404:
-//            statusDescription = "Not found."
-//            break
-//        case 405:
-//            statusDescription = "Method not allowed."
-//            break
-//        case 406:
-//            statusDescription = "Not acceptable."
-//            break
-//        case 407:
-//            statusDescription = "Proxy authentication required."
-//            break
-//        case 408:
-//            statusDescription = "Request timeout."
-//            break
-//        case 409:
-//            statusDescription = "Conflict."
-//            break
-//        case 410:
-//            statusDescription = "Gone."
-//            break
-//        case 411:
-//            statusDescription = "Length required."
-//            break
-//        case 412:
-//            statusDescription = "Precondition failed."
-//            break
-//        case 413:
-//            statusDescription = "Request entity too large."
-//            break
-//        case 414:
-//            statusDescription = "Request URI too large."
-//            break
-//        case 415:
-//            statusDescription = "Unsupported media type."
-//            break
-//        case 416:
-//            statusDescription = "Requested range not satisfiable."
-//            break
-//        case 417:
-//            statusDescription = "Expectation failed."
-//            break
-//        case 418:
-//            statusDescription = "Teapot."
-//            break
-//        case 422:
-//            statusDescription = "Unprocessable entity."
-//            break
-//        case 423:
-//            statusDescription = "Locked."
-//            break
-//        case 424:
-//            statusDescription = "Failed dependency."
-//            break
-//        case 425:
-//            statusDescription = "Unordered collection."
-//            break
-//        case 426:
-//            statusDescription = "Upgrade required."
-//            break
-//        case 428:
-//            statusDescription = "Precondition required."
-//            break
-//        case 429:
-//            statusDescription = "Too many requests."
-//            break
-//        case 431:
-//            statusDescription = "Request header fields too large."
-//            break
-//        case 500:
-//            statusDescription = "Internal server error."
-//            break
-//        case 501:
-//            statusDescription = "Not implemented."
-//            break
-//        case 502:
-//            statusDescription = "Bad gateway."
-//            break
-//        case 503:
-//            statusDescription = "Service unavailable."
-//            break
-//        case 504:
-//            statusDescription = "Gateway timeout."
-//            break
-//        case 505:
-//            statusDescription = "HTTP version not supported."
-//            break
-//        case 506:
-//            statusDescription = "Variant also negotiates."
-//            break
-//        case 507:
-//            statusDescription = "Insufficient storage."
-//            break
-//        case 508:
-//            statusDescription = "Loop detected."
-//            break
-//        case 511:
-//            statusDescription = "Network authentication required."
-//            break
-//        default:
-//            statusDescription = ""
-//        }
-    }
-
     // MARK: CustomDebugStringConvertible's members
     public var debugDescription: String {
         return description
@@ -321,9 +209,65 @@ public struct FwiNetworkStatus: OptionSet, CustomDebugStringConvertible, CustomS
 
     // MARK: CustomStringConvertible's members
     public var description: String {
-//        if let d = statusDescription {
-//            return "[\(rawValue)] \(d)"
-//        }
-        return "\(rawValue)"
+        switch self {
+
+        case FwiNetworkStatus.ok: return "Ok."
+        case FwiNetworkStatus.created: return "Created."
+        case FwiNetworkStatus.accepted: return "Accepted."
+        case FwiNetworkStatus.nonAuthoritativeInfo: return "Non authoritative info."
+        case FwiNetworkStatus.noContent: return "No content."
+        case FwiNetworkStatus.resetContent: return "Reset content."
+        case FwiNetworkStatus.partialContent: return "Partial content."
+
+        case FwiNetworkStatus.multipleChoices: return "Multiple choices."
+        case FwiNetworkStatus.movedPermanently: return "Moved permanently."
+        case FwiNetworkStatus.found: return "Found."
+        case FwiNetworkStatus.seeOther: return "See other"
+        case FwiNetworkStatus.notModified: return "Not modified."
+        case FwiNetworkStatus.useProxy: return "Use proxy"
+        case FwiNetworkStatus.temporaryRedirect: return "Temporary redirect."
+
+        case FwiNetworkStatus.badRequest: return "Bad request."
+        case FwiNetworkStatus.unauthorizedAccess: return "Unauthorized access."
+        case FwiNetworkStatus.paymentRequired: return "Payment required."
+        case FwiNetworkStatus.forbidden: return "Forbidden."
+        case FwiNetworkStatus.notFound: return "Not found."
+        case FwiNetworkStatus.methodNotAllowed: return "Method not allowed."
+        case FwiNetworkStatus.notAcceptable: return "Not acceptable."
+        case FwiNetworkStatus.proxyAuthenticationRequired: return "Proxy authentication required."
+        case FwiNetworkStatus.requestTimeout: return "Request timeout."
+        case FwiNetworkStatus.conflict: return "Conflict."
+        case FwiNetworkStatus.gone: return "Gone."
+        case FwiNetworkStatus.lengthRequired: return "Length required."
+        case FwiNetworkStatus.preconditionFailed: return "Precondition failed."
+        case FwiNetworkStatus.requestEntityTooLarge: return "Request entity too large."
+        case FwiNetworkStatus.requestUriTooLarge: return "Request URI too large."
+        case FwiNetworkStatus.unsupportedMediaType: return "Unsupported media type."
+        case FwiNetworkStatus.requestedRangeNotSatisfiable: return "Requested range not satisfiable."
+        case FwiNetworkStatus.expectationFailed: return "Expectation failed."
+        case FwiNetworkStatus.teapot: return "Teapot."
+        case FwiNetworkStatus.unprocessableEntity: return "Unprocessable entity."
+        case FwiNetworkStatus.locked: return "Locked."
+        case FwiNetworkStatus.failedDependency: return "Failed dependency."
+        case FwiNetworkStatus.unorderedCollection: return "Unordered collection."
+        case FwiNetworkStatus.upgradeRequired: return "Upgrade required."
+        case FwiNetworkStatus.preconditionFailed: return "Precondition required."
+        case FwiNetworkStatus.tooManyRequests: return "Too many requests."
+        case FwiNetworkStatus.requestHeaderFieldsTooLarge: return "Request header fields too large."
+
+        case FwiNetworkStatus.internalServerError: return "Internal server error."
+        case FwiNetworkStatus.notImplemented: return "Not implemented."
+        case FwiNetworkStatus.badGateway: return "Bad gateway."
+        case FwiNetworkStatus.serviceUnavailable: return "Service unavailable."
+        case FwiNetworkStatus.gatewayTimeout: return "Gateway timeout."
+        case FwiNetworkStatus.httpVersionNotSupported: return "HTTP version not supported."
+        case FwiNetworkStatus.variantAlsoNegotiates: return "Variant also negotiates."
+        case FwiNetworkStatus.insufficientStorage: return "Insufficient storage."
+        case FwiNetworkStatus.loopDetected: return "Loop detected."
+        case FwiNetworkStatus.networkAuthenticationRequired: return "Network authentication required."
+            
+        default:
+            return HTTPURLResponse.localizedString(forStatusCode: rawValue)
+        }
     }
 }

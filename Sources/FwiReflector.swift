@@ -503,26 +503,26 @@ fileprivate let arrayName = "Swift.Array"
 fileprivate let dictionaryName = "Swift.Dictionary"
 // Mirror types
 fileprivate let objcArrayMirror = Mirror(reflecting: NSArray())
-fileprivate let objcOptionalArrayMirror = Mirror(reflecting: NSArray() as NSArray?)
-fileprivate let objcOptionalMutableArrayMirror = Mirror(reflecting: NSMutableArray() as NSMutableArray?)
+fileprivate let objcOptionalArrayMirror = Mirror(reflecting: NSArray() as NSArray? as Any)
+fileprivate let objcOptionalMutableArrayMirror = Mirror(reflecting: NSMutableArray() as NSMutableArray? as Any)
 
 fileprivate let objcDictionaryMirror = Mirror(reflecting: NSDictionary())
-fileprivate let objcOptionalDictionaryMirror = Mirror(reflecting: NSDictionary() as NSDictionary?)
-fileprivate let objcOptionalMutableDictionaryMirror = Mirror(reflecting: NSMutableDictionary() as NSMutableDictionary?)
+fileprivate let objcOptionalDictionaryMirror = Mirror(reflecting: NSDictionary() as NSDictionary? as Any)
+fileprivate let objcOptionalMutableDictionaryMirror = Mirror(reflecting: NSMutableDictionary() as NSMutableDictionary? as Any)
 
 fileprivate let objcSetMirror = Mirror(reflecting: NSSet())
-fileprivate let objcOptionalSetMirror = Mirror(reflecting: NSSet() as NSSet?)
-fileprivate let objcOptionalMutableSetMirror = Mirror(reflecting: NSMutableSet() as NSMutableSet?)
+fileprivate let objcOptionalSetMirror = Mirror(reflecting: NSSet() as NSSet? as Any)
+fileprivate let objcOptionalMutableSetMirror = Mirror(reflecting: NSMutableSet() as NSMutableSet? as Any)
 
 fileprivate let objcStringMirror = Mirror(reflecting: NSMutableString())
-fileprivate let objcOptionalStringMirror = Mirror(reflecting: NSMutableString() as NSString?)
-fileprivate let objcOptionalMutableStringMirror = Mirror(reflecting: NSMutableString() as NSMutableString?)
+fileprivate let objcOptionalStringMirror = Mirror(reflecting: NSMutableString() as NSString? as Any)
+fileprivate let objcOptionalMutableStringMirror = Mirror(reflecting: NSMutableString() as NSMutableString? as Any)
 
 fileprivate let dataMirror = Mirror(reflecting: Data())
-fileprivate let optionalDataMirror = Mirror(reflecting: Data() as Data?)
+fileprivate let optionalDataMirror = Mirror(reflecting: Data() as Data? as Any)
 
 fileprivate let dateMirror = Mirror(reflecting: Date())
-fileprivate let optionalDateMirror = Mirror(reflecting: Date() as Date?)
+fileprivate let optionalDateMirror = Mirror(reflecting: Date() as Date? as Any)
 
 fileprivate let urlMirror = Mirror(reflecting: URL(fileURLWithPath: ""))
-fileprivate let optionalUrlMirror = Mirror(reflecting: URL(fileURLWithPath: "") as URL?)
+fileprivate let optionalUrlMirror = Mirror(reflecting: URL(fileURLWithPath: "") as URL? as Any)

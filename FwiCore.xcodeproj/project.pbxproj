@@ -570,7 +570,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = Fwi;
-				LastUpgradeCheck = 9999;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Fiision Studio";
 			};
 			buildConfigurationList = "___RootConfs_" /* Build configuration list for PBXProject "FwiCore" */;
@@ -688,7 +688,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B71D89C13B00738B1F /* lib-release.xcconfig */;
 			buildSettings = {
-				INFOPLIST_FILE = FwiCore.xcodeproj/FwiCore_Info.plist;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -700,7 +699,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735BB1D89C13B00738B1F /* test-release.xcconfig */;
 			buildSettings = {
-				INFOPLIST_FILE = FwiCore.xcodeproj/FwiCoreTests_Info.plist;
 				OTHER_LDFLAGS = "$(inherited)";
 			};
 			name = Release;
@@ -709,7 +707,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B61D89C13B00738B1F /* lib-debug.xcconfig */;
 			buildSettings = {
-				INFOPLIST_FILE = FwiCore.xcodeproj/FwiCore_Info.plist;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -721,9 +718,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735BA1D89C13B00738B1F /* test-debug.xcconfig */;
 			buildSettings = {
-				INFOPLIST_FILE = FwiCore.xcodeproj/FwiCoreTests_Info.plist;
 				OTHER_LDFLAGS = "$(inherited)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};

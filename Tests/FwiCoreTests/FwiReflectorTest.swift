@@ -181,41 +181,41 @@ class FwiReflectorTests: XCTestCase {
 
     func testOptional() {
         let intValue: Int? = 100
-        var r = FwiReflector(mirrorName: "intValue", mirrorValue: intValue)
+        var r = FwiReflector(mirrorName: "intValue", mirrorValue: intValue as Any)
         XCTAssertTrue(r.isOptional, "Expected true but found \(r.isOptional).")
         XCTAssertEqual(r.propertyName, "intValue", "Expected \"intValue\" but found \"\(r.propertyName)\".")
         XCTAssertTrue(r.primitiveType == Int.self, "Expected \"\(Int.self)\" but found \"\(r.primitiveType)\".")
 
         let uintValue: UInt? = 100
-        r = FwiReflector(mirrorName: "uintValue", mirrorValue: uintValue)
+        r = FwiReflector(mirrorName: "uintValue", mirrorValue: uintValue as Any)
         XCTAssertTrue(r.primitiveType == UInt.self, "Expected \"\(UInt.self)\" but found \"\(r.primitiveType)\".")
 
         let floatValue: Float? = 100.0
-        r = FwiReflector(mirrorName: "floatValue", mirrorValue: floatValue)
+        r = FwiReflector(mirrorName: "floatValue", mirrorValue: floatValue as Any)
         XCTAssertTrue(r.primitiveType == Float.self, "Expected \"\(Float.self)\" but found \"\(r.primitiveType)\".")
 
         let doubleValue: Double? = 100.0
-        r = FwiReflector(mirrorName: "doubleValue", mirrorValue: doubleValue)
+        r = FwiReflector(mirrorName: "doubleValue", mirrorValue: doubleValue as Any)
         XCTAssertTrue(r.primitiveType == Double.self, "Expected \"\(Double.self)\" but found \"\(r.primitiveType)\".")
 
         let boolValue: Bool? = true
-        r = FwiReflector(mirrorName: "boolValue", mirrorValue: boolValue)
+        r = FwiReflector(mirrorName: "boolValue", mirrorValue: boolValue as Any)
         XCTAssertTrue(r.primitiveType == Bool.self, "Expected \"\(Bool.self)\" but found \"\(r.primitiveType)\".")
 
         let characterValue: Character? = "C"
-        r = FwiReflector(mirrorName: "characterValue", mirrorValue: characterValue)
+        r = FwiReflector(mirrorName: "characterValue", mirrorValue: characterValue as Any)
         XCTAssertTrue(r.primitiveType == Character.self, "Expected \"\(Character.self)\" but found \"\(r.primitiveType)\".")
 
         let stringValue: String? = "Some value."
-        r = FwiReflector(mirrorName: "stringValue", mirrorValue: stringValue)
+        r = FwiReflector(mirrorName: "stringValue", mirrorValue: stringValue as Any)
         XCTAssertTrue(r.primitiveType == String.self, "Expected \"\(String.self)\" but found \"\(r.primitiveType)\".")
 
         let nsstringValue: NSString? = "Some value."
-        r = FwiReflector(mirrorName: "nsstringValue", mirrorValue: nsstringValue)
+        r = FwiReflector(mirrorName: "nsstringValue", mirrorValue: nsstringValue as Any)
         XCTAssertTrue(r.primitiveType == String.self, "Expected \"\(String.self)\" but found \"\(r.primitiveType)\".")
 
         let nsMutableStringValue: NSMutableString? = NSMutableString(format: "%s", "Some value.")
-        r = FwiReflector(mirrorName: "nsMutableStringValue", mirrorValue: nsMutableStringValue)
+        r = FwiReflector(mirrorName: "nsMutableStringValue", mirrorValue: nsMutableStringValue as Any)
         XCTAssertTrue(r.primitiveType == String.self, "Expected \"\(String.self)\" but found \"\(r.primitiveType)\".")
     }
 
@@ -225,7 +225,7 @@ class FwiReflectorTests: XCTestCase {
         XCTAssertTrue(r.isEnum, "Expected true but found \(r.isEnum).")
 
         let optionalEnumCompass: Compass1? = Compass1.north
-        r = FwiReflector(mirrorName: "optionalEnumCompass", mirrorValue: optionalEnumCompass)
+        r = FwiReflector(mirrorName: "optionalEnumCompass", mirrorValue: optionalEnumCompass as Any)
         XCTAssertTrue(r.isEnum, "Expected true but found \(r.isEnum).")
     }
 
@@ -235,7 +235,7 @@ class FwiReflectorTests: XCTestCase {
         XCTAssertTrue(r.isPrimitive, "Expected true but found \(r.isPrimitive).")
 
         let optionalValue: Int? = 10
-        r = FwiReflector(mirrorName: "optionalValue", mirrorValue: optionalValue)
+        r = FwiReflector(mirrorName: "optionalValue", mirrorValue: optionalValue as Any)
         XCTAssertTrue(r.isPrimitive, "Expected true but found \(r.isPrimitive).")
     }
 
@@ -249,8 +249,8 @@ class FwiReflectorTests: XCTestCase {
 
         let optionalValue1: (String, String)? = ("first", "second")
         let optionalValue2: (first: String, second: String)? = (first: "first", second: "second")
-        r1 = FwiReflector(mirrorName: "optionalValue1", mirrorValue: optionalValue1)
-        r2 = FwiReflector(mirrorName: "optionalValue2", mirrorValue: optionalValue2)
+        r1 = FwiReflector(mirrorName: "optionalValue1", mirrorValue: optionalValue1 as Any)
+        r2 = FwiReflector(mirrorName: "optionalValue2", mirrorValue: optionalValue2 as Any)
         XCTAssertTrue(r1.isTuple, "Expected true but found \(r1.isTuple).")
         XCTAssertTrue(r2.isTuple, "Expected true but found \(r2.isTuple).")
     }
@@ -261,14 +261,14 @@ class FwiReflectorTests: XCTestCase {
         let optionalClazz1: Test1? = Test1()
         var r = FwiReflector(mirrorName: "clazz1", mirrorValue: clazz1)
         XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
-        r = FwiReflector(mirrorName: "optionalClazz1", mirrorValue: optionalClazz1)
+        r = FwiReflector(mirrorName: "optionalClazz1", mirrorValue: optionalClazz1 as Any)
         XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
 
         let clazz2 = Test2()
         let optionalClazz2: Test2? = Test2()
         r = FwiReflector(mirrorName: "clazz2", mirrorValue: clazz2)
         XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
-        r = FwiReflector(mirrorName: "optionalClazz2", mirrorValue: optionalClazz2)
+        r = FwiReflector(mirrorName: "optionalClazz2", mirrorValue: optionalClazz2 as Any)
         XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
 
 //        let clazz3 = Test3()
@@ -283,14 +283,14 @@ class FwiReflectorTests: XCTestCase {
         let optionalClazz4: Test4? = Test4()
         r = FwiReflector(mirrorName: "clazz4", mirrorValue: clazz4)
         XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
-        r = FwiReflector(mirrorName: "optionalClazz4", mirrorValue: optionalClazz4)
+        r = FwiReflector(mirrorName: "optionalClazz4", mirrorValue: optionalClazz4 as Any)
         XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
 
         let clazz5 = Test5()
         let optionalClazz5: Test5? = Test5()
         r = FwiReflector(mirrorName: "clazz5", mirrorValue: clazz5)
         XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
-        r = FwiReflector(mirrorName: "optionalClazz5", mirrorValue: optionalClazz5)
+        r = FwiReflector(mirrorName: "optionalClazz5", mirrorValue: optionalClazz5 as Any)
         XCTAssertTrue(r.isClass, "Expected true but found \(r.isClass).")
 
 //        let clazz6 = Test6()
@@ -307,7 +307,7 @@ class FwiReflectorTests: XCTestCase {
         let optionalClazz1: Test1? = Test1()
         var r = FwiReflector(mirrorName: "clazz1", mirrorValue: clazz1)
         XCTAssertFalse(r.isObject, "Expected true but found \(r.isObject).")
-        r = FwiReflector(mirrorName: "optionalClazz1", mirrorValue: optionalClazz1)
+        r = FwiReflector(mirrorName: "optionalClazz1", mirrorValue: optionalClazz1 as Any)
         XCTAssertFalse(r.isObject, "Expected false but found \(r.isObject).")
 
 
@@ -316,16 +316,16 @@ class FwiReflectorTests: XCTestCase {
         let optionalClazz4: Test4? = Test4()
         r = FwiReflector(mirrorName: "clazz4", mirrorValue: clazz4)
         XCTAssertTrue(r.isObject, "Expected true but found \(r.isObject).")
-        r = FwiReflector(mirrorName: "optionalClazz4", mirrorValue: optionalClazz4)
+        r = FwiReflector(mirrorName: "optionalClazz4", mirrorValue: optionalClazz4 as Any)
         XCTAssertTrue(r.isObject, "Expected true but found \(r.isObject).")
     }
 
     func testIsStruct() {
         let url = URL(string: "https://google.com")
         let optionalURL: URL? = URL(string: "https://google.com")
-        var r = FwiReflector(mirrorName: "url", mirrorValue: url)
+        var r = FwiReflector(mirrorName: "url", mirrorValue: url as Any)
         XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
-        r = FwiReflector(mirrorName: "optionalURL", mirrorValue: optionalURL)
+        r = FwiReflector(mirrorName: "optionalURL", mirrorValue: optionalURL as Any)
         XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
         XCTAssertTrue(r.structType == URL.self, "Expected true but found \(r.isStruct).")
 
@@ -333,14 +333,14 @@ class FwiReflectorTests: XCTestCase {
         let optionalStruct1: Struct1? = Struct1()
         r = FwiReflector(mirrorName: "struct1", mirrorValue: struct1)
         XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
-        r = FwiReflector(mirrorName: "optionalStruct1", mirrorValue: optionalStruct1)
+        r = FwiReflector(mirrorName: "optionalStruct1", mirrorValue: optionalStruct1 as Any)
         XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
 
         let struct2 = Struct2()
         let optionalStruct2: Struct2? = Struct2()
         r = FwiReflector(mirrorName: "struct2", mirrorValue: struct2)
         XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
-        r = FwiReflector(mirrorName: "optionalStruct2", mirrorValue: optionalStruct2)
+        r = FwiReflector(mirrorName: "optionalStruct2", mirrorValue: optionalStruct2 as Any)
         XCTAssertTrue(r.isStruct, "Expected true but found \(r.isStruct).")
 
 //        let struct3 = Struct3()
@@ -360,7 +360,7 @@ class FwiReflectorTests: XCTestCase {
         XCTAssertTrue(r.collectionType?.classType == NSObject.self, "Expected \"\(NSObject.self)\" but found \(r.collectionType?.classType).")
 
         let optionalSetLetters: NSSet? = NSSet()
-        r = FwiReflector(mirrorName: "optionalSetLetters", mirrorValue: optionalSetLetters)
+        r = FwiReflector(mirrorName: "optionalSetLetters", mirrorValue: optionalSetLetters as Any)
         XCTAssertTrue(r.isSet, "Expected true but found \(r.isSet).")
         XCTAssertTrue(r.collectionType?.isObject == true, "Expected true but found \(r.collectionType?.isObject).")
         XCTAssertTrue(r.collectionType?.classType == NSObject.self, "Expected \"\(NSObject.self)\" but found \(r.collectionType?.classType).")
@@ -372,7 +372,7 @@ class FwiReflectorTests: XCTestCase {
         XCTAssertTrue(r.collectionType?.classType == NSObject.self, "Expected \"\(NSObject.self)\" but found \(r.collectionType?.classType).")
 
         let optionalMutableSetLetters: NSMutableSet? = NSMutableSet()
-        r = FwiReflector(mirrorName: "optionalMutableSetLetters", mirrorValue: optionalMutableSetLetters)
+        r = FwiReflector(mirrorName: "optionalMutableSetLetters", mirrorValue: optionalMutableSetLetters as Any)
         XCTAssertTrue(r.isSet, "Expected true but found \(r.isSet).")
         XCTAssertTrue(r.collectionType?.isObject == true, "Expected true but found \(r.collectionType?.isObject).")
         XCTAssertTrue(r.collectionType?.classType == NSObject.self, "Expected \"\(NSObject.self)\" but found \(r.collectionType?.classType).")
@@ -391,7 +391,7 @@ class FwiReflectorTests: XCTestCase {
         XCTAssertTrue(r.collectionType?.primitiveType == String.self, "Expected \"\(String.self)\" but found \(r.collectionType?.primitiveType).")
 
         let optionalLetters: Set<String>? = Set<String>()
-        r = FwiReflector(mirrorName: "optionalLetters", mirrorValue: optionalLetters)
+        r = FwiReflector(mirrorName: "optionalLetters", mirrorValue: optionalLetters as Any)
         XCTAssertTrue(r.isSet, "Expected true but found \(r.isSet).")
         XCTAssertTrue(r.collectionType?.isPrimitive == true, "Expected true but found \(r.collectionType?.isPrimitive).")
         XCTAssertTrue(r.collectionType?.primitiveType == String.self, "Expected \"\(String.self)\" but found \(r.collectionType?.primitiveType).")
@@ -411,7 +411,7 @@ class FwiReflectorTests: XCTestCase {
         XCTAssertTrue(r.collectionType?.classType == NSObject.self, "Expected \"\(NSObject.self)\" but found \(r.collectionType?.classType).")
 
         let optionalArrayLetters: NSArray? = NSArray()
-        r = FwiReflector(mirrorName: "optionalArrayLetters", mirrorValue: optionalArrayLetters)
+        r = FwiReflector(mirrorName: "optionalArrayLetters", mirrorValue: optionalArrayLetters as Any)
         XCTAssertTrue(r.isCollection, "Expected true but found \(r.isCollection).")
         XCTAssertTrue(r.isObject, "Expected true but found \(r.isObject).")
         XCTAssertTrue(r.collectionType?.isObject == true, "Expected true but found \(r.collectionType?.isObject).")
@@ -424,7 +424,7 @@ class FwiReflectorTests: XCTestCase {
         XCTAssertTrue(r.collectionType?.classType == NSObject.self, "Expected \"\(NSObject.self)\" but found \(r.collectionType?.classType).")
 
         let optionalMutableArrayLetters: NSMutableArray? = NSMutableArray()
-        r = FwiReflector(mirrorName: "optionalMutableArrayLetters", mirrorValue: optionalMutableArrayLetters)
+        r = FwiReflector(mirrorName: "optionalMutableArrayLetters", mirrorValue: optionalMutableArrayLetters as Any)
         XCTAssertTrue(r.isCollection, "Expected true but found \(r.isCollection).")
         XCTAssertTrue(r.isObject, "Expected true but found \(r.isObject).")
         XCTAssertTrue(r.collectionType?.isObject == true, "Expected true but found \(r.collectionType?.isObject).")
@@ -444,13 +444,13 @@ class FwiReflectorTests: XCTestCase {
         XCTAssertTrue(r.collectionType?.primitiveType == String.self, "Expected \"\(String.self)\" but found \(r.collectionType?.primitiveType).")
 
         let optionalLetters1: Array<String>? = Array<String>()
-        r = FwiReflector(mirrorName: "optionalLetters1", mirrorValue: optionalLetters1)
+        r = FwiReflector(mirrorName: "optionalLetters1", mirrorValue: optionalLetters1 as Any)
         XCTAssertTrue(r.isCollection, "Expected true but found \(r.isCollection).")
         XCTAssertTrue(r.collectionType?.isPrimitive == true, "Expected true but found \(r.collectionType?.isPrimitive).")
         XCTAssertTrue(r.collectionType?.primitiveType == String.self, "Expected \"\(String.self)\" but found \(r.collectionType?.primitiveType).")
 
         let optionalLetters2: [String]? = Array<String>()
-        r = FwiReflector(mirrorName: "optionalLetters2", mirrorValue: optionalLetters2)
+        r = FwiReflector(mirrorName: "optionalLetters2", mirrorValue: optionalLetters2 as Any)
         XCTAssertTrue(r.isCollection, "Expected true but found \(r.isCollection).")
         XCTAssertTrue(r.collectionType?.isPrimitive == true, "Expected true but found \(r.collectionType?.isPrimitive).")
         XCTAssertTrue(r.collectionType?.primitiveType == String.self, "Expected \"\(String.self)\" but found \(r.collectionType?.primitiveType).")
@@ -484,7 +484,7 @@ class FwiReflectorTests: XCTestCase {
         XCTAssertTrue(r.dictionaryType?.key.classType == NSObject.self, "Expected \"\(NSObject.self)\" but found \(r.dictionaryType?.key.classType).")
         XCTAssertTrue(r.dictionaryType?.value.classType == NSObject.self, "Expected \"\(NSObject.self)\" but found \(r.dictionaryType?.value.classType).")
         let optionalDictionaryLetters: NSDictionary? = NSDictionary()
-        r = FwiReflector(mirrorName: "optionalDictionaryLetters", mirrorValue: optionalDictionaryLetters)
+        r = FwiReflector(mirrorName: "optionalDictionaryLetters", mirrorValue: optionalDictionaryLetters as Any)
         XCTAssertTrue(r.isDictionary, "Expected true but found \(r.isDictionary).")
         XCTAssertTrue(r.dictionaryType?.key.isObject == true, "Expected true but found \(r.dictionaryType?.key.isObject).")
         XCTAssertTrue(r.dictionaryType?.value.isObject == true, "Expected true but found \(r.dictionaryType?.value.isObject).")
@@ -499,7 +499,7 @@ class FwiReflectorTests: XCTestCase {
         XCTAssertTrue(r.dictionaryType?.key.classType == NSObject.self, "Expected \"\(NSObject.self)\" but found \(r.dictionaryType?.key.classType).")
         XCTAssertTrue(r.dictionaryType?.value.classType == NSObject.self, "Expected \"\(NSObject.self)\" but found \(r.dictionaryType?.value.classType).")
         let optionalMutableDictionaryLetters: NSMutableDictionary? = NSMutableDictionary()
-        r = FwiReflector(mirrorName: "optionalMutableDictionaryLetters", mirrorValue: optionalMutableDictionaryLetters)
+        r = FwiReflector(mirrorName: "optionalMutableDictionaryLetters", mirrorValue: optionalMutableDictionaryLetters as Any)
         XCTAssertTrue(r.isDictionary, "Expected true but found \(r.isDictionary).")
         XCTAssertTrue(r.dictionaryType?.key.isObject == true, "Expected true but found \(r.dictionaryType?.key.isObject).")
         XCTAssertTrue(r.dictionaryType?.value.isObject == true, "Expected true but found \(r.dictionaryType?.value.isObject).")
@@ -523,7 +523,7 @@ class FwiReflectorTests: XCTestCase {
         XCTAssertTrue(r.dictionaryType?.value.primitiveType == String.self, "Expected \"\(String.self)\" but found \(r.dictionaryType?.value.primitiveType).")
 
         let optionalLetters1: Dictionary<String, String>? = Dictionary<String, String>()
-        r = FwiReflector(mirrorName: "optionalLetters1", mirrorValue: optionalLetters1)
+        r = FwiReflector(mirrorName: "optionalLetters1", mirrorValue: optionalLetters1 as Any)
         XCTAssertTrue(r.isDictionary, "Expected true but found \(r.isDictionary).")
         XCTAssertTrue(r.dictionaryType?.key.isPrimitive == true, "Expected true but found \(r.dictionaryType?.key.isPrimitive).")
         XCTAssertTrue(r.dictionaryType?.value.isPrimitive == true, "Expected true but found \(r.dictionaryType?.value.isPrimitive).")
@@ -531,7 +531,7 @@ class FwiReflectorTests: XCTestCase {
         XCTAssertTrue(r.dictionaryType?.value.primitiveType == String.self, "Expected \"\(String.self)\" but found \(r.dictionaryType?.value.primitiveType).")
 
         let optionalLetters2: [String:String]? = ["Rock":"Rock", "Classical":"Classical", "Hip hop":"Hip hop"]
-        r = FwiReflector(mirrorName: "optionalLetters2", mirrorValue: optionalLetters2)
+        r = FwiReflector(mirrorName: "optionalLetters2", mirrorValue: optionalLetters2 as Any)
         XCTAssertTrue(r.isDictionary, "Expected true but found \(r.isDictionary).")
         XCTAssertTrue(r.dictionaryType?.key.isPrimitive == true, "Expected true but found \(r.dictionaryType?.key.isPrimitive).")
         XCTAssertTrue(r.dictionaryType?.value.isPrimitive == true, "Expected true but found \(r.dictionaryType?.value.isPrimitive).")
