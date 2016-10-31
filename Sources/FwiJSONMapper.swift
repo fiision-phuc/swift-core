@@ -100,7 +100,7 @@ public struct FwiJSONMapper {
         /* Condition validation: should allow model to perform manual mapping or not */
         if let j = m as? FwiJSONManual {
             let err = j.map(object: d)
-            return err
+            return err as NSError?
         }
 
         var properties = FwiReflector.properties(withObject: m)
@@ -285,7 +285,7 @@ public func <- <T>(left: inout [T]?, right: [AnyObject]?) {
 ///
 /// parameter left (required): an original data in string form
 /// parameter right (required): a property description from model
-fileprivate func + (left: [Any], right: FwiReflector) -> [Any]? {
+internal func + (left: [Any], right: FwiReflector) -> [Any]? {
     if let _ = left as? [NSNumber], let collectionType = right.collectionType, collectionType.primitiveType != String.self {
         return left
     }
@@ -305,7 +305,7 @@ fileprivate func + (left: [Any], right: FwiReflector) -> [Any]? {
 ///
 /// parameter left (required): an original data in string form
 /// parameter right (required): a property description from model
-fileprivate func + (left: [String : Any], right: FwiReflector) -> [String : Any]? {
+internal func + (left: [String : Any], right: FwiReflector) -> [String : Any]? {
     guard let dictionaryType = right.dictionaryType else {
         return nil
     }
@@ -336,7 +336,7 @@ fileprivate func + (left: [String : Any], right: FwiReflector) -> [String : Any]
 ///
 /// parameter left (required): an original data in string form
 /// parameter right (required): a property description from model
-fileprivate func + (left: String, right: FwiReflector) -> Any? {
+internal func + (left: String, right: FwiReflector) -> Any? {
     if let primitiveType = right.primitiveType {
         if primitiveType != String.self {
             return FwiJSONMapper.numberFormat.number(from: left.trim())
@@ -362,7 +362,7 @@ fileprivate func + (left: String, right: FwiReflector) -> Any? {
 ///
 /// parameter left (required): a property list
 /// parameter right (required): an instance of model that implemented FwiJSONModel
-fileprivate func <- (left: inout [FwiReflector], right: FwiJSONModel) {
+internal func <- (left: inout [FwiReflector], right: FwiJSONModel) {
     if let ignoreProperties = right.ignoreProperties {
         left = left.filter({ ignoreProperties.contains($0.mirrorName) == false })
     }
@@ -378,7 +378,7 @@ fileprivate func <- (left: inout [FwiReflector], right: FwiJSONModel) {
 ///
 /// parameter left (required): a dictionary that will be update
 /// parameter right (required): an instance of model that implemented FwiJSONModel
-fileprivate func <- (left: inout [String : Any], right: FwiJSONModel) {
+internal func <- (left: inout [String : Any], right: FwiJSONModel) {
     left = right.convertJSON(fromOriginal: left)
     right.keyMapper?
         .filter({ (item) -> Bool in
@@ -392,4 +392,4 @@ fileprivate func <- (left: inout [String : Any], right: FwiJSONModel) {
 
 
 // Mirror types
-fileprivate let anyMirror = Mirror(reflecting: Any.self)
+internal let anyMirror = Mirror(reflecting: Any.self)
