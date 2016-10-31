@@ -64,10 +64,8 @@ public extension FileManager {
         }
         
         var isDirectory: ObjCBool = false
-        if fileExists(atPath: path, isDirectory: &isDirectory), isDirectory.boolValue {
-            return true
-        }
-        return false
+        let isExist = fileExists(atPath: path, isDirectory: &isDirectory)
+        return isExist && isDirectory.boolValue
     }
 
     /** Move directory from source's URL to destination's URL. */
