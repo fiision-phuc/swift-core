@@ -51,23 +51,6 @@ public func FwiLog(_ message: String = "", className: String = #file, methodName
     #endif
 }
 
-// MARK: Metric Function
-public enum FwiMetric: Double {
-    case π         = 3.14159
-    case rad       = 6.28319  // = 2π
-    case oneDegree = 0.0174532925199432957
-    case oneRad    = 57.295779513082320876
-}
-
-public func FwiConvertToDegree(radianValue radian: Double) -> Double {
-    let degree = radian * FwiMetric.oneRad.rawValue
-    return degree
-}
-public func FwiConvertToRadian(degreeValue degree: Double) -> Double {
-    let radian = degree * FwiMetric.oneDegree.rawValue
-    return radian
-}
-
 // MARK: HTTP Network
 public enum FwiHttpMethod: String {
     case copy = "COPY"
