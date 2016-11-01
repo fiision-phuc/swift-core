@@ -106,12 +106,7 @@ public extension UIView {
 
     /** Find and resign first responder within tree views. */
     public func findAndResignFirstResponder() {
-        if self.isFirstResponder {
-            self.resignFirstResponder()
-        } else {
-            let firstResponder = self.findFirstResponder()
-            firstResponder?.resignFirstResponder()
-        }
+        self.findFirstResponder()?.resignFirstResponder()
     }
 
     /** Round corner of an UIView with specific radius. */
