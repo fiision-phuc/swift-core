@@ -91,14 +91,16 @@ public func + (left: URL?, right: [String: String]?) -> URL? {
                      .joined(separator: "&")
 
     // Finalize url
-    if hashtag.length() > 0 && query.length() > 0 {
-        return URL(string: "\(urlString)\(hashtag)?\(query)")
-    }
-    else if hashtag.length() > 0 && query.length() <= 0 {
-        return URL(string: "\(urlString)\(hashtag)")
-    }
-    else {
-        return URL(string: "\(urlString)?\(query)")
+    let isHaveHashTag = hashtag.length() > 0
+    let isHaveQuery = query.length() > 0
+    
+    switch (isHaveHashTag, isHaveQuery) {
+        case (true, true):
+            return URL(string: "\(urlString)\(hashtag)?\(query)")
+        case (true, false):
+            return URL(string: "\(urlString)\(hashtag)")
+        default:
+            return URL(string: "\(urlString)?\(query)")
     }
 }
 

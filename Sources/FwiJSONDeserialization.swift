@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiJSONModel.swift
+//  File name   : FwiJSONDeserialization.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 6/10/16
+//  Created date: 10/31/16
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -39,57 +39,36 @@
 import Foundation
 
 
-/// FwiJSONModel represents a JSON model. This protocol is required in order to let FwiReflector
-/// working properly.
-public protocol FwiJSONModel {
-
-    /// Define keys mapper.
-    var keyMapper: [String:String]? { get }
-
-    /// Define ignored properties.
-    var ignoreProperties: [String]? { get }
-
-    /// Define optional properties.
-    var optionalProperties: [String]? { get }
-
-    /// Allow developer to interact directly with json dictionary before mapping process.
-    ///
-    /// parameter original (required): original json dictionary
-    func convertJSON(fromOriginal original: [String:Any]) -> [String:Any]
+/// FwiJSONDeserialization defines default functions to convert JSON to model.
+public protocol FwiJSONDeserialization {
 }
 
-/// An extension to help FwiReflector and FwiJSONMapper.
-public extension FwiJSONModel {
+/// FwiJSONDeserialization is only work when Model is an instance of NSObject.
+public extension FwiJSONDeserialization {
+    public typealias Model = Self
+}
 
-    /// Default implementation for keys mapper.
-    public var keyMapper: [String:String]? {
-        return nil
+public extension FwiJSONDeserialization where Self: NSObject  {
+
+    /// Build a list of models.
+    ///
+    /// - parameter array (required): a list of keys-values
+    public static func map(array a: [[String: Any]]) -> ([Model]?, Error?) {
+        let result = FwiJSONMapper.map(array: a, toModel: Model.self)
+        return (result.0, result.1)
     }
 
-    /// Default implementation for ignored properties.
-    public var ignoreProperties: [String]? {
-        return nil
-    }
-
-    /// Default implementation for optional properties.
-    public var optionalProperties: [String]? {
-        return nil
-    }
-
-    /// Default implementation for convertJSON function.
-    public func convertJSON(fromOriginal original: [String:Any]) -> [String:Any] {
-        return original
+    /// Create model's instance and map dictionary to that instance.
+    ///
+    /// - parameter dictionary (required): set of keys-values
+    public static func map(dictionary d: [String : Any]) -> (Self?, Error?) {
+        let result = FwiJSONMapper.map(dictionary: d, toModel: Model.self)
+        return (result.0, result.1)
     }
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// FwiJSONManual represents a manual JSON model where developer wish to perform custom mapping.
-public protocol FwiJSONManual {
-
-    /// Allow developer to perform custom map.
-    ///
-    /// parameter object (required): object json
-    @discardableResult
-    func map(object o: [String : Any]) -> Error?
+/// Map FwiJSONDeserialization NSObject.
+extension NSObject: FwiJSONDeserialization {
 }

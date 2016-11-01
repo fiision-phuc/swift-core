@@ -40,10 +40,9 @@ import XCTest
 @testable import FwiCore
 
 
-class FwiNetworkManagerTest: XCTestCase {
+class FwiNetworkManagerTest: XCTestCase, FwiNetworkProtocol {
     
-    
-    fileprivate lazy var instance  = FwiNetworkManager.instance
+
     fileprivate lazy var baseHTTP  = URL(string: "http://httpbin.org")
     fileprivate lazy var baseHTTPS = URL(string: "https://httpbin.org")
     
@@ -64,7 +63,7 @@ class FwiNetworkManagerTest: XCTestCase {
         if let url = baseHTTP + "/get" {
             let request = URLRequest(url: url)
 
-            instance.send(request: request) { (data, error, statusCode, response) in
+            send(request: request) { (data, error, statusCode, response) in
                 XCTAssertTrue(FwiNetworkStatusIsSuccces(statusCode), "Success connection should return status code range 200 - 299. But found \(statusCode)")
                 XCTAssertNil(error, "Success connection should not return error. But found \(error)");
                 XCTAssertNotNil(data, "Success connection should return data. But found nil");
@@ -86,7 +85,7 @@ class FwiNetworkManagerTest: XCTestCase {
         if let url = baseHTTPS + "/get" {
             let request = URLRequest(url: url)
 
-            instance.send(request: request) { (data, error, statusCode, response) in
+            send(request: request) { (data, error, statusCode, response) in
                 XCTAssertTrue(FwiNetworkStatusIsSuccces(statusCode), "Success connection should return status code range 200 - 299. But found \(statusCode)")
                 XCTAssertNil(error, "Success connection should not return error. But found \(error)");
                 XCTAssertNotNil(data, "Success connection should return data. But found nil");
@@ -114,31 +113,31 @@ class FwiNetworkManagerTest: XCTestCase {
             var request4 = false
             var request5 = false
             
-            instance.send(request: request) { (data, error, statusCode, response) in
+            send(request: request) { (data, error, statusCode, response) in
                 request1 = true
                 if request1 && request2 && request3 && request4 && request5 {
                     completedExpectation.fulfill()
                 }
             }
-            instance.send(request: request) { (data, error, statusCode, response) in
+            send(request: request) { (data, error, statusCode, response) in
                 request2 = true
                 if request1 && request2 && request3 && request4 && request5 {
                     completedExpectation.fulfill()
                 }
             }
-            instance.send(request: request) { (data, error, statusCode, response) in
+            send(request: request) { (data, error, statusCode, response) in
                 request3 = true
                 if request1 && request2 && request3 && request4 && request5 {
                     completedExpectation.fulfill()
                 }
             }
-            instance.send(request: request) { (data, error, statusCode, response) in
+            send(request: request) { (data, error, statusCode, response) in
                 request4 = true
                 if request1 && request2 && request3 && request4 && request5 {
                     completedExpectation.fulfill()
                 }
             }
-            instance.send(request: request) { (data, error, statusCode, response) in
+            send(request: request) { (data, error, statusCode, response) in
                 request5 = true
                 if request1 && request2 && request3 && request4 && request5 {
                     completedExpectation.fulfill()
@@ -157,7 +156,7 @@ class FwiNetworkManagerTest: XCTestCase {
         if let url = URL(string: "/", relativeTo: nil) {
             let request = URLRequest(url: url)
 
-            instance.send(request: request) { (data, error, statusCode, response) in
+            send(request: request) { (data, error, statusCode, response) in
                 XCTAssertTrue(statusCode == .unsupportedURL, "Fail connection status should be \(FwiNetworkStatus.unsupportedURL). But found \(statusCode)")
                 XCTAssertNotNil(error, "Fail connection should not return error. But found \(error)");
                 XCTAssertNil(data, "Fail connection should return nil data. But found \(data)");
@@ -179,7 +178,7 @@ class FwiNetworkManagerTest: XCTestCase {
         if let url = URL(string: "http://localhost:8080") {
             let request = URLRequest(url: url)
 
-            instance.send(request: request) { (data, error, statusCode, response) in
+            send(request: request) { (data, error, statusCode, response) in
                 XCTAssertTrue(statusCode == .cannotConnectToHost, "Cancelled connection status should be \(FwiNetworkStatus.cannotConnectToHost). But found \(statusCode)")
                 XCTAssertNotNil(error, "Cancelled connection should return error. But found nil")
                 XCTAssertNil(data, "Cancelled connection should return nil data. But found \(data)")
@@ -201,7 +200,7 @@ class FwiNetworkManagerTest: XCTestCase {
         if let url = baseHTTP + "/redirect-to" + ["url" : "https://www.google.com"] {
             let request = URLRequest(url: url)
 
-            instance.send(request: request) { (data, error, statusCode, response) in
+            send(request: request) { (data, error, statusCode, response) in
                 XCTAssertNil(error, "Redirect connection should return nil error. But found \(error)")
                 
                 if error == nil {
@@ -221,7 +220,7 @@ class FwiNetworkManagerTest: XCTestCase {
         if let url = baseHTTP + "/status/404" {
             let request = URLRequest(url: url)
 
-            instance.send(request: request) { (data, error, statusCode, response) in
+            send(request: request) { (data, error, statusCode, response) in
                 XCTAssertTrue(statusCode == .notFound, "Status should be \(FwiNetworkStatus.notFound). But found \(statusCode)")
                 XCTAssertNotNil(error, "Connection should return error. But found nil")
                 
@@ -242,7 +241,7 @@ class FwiNetworkManagerTest: XCTestCase {
         if let url = baseHTTP + "/status/500" {
             let request = URLRequest(url: url)
 
-            instance.send(request: request) { (data, error, statusCode, response) in
+            send(request: request) { (data, error, statusCode, response) in
                 XCTAssertTrue(statusCode == .internalServerError, "Status should be \(FwiNetworkStatus.internalServerError). But found \(statusCode)")
                 XCTAssertNotNil(error, "Connection should return error. But found nil")
                 

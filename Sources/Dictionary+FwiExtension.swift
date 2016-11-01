@@ -47,19 +47,10 @@ public extension Dictionary {
     /// - parameter plistFormat (optional): the plist's format, default is xml
     /// - parameter bundle (optional): which bundle contains the plist file
     public static func loadPlist(withPlistname n: String, plistFormat f: PropertyListSerialization.PropertyListFormat = .xml, fromBundle b: Bundle = Bundle.main) -> [String : Any]? {
-        if let url = Bundle.main.url(forResource: n, withExtension: "plist") {
-            do {
-                let data = try Data(contentsOf: url)
-
-                guard let dictionary = try PropertyListSerialization.propertyList(from: data, options: .mutableContainers, format: nil) as? [String : Any] else {
-                    return nil
-                }
-                return dictionary
-            }
-            catch _ {
-                // Ignore error.
-            }
+        guard let url = Bundle.main.url(forResource: n, withExtension: "plist"),let data = try? Data(contentsOf: url) else {
+            return nil
         }
-        return nil
+        
+        return (try? PropertyListSerialization.propertyList(from: data, options: .mutableContainers, format: nil)) as? [String : Any]
     }
 }
