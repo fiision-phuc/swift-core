@@ -12,9 +12,8 @@ import Foundation
 
 
 public protocol FwiNetworkProtocol {
-    
-    typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
     typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
+    typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
 }
 
 
@@ -55,7 +54,7 @@ public extension FwiNetworkProtocol {
             if !FwiNetworkStatusIsSuccces(statusCode) {
                 error = manager.generateError(r as URLRequest, statusCode: statusCode)
             }
-            manager.consoleError(r as URLRequest, data: nil, error: error, statusCode: statusCode)
+            manager.consoleError(r, data: nil, error: error, statusCode: statusCode)
             c(location, error, statusCode, httpResponse)
         }
 
@@ -78,45 +77,28 @@ public extension FwiNetworkProtocol {
         let task = manager.session.dataTask(with: r) { (data, response, err) in
             // Turn off activity indicator if neccessary
             manager.networkCounter -= 1
-            var err = err
-            
-            // Obtain HTTP status
+
             var statusCode = FwiNetworkStatus.unknown
-            if let err = err as? NSError {
-                statusCode = FwiNetworkStatus(rawValue: err.code)
-            }
-            
-            // Perform casting
+            var error = err
+
+            /* Condition validation: Validate HTTP response instance */
             guard let httpResponse = response as? HTTPURLResponse else {
-                c(nil, err, statusCode, nil)
+                c(nil, error, statusCode, nil)
                 return
             }
-            statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
+            
+            // Obtain HTTP status
+            if let error = error as? NSError {
+                statusCode = FwiNetworkStatus(rawValue: error.code)
+            } else {
+                statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
+            }
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
-                err = manager.generateError(r, statusCode: statusCode)
+                error = manager.generateError(r as URLRequest, statusCode: statusCode)
             }
             manager.consoleError(r, data: data, error: err, statusCode: statusCode)
-            
-//            // Remove previous cache, remove it anyways
-//            if let cacheControl = httpResponse.allHeaderFields["Cache-Control"] as? String, statusCode.rawValue != 304 {
-//                let cacheHeader = cacheControl.lowercased()
-//                if cacheHeader.hasPrefix("public") {
-//                    if let data = data {
-//                        self?.cache.removeCachedResponse(for: request)
-//                        self?.cache.storeCachedResponse(CachedURLResponse(response: httpResponse, data: data), for: request)
-//                    }
-//                }
-//            }
-
-//            // Load cache if http status is 304 or offline
-//            if statusCode == .notConnectedToInternet || statusCode.rawValue == 304 {
-//                if let cached = self?.cache.cachedResponse(for: r) {
-//                    c(cached.data, err, FwiNetworkStatus(rawValue: 200), httpResponse)
-//                    return
-//                }
-//            }
             c(data, err, statusCode, httpResponse)
         }
         task.resume()

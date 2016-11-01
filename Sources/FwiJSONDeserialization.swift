@@ -41,21 +41,20 @@ import Foundation
 
 /// FwiJSONDeserialization defines default functions to convert JSON to model.
 public protocol FwiJSONDeserialization {
-    associatedtype Model
-}
-
-extension NSObject: FwiJSONDeserialization {
-    public typealias Model = NSObject
 }
 
 /// FwiJSONDeserialization is only work when Model is an instance of NSObject.
+public extension FwiJSONDeserialization {
+    public typealias Model = Self
+}
+
 public extension FwiJSONDeserialization where Self: NSObject  {
 
     /// Build a list of models.
     ///
     /// - parameter array (required): a list of keys-values
-    public static func map(array a: [[String: Any]]) -> ([Self]?, Error?) {
-        let result = FwiJSONMapper.map(array: a, toModel: self)
+    public static func map(array a: [[String: Any]]) -> ([Model]?, Error?) {
+        let result = FwiJSONMapper.map(array: a, toModel: Model.self)
         return (result.0, result.1)
     }
 
@@ -63,13 +62,13 @@ public extension FwiJSONDeserialization where Self: NSObject  {
     ///
     /// - parameter dictionary (required): set of keys-values
     public static func map(dictionary d: [String : Any]) -> (Self?, Error?) {
-        let result = FwiJSONMapper.map(dictionary: d, toModel: self)
+        let result = FwiJSONMapper.map(dictionary: d, toModel: Model.self)
         return (result.0, result.1)
     }
 }
 
 
-
-
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Map FwiJSONDeserialization NSObject.
+extension NSObject: FwiJSONDeserialization {
+}

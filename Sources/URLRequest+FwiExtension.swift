@@ -95,7 +95,7 @@ public extension URLRequest {
             setValue($1, forHTTPHeaderField: $0)
         })
     }
-    public init?(url: URL?, requestMethod method: FwiHttpMethod = .get, extraHeaders headers: [String:String]? = nil, cachePolicy cache: CachePolicy = .useProtocolCachePolicy) {
+    public init?(url: URL?, requestMethod method: FwiHttpMethod = .get, extraHeaders headers: [String:String]? = nil, cachePolicy cache: CachePolicy = .reloadIgnoringLocalCacheData) {
         guard let url = url else {
             return nil
         }
