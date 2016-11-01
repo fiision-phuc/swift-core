@@ -38,6 +38,37 @@
 
 import Foundation
 
+// MARK: Struct's private methods
+/// Transform JSON date to date object.
+///
+/// parameter value (required): JSON date, can be either in string form or number form
+/// parameter format (optional): format string to convert string to date
+internal func transformDate(_ value: Any?, formats: [String] = ["yyyy-MM-dd'T'HH:mm:ssZ","yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd'T'HHmmss'GMT'"]) -> Date? {
+    
+    if let number = value as? TimeInterval {
+        return Date(timeIntervalSince1970: number)
+    } else if let number = value as? NSNumber {
+        return Date(timeIntervalSince1970: number.doubleValue)
+    }
+    
+    if let dateString = value as? String {
+        if dateString.matchPattern("^\\d+$") {
+            if let number = FwiJSONMapper.numberFormat.number(from: dateString) as? TimeInterval {
+                return Date(timeIntervalSince1970: number)
+            }
+        }
+        else {
+            let dateFormatter = DateFormatter()
+            for format in formats {
+                dateFormatter.dateFormat = format
+                if let date = dateFormatter.date(from: dateString) {
+                    return date
+                }
+            }
+        }
+    }
+    return nil
+}
 
 public struct FwiJSONMapper {
 
@@ -201,36 +232,7 @@ public struct FwiJSONMapper {
         return nil
     }
 
-    // MARK: Struct's private methods
-    /// Transform JSON date to date object.
-    ///
-    /// parameter value (required): JSON date, can be either in string form or number form
-    /// parameter format (optional): format string to convert string to date
-    internal static func transformDate(_ value: Any?, formats: [String] = ["yyyy-MM-dd'T'HH:mm:ssZ","yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd'T'HHmmss'GMT'"]) -> Date? {
-        if let number = value as? TimeInterval {
-            return Date(timeIntervalSince1970: number)
-        } else if let number = value as? NSNumber {
-            return Date(timeIntervalSince1970: number.doubleValue)
-        }
-        
-        if let dateString = value as? String {
-            if dateString.matchPattern("^\\d+$") {
-                if let number = numberFormat.number(from: dateString) as? TimeInterval {
-                    return Date(timeIntervalSince1970: number)
-                }
-            }
-            else {
-                let dateFormatter = DateFormatter()
-                for format in formats {
-                    dateFormatter.dateFormat = format
-                    if let date = dateFormatter.date(from: dateString) {
-                        return date
-                    }
-                }
-            }
-        }
-        return nil
-    }
+    
 }
 
 
@@ -349,7 +351,7 @@ internal func + (left: String, right: FwiReflector) -> Any? {
             return left.decodeBase64Data() ?? left.toData()
         }
         else if structType == Date.self {
-            return FwiJSONMapper.transformDate(left)
+            return transformDate(left)
         }
         else if structType == URL.self {
             return URL(string: left.encodeHTML())
