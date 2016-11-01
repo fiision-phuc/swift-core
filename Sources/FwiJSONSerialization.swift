@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiJSONModel.swift
+//  File name   : FwiJSONSerialization.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 6/10/16
+//  Created date: 10/31/16
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -39,57 +39,12 @@
 import Foundation
 
 
-/// FwiJSONModel represents a JSON model. This protocol is required in order to let FwiReflector
-/// working properly.
-public protocol FwiJSONModel {
-
-    /// Define keys mapper.
-    var keyMapper: [String:String]? { get }
-
-    /// Define ignored properties.
-    var ignoreProperties: [String]? { get }
-
-    /// Define optional properties.
-    var optionalProperties: [String]? { get }
-
-    /// Allow developer to interact directly with json dictionary before mapping process.
-    ///
-    /// parameter original (required): original json dictionary
-    func convertJSON(fromOriginal original: [String:Any]) -> [String:Any]
-}
-
-/// An extension to help FwiReflector and FwiJSONMapper.
-public extension FwiJSONModel where Self: FwiJSONModel {
-
-    /// Default implementation for keys mapper.
-    public var keyMapper: [String:String]? {
-        return nil
-    }
-
-    /// Default implementation for ignored properties.
-    public var ignoreProperties: [String]? {
-        return nil
-    }
-
-    /// Default implementation for optional properties.
-    public var optionalProperties: [String]? {
-        return nil
-    }
-
-    /// Default implementation for convertJSON function.
-    public func convertJSON(fromOriginal original: [String:Any]) -> [String:Any] {
-        return original
-    }
+/// FwiJSONSerialization defines default functions to convert model to JSON.
+public protocol FwiJSONSerialization {
+    associatedtype Model
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// FwiJSONManual represents a manual JSON model where developer wish to perform custom mapping.
-public protocol FwiJSONManual {
-
-    /// Allow developer to perform custom map.
-    ///
-    /// parameter object (required): object json
-    @discardableResult
-    func map(object o: [String : Any]) -> Error?
+/// FwiJSONSerialization is only work when Model is an instance of NSObject.
+public extension FwiJSONSerialization where Model: NSObject {
 }
