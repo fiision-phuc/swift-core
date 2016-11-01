@@ -95,7 +95,10 @@ public extension UIView {
             if view.isFirstResponder {
                 return view
             } else {
-                return view.findFirstResponder()
+                guard let nView = view.findFirstResponder() else {
+                    continue
+                }
+                return nView
             }
         }
         return nil
