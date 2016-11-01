@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : FwiNetworkManager.swift
+//  File name   : FwiNetwork.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 4/13/14
@@ -42,11 +42,9 @@
 import Foundation
 
 
-public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate {
-    
-
+public final class FwiNetwork: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate {
     // MARK: Singleton instance
-    public static let instance = FwiNetworkManager()
+    public static let instance = FwiNetwork()
     
     // MARK: Class's properties
     public fileprivate (set) lazy var configuration: URLSessionConfiguration = {
@@ -60,17 +58,15 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
 
         // Config cache policy
         config.requestCachePolicy = NSURLRequest.CachePolicy.returnCacheDataElseLoad
-        config.urlCache = self.cache
-
         return config
     }()
 
     public fileprivate (set) lazy var session: URLSession = {
-        return Foundation.URLSession(configuration: self.configuration, delegate: self, delegateQueue: operationQueue)
+        return URLSession(configuration: self.configuration, delegate: self, delegateQueue: operationQueue)
     }()
 
     fileprivate var networkCounter_ = 0
-    fileprivate var networkCounter: Int {
+    public var networkCounter: Int {
         get {
             return networkCounter_
         }
@@ -87,13 +83,6 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
         }
     }
 
-    fileprivate lazy var cache: URLCache = {
-        let cache = URLCache(memoryCapacity: 1 * 1024 * 1024,   // 1Mb
-                             diskCapacity: 20 * 1024 * 1024,    // 20Mb
-                             diskPath: "")
-        return cache
-    }()
-
     // MARK: Class's private methods
     /// Output error to console.
     ///
@@ -101,7 +90,7 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
     /// - parameter data (required): response's data
     /// - parameter error (required): response's error
     /// - parameter statusCode (required): network's status
-    fileprivate func consoleError(_ request: URLRequest, data d: Data?, error e: Error?, statusCode s: FwiNetworkStatus) {
+    internal func consoleError(_ request: URLRequest, data d: Data?, error e: Error?, statusCode s: FwiNetworkStatus) {
         guard let err = e as? NSError, let url = request.url, let host = url.host, let method = request.httpMethod else {
             return
         }
@@ -119,17 +108,17 @@ public final class FwiNetworkManager: NSObject, URLSessionDelegate, URLSessionTa
     ///
     /// - parameter request (required): request
     /// - parameter statusCode (required): network's status
-    fileprivate func generateError(_ request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
+    internal func generateError(_ request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
         let userInfo = [NSURLErrorFailingURLErrorKey:request.url?.description ?? "",
                         NSURLErrorFailingURLStringErrorKey:request.url?.description ?? "",
-                        NSLocalizedDescriptionKey:HTTPURLResponse.localizedString(forStatusCode: Int(s.rawValue))]
+                        NSLocalizedDescriptionKey:s.description]
 
-        return NSError(domain: NSURLErrorDomain, code: Int(s.rawValue), userInfo: userInfo)
+        return NSError(domain: NSURLErrorDomain, code: s.rawValue, userInfo: userInfo)
     }
 
     // MARK: NSURLSessionDelegate's members
     public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        if let serverTrust = challenge.protectionSpace.serverTrust , challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
+        if let serverTrust = challenge.protectionSpace.serverTrust, challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
             let credential = URLCredential(trust: serverTrust)
             completionHandler(.useCredential, credential)
         }

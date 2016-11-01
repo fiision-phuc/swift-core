@@ -78,9 +78,8 @@ class TestJSON3: TestJSON1 {
     var date2: Date?
 }
 
-class TestJSON4: FwiJSONModelMapper {
-    typealias Model = TestJSON4
-    
+class TestJSON4 {
+
     var urls1: [String:String]?
     var urls2: [String:URL]?
     var urls3: [String:Int]?
@@ -133,8 +132,7 @@ class TestJSON7: NSObject, FwiJSONModel {
     var test: URLTest?
 }
 
-class TestJSON8: NSObject, FwiJSONModel, FwiJSONModelMapper {
-    typealias Model = TestJSON8
+class TestJSON8: NSObject, FwiJSONModel {
 
     var name: String?
     var lastName: String?
@@ -149,9 +147,6 @@ class FwiJSONMapperTest: XCTestCase {
     // MARK: Setup
     override func setUp() {
         super.setUp()
-        
-
-//        TestJSON4.map(array: array, toModel: TestJSON4.self)
     }
 
     // MARK: Teardown
@@ -266,6 +261,22 @@ class FwiJSONMapperTest: XCTestCase {
         XCTAssertEqual(o.data2?.toString(), "2012-04-23T18:25:43.511Z", "Expected '2012-04-23T18:25:43.511Z' but found: '\(o.data2?.toString())'.")
         XCTAssertNotNil(o.date1, "Expected not nil but found: '\(o.date1)'.")
         XCTAssertNotNil(o.date2, "Expected not nil but found: '\(o.date2)'.")
+
+        let (o1, _) = TestJSON3.map(dictionary: d)
+        XCTAssertEqual(o1?.a, 1, "Expected '1' but found: '\(o.a)'.")
+        XCTAssertEqual(o1?.b, 2, "Expected '2' but found: '\(o.b)'.")
+        XCTAssertEqual(o1?.c, 3, "Expected '3' but found: '\(o.c)'.")
+        XCTAssertEqual(o1?.e, 10, "Expected '10' but found: '\(o.e)'.")
+
+        XCTAssertEqual(o1?.d, "Hello world", "Expected 'Hello world' but found: '\(o.d)'.")
+        XCTAssertNotNil(o1?.url, "Expected not nil but found: '\(o.url)'.")
+        XCTAssertEqual(o1?.url?.absoluteString, "https://www.google.com/?gws_rd=ssl", "Expected 'https://www.google.com/?gws_rd=ssl' but found: '\(o.url?.absoluteString)'.")
+        XCTAssertNotNil(o1?.data1, "Expected not nil but found: '\(o.data1)'.")
+        XCTAssertEqual(o1?.data1?.toString(), "FwiCore", "Expected 'FwiCore' but found: '\(o.data1?.toString())'.")
+        XCTAssertNotNil(o1?.data2, "Expected not nil but found: '\(o.data2)'.")
+        XCTAssertEqual(o1?.data2?.toString(), "2012-04-23T18:25:43.511Z", "Expected '2012-04-23T18:25:43.511Z' but found: '\(o.data2?.toString())'.")
+        XCTAssertNotNil(o1?.date1, "Expected not nil but found: '\(o.date1)'.")
+        XCTAssertNotNil(o1?.date2, "Expected not nil but found: '\(o.date2)'.")
     }
     
     func testMapDictionary4() {

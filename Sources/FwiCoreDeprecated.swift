@@ -39,7 +39,7 @@
 import Foundation
 
 
-public extension FwiJSONMapper {
+extension FwiJSONMapper {
     
     // MARK: Class's static constructors
     public static func mapObjectToModel<T: NSObject>(_ object: Any?, model m: inout T) -> NSError? {
@@ -242,7 +242,7 @@ public extension FwiJSONMapper {
 }
 
 // Legacy
-public extension FwiJSONMapper {
+extension FwiJSONMapper {
     
     /** Map Dictionary To Model. */
     public static func mapDictionaryToModel<T: NSObject>(_ dictionary: [String: AnyObject], model m: inout T) -> NSError? {

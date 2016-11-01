@@ -19,8 +19,7 @@ public protocol FwiNetworkProtocol {
 
 
 public extension FwiNetworkProtocol {
-    
-    // MARK: Class's public methods
+
     /// Download resource from server.
     ///
     /// - parameter request (required): request
@@ -28,16 +27,16 @@ public extension FwiNetworkProtocol {
     @discardableResult
     public func download(resource r: URLRequest, completion c: @escaping DownloadCompletion) -> URLSessionDownloadTask {
         // Turn on activity indicator
-        let manager = FwiNetworkManager.instance
-//        manager.networkCounter += 1
-        
+        let manager = FwiNetwork.instance
+        manager.networkCounter += 1
+
         // Create new task
         let task = manager.session.downloadTask(with: r) { (location, response, err) in
             // Turn off activity indicator if neccessary
-//            self?.networkCounter -= 1
-            
+            manager.networkCounter -= 1
+
             var statusCode = FwiNetworkStatus.unknown
-            let error = err
+            var error = err
             
             /* Condition validation: Validate HTTP response instance */
             guard let httpResponse = response as? HTTPURLResponse else {
@@ -53,12 +52,13 @@ public extension FwiNetworkProtocol {
             }
             
             // Validate HTTP status
-//            if !FwiNetworkStatusIsSuccces(statusCode) {
-//                error = self?.generateError(r as URLRequest, statusCode: statusCode)
-//            }
-//            self?.consoleError(r as URLRequest, data: nil, error: error, statusCode: statusCode)
-            c(location, err, statusCode, httpResponse)
+            if !FwiNetworkStatusIsSuccces(statusCode) {
+                error = manager.generateError(r as URLRequest, statusCode: statusCode)
+            }
+            manager.consoleError(r as URLRequest, data: nil, error: error, statusCode: statusCode)
+            c(location, error, statusCode, httpResponse)
         }
+
         task.resume()
         return task
     }
@@ -71,20 +71,13 @@ public extension FwiNetworkProtocol {
     @discardableResult
     public func send(request r: URLRequest, completion c: @escaping RequestCompletion) -> URLSessionDataTask {
         // Turn on activity indicator
-        networkCounter += 1
-        
-        // Add additional content negotiation
-        var request = r
-        if let cached = cache.cachedResponse(for: request)?.response as? HTTPURLResponse {
-            if let modifiedSince = cached.allHeaderFields["Date"] as? String {
-                request.setValue(modifiedSince, forHTTPHeaderField: "If-Modified-Since")
-            }
-        }
+        let manager = FwiNetwork.instance
+        manager.networkCounter += 1
         
         // Create new task
-        let task = session.dataTask(with: request) { [weak self] (data, response, err) in
+        let task = manager.session.dataTask(with: r) { (data, response, err) in
             // Turn off activity indicator if neccessary
-            self?.networkCounter -= 1
+            manager.networkCounter -= 1
             var err = err
             
             // Obtain HTTP status
@@ -102,28 +95,28 @@ public extension FwiNetworkProtocol {
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
-                err = self?.generateError(request, statusCode: statusCode)
+                err = manager.generateError(r, statusCode: statusCode)
             }
-            self?.consoleError(request, data: data, error: err, statusCode: statusCode)
+            manager.consoleError(r, data: data, error: err, statusCode: statusCode)
             
-            // Remove previous cache, remove it anyways
-            if let cacheControl = httpResponse.allHeaderFields["Cache-Control"] as? String, statusCode.rawValue != 304 {
-                let cacheHeader = cacheControl.lowercased()
-                if cacheHeader.hasPrefix("public") {
-                    if let data = data {
-                        self?.cache.removeCachedResponse(for: request)
-                        self?.cache.storeCachedResponse(CachedURLResponse(response: httpResponse, data: data), for: request)
-                    }
-                }
-            }
-            
-            // Load cache if http status is 304 or offline
-            if statusCode == .notConnectedToInternet || statusCode.rawValue == 304 {
-                if let cached = self?.cache.cachedResponse(for: request) {
-                    c(cached.data, err, FwiNetworkStatus(rawValue: 200), httpResponse)
-                    return
-                }
-            }
+//            // Remove previous cache, remove it anyways
+//            if let cacheControl = httpResponse.allHeaderFields["Cache-Control"] as? String, statusCode.rawValue != 304 {
+//                let cacheHeader = cacheControl.lowercased()
+//                if cacheHeader.hasPrefix("public") {
+//                    if let data = data {
+//                        self?.cache.removeCachedResponse(for: request)
+//                        self?.cache.storeCachedResponse(CachedURLResponse(response: httpResponse, data: data), for: request)
+//                    }
+//                }
+//            }
+
+//            // Load cache if http status is 304 or offline
+//            if statusCode == .notConnectedToInternet || statusCode.rawValue == 304 {
+//                if let cached = self?.cache.cachedResponse(for: r) {
+//                    c(cached.data, err, FwiNetworkStatus(rawValue: 200), httpResponse)
+//                    return
+//                }
+//            }
             c(data, err, statusCode, httpResponse)
         }
         task.resume()
@@ -132,14 +125,16 @@ public extension FwiNetworkProtocol {
     
     /// Cancel all running Tasks.
     public func cancelTasks() {
+        let manager = FwiNetwork.instance
+
         if #available(OSX 10.11, iOS 9.0, *) {
-            self.session.getAllTasks { (tasks) in
+            manager.session.getAllTasks { (tasks) in
                 tasks.forEach({
                     $0.cancel()
                 })
             }
         } else {
-            session.getTasksWithCompletionHandler({ (sessionTasks, uploadTasks, downloadTasks) in
+            manager.session.getTasksWithCompletionHandler({ (sessionTasks, uploadTasks, downloadTasks) in
                 sessionTasks.forEach({
                     $0.cancel()
                 })
@@ -157,7 +152,8 @@ public extension FwiNetworkProtocol {
     
     /// Cancel all data Tasks.
     public func cancelDataTasks() {
-        session.getTasksWithCompletionHandler({ (sessionTasks, _, _) in
+        let manager = FwiNetwork.instance
+        manager.session.getTasksWithCompletionHandler({ (sessionTasks, _, _) in
             sessionTasks.forEach({
                 $0.cancel()
             })
@@ -166,7 +162,8 @@ public extension FwiNetworkProtocol {
     
     /// Cancel all download Tasks.
     public func cancelDownloadTasks() {
-        session.getTasksWithCompletionHandler({ (_, _, downloadTasks) in
+        let manager = FwiNetwork.instance
+        manager.session.getTasksWithCompletionHandler({ (_, _, downloadTasks) in
             downloadTasks.forEach({
                 $0.cancel()
             })
@@ -175,7 +172,8 @@ public extension FwiNetworkProtocol {
     
     /// Cancel all upload Tasks.
     public func cancelUploadTasks() {
-        session.getTasksWithCompletionHandler({ (_, uploadTasks, _) in
+        let manager = FwiNetwork.instance
+        manager.session.getTasksWithCompletionHandler({ (_, uploadTasks, _) in
             uploadTasks.forEach({
                 $0.cancel()
             })
