@@ -59,7 +59,7 @@ public protocol FwiJSONModel {
 }
 
 /// An extension to help FwiReflector and FwiJSONMapper.
-public extension FwiJSONModel where Self: FwiJSONModel {
+public extension FwiJSONModel {
 
     /// Default implementation for keys mapper.
     public var keyMapper: [String:String]? {
