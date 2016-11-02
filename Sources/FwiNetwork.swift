@@ -57,7 +57,7 @@ public final class FwiNetwork: NSObject, URLSessionDelegate, URLSessionTaskDeleg
         config.networkServiceType = .background
 
         // Config cache policy
-        config.requestCachePolicy = NSURLRequest.CachePolicy.returnCacheDataElseLoad
+        config.requestCachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData
         return config
     }()
 

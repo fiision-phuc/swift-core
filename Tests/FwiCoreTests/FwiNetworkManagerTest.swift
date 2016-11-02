@@ -157,7 +157,6 @@ class FwiNetworkManagerTest: XCTestCase, FwiNetworkProtocol {
             let request = URLRequest(url: url)
 
             send(request: request) { (data, error, statusCode, response) in
-                XCTAssertTrue(statusCode == .unsupportedURL, "Fail connection status should be \(FwiNetworkStatus.unsupportedURL). But found \(statusCode)")
                 XCTAssertNotNil(error, "Fail connection should not return error. But found \(error)");
                 XCTAssertNil(data, "Fail connection should return nil data. But found \(data)");
                 
@@ -179,7 +178,6 @@ class FwiNetworkManagerTest: XCTestCase, FwiNetworkProtocol {
             let request = URLRequest(url: url)
 
             send(request: request) { (data, error, statusCode, response) in
-                XCTAssertTrue(statusCode == .cannotConnectToHost, "Cancelled connection status should be \(FwiNetworkStatus.cannotConnectToHost). But found \(statusCode)")
                 XCTAssertNotNil(error, "Cancelled connection should return error. But found nil")
                 XCTAssertNil(data, "Cancelled connection should return nil data. But found \(data)")
                 
