@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : FwiNetworkManagerTest.swift
+//  File name   : FwiNetworkProtocolTest.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 8/20/16
@@ -40,7 +40,7 @@ import XCTest
 @testable import FwiCore
 
 
-class FwiNetworkManagerTest: XCTestCase, FwiNetworkProtocol {
+class FwiNetworkProtocolTest: XCTestCase, FwiNetworkProtocol {
     
 
     fileprivate lazy var baseHTTP  = URL(string: "http://httpbin.org")
