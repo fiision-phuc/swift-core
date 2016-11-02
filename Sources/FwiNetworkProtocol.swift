@@ -33,22 +33,19 @@ public extension FwiNetworkProtocol {
         let task = manager.session.downloadTask(with: r) { (location, response, err) in
             // Turn off activity indicator if neccessary
             manager.networkCounter -= 1
-
-            var statusCode = FwiNetworkStatus.unknown
             var error = err
+            
+            var statusCode = FwiNetworkStatus.unknown
+            if let error = error as? NSError {
+                statusCode = FwiNetworkStatus(rawValue: error.code)
+            }
             
             /* Condition validation: Validate HTTP response instance */
             guard let httpResponse = response as? HTTPURLResponse else {
                 c(nil, error, statusCode, nil)
                 return
             }
-            
-            // Obtain HTTP status
-            if let error = error as? NSError {
-                statusCode = FwiNetworkStatus(rawValue: error.code)
-            } else {
-                statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
-            }
+            statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
@@ -77,29 +74,26 @@ public extension FwiNetworkProtocol {
         let task = manager.session.dataTask(with: r) { (data, response, err) in
             // Turn off activity indicator if neccessary
             manager.networkCounter -= 1
-
-            var statusCode = FwiNetworkStatus.unknown
             var error = err
+            
+            var statusCode = FwiNetworkStatus.unknown
+            if let error = error as? NSError {
+                statusCode = FwiNetworkStatus(rawValue: error.code)
+            }
 
             /* Condition validation: Validate HTTP response instance */
             guard let httpResponse = response as? HTTPURLResponse else {
                 c(nil, error, statusCode, nil)
                 return
             }
-            
-            // Obtain HTTP status
-            if let error = error as? NSError {
-                statusCode = FwiNetworkStatus(rawValue: error.code)
-            } else {
-                statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
-            }
+            statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
                 error = manager.generateError(r as URLRequest, statusCode: statusCode)
             }
-            manager.consoleError(r, data: data, error: err, statusCode: statusCode)
-            c(data, err, statusCode, httpResponse)
+            manager.consoleError(r, data: data, error: error, statusCode: statusCode)
+            c(data, error, statusCode, httpResponse)
         }
         task.resume()
         return task
