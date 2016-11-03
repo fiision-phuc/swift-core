@@ -61,14 +61,29 @@ public extension FwiJSONDeserialization where Self: NSObject  {
     /// Create model's instance and map dictionary to that instance.
     ///
     /// - parameter dictionary (required): set of keys-values
-    public static func map(dictionary d: [String : Any]) -> (Self?, Error?) {
+    public static func map(dictionary d: [String : Any]) -> (Model?, Error?) {
         let result = FwiJSONMapper.map(dictionary: d, toModel: Model.self)
         return (result.0, result.1)
     }
 }
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Map FwiJSONDeserialization NSObject.
+// It's only using for non-generic
 extension NSObject: FwiJSONDeserialization {
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Class using for map , because FwiJSONDeserialization is dynamic protocol, using for generic object
+public class Map<T: NSObject>{
+}
+
+public extension Map {
+    class func map(dictionary d: [String : Any]) -> (T?, NSError?)  {
+        return FwiJSONMapper.map(dictionary: d, toModel: T.self)
+    }
+    
+    class func map(array a: [[String: Any]]) -> ([T]?, NSError?)  {
+        return FwiJSONMapper.map(array: a, toModel: T.self)
+    }
+}
+
+
