@@ -42,7 +42,7 @@
 import Foundation
 
 
-public final class FwiNetwork: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate {
+public final class FwiNetwork: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, FwiNetworkProtocol {
     // MARK: Singleton instance
     public static let instance = FwiNetwork()
     
@@ -81,39 +81,6 @@ public final class FwiNetwork: NSObject, URLSessionDelegate, URLSessionTaskDeleg
                 }
             #endif
         }
-    }
-
-    // MARK: Class's private methods
-    /// Output error to console.
-    ///
-    /// - parameter request (required): request
-    /// - parameter data (required): response's data
-    /// - parameter error (required): response's error
-    /// - parameter statusCode (required): network's status
-    internal func consoleError(_ request: URLRequest, data d: Data?, error e: Error?, statusCode s: FwiNetworkStatus) {
-        guard let err = e as? NSError, let url = request.url, let host = url.host, let method = request.httpMethod else {
-            return
-        }
-        
-        let domain     = "Domain     : \(host)\n"
-        let urlString  = "HTTP Url   : \(url)\n"
-        let httpMethod = "HTTP Method: \(method)\n"
-        let status     = "HTTP Status: \(s.rawValue) (\(err.localizedDescription))\n"
-        let dataString = "\(d?.toString() ?? "")"
-        
-        FwiLog("\n\(domain)\(urlString)\(httpMethod)\(status)\(dataString)")
-    }
-
-    /// Generate network error.
-    ///
-    /// - parameter request (required): request
-    /// - parameter statusCode (required): network's status
-    internal func generateError(_ request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
-        let userInfo = [NSURLErrorFailingURLErrorKey:request.url?.description ?? "",
-                        NSURLErrorFailingURLStringErrorKey:request.url?.description ?? "",
-                        NSLocalizedDescriptionKey:s.description]
-
-        return NSError(domain: NSURLErrorDomain, code: s.rawValue, userInfo: userInfo)
     }
 
     // MARK: NSURLSessionDelegate's members

@@ -10,14 +10,48 @@
 
 import Foundation
 
-
-public protocol FwiNetworkProtocol {
-    typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
-    typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
+struct ConsoleNetwork {
+    /// - parameter request (required): request
+    /// - parameter statusCode (required): network's status
+    static func generateError(_ request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
+        let userInfo = [NSURLErrorFailingURLErrorKey:request.url?.description ?? "",
+                        NSURLErrorFailingURLStringErrorKey:request.url?.description ?? "",
+                        NSLocalizedDescriptionKey:s.description]
+        
+        return NSError(domain: NSURLErrorDomain, code: s.rawValue, userInfo: userInfo)
+    }
+    
+    /// Output error to console.
+    ///
+    /// - parameter request (required): request
+    /// - parameter data (required): response's data
+    /// - parameter error (required): response's error
+    /// - parameter statusCode (required): network's status
+    static func consoleError(_ request: URLRequest, data d: Data?, error e: Error?, statusCode s: FwiNetworkStatus) {
+        guard let err = e as? NSError, let url = request.url, let host = url.host, let method = request.httpMethod else {
+            return
+        }
+        
+        let domain     = "Domain     : \(host)\n"
+        let urlString  = "HTTP Url   : \(url)\n"
+        let httpMethod = "HTTP Method: \(method)\n"
+        let status     = "HTTP Status: \(s.rawValue) (\(err.localizedDescription))\n"
+        let dataString = "\(d?.toString() ?? "")"
+        
+        FwiLog("\n\(domain)\(urlString)\(httpMethod)\(status)\(dataString)")
+    }
 }
 
 
-public extension FwiNetworkProtocol {
+public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
+public typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
+
+public protocol FwiNetworkProtocol {
+    var session: URLSession { get }
+    var networkCounter: Int { get set }
+}
+
+public extension FwiNetworkProtocol where Self: FwiNetwork{
 
     /// Download resource from server.
     ///
@@ -26,35 +60,31 @@ public extension FwiNetworkProtocol {
     @discardableResult
     public func download(resource r: URLRequest, completion c: @escaping DownloadCompletion) -> URLSessionDownloadTask {
         // Turn on activity indicator
-        let manager = FwiNetwork.instance
-        manager.networkCounter += 1
+        self.networkCounter += 1
 
         // Create new task
-        let task = manager.session.downloadTask(with: r) { (location, response, err) in
+        let task = session.downloadTask(with: r) { [weak self](location, response, err) in
             // Turn off activity indicator if neccessary
-            manager.networkCounter -= 1
-
-            var statusCode = FwiNetworkStatus.unknown
+            self?.networkCounter -= 1
             var error = err
+            
+            var statusCode = FwiNetworkStatus.unknown
+            if let error = error as? NSError {
+                statusCode = FwiNetworkStatus(rawValue: error.code)
+            }
             
             /* Condition validation: Validate HTTP response instance */
             guard let httpResponse = response as? HTTPURLResponse else {
                 c(nil, error, statusCode, nil)
                 return
             }
-            
-            // Obtain HTTP status
-            if let error = error as? NSError {
-                statusCode = FwiNetworkStatus(rawValue: error.code)
-            } else {
-                statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
-            }
+            statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
-                error = manager.generateError(r as URLRequest, statusCode: statusCode)
+                error = ConsoleNetwork.generateError(r as URLRequest, statusCode: statusCode)
             }
-            manager.consoleError(r, data: nil, error: error, statusCode: statusCode)
+            ConsoleNetwork.consoleError(r, data: nil, error: error, statusCode: statusCode)
             c(location, error, statusCode, httpResponse)
         }
 
@@ -70,36 +100,32 @@ public extension FwiNetworkProtocol {
     @discardableResult
     public func send(request r: URLRequest, completion c: @escaping RequestCompletion) -> URLSessionDataTask {
         // Turn on activity indicator
-        let manager = FwiNetwork.instance
-        manager.networkCounter += 1
+        self.networkCounter += 1
         
         // Create new task
-        let task = manager.session.dataTask(with: r) { (data, response, err) in
+        let task = session.dataTask(with: r) { [weak self](data, response, err) in
             // Turn off activity indicator if neccessary
-            manager.networkCounter -= 1
-
-            var statusCode = FwiNetworkStatus.unknown
+            self?.networkCounter -= 1
             var error = err
+            
+            var statusCode = FwiNetworkStatus.unknown
+            if let error = error as? NSError {
+                statusCode = FwiNetworkStatus(rawValue: error.code)
+            }
 
             /* Condition validation: Validate HTTP response instance */
             guard let httpResponse = response as? HTTPURLResponse else {
                 c(nil, error, statusCode, nil)
                 return
             }
-            
-            // Obtain HTTP status
-            if let error = error as? NSError {
-                statusCode = FwiNetworkStatus(rawValue: error.code)
-            } else {
-                statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
-            }
+            statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
-                error = manager.generateError(r as URLRequest, statusCode: statusCode)
+                error = ConsoleNetwork.generateError(r as URLRequest, statusCode: statusCode)
             }
-            manager.consoleError(r, data: data, error: err, statusCode: statusCode)
-            c(data, err, statusCode, httpResponse)
+            ConsoleNetwork.consoleError(r, data: data, error: error, statusCode: statusCode)
+            c(data, error, statusCode, httpResponse)
         }
         task.resume()
         return task
@@ -134,8 +160,7 @@ public extension FwiNetworkProtocol {
     
     /// Cancel all data Tasks.
     public func cancelDataTasks() {
-        let manager = FwiNetwork.instance
-        manager.session.getTasksWithCompletionHandler({ (sessionTasks, _, _) in
+        session.getTasksWithCompletionHandler({ (sessionTasks, _, _) in
             sessionTasks.forEach({
                 $0.cancel()
             })
@@ -144,8 +169,7 @@ public extension FwiNetworkProtocol {
     
     /// Cancel all download Tasks.
     public func cancelDownloadTasks() {
-        let manager = FwiNetwork.instance
-        manager.session.getTasksWithCompletionHandler({ (_, _, downloadTasks) in
+        session.getTasksWithCompletionHandler({ (_, _, downloadTasks) in
             downloadTasks.forEach({
                 $0.cancel()
             })
@@ -154,8 +178,7 @@ public extension FwiNetworkProtocol {
     
     /// Cancel all upload Tasks.
     public func cancelUploadTasks() {
-        let manager = FwiNetwork.instance
-        manager.session.getTasksWithCompletionHandler({ (_, uploadTasks, _) in
+        session.getTasksWithCompletionHandler({ (_, uploadTasks, _) in
             uploadTasks.forEach({
                 $0.cancel()
             })
