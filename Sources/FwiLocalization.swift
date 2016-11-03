@@ -48,14 +48,14 @@ public final class FwiLocalization {
 
     // MARK: Class's properties
     public fileprivate (set) var bundle: Bundle?
-    public var locale: String? {
+    public var locale: String = "en" {
         didSet {
             guard let path = Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: locale) else {
                 reset()
                 return
             }
             
-            UserDefaults.standard.set([locale!], forKey: "AppleLanguages")
+            UserDefaults.standard.set([locale], forKey: "AppleLanguages")
             UserDefaults.standard.synchronize()
             
             bundle = Bundle(path: (path as NSString).deletingLastPathComponent)
