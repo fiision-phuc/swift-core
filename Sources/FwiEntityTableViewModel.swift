@@ -44,7 +44,7 @@ import CoreData
 
 public final class FwiEntityTableViewModel<T: NSFetchRequestResult> : FwiEntityViewModel<T>, UITableViewDataSource, UITableViewDelegate {
     public typealias CellFactory = (UITableView, IndexPath, T) -> UITableViewCell
-//    public typealias SizeFactory = (UICollectionView, IndexPath) -> CGSize
+    
     
     /// MARK: Class's constructors
     public convenience init(tableView t: UITableView?, context c: NSManagedObjectContext?) {
@@ -54,8 +54,6 @@ public final class FwiEntityTableViewModel<T: NSFetchRequestResult> : FwiEntityV
     
     /// MARK: Class's properties
     public var cellFactory: CellFactory?
-//    public var sizeFactory: SizeFactory?
-    
     fileprivate weak var tableView: UITableView?
     
     /// MARK: Class's private methods

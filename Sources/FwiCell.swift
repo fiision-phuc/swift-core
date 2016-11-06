@@ -65,7 +65,10 @@ extension UICollectionViewCell : FwiCell {
 public extension FwiCell where Self: UICollectionViewCell {
     
     /// Dequeue and cast to self.
-    static func dequeueCell(collectionView c: UICollectionView, indexPath i: IndexPath) -> Self {
+    ///
+    /// - parameter collectionView (required): collectionView instance
+    /// - parameter indexPath (required): indexPath
+    public static func dequeueCell(collectionView c: UICollectionView, indexPath i: IndexPath) -> Self {
         return c.dequeueReusableCell(withReuseIdentifier: identifier, for: i) as! Self
     }
 }
@@ -79,7 +82,9 @@ extension UITableViewCell : FwiCell {
 public extension FwiCell where Self: UITableViewCell {
     
     /// Dequeue and cast to self.
-    static func dequeueCell(tableView t: UITableView) -> Self {
+    ///
+    /// - parameter tableView (required): tableView instance
+    public static func dequeueCell(tableView t: UITableView) -> Self {
         return t.dequeueReusableCell(withIdentifier: identifier) as! Self
     }
 }

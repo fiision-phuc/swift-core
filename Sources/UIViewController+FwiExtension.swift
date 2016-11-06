@@ -44,7 +44,7 @@ import Foundation
 public extension UIViewController {
     
     /// Return view controller's identifier.
-    static func identifier() -> String {
+    public static var identifier: String {
         return "\(self)"
     }
 

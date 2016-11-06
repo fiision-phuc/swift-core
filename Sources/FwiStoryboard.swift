@@ -72,7 +72,7 @@ public extension FwiStoryboard where Self: UIViewController {
     ///
     /// - parameter storyboard (required): storyboard's instance
     public static func instantiate(fromStoryboard s: UIStoryboard) -> Self? {
-        return s.instantiateViewController(withIdentifier: identifier()) as? Self
+        return s.instantiateViewController(withIdentifier: identifier) as? Self
     }
 }
 #endif
