@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : UIViewController+FwiExtension.swift
+//  File name   : FwiStoryboard.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 9/3/16
+//  Author      : Dung Vu
+//  Created date: 8/10/16
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -41,35 +41,38 @@ import UIKit
 import Foundation
 
 
-public extension UIViewController {
+/// FwiStoryboard defines instruction on how to load a storyboard.
+public protocol FwiStoryboard {
     
-    /// Return view controller's identifier.
-    static func identifier() -> String {
-        return "\(self)"
-    }
+    /// Storyboard's name
+    static var name: String { get }
+    
+    /// Which bundle that a storyboard comes from. If nil, default bundle will be used.
+    static var bundle: Bundle? { get }
+}
 
-    /// Add initial view controller from other storyboard into defined view. Default is view
-    /// controller's view.
-    @discardableResult
-    public func addFlow(fromStoryboard storyboardName: String, intoView rootView: UIView, inBundle bundle: Bundle = Bundle.main) -> UIViewController? {
-        let flow = UIStoryboard(name: storyboardName, bundle: bundle)
-        guard let controller = flow.instantiateInitialViewController(), let subView = controller.view else {
-            return nil
-        }
-        
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
-        self.addChildViewController(controller)
-        view.addSubview(subView)
-        
-        let views = ["subView":subView]
-        let constraints1 = NSLayoutConstraint.constraints(withVisualFormat: "|[subView]|", options: .alignAllLeading, metrics: nil, views: views)
-        let constraints2 = NSLayoutConstraint.constraints(withVisualFormat: "V:|[subView]|", options: .alignAllLeading, metrics: nil, views: views)
-        view.addConstraints(constraints1)
-        view.addConstraints(constraints2)
-        
-        controller.willMove(toParentViewController: self)
-        controller.didMove(toParentViewController: self)
-        return controller
+/// Default implementation for FwiStoryboard.
+public extension FwiCell {
+    
+    static var bundle: Bundle?  {
+        return nil
+    }
+}
+    
+/// FwiStoryboard has addon function only when self is UIViewController.
+public extension FwiStoryboard where Self: UIViewController {
+    
+    /// Create view controller from storyboard.
+    public static func instantiate() -> Self? {
+        let storyboard = UIStoryboard(name: name, bundle: bundle)
+        return instantiate(fromStoryboard: storyboard)
+    }
+    
+    /// Create view controller from defined storyboard.
+    ///
+    /// - parameter storyboard (required): storyboard's instance
+    public static func instantiate(fromStoryboard s: UIStoryboard) -> Self? {
+        return s.instantiateViewController(withIdentifier: identifier()) as? Self
     }
 }
 #endif

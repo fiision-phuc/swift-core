@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiJSONDeserialization.swift
+//  File name   : FwiCell.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 10/31/16
+//  Author      : Dung Vu
+//  Created date: 8/10/16
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2016 Fiision Studio.
@@ -36,58 +36,51 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
+#if os(iOS)
+import UIKit
 import Foundation
 
 
-/// FwiJSONDeserialization defines default functions to convert JSON to model.
-public protocol FwiJSONDeserialization {
+/// FwiCell defines instruction on how to load a cell.
+public protocol FwiCell {
+    
+    /// Return cell's identifier.
+    static var identifier: String { get }
 }
 
-/// FwiJSONDeserialization is only work when Model is an instance of NSObject.
-public extension FwiJSONDeserialization {
-    public typealias Model = Self
-}
-
-public extension FwiJSONDeserialization where Self: NSObject  {
-
-    /// Build a list of models.
-    ///
-    /// - parameter array (required): a list of keys-values
-    public static func map(array a: [[String: Any]]) -> ([Model]?, Error?) {
-        let result = FwiJSONMapper.map(array: a, toModel: Model.self)
-        return (result.0, result.1)
-    }
-
-    /// Create model's instance and map dictionary to that instance.
-    ///
-    /// - parameter dictionary (required): set of keys-values
-    public static func map(dictionary d: [String : Any]) -> (Model?, Error?) {
-        let result = FwiJSONMapper.map(dictionary: d, toModel: Model.self)
-        return (result.0, result.1)
+/// Default implementation for FwiCell.
+public extension FwiCell {
+    
+    static var identifier: String  {
+        return "\(self)"
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// It's only using for non-generic.
-extension NSObject: FwiJSONDeserialization {
+/// Default added FwiCell to UICollection view cell.
+extension UICollectionViewCell : FwiCell {
+}
+ 
+/// FwiCell has addon function only when self is UICollectionViewCell.
+public extension FwiCell where Self: UICollectionViewCell {
+    
+    /// Dequeue and cast to self.
+    static func dequeueCell(collectionView c: UICollectionView, indexPath i: IndexPath) -> Self {
+        return c.dequeueReusableCell(withReuseIdentifier: identifier, for: i) as! Self
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Class using for map, because FwiJSONDeserialization is dynamic protocol, using for generic
-/// object.
-public final class FwiMap<T: NSObject> {
+/// Default added FwiCell to UITableView view cell.
+extension UITableViewCell : FwiCell {
+}
     
-    /// Build a list of models.
-    ///
-    /// - parameter array (required): a list of keys-values
-    class func map(array a: [[String: Any]]) -> ([T]?, NSError?)  {
-        return FwiJSONMapper.map(array: a, toModel: T.self)
-    }
+/// FwiCell has addon function only when self is UITableViewCell.
+public extension FwiCell where Self: UITableViewCell {
     
-    /// Create model's instance and map dictionary to that instance.
-    ///
-    /// - parameter dictionary (required): set of keys-values
-    class func map(dictionary d: [String : Any]) -> (T?, NSError?)  {
-        return FwiJSONMapper.map(dictionary: d, toModel: T.self)
+    /// Dequeue and cast to self.
+    static func dequeueCell(tableView t: UITableView) -> Self {
+        return t.dequeueReusableCell(withIdentifier: identifier) as! Self
     }
 }
+#endif

@@ -26,11 +26,13 @@
 		BEA221C31D8E26C60001761E /* FwiJSONMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C21D8E26C60001761E /* FwiJSONMapper.swift */; };
 		BEA221C61D8E27C10001761E /* FwiJSONMapperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C41D8E26D10001761E /* FwiJSONMapperTest.swift */; };
 		BEA221C81D8E40110001761E /* FwiCoreDeprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C71D8E40110001761E /* FwiCoreDeprecated.swift */; };
+		BEDF0AC11DCF110400D0B8AB /* FwiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDF0AC01DCF110400D0B8AB /* FwiCell.swift */; };
 		BEF4FFDC1D9293D0008B9BFE /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BEF4FFDA1D9293D0008B9BFE /* Sample.xcdatamodeld */; };
 		BEF4FFE41D929509008B9BFE /* Person+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF4FFE21D929509008B9BFE /* Person+CoreDataClass.swift */; };
 		BEF4FFE51D929509008B9BFE /* Person+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF4FFE31D929509008B9BFE /* Person+CoreDataProperties.swift */; };
 		BEF4FFE71D92964A008B9BFE /* FwiPersistentManagerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF4FFE61D92964A008B9BFE /* FwiPersistentManagerTest.swift */; };
 		BEF4FFE91D92975C008B9BFE /* Sample.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = BEF4FFDA1D9293D0008B9BFE /* Sample.xcdatamodeld */; };
+		BEFB00A41DCEEA33000471A4 /* FwiStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFB00A31DCEEA33000471A4 /* FwiStoryboard.swift */; };
 		_LinkFileRef_FwiCore_via_FwiCoreTests /* FwiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_FwiCore" /* FwiCore.framework */; };
 		"__src_cc_ref_Sources/Data+FwiBase64.swift" /* Data+FwiBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = "__PBXFileRef_Sources/Data+FwiBase64.swift" /* Data+FwiBase64.swift */; };
 		"__src_cc_ref_Sources/Data+FwiExtension.swift" /* Data+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = "__PBXFileRef_Sources/Data+FwiExtension.swift" /* Data+FwiExtension.swift */; };
@@ -106,10 +108,12 @@
 		BEA221C21D8E26C60001761E /* FwiJSONMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONMapper.swift; sourceTree = "<group>"; };
 		BEA221C41D8E26D10001761E /* FwiJSONMapperTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONMapperTest.swift; sourceTree = "<group>"; };
 		BEA221C71D8E40110001761E /* FwiCoreDeprecated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiCoreDeprecated.swift; sourceTree = "<group>"; };
+		BEDF0AC01DCF110400D0B8AB /* FwiCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiCell.swift; sourceTree = "<group>"; };
 		BEF4FFDB1D9293D0008B9BFE /* Sample.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sample.xcdatamodel; sourceTree = "<group>"; };
 		BEF4FFE21D929509008B9BFE /* Person+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataClass.swift"; sourceTree = "<group>"; };
 		BEF4FFE31D929509008B9BFE /* Person+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		BEF4FFE61D92964A008B9BFE /* FwiPersistentManagerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiPersistentManagerTest.swift; sourceTree = "<group>"; };
+		BEFB00A31DCEEA33000471A4 /* FwiStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiStoryboard.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Package.swift /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		"__PBXFileRef_Sources/Data+FwiBase64.swift" /* Data+FwiBase64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+FwiBase64.swift"; sourceTree = "<group>"; };
 		"__PBXFileRef_Sources/Data+FwiExtension.swift" /* Data+FwiExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+FwiExtension.swift"; sourceTree = "<group>"; };
@@ -219,6 +223,8 @@
 		BE8BF12E1D832CE900F710CB /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				BEDF0AC01DCF110400D0B8AB /* FwiCell.swift */,
+				BEFB00A31DCEEA33000471A4 /* FwiStoryboard.swift */,
 				"__PBXFileRef_Sources/UIApplication+FwiExtension.swift" /* UIApplication+FwiExtension.swift */,
 				"__PBXFileRef_Sources/UIButton+FwiExtension.swift" /* UIButton+FwiExtension.swift */,
 				"__PBXFileRef_Sources/UIColor+FwiExtension.swift" /* UIColor+FwiExtension.swift */,
@@ -589,6 +595,11 @@
 				CLASSPREFIX = Fwi;
 				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Fiision Studio";
+				TargetAttributes = {
+					"______Target_FwiCore" = {
+						ProvisioningStyle = Manual;
+					};
+				};
 			};
 			buildConfigurationList = "___RootConfs_" /* Build configuration list for PBXProject "FwiCore" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -635,6 +646,7 @@
 				__src_cc_ref_Sources/FwiDataParam.swift /* FwiDataParam.swift in Sources */,
 				__src_cc_ref_Sources/FwiEntityCollectionViewModel.swift /* FwiEntityCollectionViewModel.swift in Sources */,
 				__src_cc_ref_Sources/FwiEntityTableViewModel.swift /* FwiEntityTableViewModel.swift in Sources */,
+				BEFB00A41DCEEA33000471A4 /* FwiStoryboard.swift in Sources */,
 				BE9850E91DC8705F00C3A279 /* FwiJSONSerialization.swift in Sources */,
 				__src_cc_ref_Sources/FwiEntityViewModel.swift /* FwiEntityViewModel.swift in Sources */,
 				BE78D9441D98D8DA00091D5D /* Dictionary+FwiExtension.swift in Sources */,
@@ -662,6 +674,7 @@
 				"__src_cc_ref_Sources/UITableViewController+FwiExtension.swift" /* UITableViewController+FwiExtension.swift in Sources */,
 				"__src_cc_ref_Sources/UIView+FwiExtension.swift" /* UIView+FwiExtension.swift in Sources */,
 				"__src_cc_ref_Sources/UIViewController+FwiExtension.swift" /* UIViewController+FwiExtension.swift in Sources */,
+				BEDF0AC11DCF110400D0B8AB /* FwiCell.swift in Sources */,
 				"__src_cc_ref_Sources/URL+FwiExtension.swift" /* URL+FwiExtension.swift in Sources */,
 				"__src_cc_ref_Sources/URLRequest+FwiExtension.swift" /* URLRequest+FwiExtension.swift in Sources */,
 				BEA221C31D8E26C60001761E /* FwiJSONMapper.swift in Sources */,
@@ -708,10 +721,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B71D89C13B00738B1F /* lib-release.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = "";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
-				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 			};
 			name = Release;
 		};
@@ -727,10 +739,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B61D89C13B00738B1F /* lib-debug.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = "";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
-				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 			};
 			name = Debug;
 		};
