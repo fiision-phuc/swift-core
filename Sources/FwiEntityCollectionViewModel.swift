@@ -44,23 +44,26 @@ import CoreData
 
 public final class FwiEntityCollectionViewModel<T: NSFetchRequestResult> : FwiEntityViewModel<T>, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     public typealias CellFactory = (UICollectionView, IndexPath, T) -> UICollectionViewCell
+    public typealias InteritemSpacingFactory = (UICollectionView) -> CGFloat
+    public typealias LineSpacingFactory = (UICollectionView) -> CGFloat
+    public typealias SectionInsetFactory = (UICollectionView) -> UIEdgeInsets
     public typealias SizeFactory = (UICollectionView, IndexPath) -> CGSize
+    public typealias SupplementaryViewFactory = (UICollectionView, String, IndexPath) -> UICollectionReusableView
+    
     
     // MARK: Class's constructors
     public convenience init(collectionView c: UICollectionView?, context ctx: NSManagedObjectContext?) {
         self.init(ctx)
         collectionView = c
-        collectionView?.delegate = self
-        collectionView?.dataSource = self
     }
     
     // MARK: Class's properties
     public var cellFactory: CellFactory?
+    public var interitemSpacingFactory: InteritemSpacingFactory?
+    public var lineSpacingFactory: LineSpacingFactory?
+    public var sectionInsetFactory: SectionInsetFactory?
     public var sizeFactory: SizeFactory?
-    
-    public lazy var minLineSpacing = 0.0
-    public lazy var minInteritemSpacing = 0.0
-    public lazy var sectionInset = UIEdgeInsets.zero
+    public var supplementaryViewFactory: SupplementaryViewFactory?
     
     fileprivate weak var collectionView: UICollectionView?
     
@@ -73,57 +76,72 @@ public final class FwiEntityCollectionViewModel<T: NSFetchRequestResult> : FwiEn
     }
     
     // MARK: UICollectionViewDataSource's members
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
+    open func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sectionCount()
     }
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return itemCount(forSection: section)
     }
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cellFactory = cellFactory, let item = item(forIndexPath: indexPath) else {
-            return UICollectionViewCell()
+            fatalError("CellFactory is not yet defined!")
         }
         return cellFactory(collectionView, indexPath, item)
     }
     
+    open func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let supplementaryViewFactory = supplementaryViewFactory else {
+            fatalError("SupplementaryViewFactory is not yet defined!")
+        }
+        return supplementaryViewFactory(collectionView, kind, indexPath)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    open func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    }
+    
     // MARK: UICollectionViewDelegateFlowLayout's members
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let sizeFactory = sizeFactory else {
-            return CGSize.zero
-        }
-        return sizeFactory(collectionView, indexPath)
+        return sizeFactory?(collectionView, indexPath) ?? CGSize.zero
     }
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return sectionInset
+        return sectionInsetFactory?(collectionView) ?? UIEdgeInsets.zero
     }
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return CGFloat(minLineSpacing)
+        return lineSpacingFactory?(collectionView) ?? 0
     }
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return CGFloat(minInteritemSpacing)
+        return interitemSpacingFactory?(collectionView) ?? 0
     }
     
     // MARK: NSFetchedResultsControllerDelegate's members
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         DispatchQueue.main.async { [weak self] in
-            self?.collectionView?.performBatchUpdates(
-                {
-                    if let array = self?.deleteArrays {
-                        self?.collectionView?.deleteItems(at: array)
+//            do {
+                self?.collectionView?.performBatchUpdates(
+                    {
+                        if let array = self?.deleteArrays {
+                            self?.collectionView?.deleteItems(at: array)
+                        }
+                        if let array = self?.insertArrays {
+                            self?.collectionView?.insertItems(at: array)
+                        }
+                        if let array = self?.deleteArrays {
+                            self?.collectionView?.reloadItems(at: array)
+                        }
+                    },
+                    completion: { _ in
+                        self?.deleteArrays = nil
+                        self?.insertArrays = nil
+                        self?.reloadArrays = nil
                     }
-                    if let array = self?.insertArrays {
-                        self?.collectionView?.insertItems(at: array)
-                    }
-                    if let array = self?.deleteArrays {
-                        self?.collectionView?.reloadItems(at: array)
-                    }
-                },
-                completion: { _ in
-                    self?.deleteArrays = nil
-                    self?.insertArrays = nil
-                    self?.reloadArrays = nil
-                }
-            )
+                )
+//            }
+//            catch _ {
+//                self?.collectionView?.reloadData()
+//            }
         }
     }
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
