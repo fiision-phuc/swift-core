@@ -12,7 +12,7 @@
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
     "5B668FBF18F07019A0BC8AC0628676B34F9C6157" : "..",
     "8B123162C394A0A0A138779108E4C59DD771865A" : "FwiCore\/Packages\/RxSwift-3.0.0-beta.1\/",
-    "4B9F33DD39F3A1E31BB679D5CEA49DB06F5AC90F" : "swift-core\/"
+    "4B9F33DD39F3A1E31BB679D5CEA49DB06F5AC90F" : "FwiCore\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "FwiCore",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,

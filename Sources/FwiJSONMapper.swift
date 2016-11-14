@@ -55,6 +55,11 @@ internal struct FwiJSONMapper {
     }()
 
     // MARK: Struct's public methods
+    internal static func convert<T: NSObject>(model m: T) -> [String : Any] {
+        
+        return [:]
+    }
+    
     /// Build a list of objects.
     ///
     /// - parameter array (required): a list of keys-values
