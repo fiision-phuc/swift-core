@@ -10,48 +10,17 @@
 
 import Foundation
 
-struct ConsoleNetwork {
-    /// - parameter request (required): request
-    /// - parameter statusCode (required): network's status
-    static func generateError(_ request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
-        let userInfo = [NSURLErrorFailingURLErrorKey:request.url?.description ?? "",
-                        NSURLErrorFailingURLStringErrorKey:request.url?.description ?? "",
-                        NSLocalizedDescriptionKey:s.description]
-        
-        return NSError(domain: NSURLErrorDomain, code: s.rawValue, userInfo: userInfo)
-    }
-    
-    /// Output error to console.
-    ///
-    /// - parameter request (required): request
-    /// - parameter data (required): response's data
-    /// - parameter error (required): response's error
-    /// - parameter statusCode (required): network's status
-    static func consoleError(_ request: URLRequest, data d: Data?, error e: Error?, statusCode s: FwiNetworkStatus) {
-        guard let err = e as? NSError, let url = request.url, let host = url.host, let method = request.httpMethod else {
-            return
-        }
-        
-        let domain     = "Domain     : \(host)\n"
-        let urlString  = "HTTP Url   : \(url)\n"
-        let httpMethod = "HTTP Method: \(method)\n"
-        let status     = "HTTP Status: \(s.rawValue) (\(err.localizedDescription))\n"
-        let dataString = "\(d?.toString() ?? "")"
-        
-        FwiLog("\n\(domain)\(urlString)\(httpMethod)\(status)\(dataString)")
-    }
-}
 
-
-public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
 public typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
+public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
 
+/// FwiNetworkProtocol defines required properties for network manager.
 public protocol FwiNetworkProtocol {
     var session: URLSession { get }
     var networkCounter: Int { get set }
 }
 
-public extension FwiNetworkProtocol where Self: FwiNetwork{
+public extension FwiNetworkProtocol where Self: FwiNetwork {
 
     /// Download resource from server.
     ///
@@ -82,9 +51,9 @@ public extension FwiNetworkProtocol where Self: FwiNetwork{
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
-                error = ConsoleNetwork.generateError(r as URLRequest, statusCode: statusCode)
+                error = FwiNetworkConsole.generateError(r as URLRequest, statusCode: statusCode)
             }
-            ConsoleNetwork.consoleError(r, data: nil, error: error, statusCode: statusCode)
+            FwiNetworkConsole.consoleError(r, data: nil, error: error, statusCode: statusCode)
             c(location, error, statusCode, httpResponse)
         }
 
@@ -122,9 +91,9 @@ public extension FwiNetworkProtocol where Self: FwiNetwork{
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
-                error = ConsoleNetwork.generateError(r as URLRequest, statusCode: statusCode)
+                error = FwiNetworkConsole.generateError(r as URLRequest, statusCode: statusCode)
             }
-            ConsoleNetwork.consoleError(r, data: data, error: error, statusCode: statusCode)
+            FwiNetworkConsole.consoleError(r, data: data, error: error, statusCode: statusCode)
             c(data, error, statusCode, httpResponse)
         }
         task.resume()

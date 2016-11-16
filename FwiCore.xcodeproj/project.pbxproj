@@ -26,6 +26,7 @@
 		BEA221C31D8E26C60001761E /* FwiJSONMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C21D8E26C60001761E /* FwiJSONMapper.swift */; };
 		BEA221C61D8E27C10001761E /* FwiJSONMapperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C41D8E26D10001761E /* FwiJSONMapperTest.swift */; };
 		BEA221C81D8E40110001761E /* FwiCoreDeprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C71D8E40110001761E /* FwiCoreDeprecated.swift */; };
+		BEC3AE8C1DD591910044307B /* FwiNetworkConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC3AE8B1DD591910044307B /* FwiNetworkConsole.swift */; };
 		BEDF0AC11DCF110400D0B8AB /* FwiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDF0AC01DCF110400D0B8AB /* FwiCell.swift */; };
 		BEF4FFDC1D9293D0008B9BFE /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BEF4FFDA1D9293D0008B9BFE /* Sample.xcdatamodeld */; };
 		BEF4FFE41D929509008B9BFE /* Person+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF4FFE21D929509008B9BFE /* Person+CoreDataClass.swift */; };
@@ -108,6 +109,7 @@
 		BEA221C21D8E26C60001761E /* FwiJSONMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONMapper.swift; sourceTree = "<group>"; };
 		BEA221C41D8E26D10001761E /* FwiJSONMapperTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONMapperTest.swift; sourceTree = "<group>"; };
 		BEA221C71D8E40110001761E /* FwiCoreDeprecated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiCoreDeprecated.swift; sourceTree = "<group>"; };
+		BEC3AE8B1DD591910044307B /* FwiNetworkConsole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiNetworkConsole.swift; sourceTree = "<group>"; };
 		BEDF0AC01DCF110400D0B8AB /* FwiCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiCell.swift; sourceTree = "<group>"; };
 		BEF4FFDB1D9293D0008B9BFE /* Sample.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sample.xcdatamodel; sourceTree = "<group>"; };
 		BEF4FFE21D929509008B9BFE /* Person+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 			children = (
 				BE8207ED1DC7A97C0095358C /* param */,
 				__PBXFileRef_Sources/FwiNetworkManager.swift /* FwiNetwork.swift */,
+				BEC3AE8B1DD591910044307B /* FwiNetworkConsole.swift */,
 				BE8207EE1DC7A9AD0095358C /* FwiNetworkProtocol.swift */,
 			);
 			name = network;
@@ -660,6 +663,7 @@
 				__src_cc_ref_Sources/FwiPersistentManager.swift /* FwiPersistentManager.swift in Sources */,
 				__src_cc_ref_Sources/FwiReachability.swift /* FwiReachability.swift in Sources */,
 				__src_cc_ref_Sources/FwiReflector.swift /* FwiReflector.swift in Sources */,
+				BEC3AE8C1DD591910044307B /* FwiNetworkConsole.swift in Sources */,
 				"__src_cc_ref_Sources/NSCoding+FwiExtension.swift" /* NSCoding+FwiExtension.swift in Sources */,
 				"__src_cc_ref_Sources/NSManagedObject+FwiExtension.swift" /* NSManagedObject+FwiExtension.swift in Sources */,
 				"__src_cc_ref_Sources/NSNumber+FwiExtension.swift" /* NSNumber+FwiExtension.swift in Sources */,

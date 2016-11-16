@@ -235,6 +235,6 @@ public extension FwiJSONSerialization where Self: NSObject {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Map FwiJSONSerialization NSObject.
+/// It's only using for non-generic.
 extension NSObject: FwiJSONSerialization {
 }
