@@ -55,6 +55,110 @@ internal struct FwiJSONMapper {
     }()
 
     // MARK: Struct's public methods
+    internal static func convert<T: NSObject>(model m: T) -> [String : Any] {
+        var properties = FwiReflector.properties(withObject: m)
+        var userInfo = [String : Any]()
+//        let d = NSMutableDictionary()
+        var d = [String : Any]()
+        
+        // Inject data into object's properties
+        for p in properties {
+//            /* Condition validation: validate JSON base on https://tools.ietf.org/html/rfc7159#section-2 */
+//            guard let valueJSON = dictionary[p.mirrorName], !(valueJSON is NSNull) || valueJSON is NSNumber || valueJSON is String || valueJSON is [Any] || valueJSON is [String : Any] else {
+//                if !p.optionalProperty { userInfo[p.mirrorName] = "Could not map 'value' to property: '\(p.mirrorName)' because of incorrect JSON grammar: '\(dictionary[p.mirrorName])'." }
+//                continue
+//            }
+            
+            // Try to convert raw data to right format
+            var value = p.mirrorType.children.first?.value
+            
+//            if p.mirrorType.children.count == 0 {
+//                
+////                p.mirrorType.children = AnyCollection<Mirror.Child>(Mirror.Child(label: "some", value: 2))
+////                var c = p.mirrorType.children
+////                p.mirrorType.children[p.mirrorType.children.startIndex] = Mirror.Child(label: "some", value: 2)
+//
+////                p.mirrorType.children
+////                p.mirrorType.children["label"] = "some"
+////                p.mirrorType.children["value"] = 2
+//            }
+            for (_, var attr) in p.mirrorType.children.enumerated() {
+                if let propertyName = attr.label {
+//                    attr.value = json[propertyName]
+                    print(propertyName)
+                    print(attr.value)
+                }
+            }
+            
+            if p.isCollection || p.isSet {
+//                if let collectionType = p.collectionType, let c = collectionType.classType as? NSObject.Type, let objects = a as? [[String : Any]] {
+//                    let (list, _) = map(array: objects, toModel: c)
+//                    if let l = list {
+//                        value = l
+//                        canAssign = true
+//                    }
+//                } else {
+//                    if let array = a + p {
+//                        value = array
+//                        canAssign = true
+//                    }
+//                }
+            } else if p.isDictionary || p.isObject {
+//                if p.isObject {
+//                    if let c = p.classType as? NSObject.Type {
+//                        let (child, _) = map(dictionary: d, toModel: c)
+//                        if let c = child {
+//                            value = c
+//                            canAssign = true
+//                        }
+//                    }
+//                } else {
+//                    if let dictionary = d + p {
+//                        value = dictionary
+//                        canAssign = true
+//                    }
+//                }
+            } else {
+//                if let s = value as? String {
+//                    if let v = s + p {
+//                        value = v
+//                        canAssign = true
+//                    }
+//                } else if let n = value as? NSNumber, p.isStruct && p.structType == Date.self {
+//                    if let d = transformDate(n) {
+//                        value = d
+//                        canAssign = true
+//                    }
+//                } else {
+//                    canAssign = true
+//                }
+//            }
+            
+//            // Assign value to property if can
+//            if canAssign && m.responds(to: NSSelectorFromString(p.mirrorName)) == true {
+//                m.setValue(value, forKey: p.mirrorName)
+//            } else {
+//                if !p.optionalProperty {
+//                    userInfo[p.mirrorName] = "could not map '\(value)' to this property due to data's type conflict."
+//                }
+//                
+            }
+            d[p.mirrorName] = value ?? NSNull()
+        }
+        
+//        // Summary error
+//        if userInfo.keys.count > 0 {
+//            var message = "\nThere is an error when trying to map data into model: \(NSStringFromClass(type(of: m)))\n"
+//            userInfo.forEach({
+//                message += "-> [\($0)] \($1)\n"
+//            })
+//            FwiLog(message)
+//            
+//            return NSError(domain: "FwiJSONMapper", code: -1, userInfo: userInfo)
+//        }
+        return d // NSDictionary(dictionary: d) as! [String : Any]
+    }
+    
     /// Build a list of objects.
     ///
     /// - parameter array (required): a list of keys-values

@@ -128,7 +128,7 @@ public final class FwiEntityCollectionViewModel<T: NSFetchRequestResult> : FwiEn
                         if let array = self?.insertArrays {
                             self?.collectionView?.insertItems(at: array)
                         }
-                        if let array = self?.deleteArrays {
+                        if let array = self?.reloadArrays {
                             self?.collectionView?.reloadItems(at: array)
                         }
                     },

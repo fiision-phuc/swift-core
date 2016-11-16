@@ -204,6 +204,26 @@ class FwiJSONMapperTest: XCTestCase {
         XCTAssertNotNil(o.arrayUrls, "Expected not nil but found: '\(o.arrayUrls)'.")
     }
     
+    func testConvertDictionary1() {
+        let o = TestJSON1()
+        o.a = 1
+        o.b = 2
+        o.c = 3
+        o.e = 10
+        o.d = "Hello world"
+        o.g = "Hello world"
+        
+        let d = FwiJSONMapper.convert(model: o)
+        XCTAssertEqual(d["a"] as! NSNumber, NSNumber(value: 1), "Expected '1' but found: '\(d["a"])'.")
+        XCTAssertEqual(d["b"] as! NSNumber, NSNumber(value: 2), "Expected '2' but found: '\(d["b"])'.")
+        XCTAssertEqual(d["c"] as! NSNumber, NSNumber(value: 3), "Expected '3' but found: '\(d["c"])'.")
+        XCTAssertEqual(d["e"] as! NSNumber, NSNumber(value: 10), "Expected '10' but found: '\(d["e"])'.")
+        XCTAssertEqual(d["d"] as! String, "Hello world", "Expected 'Hello world' but found: '\(d["d"])'.")
+        XCTAssertEqual(d["g"] as! String, "Hello world", "Expected 'Hello world' but found: '\(d["g"])'.")
+        
+        let data = try? JSONSerialization.data(withJSONObject: d, options: [])
+        XCTAssertNotNil(data, "Expected not nil but found nil.")
+    }
     func testMapDictionary1() {
         let d: [String : Any] = ["a":NSNumber(value: 1), "b":NSNumber(value: 2), "c":NSNumber(value: 3), "d":"Hello world", "e":"10", "f":"10.15", "g":"Hello world"]
         
@@ -217,7 +237,27 @@ class FwiJSONMapperTest: XCTestCase {
         XCTAssertEqual(o.d, "Hello world", "Expected 'Hello world' but found: '\(o.d)'.")
         XCTAssertEqual(o.g, "Hello world", "Expected 'Hello world' but found: '\(o.g)'.")
     }
-
+    
+    func testConvertDictionary2() {
+        let o = TestJSON2()
+        o.a = 1
+//        o.b = 2
+        o.c = 3
+        o.e = 10
+        o.d = "Hello world"
+        o.f = 10.15
+        
+        let d = FwiJSONMapper.convert(model: o)
+        XCTAssertEqual(d["a"] as! NSNumber, NSNumber(value: 1), "Expected '1' but found: '\(d["a"])'.")
+        XCTAssertEqual(d["b"] as! NSNumber, NSNumber(value: 2), "Expected '2' but found: '\(d["b"])'.")
+        XCTAssertEqual(d["c"] as! NSNumber, NSNumber(value: 3), "Expected '3' but found: '\(d["c"])'.")
+        XCTAssertEqual(d["e"] as! NSNumber, NSNumber(value: 10), "Expected '10' but found: '\(d["e"])'.")
+        XCTAssertEqual(d["d"] as! String, "Hello world", "Expected 'Hello world' but found: '\(d["d"])'.")
+        XCTAssertEqual(d["g"] as! String, "Hello world", "Expected 'Hello world' but found: '\(d["g"])'.")
+        
+        let data = try? JSONSerialization.data(withJSONObject: d, options: [])
+        XCTAssertNotNil(data, "Expected not nil but found nil.")
+    }
     func testMapDictionary2() {
         let d: [String : Any] = ["a":NSNumber(value: 1), "b":NSNumber(value: 2), "c":NSNumber(value: 3), "d":"Hello world", "e":"10", "f":"10.15"]
         
