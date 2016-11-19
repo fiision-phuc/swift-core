@@ -40,40 +40,6 @@ import Foundation
 
 
 public extension Data {
-
-    /// Convert data to json.
-    public func convertToJson(options otp: JSONSerialization.ReadingOptions = []) -> [String: AnyObject]? {
-        do {
-            let json = try JSONSerialization.jsonObject(with: self, options: otp)
-            return json as? [String: AnyObject]
-        } catch {
-            return nil
-        }
-    }
-
-    /** Convert data to model object */
-    @discardableResult
-    public func decodeJSONWithModel<T: NSObject>(model m: inout T) -> NSError? {
-        do {
-
-
-            if let json = try JSONSerialization.jsonObject(with: self, options: []) as? [String:Any], let error = FwiJSONMapper.map(dictionary: json, toObject: &m) {
-                throw error
-            } else {
-                return nil
-            }
-
-        } catch let error as NSError {
-            return error
-        }
-    }
-
-    /** Convert model object to data */
-    @discardableResult
-    public func encodeJSONWithModel<T: NSObject>(model m: T) -> NSError? {
-
-        return nil
-    }
     
     /// Convert data to string base on string encoding type.
     ///
@@ -136,13 +102,7 @@ public extension Data {
         guard let url = url, url.isFileURL else {
             return nil
         }
-        
-        do {
-            return try Data(contentsOf: url, options: readingMode)
-        } catch _ {
-            // Ignore all error and return nil
-        }
-        return nil
+        return try? Data(contentsOf: url, options: readingMode)
     }
     
     /// Write data to file.

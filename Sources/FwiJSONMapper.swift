@@ -42,121 +42,113 @@ import Foundation
 internal struct FwiJSONMapper {
 
     // MARK: file's properties
-    internal static var numberFormat: NumberFormatter = {
-        let numberFormat = NumberFormatter()
-
-        numberFormat.locale = Locale(identifier: "en_US")
-        numberFormat.formatterBehavior = .behavior10_4
-        numberFormat.generatesDecimalNumbers = false
-        numberFormat.roundingMode = .halfUp
-        numberFormat.numberStyle = .decimal
+    internal static var dateFormat: DateFormatter = {
+        let format = DateFormatter()
+        format.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         
-        return numberFormat
+        return format
+    }()
+    internal static var numberFormat: NumberFormatter = {
+        let format = NumberFormatter()
+
+        format.locale = Locale(identifier: "en_US")
+        format.formatterBehavior = .behavior10_4
+        format.generatesDecimalNumbers = false
+        format.roundingMode = .halfUp
+        format.numberStyle = .decimal
+        
+        return format
     }()
 
     // MARK: Struct's public methods
+    internal static func convert<T: NSObject>(array a: [T]) -> [Any] {
+        return a.map { (o) -> [String : Any] in
+            return convert(model: o)
+        }
+    }
+    
+    /// Convert object to dictionary.
+    ///
+    /// - parameter object (required): an object to be converted
     internal static func convert<T: NSObject>(model m: T) -> [String : Any] {
         var properties = FwiReflector.properties(withObject: m)
-        var userInfo = [String : Any]()
-//        let d = NSMutableDictionary()
         var d = [String : Any]()
+        
+        // Remove ignored properties
+        if let j = m as? FwiJSONModel {
+            properties <- j
+        }
         
         // Inject data into object's properties
         for p in properties {
-//            /* Condition validation: validate JSON base on https://tools.ietf.org/html/rfc7159#section-2 */
-//            guard let valueJSON = dictionary[p.mirrorName], !(valueJSON is NSNull) || valueJSON is NSNumber || valueJSON is String || valueJSON is [Any] || valueJSON is [String : Any] else {
-//                if !p.optionalProperty { userInfo[p.mirrorName] = "Could not map 'value' to property: '\(p.mirrorName)' because of incorrect JSON grammar: '\(dictionary[p.mirrorName])'." }
-//                continue
-//            }
+            var value = p.isOptional ? p.mirrorType.children.first?.value : m.value(forKey: p.mirrorName)
             
-            // Try to convert raw data to right format
-            var value = p.mirrorType.children.first?.value
-            
-//            if p.mirrorType.children.count == 0 {
-//                
-////                p.mirrorType.children = AnyCollection<Mirror.Child>(Mirror.Child(label: "some", value: 2))
-////                var c = p.mirrorType.children
-////                p.mirrorType.children[p.mirrorType.children.startIndex] = Mirror.Child(label: "some", value: 2)
-//
-////                p.mirrorType.children
-////                p.mirrorType.children["label"] = "some"
-////                p.mirrorType.children["value"] = 2
-//            }
-            for (_, var attr) in p.mirrorType.children.enumerated() {
-                if let propertyName = attr.label {
-//                    attr.value = json[propertyName]
-                    print(propertyName)
-                    print(attr.value)
+            if (p.isCollection || p.isSet) {
+                if let array = value as? [NSObject], p.collectionType?.isObject == true {
+                    value = convert(array: array)
+                } else if p.collectionType?.isStruct == true {
+                    if let array = value as? [Data] {
+                        value = array.reduce([], { (original, data) -> [String] in
+                            guard let string = data.encodeHexString() else {
+                                return original
+                            }
+                            
+                            var o = original
+                            o.append(string)
+                            return o
+                        })
+                    } else if let array = value as? [Date] {
+                        value = array.reduce([], { (original, date) -> [String] in
+                            let string = dateFormat.string(from: date)
+                            var o = original
+                            o.append(string)
+                            return o
+                        })
+                    } else if let array = value as? [URL] {
+                        value = array.reduce([], { (original, url) -> [String] in
+                            let string = url.absoluteString
+                            var o = original
+                            o.append(string)
+                            return o
+                        })
+                    }
+                }
+            } else if p.isDictionary {
+                // Should we stop here?
+            } else if p.isObject {
+                if let o = value as? NSObject {
+                    value = convert(model: o)
+                }
+            } else {
+                if p.isStruct {
+                    if let d = value as? Data {
+                        value = d.encodeBase64String()
+                    }
+                    else if let d = value as? Date {
+                        value = dateFormat.string(from: d)
+                    }
+                    else if let u = value as? URL {
+                        value = u.absoluteString
+                    }
                 }
             }
             
-            if p.isCollection || p.isSet {
-//                if let collectionType = p.collectionType, let c = collectionType.classType as? NSObject.Type, let objects = a as? [[String : Any]] {
-//                    let (list, _) = map(array: objects, toModel: c)
-//                    if let l = list {
-//                        value = l
-//                        canAssign = true
-//                    }
-//                } else {
-//                    if let array = a + p {
-//                        value = array
-//                        canAssign = true
-//                    }
-//                }
-            } else if p.isDictionary || p.isObject {
-//                if p.isObject {
-//                    if let c = p.classType as? NSObject.Type {
-//                        let (child, _) = map(dictionary: d, toModel: c)
-//                        if let c = child {
-//                            value = c
-//                            canAssign = true
-//                        }
-//                    }
-//                } else {
-//                    if let dictionary = d + p {
-//                        value = dictionary
-//                        canAssign = true
-//                    }
-//                }
-            } else {
-//                if let s = value as? String {
-//                    if let v = s + p {
-//                        value = v
-//                        canAssign = true
-//                    }
-//                } else if let n = value as? NSNumber, p.isStruct && p.structType == Date.self {
-//                    if let d = transformDate(n) {
-//                        value = d
-//                        canAssign = true
-//                    }
-//                } else {
-//                    canAssign = true
-//                }
-//            }
-            
-//            // Assign value to property if can
-//            if canAssign && m.responds(to: NSSelectorFromString(p.mirrorName)) == true {
-//                m.setValue(value, forKey: p.mirrorName)
-//            } else {
-//                if !p.optionalProperty {
-//                    userInfo[p.mirrorName] = "could not map '\(value)' to this property due to data's type conflict."
-//                }
-//                
+            /* Condition validation: validate JSON base on https://tools.ietf.org/html/rfc7159#section-2 */
+            if value != nil && !(value is NSNumber || value is String || value is [Any] || value is [String : Any]) {
+                value = "\(value ?? "")"
             }
-            d[p.mirrorName] = value ?? NSNull()
+            
+            // Assign or skip value
+            if let v = value {
+                d[p.mirrorName] = v
+            }
         }
         
-//        // Summary error
-//        if userInfo.keys.count > 0 {
-//            var message = "\nThere is an error when trying to map data into model: \(NSStringFromClass(type(of: m)))\n"
-//            userInfo.forEach({
-//                message += "-> [\($0)] \($1)\n"
-//            })
-//            FwiLog(message)
-//            
-//            return NSError(domain: "FwiJSONMapper", code: -1, userInfo: userInfo)
-//        }
-        return d // NSDictionary(dictionary: d) as! [String : Any]
+        // Convert property to key
+        if let j = m as? FwiJSONModel {
+            d <- j
+        }
+        return d
     }
     
     /// Build a list of objects.
@@ -213,7 +205,7 @@ internal struct FwiJSONMapper {
 
         // Override dictionary if model implement FwiJSONModel
         if let j = m as? FwiJSONModel {
-            dictionary <- j
+            j <- dictionary
             properties <- j
         }
 
@@ -302,7 +294,7 @@ internal struct FwiJSONMapper {
     ///
     /// parameter value (required): JSON date, can be either in string form or number form
     /// parameter format (optional): format string to convert string to date
-    internal static func transformDate(_ value: Any?, formats: [String] = ["yyyy-MM-dd'T'HH:mm:ssZ","yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd'T'HHmmss'GMT'"]) -> Date? {
+    internal static func transformDate(_ value: Any?, formats: [String] = ["yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd'T'HH:mm:ssZ", "yyyy-MM-dd'T'HHmmss'GMT'"]) -> Date? {
         if let number = value as? TimeInterval {
             return Date(timeIntervalSince1970: number)
         } else if let number = value as? NSNumber {
@@ -332,50 +324,6 @@ internal struct FwiJSONMapper {
 
 // MARK: Custom Operator
 infix operator <-
-
-public func <- <T>(left: inout T, right: AnyObject?) {
-    if let value = right as? T {
-        left = value
-    }
-}
-public func <- <T>(left: inout T?, right: AnyObject?) {
-    left = right as? T
-}
-
-public func <- <T: NSObject>(left: inout T, right: AnyObject?) {
-    let _ = FwiJSONMapper.mapObjectToModel(right, model: &left)
-}
-
-public func <- <T>(left: inout [T], right: [AnyObject]?) {
-    if let arrValue = right {
-        var temp = [T]()
-        
-        arrValue.forEach {
-            if let value = $0 as? T {
-                temp.append(value)
-            }
-        }
-        
-        if temp.count > 0 {
-            left = temp
-        }
-    }
-}
-public func <- <T>(left: inout [T]?, right: [AnyObject]?) {
-    if let arrValue = right {
-        var temp = [T]()
-        
-        arrValue.forEach {
-            if let value = $0 as? T {
-                temp.append(value)
-            }
-        }
-        
-        if temp.count > 0 {
-            left = temp
-        }
-    }
-}
 
 /// Transform array.
 ///
@@ -470,22 +418,32 @@ fileprivate func <- (left: inout [FwiReflector], right: FwiJSONModel) {
     })
 }
 
+/// Update output dictionary after mapping process occured.
+///
+/// parameter left (required): an instance of model that implemented FwiJSONModel
+/// parameter right (required): a dictionary that will be update
+fileprivate func <- (left: inout [String : Any], right: FwiJSONModel) {
+    right.keyMapper?.forEach({
+        left[$0.key] = left[$0.value]
+        left.removeValue(forKey: $0.value)
+    })
+}
+
 /// Update input dictionary before mapping process occur.
 ///
 /// parameter left (required): a dictionary that will be update
 /// parameter right (required): an instance of model that implemented FwiJSONModel
-fileprivate func <- (left: inout [String : Any], right: FwiJSONModel) {
-    left = right.convertJSON(fromOriginal: left)
-    right.keyMapper?
+fileprivate func <- (left: FwiJSONModel, right: inout [String : Any]) {
+    right = left.convertJSON(fromOriginal: right)
+    left.keyMapper?
         .filter({ (item) -> Bool in
             return (item.key != item.value)
         })
         .forEach({
-            left[$0.value] = left[$0.key]
-            left.removeValue(forKey: $0.key)
+            right[$0.value] = right[$0.key]
+            right.removeValue(forKey: $0.key)
         })
 }
-
 
 // Mirror types
 fileprivate let anyMirror = Mirror(reflecting: Any.self)

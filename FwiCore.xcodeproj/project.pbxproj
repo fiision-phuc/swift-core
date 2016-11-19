@@ -25,7 +25,6 @@
 		BE9850E91DC8705F00C3A279 /* FwiJSONSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9850E71DC8705F00C3A279 /* FwiJSONSerialization.swift */; };
 		BEA221C31D8E26C60001761E /* FwiJSONMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C21D8E26C60001761E /* FwiJSONMapper.swift */; };
 		BEA221C61D8E27C10001761E /* FwiJSONMapperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C41D8E26D10001761E /* FwiJSONMapperTest.swift */; };
-		BEA221C81D8E40110001761E /* FwiCoreDeprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C71D8E40110001761E /* FwiCoreDeprecated.swift */; };
 		BEC3AE8C1DD591910044307B /* FwiNetworkConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC3AE8B1DD591910044307B /* FwiNetworkConsole.swift */; };
 		BEDF0AC11DCF110400D0B8AB /* FwiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDF0AC01DCF110400D0B8AB /* FwiCell.swift */; };
 		BEF4FFDC1D9293D0008B9BFE /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BEF4FFDA1D9293D0008B9BFE /* Sample.xcdatamodeld */; };
@@ -108,7 +107,6 @@
 		BE9850E71DC8705F00C3A279 /* FwiJSONSerialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONSerialization.swift; sourceTree = "<group>"; };
 		BEA221C21D8E26C60001761E /* FwiJSONMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONMapper.swift; sourceTree = "<group>"; };
 		BEA221C41D8E26D10001761E /* FwiJSONMapperTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONMapperTest.swift; sourceTree = "<group>"; };
-		BEA221C71D8E40110001761E /* FwiCoreDeprecated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiCoreDeprecated.swift; sourceTree = "<group>"; };
 		BEC3AE8B1DD591910044307B /* FwiNetworkConsole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiNetworkConsole.swift; sourceTree = "<group>"; };
 		BEDF0AC01DCF110400D0B8AB /* FwiCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiCell.swift; sourceTree = "<group>"; };
 		BEF4FFDB1D9293D0008B9BFE /* Sample.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sample.xcdatamodel; sourceTree = "<group>"; };
@@ -514,7 +512,6 @@
 			isa = PBXGroup;
 			children = (
 				__PBXFileRef_Sources/FwiCore.swift /* FwiCore.swift */,
-				BEA221C71D8E40110001761E /* FwiCoreDeprecated.swift */,
 				BE8BF12D1D832CC900F710CB /* extension */,
 				BE8BF12A1D832C4200F710CB /* codec */,
 				BE8BF1301D832D8700F710CB /* i18n */,
@@ -657,7 +654,6 @@
 				__src_cc_ref_Sources/FwiJSONModel.swift /* FwiJSONModel.swift in Sources */,
 				__src_cc_ref_Sources/FwiLocalization.swift /* FwiLocalization.swift in Sources */,
 				__src_cc_ref_Sources/FwiMultipartParam.swift /* FwiMultipartParam.swift in Sources */,
-				BEA221C81D8E40110001761E /* FwiCoreDeprecated.swift in Sources */,
 				__src_cc_ref_Sources/FwiNetworkManager.swift /* FwiNetwork.swift in Sources */,
 				__src_cc_ref_Sources/FwiOperation.swift /* FwiOperation.swift in Sources */,
 				__src_cc_ref_Sources/FwiPersistentManager.swift /* FwiPersistentManager.swift in Sources */,

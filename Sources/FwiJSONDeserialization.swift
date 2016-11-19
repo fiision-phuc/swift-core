@@ -75,11 +75,11 @@ extension NSObject: FwiJSONDeserialization {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Class using for map, because FwiJSONDeserialization is dynamic protocol, using for generic
 /// object.
-public final class FwiMap<T: NSObject> {
+public final class FwiJSONMap<T: NSObject> {
     
     /// Build a list of models.
     ///
-    /// - parameter array (required): a list of keys-values
+    /// - parameter array (required): a list of set of keys-values
     class func map(array a: [[String: Any]]) -> ([T]?, NSError?)  {
         return FwiJSONMapper.map(array: a, toModel: T.self)
     }

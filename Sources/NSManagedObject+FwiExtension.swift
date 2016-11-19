@@ -45,11 +45,11 @@ public extension NSManagedObject {
     /// Remove self from database.
     public func remove() {
         managedObjectContext?.performAndWait({ [weak self] in
-            guard let strongSelf = self else {
+            guard let strongSelf = self, let context = self?.managedObjectContext else {
                 return
             }
-            self?.managedObjectContext?.delete(strongSelf)
-            try? self?.managedObjectContext?.save()
+            context.delete(strongSelf)
+            try? context.save()
         })
     }
 }

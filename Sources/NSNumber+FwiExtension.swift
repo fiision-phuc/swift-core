@@ -42,7 +42,7 @@ import Foundation
 public extension NSNumber {
 
     /// Display number to specific currency format.
-    public func currencyWithISO3(_ iso3: String, decimalSeparator decimal: String = ".", groupingSeparator grouping: String = ",", usingSymbol isSymbol: Bool = true) -> String? {
+    public func currency(withISO3 iso3: String, decimalSeparator decimal: String = ".", groupingSeparator grouping: String = ",", usingSymbol isSymbol: Bool = true) -> String? {
         // Initialize currency format object
         let locale = Locale(identifier: "en_US")
         let currencyFormat = NumberFormatter()

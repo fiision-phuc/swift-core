@@ -47,7 +47,7 @@ public final class FwiLocalization {
     }
 
     // MARK: Class's properties
-    public fileprivate (set) var bundle: Bundle?
+    public fileprivate(set) var bundle: Bundle?
     public var locale: String = "en" {
         didSet {
             guard let path = Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: locale) else {
