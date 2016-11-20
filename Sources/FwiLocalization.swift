@@ -39,50 +39,42 @@
 import Foundation
 
 
-public final class FwiLocalization {
-
+public struct FwiLocalization {
+    // MARK: Singleton instance
+    public static let instance = FwiLocalization()
+    
     // MARK: Class's constructors
     public init() {
         reset()
     }
 
     // MARK: Class's properties
-    public fileprivate(set) var bundle: Bundle?
     public var locale: String = "en" {
         didSet {
             guard let path = Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: locale) else {
                 reset()
                 return
             }
+            let userDefaults = UserDefaults.standard
             
-            UserDefaults.standard.set([locale], forKey: "AppleLanguages")
-            UserDefaults.standard.synchronize()
+            userDefaults.set([locale], forKey: "AppleLanguages")
+            userDefaults.synchronize()
             
             bundle = Bundle(path: (path as NSString).deletingLastPathComponent)
         }
     }
-
+    public fileprivate(set) var bundle: Bundle?
+    
     // MARK: Class's public methods
-    public func localizedForString(_ string: String) -> String {
-        if let localized = bundle?.localizedString(forKey: string, value: string, table: nil) {
+    public func localized(forString s: String) -> String {
+        if let localized = bundle?.localizedString(forKey: s, value: s, table: nil) {
             return localized
         }
-        return string
+        return s
     }
 
-    public func reset() {
+    public mutating func reset() {
         let languages = Bundle.main.preferredLocalizations
         locale = languages.count > 0 ? languages[0] : "en"
-    }
-}
-
-
-// MARK: Singleton
-public extension FwiLocalization {
-    fileprivate static let instance = FwiLocalization()
-    
-    /** Get singleton network manager. */
-    public class func sharedInstance() -> FwiLocalization {
-        return instance
     }
 }

@@ -40,17 +40,6 @@ import Foundation
 
 
 public extension Data {
-    
-    /// Convert data to string base on string encoding type.
-    ///
-    /// - parameter stringEncoding (optional): string encoding, default is UTF-8
-    public func toString(stringEncoding encoding: String.Encoding = .utf8) -> String? {
-        /* Condition validation */
-        if count <= 0 {
-            return nil
-        }
-        return String(data: self, encoding: encoding)
-    }
 
     /// Clear all bytes data.
     public mutating func clearBytes() {
@@ -92,20 +81,34 @@ public extension Data {
             end -= 1
         }
     }
-}
-
-/// MARK: Open file
-public extension Data {
     
+    /// Convert data to string base on string encoding type.
+    ///
+    /// - parameter stringEncoding (optional): string encoding, default is UTF-8
+    public func toString(stringEncoding encoding: String.Encoding = .utf8) -> String? {
+        /* Condition validation */
+        if count <= 0 {
+            return nil
+        }
+        return String(data: self, encoding: encoding)
+    }
+    
+    // MARK: File I/O
     /// Read data from file.
-    public static func readFromFile(atURL url: URL?, readingMode: Data.ReadingOptions = []) -> Data? {
+    ///
+    /// - parameter url (required): source url to read from
+    /// - parameter readingMode (optional): seealso `Data.ReadingOptions`
+    public static func readFromFile(atURL url: URL?, readingMode mode: Data.ReadingOptions = []) -> Data? {
         guard let url = url, url.isFileURL else {
             return nil
         }
-        return try? Data(contentsOf: url, options: readingMode)
+        return try? Data(contentsOf: url, options: mode)
     }
     
     /// Write data to file.
+    ///
+    /// - parameter url (required): destination url to write to
+    /// - parameter readingMode (optional): seealso `Data.ReadingOptions`
     @discardableResult
     public func writeToFile(toUrl url: URL?, options: Data.WritingOptions = []) -> Error? {
         guard let url = url, url.isFileURL else {

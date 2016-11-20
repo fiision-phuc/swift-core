@@ -41,7 +41,7 @@ import Foundation
 
 public extension String {
     
-    /** Generate random identifier base on uuid. */
+    /// Generate random identifier base on uuid.
     public static func randomIdentifier() -> String? {
         if let uuidRef = CFUUIDCreate(nil), let cfString = CFUUIDCreateString(nil, uuidRef) {
             return cfString as String
@@ -49,23 +49,25 @@ public extension String {
         return nil
     }
 
-    /** Generate timestamp string. */
+    /// Generate timestamp string.
     public static func timestamp() -> String {
         return "\(time(nil))"
     }
     
     
-    /** Convert html string compatible to string. */
+    /// Convert html string compatible to string.
     public func decodeHTML() -> String {
         return removingPercentEncoding ?? ""
     }
-    /** Convert string to html string compatible. */
+    
+    /// Convert string to html string compatible.
     public func encodeHTML() -> String {
         return addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed) ?? ""
     }
     
-    
-    /** Compare 2 string regardless case sensitive. */
+    /// Compare 2 string regardless case sensitive.
+    ///
+    /// - parameter otherString (required): other string to compare
     public func isEqualToStringIgnoreCase(_ otherString: String?) -> Bool {
         /* Condition validation */
         if otherString == nil {
@@ -76,12 +78,15 @@ public extension String {
         return text1 == text2
     }
     
-    /** Calculate string length. */
+    /// Calculate string length.
     public func length() -> Int {
         return characters.count
     }
     
-    /** Validate string. */
+    /// Validate string.
+    ///
+    /// - parameter pattern (required): regular expression to validate string
+    /// - parameter expressionOption (optional): regular expression searching option
     public func matchPattern(_ pattern: String, expressionOption option: NSRegularExpression.Options = .caseInsensitive) -> Bool {
         /* Condition validation */
         if pattern.length() <= 0 {
@@ -99,12 +104,14 @@ public extension String {
         return false
     }
 
-    /** Split string into components. */
+    /// Split string into components.
+    ///
+    /// - parameter separator (required): string's separator
     public func split(_ separator: String) -> [String] {
         return components(separatedBy: separator)
     }
     
-    /** Sub string to index. */
+    /// Sub string to index.
     public func substring(endIndex index: Int) -> String {
         /* Condition validation: Validate end index */
         if index <= 0 || index >= length() {
@@ -114,7 +121,10 @@ public extension String {
         return substring(startIndex: 0, reverseIndex: -(length() - index))
     }
     
-    /** Sub string from index to reverse index. */
+    /// Sub string from index to reverse index.
+    ///
+    /// - parameter startIndex (required): beginning index
+    /// - parameter reverseIndex (optional): ending index
     public func substring(startIndex strIndex: Int, reverseIndex endIndex: Int = 0) -> String {
         /* Condition validation: Validate start index */
         if strIndex < 0 || strIndex > length() {
@@ -138,19 +148,20 @@ public extension String {
         return self.substring(with: range)
     }
     
-    /** Trim all spaces before and after a string. */
+    /// Trim all spaces before and after a string.
     public func trim() -> String {
         return trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
     
-    /** Convert string to data. */
+    /// Convert string to data.
     public func toData(dataEncoding encoding: String.Encoding = .utf8) -> Data? {
         return data(using: encoding, allowLossyConversion: false)
     }
 }
 
 extension String {
-    /** Subscript get character at index */
+    
+    /// Subscript get character at index.
     public subscript(index: Int) -> Character? {
         guard !(index < 0 || index >= characters.count) else {
             return nil

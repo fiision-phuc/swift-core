@@ -51,9 +51,9 @@ public extension FwiNetworkProtocol where Self: FwiNetwork {
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
-                error = FwiNetworkConsole.generateError(r as URLRequest, statusCode: statusCode)
+                error = FwiConsole.generateError(withRequest: r as URLRequest, statusCode: statusCode)
             }
-            FwiNetworkConsole.consoleError(r, data: nil, error: error, statusCode: statusCode)
+            FwiConsole.consoleError(withRequest: r, data: nil, error: error, statusCode: statusCode)
             c(location, error, statusCode, httpResponse)
         }
 
@@ -91,9 +91,9 @@ public extension FwiNetworkProtocol where Self: FwiNetwork {
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
-                error = FwiNetworkConsole.generateError(r as URLRequest, statusCode: statusCode)
+                error = FwiConsole.generateError(withRequest: r as URLRequest, statusCode: statusCode)
             }
-            FwiNetworkConsole.consoleError(r, data: data, error: error, statusCode: statusCode)
+            FwiConsole.consoleError(withRequest: r, data: data, error: error, statusCode: statusCode)
             c(data, error, statusCode, httpResponse)
         }
         task.resume()

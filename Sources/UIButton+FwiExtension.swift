@@ -43,7 +43,7 @@ import Foundation
 
 public extension UIButton {
 
-    /** Apply background to button. */
+    /// Apply background to button.
     public func applyBackgroundImage(_ imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)) {
         let imageDefault = UIImage(named: "\(imageName)_Default")?.resizableImage(withCapInsets: edgeInsets)
         let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImage(withCapInsets: edgeInsets)
@@ -56,7 +56,7 @@ public extension UIButton {
         self.setImage(imageDisabled, for: UIControlState.disabled)
     }
 
-    /** Apply image to button. */
+    /// Apply image to button.
     public func applyImage(_ imageName: String) {
         let imageDefault = UIImage(named: "\(imageName)_Default")
         let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")

@@ -39,10 +39,13 @@
 import Foundation
 
 
-// MARK: Directory manager
 public extension FileManager {
     
-    /** Create directory for a given URL. */
+    // MARK: Directory manager
+    /// Create directory for a given URL.
+    ///
+    /// - parameter url (required): destination url to create directory
+    /// - parameter intermediateDirectories (optional): should create intermediate directories as well
     @discardableResult
     public func createDirectory(atURL url: URL?, withIntermediateDirectories intermediate: Bool = true, attributes: [String: AnyObject]? = nil) -> NSError? {
         guard let url = url, url.isFileURL && url != URL.documentDirectory() && url != URL.cacheDirectory() else {
@@ -57,7 +60,9 @@ public extension FileManager {
         }
     }
     
-    /** Check if directory is available for a given URL. */
+    /// Check if directory is available for a given URL.
+    ///
+    /// - parameter url (required): destination url
     public func directoryExists(atURL url: URL?) -> Bool {
         guard let path = url?.path else {
             return false
@@ -68,24 +73,27 @@ public extension FileManager {
         return isExist && isDirectory.boolValue
     }
 
-    /** Move directory from source's URL to destination's URL. */
+    /// Move directory from source's URL to destination's URL.
+    ///
+    /// - parameter from (required): source url
+    /// - parameter to (required): destination url
     @discardableResult
     public func moveDirectory(from srcURL: URL?, to dstURL: URL?) -> NSError? {
         return moveFile(from: srcURL, to: dstURL)
     }
 
-    /** Remove directory for a given URL. */
+    /// Remove directory for a given URL.
+    ///
+    /// - parameter url (required): source url
     @discardableResult
     public func removeDirectory(atURL url: URL?) -> NSError? {
         return removeFile(atURL: url)
     }
-}
-
-
-// MARK: File manager
-public extension FileManager {
     
-    /** Check if file is available for a given URL. */
+    // MARK: File manager
+    /// Check if file is available for a given URL.
+    ///
+    /// - parameter url (required): source url
     public func fileExists(atURL url: URL?) -> Bool {
         guard let path = url?.path else {
             return false
@@ -93,7 +101,10 @@ public extension FileManager {
         return fileExists(atPath: path)
     }
     
-    /** Move file from source's URL to destination's URL. */
+    /// Move file from source's URL to destination's URL.
+    ///
+    /// - parameter from (required): source url
+    /// - parameter to (required): destination url
     @discardableResult
     public func moveFile(from srcURL: URL?, to dstURL: URL?) -> NSError? {
         guard let srcURL = srcURL, let dstURL = dstURL else {
@@ -108,7 +119,9 @@ public extension FileManager {
         }
     }
     
-    /** Remove file for a given URL. */
+    /// Remove file for a given URL.
+    ///
+    /// - parameter url (required): source url
     @discardableResult
     public func removeFile(atURL url: URL?) -> NSError? {
         guard let url = url , fileExists(atURL: url) else {
@@ -123,3 +136,4 @@ public extension FileManager {
         }
     }
 }
+

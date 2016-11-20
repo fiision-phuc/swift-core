@@ -42,6 +42,11 @@ import Foundation
 public extension NSNumber {
 
     /// Display number to specific currency format.
+    ///
+    /// - parameter ISO3 (required): currency's ISO3
+    /// - parameter decimalSeparator (optional): decimal's separator (ex. xxx.xx)
+    /// - parameter groupingSeparator (optional): grouping's separator (ex. xxx,xxx)
+    /// - parameter usingSymbol (optional): currency display ($100.00 vs. 100.00 USD)
     public func currency(withISO3 iso3: String, decimalSeparator decimal: String = ".", groupingSeparator grouping: String = ",", usingSymbol isSymbol: Bool = true) -> String? {
         // Initialize currency format object
         let locale = Locale(identifier: "en_US")

@@ -41,27 +41,56 @@ import Foundation
 
 public extension NSCoding {
     
-    /// Unarchive from UserDefaults.
-    public static func unarchiveFromUserDefaults(with key: String) -> Self? {
-        let userDefault = UserDefaults.standard
-        
-        guard let data = userDefault.value(forKey: key) as? Data , data.count > 0 else {
+    // MARK: I/O to Data
+    /// Unarchive from data.
+    ///
+    /// - parameter data (required): object's data
+    public static func unarchive(fromData d: Data?) -> Self? {
+        guard let data = d else {
             return nil
         }
         return NSKeyedUnarchiver.unarchiveObject(with: data) as? Self
     }
     
     /// Archive to data.
-    public func archiveToData() -> Data {
+    public func archive() -> Data {
         return NSKeyedArchiver.archivedData(withRootObject: self)
     }
     
+    // MARK: I/O to File
+    /// Unarchive from file.
+    ///
+    /// - parameter file (required): destination url
+    public static func unarchive(fromFile url: URL?) -> Self? {
+        return unarchive(fromData: Data.readFromFile(atURL: url))
+    }
+    
+    /// Archive to file.
+    ///
+    /// - parameter file (required): source url
+    public func archive(toFile url: URL?) -> Error? {
+        return archive().writeToFile(toUrl: url)
+    }
+    
+    // MARK: I/O to UserDefaults
+    /// Unarchive from UserDefaults.
+    ///
+    /// - parameter key (required): object's key inside UserDefaults
+    public static func unarchive(fromUserDefaults key: String) -> Self? {
+        guard let data = UserDefaults.standard.value(forKey: key) as? Data , data.count > 0 else {
+            return nil
+        }
+        return unarchive(fromData: data)
+    }
+    
     /// Archive to UserDefaults.
+    ///
+    /// - parameter key (required): object's key to store inside UserDefaults
     @discardableResult
-    public func archiveToUserDefaults(forKey key: String) -> Bool {
+    public func archive(toUserDefaults key: String) -> Bool {
         let userDefault = UserDefaults.standard
         
-        userDefault.set(archiveToData(), forKey: key)
+        userDefault.set(archive(), forKey: key)
         return userDefault.synchronize()
     }
 }

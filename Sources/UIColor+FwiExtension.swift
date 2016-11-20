@@ -43,7 +43,7 @@ import Foundation
 
 public extension UIColor {
 
-    /** Convert hex to color. */
+    /// Convert hex to color.
     public convenience init(rgb hex: UInt32) {
         self.init(red: CGFloat((hex & 0xff0000) >> 16) / 255.0,
                   green: CGFloat((hex & 0x00ff00) >> 8) / 255.0,

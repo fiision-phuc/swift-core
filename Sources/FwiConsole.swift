@@ -1,5 +1,5 @@
 //  Project name: FwiCore
-//  File name   : FwiNetworkConsole.swift
+//  File name   : FwiConsole.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/11/16
@@ -39,19 +39,7 @@
 import Foundation
 
 
-public struct FwiNetworkConsole {
-
-    /// Generate network error.
-    ///
-    /// - parameter request (required): request
-    /// - parameter statusCode (required): network's status
-    static func generateError(_ request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
-        let userInfo = [NSURLErrorFailingURLErrorKey:request.url?.description ?? "",
-                        NSURLErrorFailingURLStringErrorKey:request.url?.description ?? "",
-                        NSLocalizedDescriptionKey:s.description]
-
-        return NSError(domain: NSURLErrorDomain, code: s.rawValue, userInfo: userInfo)
-    }
+public struct FwiConsole {
 
     /// Output error to console.
     ///
@@ -59,17 +47,29 @@ public struct FwiNetworkConsole {
     /// - parameter data (required): response's data
     /// - parameter error (required): response's error
     /// - parameter statusCode (required): network's status
-    static func consoleError(_ request: URLRequest, data d: Data?, error e: Error?, statusCode s: FwiNetworkStatus) {
+    static func consoleError(withRequest request: URLRequest, data d: Data?, error e: Error?, statusCode s: FwiNetworkStatus) {
         guard let err = e as? NSError, let url = request.url, let host = url.host, let method = request.httpMethod else {
             return
         }
-
+        
         let domain     = "Domain     : \(host)\n"
         let urlString  = "HTTP Url   : \(url)\n"
         let httpMethod = "HTTP Method: \(method)\n"
         let status     = "HTTP Status: \(s.rawValue) (\(err.localizedDescription))\n"
         let dataString = "\(d?.toString() ?? "")"
-
+        
         FwiLog("\n\(domain)\(urlString)\(httpMethod)\(status)\(dataString)")
+    }
+    
+    /// Generate network error.
+    ///
+    /// - parameter request (required): request
+    /// - parameter statusCode (required): network's status
+    static func generateError(withRequest request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
+        let userInfo = [NSURLErrorFailingURLErrorKey:request.url?.description ?? "",
+                        NSURLErrorFailingURLStringErrorKey:request.url?.description ?? "",
+                        NSLocalizedDescriptionKey:s.description]
+
+        return NSError(domain: NSURLErrorDomain, code: s.rawValue, userInfo: userInfo)
     }
 }
