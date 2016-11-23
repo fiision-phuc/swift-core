@@ -213,7 +213,9 @@ internal struct FwiJSONMapper {
         for p in properties {
             /* Condition validation: validate JSON base on https://tools.ietf.org/html/rfc7159#section-2 */
             guard let valueJSON = dictionary[p.mirrorName], !(valueJSON is NSNull) || valueJSON is NSNumber || valueJSON is String || valueJSON is [Any] || valueJSON is [String : Any] else {
-                if !p.optionalProperty { userInfo[p.mirrorName] = "Could not map 'value' to property: '\(p.mirrorName)' because of incorrect JSON grammar: '\(dictionary[p.mirrorName])'." }
+                if !p.optionalProperty {
+                    userInfo[p.mirrorName] = "Could not map 'value' to property: '\(p.mirrorName)' because of incorrect JSON grammar: '\(dictionary[p.mirrorName])'."
+                }
                 continue
             }
 

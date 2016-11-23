@@ -48,8 +48,51 @@ public extension FwiJSONDeserialization {
     public typealias Model = Self
 }
 
-public extension FwiJSONDeserialization where Self: NSObject  {
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// It's only using for non-generic.
+extension NSObject: FwiJSONDeserialization {
+}
 
+public extension FwiJSONDeserialization where Self: NSObject  {
+    
+    // MARK: Deserialize from data.
+    /// Build a list of models from data.
+    ///
+    /// - parameter arrayData (required): a list of keys-values as data
+    public static func map(arrayData d: Data?) -> ([Model]?, Error?) {
+        /* Condition validation: validate input data */
+        guard let data = d else {
+            return (nil, NSError(domain: "FwiJSONDeserialization", code: -1, userInfo: [NSLocalizedDescriptionKey:"Input data is empty."]))
+        }
+        
+        /* Condition validation: validate array of objects */
+        guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let a = json as? [[String : Any]] else {
+            return (nil, NSError(domain: "FwiJSONDeserialization", code: -1, userInfo: [NSLocalizedDescriptionKey:"Input data is not array of objects."]))
+        }
+        
+        let result = FwiJSONMapper.map(array: a, toModel: Model.self)
+        return (result.0, result.1)
+    }
+    
+    /// Create model's instance and map dictionary to that instance from data.
+    ///
+    /// - parameter dictionaryData (required): a set of keys-values as data
+    public static func map(dictionaryData d: Data?) -> (Model?, Error?) {
+        /* Condition validation: validate input data */
+        guard let data = d else {
+            return (nil, NSError(domain: "FwiJSONDeserialization", code: -1, userInfo: [NSLocalizedDescriptionKey:"Input data is empty."]))
+        }
+        
+        /* Condition validation: validate array of objects */
+        guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let dictionary = json as? [String : Any] else {
+            return (nil, NSError(domain: "FwiJSONDeserialization", code: -1, userInfo: [NSLocalizedDescriptionKey:"Input data is not an object."]))
+        }
+        
+        let result = FwiJSONMapper.map(dictionary: dictionary, toModel: Model.self)
+        return (result.0, result.1)
+    }
+    
+    // MARK: Deserialize from collection.
     /// Build a list of models.
     ///
     /// - parameter array (required): a list of keys-values
@@ -57,19 +100,14 @@ public extension FwiJSONDeserialization where Self: NSObject  {
         let result = FwiJSONMapper.map(array: a, toModel: Model.self)
         return (result.0, result.1)
     }
-
+    
     /// Create model's instance and map dictionary to that instance.
     ///
-    /// - parameter dictionary (required): set of keys-values
+    /// - parameter dictionary (required): a set of keys-values
     public static func map(dictionary d: [String : Any]) -> (Model?, Error?) {
         let result = FwiJSONMapper.map(dictionary: d, toModel: Model.self)
         return (result.0, result.1)
     }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// It's only using for non-generic.
-extension NSObject: FwiJSONDeserialization {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

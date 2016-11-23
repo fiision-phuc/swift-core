@@ -48,6 +48,11 @@ public extension FwiJSONSerialization {
     public typealias Model = Self
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// It's only using for non-generic.
+extension NSObject: FwiJSONSerialization {
+}
+
 public extension FwiJSONSerialization where Self: NSObject {
     
     /// Convert model to dictionary.
@@ -65,12 +70,6 @@ public extension FwiJSONSerialization where Self: NSObject {
     public func toJSONString() -> String? {
         return toJSONData()?.toString()
     }
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// It's only using for non-generic.
-extension NSObject: FwiJSONSerialization {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
