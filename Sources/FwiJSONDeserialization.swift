@@ -69,9 +69,7 @@ public extension FwiJSONDeserialization where Self: NSObject  {
         guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let a = json as? [[String : Any]] else {
             return (nil, NSError(domain: "FwiJSONDeserialization", code: -1, userInfo: [NSLocalizedDescriptionKey:"Input data is not array of objects."]))
         }
-        
-        let result = FwiJSONMapper.map(array: a, toModel: Model.self)
-        return (result.0, result.1)
+        return map(array: a)
     }
     
     /// Create model's instance and map dictionary to that instance from data.
@@ -87,9 +85,7 @@ public extension FwiJSONDeserialization where Self: NSObject  {
         guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let dictionary = json as? [String : Any] else {
             return (nil, NSError(domain: "FwiJSONDeserialization", code: -1, userInfo: [NSLocalizedDescriptionKey:"Input data is not an object."]))
         }
-        
-        let result = FwiJSONMapper.map(dictionary: dictionary, toModel: Model.self)
-        return (result.0, result.1)
+        return map(dictionary: dictionary)
     }
     
     // MARK: Deserialize from collection.

@@ -89,7 +89,7 @@ internal struct FwiJSONMapper {
                 } else if p.collectionType?.isStruct == true {
                     if let array = value as? [Data] {
                         value = array.reduce([], { (original, data) -> [String] in
-                            guard let string = data.encodeHexString() else {
+                            guard let string = data.encodeBase64String() else {
                                 return original
                             }
                             
@@ -159,6 +159,7 @@ internal struct FwiJSONMapper {
     internal static func map<T: NSObject>(array a: [[String : Any]], toModel m: T.Type) -> ([T]?, NSError?) {
         var userInfo = [String]()
         var array = [T]()
+        
         for (idx, d) in a.enumerated() {
             var o = m.init()
             
@@ -182,8 +183,8 @@ internal struct FwiJSONMapper {
     /// - parameter model (required): a class to be initialize for mapping
     internal static func map<T: NSObject>(dictionary d: [String : Any], toModel m: T.Type) -> (T?, NSError?) {
         var o = m.init()
+        
         let err = map(dictionary: d, toObject: &o)
-
         return (o, err)
     }
     
@@ -210,6 +211,7 @@ internal struct FwiJSONMapper {
         }
 
         // Inject data into object's properties
+        var final = [String : Any]()
         for p in properties {
             /* Condition validation: validate JSON base on https://tools.ietf.org/html/rfc7159#section-2 */
             guard let valueJSON = dictionary[p.mirrorName], !(valueJSON is NSNull) || valueJSON is NSNumber || valueJSON is String || valueJSON is [Any] || valueJSON is [String : Any] else {
@@ -222,13 +224,14 @@ internal struct FwiJSONMapper {
             // Try to convert raw data to right format
             var value = valueJSON
             var canAssign = false
-
             if let a = value as? [Any], p.isCollection || p.isSet {
                 if let collectionType = p.collectionType, let c = collectionType.classType as? NSObject.Type, let objects = a as? [[String : Any]] {
-                    let (list, _) = map(array: objects, toModel: c)
+                    let (list, err) = map(array: objects, toModel: c)
                     if let l = list {
                         value = l
                         canAssign = true
+                    } else {
+                        userInfo[p.mirrorName] = err?.localizedDescription ?? "Could not convert data into array."
                     }
                 } else {
                     if let array = a + p {
@@ -239,15 +242,17 @@ internal struct FwiJSONMapper {
             } else if let d = value as? [String : Any], p.isDictionary || p.isObject {
                 if p.isObject {
                     if let c = p.classType as? NSObject.Type {
-                        let (child, _) = map(dictionary: d, toModel: c)
+                        let (child, err) = map(dictionary: d, toModel: c)
                         if let c = child {
                             value = c
                             canAssign = true
+                        } else {
+                            dictionary[p.mirrorName] = err?.localizedDescription ?? "Could not convert data into object."
                         }
                     }
                 } else {
-                    if let dictionary = d + p {
-                        value = dictionary
+                    if let objects = d + p {
+                        value = objects
                         canAssign = true
                     }
                 }
@@ -269,25 +274,26 @@ internal struct FwiJSONMapper {
             
             // Assign value to property if can
             if canAssign && m.responds(to: NSSelectorFromString(p.mirrorName)) == true {
-                m.setValue(value, forKey: p.mirrorName)
+                final[p.mirrorName] = value
             } else {
                 if !p.optionalProperty {
                     userInfo[p.mirrorName] = "could not map '\(value)' to this property due to data's type conflict."
                 }
-
             }
         }
         
         // Summary error
         if userInfo.keys.count > 0 {
-            var message = "\nThere is an error when trying to map data into model: \(NSStringFromClass(type(of: m)))\n"
+            var message = "There is an error when trying to map data into model: \(NSStringFromClass(type(of: m)))\n"
             userInfo.forEach({
                 message += "-> [\($0)] \($1)\n"
             })
             FwiLog(message)
             
-            return NSError(domain: "FwiJSONMapper", code: -1, userInfo: userInfo)
+            return NSError(domain: "FwiJSONMapper", code: -1, userInfo: [NSLocalizedDescriptionKey:message])
         }
+        
+        m.setValuesForKeys(final)
         return nil
     }
 

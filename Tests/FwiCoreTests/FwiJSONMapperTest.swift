@@ -389,6 +389,7 @@ class FwiJSONMapperTest: XCTestCase {
                                  "d":"Hello world",
                                  "e":"10",
                                  "f":"10.15",
+                                 "g":"Hello world",
                                  "url": "https://www.google.com/?gws_rd=ssl",
                                  "data1": "RndpQ29yZQ==",
                                  "data2": "2012-04-23T18:25:43.511Z",
