@@ -103,6 +103,7 @@ public extension URLRequest {
     }
     
     // MARK: Struct's public methods
+    /// Manual define body data.
     public mutating func generateRawForm(_ rawParam: FwiDataParam?) {
         if let p = rawParam {
             let length = p.data.count

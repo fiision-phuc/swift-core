@@ -73,8 +73,8 @@ public extension FwiJSONSerialization where Self: NSObject {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Class using for convert, because FwiJSONSerialization is dynamic protocol, using for generic
-/// object.
+/// Class using for convert, because FwiJSONSerialization is dynamic protocol, using this for
+/// generic object.
 public final class FwiJSONConvert<T: NSObject> {
     
     /// Build a list from a list of models.

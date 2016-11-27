@@ -55,7 +55,7 @@ class FwiOperationTest: XCTestCase {
     // MARK: Test Cases
     func testInitialize() {
         let operation = FwiOperation()
-
+        
         XCTAssertNotNil(operation, "Operation must not be nil.")
         XCTAssertNotNil(operation.identifier, "All operations must have any identifier.")
         XCTAssertFalse(operation.isLongOperation, "Initial operation is not a long operation.")

@@ -107,7 +107,7 @@ public extension FwiJSONDeserialization where Self: NSObject  {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Class using for map, because FwiJSONDeserialization is dynamic protocol, using for generic
+/// Class using for map, because FwiJSONDeserialization is dynamic protocol, using this for generic
 /// object.
 public final class FwiJSONMap<T: NSObject> {
     
