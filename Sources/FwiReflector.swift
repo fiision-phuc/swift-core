@@ -3,9 +3,9 @@
 //
 //  Author      : Phuc Tran
 //  Created date: 4/27/16
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2016 Fiision Studio.
+//  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -51,12 +51,12 @@ public final class FwiReflector: CustomDebugStringConvertible, CustomStringConve
     /// Define if a property is optional or not
     public var optionalProperty = false
     /// Return subject's name.
-    public private (set) var mirrorName: String
+    public fileprivate(set) var mirrorName: String
     /// Return subject's reflector.
-    public private (set) var mirrorType: Mirror
+    public fileprivate(set) var mirrorType: Mirror
     
     /// Return subject's reflector description.
-    public lazy private (set) var mirrorDescription: String = {
+    public lazy fileprivate(set) var mirrorDescription: String = {
         var string = ""
         
         debugPrint(self.mirrorType.subjectType, to: &string)
@@ -68,12 +68,12 @@ public final class FwiReflector: CustomDebugStringConvertible, CustomStringConve
     }()
 
     /// Check whether the subject's type is optional type or not.
-    public lazy private (set) var isOptional: Bool = {
+    public lazy fileprivate(set) var isOptional: Bool = {
         return self.mirrorType.displayStyle == .optional
     }()
     
     /// Check whether the subject's type is enum or not.
-    public lazy private (set) var isEnum: Bool = {
+    public lazy fileprivate(set) var isEnum: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .enum
         }
@@ -83,7 +83,7 @@ public final class FwiReflector: CustomDebugStringConvertible, CustomStringConve
     }()
     
     /// Check whether the subject's type is tuple or not.
-    public lazy private (set) var isTuple: Bool = {
+    public lazy fileprivate(set) var isTuple: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .tuple
         }
@@ -94,7 +94,7 @@ public final class FwiReflector: CustomDebugStringConvertible, CustomStringConve
 
     /// Check whether the subject's type is struct or not. If subject's type is struct then it
     /// should return the unwrap subject's struct.
-    public lazy private (set) var isStruct: Bool = {
+    public lazy fileprivate(set) var isStruct: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .`struct`
         }
@@ -105,7 +105,7 @@ public final class FwiReflector: CustomDebugStringConvertible, CustomStringConve
         }
         return false
     }()
-    public lazy private (set) var structType: Any.Type? = {
+    public lazy fileprivate(set) var structType: Any.Type? = {
         /* Condition validation */
         if !self.isStruct {
             return nil
@@ -126,7 +126,7 @@ public final class FwiReflector: CustomDebugStringConvertible, CustomStringConve
     
     /// Check whether the subject's type is primitive or not. If subject's type is primitive then
     /// it should return the unwrap subject's type.
-    public lazy private (set) var isPrimitive: Bool = {
+    public lazy fileprivate(set) var isPrimitive: Bool = {
         let type = self.mirrorType.subjectType
         
         var isPrimitive = self.isType(type, typeCheck: Bool.self)
@@ -143,7 +143,7 @@ public final class FwiReflector: CustomDebugStringConvertible, CustomStringConve
         
         return isPrimitive
     }()
-    public lazy private (set) var primitiveType: Any.Type? = {
+    public lazy fileprivate(set) var primitiveType: Any.Type? = {
         /* Condition validation */
         if !self.isPrimitive {
             return nil
@@ -189,25 +189,25 @@ public final class FwiReflector: CustomDebugStringConvertible, CustomStringConve
 
     /// Check whether the subject's type is class or not, can be ObjC's class or Swift's class. If
     /// subject's type is class then it should return the unwrap subject's class.
-    public lazy private (set) var isClass: Bool = {
+    public lazy fileprivate(set) var isClass: Bool = {
         if let clazz = self.classType {
             return true
         }
         return false
     }()
-    public lazy private (set) var isObject: Bool = {
+    public lazy fileprivate(set) var isObject: Bool = {
         if let clazz = self.classType, clazz is NSObject.Type {
             return true
         }
         return false
     }()
-    public lazy private (set) var classType: AnyClass? = {
+    public lazy fileprivate(set) var classType: AnyClass? = {
         return FwiReflector.lookup(classType: self.mirrorDescription)
     }()
 
     /// Check whether the subject's type is collection, set or not. If subject's type is collection
     /// or set then it should return the unwrap collection's type.
-    public lazy private (set) var isSet: Bool = {
+    public lazy fileprivate(set) var isSet: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .set
         }
@@ -219,7 +219,7 @@ public final class FwiReflector: CustomDebugStringConvertible, CustomStringConve
         }
         return self.mirrorDescription.hasPrefix(setName)
     }()
-    public lazy private (set) var isCollection: Bool = {
+    public lazy fileprivate(set) var isCollection: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .collection
         }
@@ -231,7 +231,7 @@ public final class FwiReflector: CustomDebugStringConvertible, CustomStringConve
         }
         return self.mirrorDescription.hasPrefix(arrayName)
     }()
-    public lazy private (set) var collectionType: FwiReflector? = {
+    public lazy fileprivate(set) var collectionType: FwiReflector? = {
         /* Condition validation */
         if !(self.isSet || self.isCollection) {
             return nil
@@ -254,7 +254,7 @@ public final class FwiReflector: CustomDebugStringConvertible, CustomStringConve
     }()
     
     /// Check whether the subject's type is dictionary or not.
-    public lazy private (set) var isDictionary: Bool = {
+    public lazy fileprivate(set) var isDictionary: Bool = {
         if !self.isOptional {
             return self.mirrorType.displayStyle == .dictionary
         }
@@ -266,7 +266,7 @@ public final class FwiReflector: CustomDebugStringConvertible, CustomStringConve
         }
         return self.mirrorDescription.hasPrefix(dictionaryName)
     }()
-    public lazy private (set) var dictionaryType: (key: FwiReflector, value: FwiReflector)? = {
+    public lazy fileprivate(set) var dictionaryType: (key: FwiReflector, value: FwiReflector)? = {
         /* Condition validation */
         if !self.isDictionary {
             return nil
@@ -305,6 +305,11 @@ public final class FwiReflector: CustomDebugStringConvertible, CustomStringConve
             return FwiReflector(mirrorValue: clazz.init())
         }
         else if t == "Any" {
+            if (isCollection || isSet) {
+                if let collection = mirrorType.children.first?.value as? [Any], collection.count > 0 {
+                    return FwiReflector(mirrorValue: collection[0])
+                }
+            }
             return FwiReflector(mirrorValue: Any.self)
         }
         return nil

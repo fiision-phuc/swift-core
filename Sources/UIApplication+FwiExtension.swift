@@ -3,9 +3,9 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 6/13/16
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2016 Fiision Studio.
+//  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -43,16 +43,16 @@ import Foundation
 
 public extension UIApplication {
 
-    /** Define whether the device is iPad or not. */
+    /// Define whether the device is iPad or not.
     public class func isPad() -> Bool {
         return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad
     }
-    /** Define whether the device is iPhone or not. */
+    /// Define whether the device is iPhone or not.
     public class func isPhone() -> Bool {
         return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone
     }
 
-    /** Return iOS major version. */
+    /// Return iOS major version.
     public class func osMajor() -> Int {
         let token = UIDevice.current.systemVersion.split(".")
         if let major = Int(token[0]) {
@@ -60,7 +60,7 @@ public extension UIApplication {
         }
         return 0
     }
-    /** Return iOS minor version. */
+    /// Return iOS minor version.
     public class func osMinor() -> Int {
         let token = UIDevice.current.systemVersion.split(".")
         if let minor = Int(token[1]) , token.count >= 2 {
@@ -69,7 +69,7 @@ public extension UIApplication {
         return 0
     }
 
-    /** Enable remote notification. */
+    /// Enable remote notification.
     public class func enableRemoteNotification() {
         #if (arch(i386) || arch(x86_64)) && os(iOS)
             print("Remote notification does not support this device.")

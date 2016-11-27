@@ -3,9 +3,9 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 12/3/14
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2016 Fiision Studio.
+//  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -103,6 +103,7 @@ public extension URLRequest {
     }
     
     // MARK: Struct's public methods
+    /// Manual define body data.
     public mutating func generateRawForm(_ rawParam: FwiDataParam?) {
         if let p = rawParam {
             let length = p.data.count

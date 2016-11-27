@@ -3,9 +3,9 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/22/14
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2016 Fiision Studio.
+//  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -43,7 +43,7 @@ import Foundation
 
 public extension UIView {
 
-    /** Create image from current view. */
+    /// Create image from current view.
     public func createImage(_ scaleFactor: CGFloat = UIScreen.main.scale) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, scaleFactor)
         guard let context = UIGraphicsGetCurrentContext() else {
@@ -63,7 +63,7 @@ public extension UIView {
         return image
     }
 
-    /** Create image from region of interest. */
+    /// Create image from region of interest.
     public func createImageWithROI(_ roiRect: CGRect, scaleFactor scale: CGFloat = UIScreen.main.scale) -> UIImage? {
         /* Condition validation: Validate ROI */
         if !self.bounds.contains(roiRect) {
@@ -83,7 +83,7 @@ public extension UIView {
         return image
     }
 
-    /** Find first responder within tree views. */
+    /// Find first responder within tree views.
     public func findFirstResponder() -> UIView? {
         /* Condition validation */
         if self.isFirstResponder {
@@ -104,12 +104,12 @@ public extension UIView {
         return nil
     }
 
-    /** Find and resign first responder within tree views. */
+    /// Find and resign first responder within tree views.
     public func findAndResignFirstResponder() {
         self.findFirstResponder()?.resignFirstResponder()
     }
 
-    /** Round corner of an UIView with specific radius. */
+    /// Round corner of an UIView with specific radius.
     public func roundCorner(_ radius: CGFloat) {
         let bgLayer = self.layer
         bgLayer.masksToBounds = true

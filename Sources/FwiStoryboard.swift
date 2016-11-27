@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiJSONModel.swift
+//  File name   : FwiStoryboard.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 6/10/16
+//  Author      : Dung Vu
+//  Created date: 8/10/16
 //  Version     : 1.1.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
@@ -36,60 +36,43 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
+#if os(iOS)
+import UIKit
 import Foundation
 
 
-/// FwiJSONModel represents a JSON model. This protocol is required in order to let FwiReflector
-/// working properly.
-public protocol FwiJSONModel {
+/// FwiStoryboard defines instruction on how to load a storyboard.
+public protocol FwiStoryboard {
+    
+    /// Storyboard's name
+    static var name: String { get }
+    
+    /// Which bundle that a storyboard comes from. If nil, default bundle will be used.
+    static var bundle: Bundle? { get }
+}
 
-    /// Define keys mapper.
-    var keyMapper: [String:String]? { get }
-
-    /// Define ignored properties.
-    var ignoreProperties: [String]? { get }
-
-    /// Define optional properties.
-    var optionalProperties: [String]? { get }
-
-    /// Allow developer to interact directly with json dictionary before mapping process.
+/// Default implementation for FwiStoryboard.
+public extension FwiCell {
+    
+    static var bundle: Bundle?  {
+        return nil
+    }
+}
+    
+/// FwiStoryboard has addon function only when self is UIViewController.
+public extension FwiStoryboard where Self: UIViewController {
+    
+    /// Create view controller from storyboard.
+    public static func instantiate() -> Self? {
+        let storyboard = UIStoryboard(name: name, bundle: bundle)
+        return instantiate(fromStoryboard: storyboard)
+    }
+    
+    /// Create view controller from defined storyboard.
     ///
-    /// parameter original (required): original json dictionary
-    func convertJSON(fromOriginal original: [String:Any]) -> [String:Any]
-}
-
-/// An extension to help FwiReflector and FwiJSONMapper.
-public extension FwiJSONModel {
-
-    /// Default implementation for keys mapper.
-    public var keyMapper: [String:String]? {
-        return nil
-    }
-
-    /// Default implementation for ignored properties.
-    public var ignoreProperties: [String]? {
-        return nil
-    }
-
-    /// Default implementation for optional properties.
-    public var optionalProperties: [String]? {
-        return nil
-    }
-
-    /// Default implementation for convertJSON function.
-    public func convertJSON(fromOriginal original: [String:Any]) -> [String:Any] {
-        return original
+    /// - parameter storyboard (required): storyboard's instance
+    public static func instantiate(fromStoryboard s: UIStoryboard) -> Self? {
+        return s.instantiateViewController(withIdentifier: identifier) as? Self
     }
 }
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// FwiJSONManual represents a manual JSON model where developer wish to perform custom mapping.
-public protocol FwiJSONManual {
-
-    /// Allow developer to perform custom map.
-    ///
-    /// parameter object (required): object json
-    @discardableResult
-    func map(object o: [String : Any]) -> Error?
-}
+#endif

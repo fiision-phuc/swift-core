@@ -3,9 +3,9 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 1/15/15
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2016 Fiision Studio.
+//  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -55,7 +55,7 @@ class FwiOperationTest: XCTestCase {
     // MARK: Test Cases
     func testInitialize() {
         let operation = FwiOperation()
-
+        
         XCTAssertNotNil(operation, "Operation must not be nil.")
         XCTAssertNotNil(operation.identifier, "All operations must have any identifier.")
         XCTAssertFalse(operation.isLongOperation, "Initial operation is not a long operation.")

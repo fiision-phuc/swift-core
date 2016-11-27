@@ -3,9 +3,9 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 6/14/16
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2016 Fiision Studio.
+//  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -141,7 +141,7 @@ class FwiReflectorTests: XCTestCase {
         let intValue: Int = 100
         var r = FwiReflector(mirrorName: "intValue", mirrorValue: intValue)
         XCTAssertFalse(r.isOptional, "Expected true but found \(r.isOptional).")
-        XCTAssertEqual(r.propertyName, "intValue", "Expected \"intValue\" but found \"\(r.propertyName)\".")
+        XCTAssertEqual(r.mirrorName, "intValue", "Expected \"intValue\" but found \"\(r.mirrorName)\".")
         XCTAssertTrue(r.primitiveType == Int.self, "Expected \"\(Int.self)\" but found \"\(r.primitiveType)\".")
 
         let uintValue: UInt = 100
@@ -167,7 +167,7 @@ class FwiReflectorTests: XCTestCase {
         let stringValue = "Some value."
         r = FwiReflector(mirrorName: "value", mirrorValue: stringValue)
         XCTAssertFalse(r.isOptional, "Expected false but found \(r.isOptional).")
-        XCTAssertEqual(r.propertyName, "value", "Expected \"value\" but found \"\(r.propertyName)\".")
+        XCTAssertEqual(r.mirrorName, "value", "Expected \"value\" but found \"\(r.mirrorName)\".")
         XCTAssertTrue(r.primitiveType == String.self, "Expected \"\(String.self)\" but found \"\(r.primitiveType)\".")
 
         let nsstringValue: NSString = "Some value."
@@ -183,7 +183,7 @@ class FwiReflectorTests: XCTestCase {
         let intValue: Int? = 100
         var r = FwiReflector(mirrorName: "intValue", mirrorValue: intValue as Any)
         XCTAssertTrue(r.isOptional, "Expected true but found \(r.isOptional).")
-        XCTAssertEqual(r.propertyName, "intValue", "Expected \"intValue\" but found \"\(r.propertyName)\".")
+        XCTAssertEqual(r.mirrorName, "intValue", "Expected \"intValue\" but found \"\(r.mirrorName)\".")
         XCTAssertTrue(r.primitiveType == Int.self, "Expected \"\(Int.self)\" but found \"\(r.primitiveType)\".")
 
         let uintValue: UInt? = 100

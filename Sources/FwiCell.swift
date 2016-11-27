@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiJSONModel.swift
+//  File name   : FwiCell.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 6/10/16
+//  Author      : Dung Vu
+//  Created date: 8/10/16
 //  Version     : 1.1.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
@@ -36,60 +36,56 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
+#if os(iOS)
+import UIKit
 import Foundation
 
 
-/// FwiJSONModel represents a JSON model. This protocol is required in order to let FwiReflector
-/// working properly.
-public protocol FwiJSONModel {
-
-    /// Define keys mapper.
-    var keyMapper: [String:String]? { get }
-
-    /// Define ignored properties.
-    var ignoreProperties: [String]? { get }
-
-    /// Define optional properties.
-    var optionalProperties: [String]? { get }
-
-    /// Allow developer to interact directly with json dictionary before mapping process.
-    ///
-    /// parameter original (required): original json dictionary
-    func convertJSON(fromOriginal original: [String:Any]) -> [String:Any]
+/// FwiCell defines instruction on how to load a cell.
+public protocol FwiCell {
+    
+    /// Return cell's identifier.
+    static var identifier: String { get }
 }
 
-/// An extension to help FwiReflector and FwiJSONMapper.
-public extension FwiJSONModel {
-
-    /// Default implementation for keys mapper.
-    public var keyMapper: [String:String]? {
-        return nil
-    }
-
-    /// Default implementation for ignored properties.
-    public var ignoreProperties: [String]? {
-        return nil
-    }
-
-    /// Default implementation for optional properties.
-    public var optionalProperties: [String]? {
-        return nil
-    }
-
-    /// Default implementation for convertJSON function.
-    public func convertJSON(fromOriginal original: [String:Any]) -> [String:Any] {
-        return original
+/// Default implementation for FwiCell.
+public extension FwiCell {
+    
+    static var identifier: String  {
+        return "\(self)"
     }
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// FwiJSONManual represents a manual JSON model where developer wish to perform custom mapping.
-public protocol FwiJSONManual {
-
-    /// Allow developer to perform custom map.
-    ///
-    /// parameter object (required): object json
-    @discardableResult
-    func map(object o: [String : Any]) -> Error?
+/// Default added FwiCell to UICollection view cell.
+extension UICollectionViewCell : FwiCell {
 }
+ 
+/// FwiCell has addon function only when self is UICollectionViewCell.
+public extension FwiCell where Self: UICollectionViewCell {
+    
+    /// Dequeue and cast to self.
+    ///
+    /// - parameter collectionView (required): collectionView instance
+    /// - parameter indexPath (required): indexPath
+    public static func dequeueCell(collectionView c: UICollectionView, indexPath i: IndexPath) -> Self {
+        return c.dequeueReusableCell(withReuseIdentifier: identifier, for: i) as! Self
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Default added FwiCell to UITableView view cell.
+extension UITableViewCell : FwiCell {
+}
+    
+/// FwiCell has addon function only when self is UITableViewCell.
+public extension FwiCell where Self: UITableViewCell {
+    
+    /// Dequeue and cast to self.
+    ///
+    /// - parameter tableView (required): tableView instance
+    public static func dequeueCell(tableView t: UITableView) -> Self {
+        return t.dequeueReusableCell(withIdentifier: identifier) as! Self
+    }
+}
+#endif

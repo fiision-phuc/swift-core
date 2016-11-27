@@ -3,9 +3,9 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 9/3/16
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2016 Fiision Studio.
+//  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -42,6 +42,11 @@ import Foundation
 
 
 public extension UIViewController {
+    
+    /// Return view controller's identifier.
+    public static var identifier: String {
+        return "\(self)"
+    }
 
     /// Add initial view controller from other storyboard into defined view. Default is view
     /// controller's view.

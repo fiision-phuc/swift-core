@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiJSONModel.swift
+//  File name   : FwiConsole.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 6/10/16
+//  Created date: 11/11/16
 //  Version     : 1.1.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
@@ -39,57 +39,37 @@
 import Foundation
 
 
-/// FwiJSONModel represents a JSON model. This protocol is required in order to let FwiReflector
-/// working properly.
-public protocol FwiJSONModel {
+public struct FwiConsole {
 
-    /// Define keys mapper.
-    var keyMapper: [String:String]? { get }
-
-    /// Define ignored properties.
-    var ignoreProperties: [String]? { get }
-
-    /// Define optional properties.
-    var optionalProperties: [String]? { get }
-
-    /// Allow developer to interact directly with json dictionary before mapping process.
+    /// Output error to console.
     ///
-    /// parameter original (required): original json dictionary
-    func convertJSON(fromOriginal original: [String:Any]) -> [String:Any]
-}
-
-/// An extension to help FwiReflector and FwiJSONMapper.
-public extension FwiJSONModel {
-
-    /// Default implementation for keys mapper.
-    public var keyMapper: [String:String]? {
-        return nil
+    /// - parameter request (required): request
+    /// - parameter data (required): response's data
+    /// - parameter error (required): response's error
+    /// - parameter statusCode (required): network's status
+    static func consoleError(withRequest request: URLRequest, data d: Data?, error e: Error?, statusCode s: FwiNetworkStatus) {
+        guard let err = e as? NSError, let url = request.url, let host = url.host, let method = request.httpMethod else {
+            return
+        }
+        
+        let domain     = "Domain     : \(host)\n"
+        let urlString  = "HTTP Url   : \(url)\n"
+        let httpMethod = "HTTP Method: \(method)\n"
+        let status     = "HTTP Status: \(s.rawValue) (\(err.localizedDescription))\n"
+        let dataString = "\(d?.toString() ?? "")"
+        
+        FwiLog("\n\(domain)\(urlString)\(httpMethod)\(status)\(dataString)")
     }
-
-    /// Default implementation for ignored properties.
-    public var ignoreProperties: [String]? {
-        return nil
-    }
-
-    /// Default implementation for optional properties.
-    public var optionalProperties: [String]? {
-        return nil
-    }
-
-    /// Default implementation for convertJSON function.
-    public func convertJSON(fromOriginal original: [String:Any]) -> [String:Any] {
-        return original
-    }
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// FwiJSONManual represents a manual JSON model where developer wish to perform custom mapping.
-public protocol FwiJSONManual {
-
-    /// Allow developer to perform custom map.
+    
+    /// Generate network error.
     ///
-    /// parameter object (required): object json
-    @discardableResult
-    func map(object o: [String : Any]) -> Error?
+    /// - parameter request (required): request
+    /// - parameter statusCode (required): network's status
+    static func generateError(withRequest request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
+        let userInfo = [NSURLErrorFailingURLErrorKey:request.url?.description ?? "",
+                        NSURLErrorFailingURLStringErrorKey:request.url?.description ?? "",
+                        NSLocalizedDescriptionKey:s.description]
+
+        return NSError(domain: NSURLErrorDomain, code: s.rawValue, userInfo: userInfo)
+    }
 }

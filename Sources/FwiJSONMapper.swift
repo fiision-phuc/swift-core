@@ -3,9 +3,9 @@
 //
 //  Author      : Dung Vu
 //  Created date: 6/14/16
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2016 Fiision Studio.
+//  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -42,19 +42,115 @@ import Foundation
 internal struct FwiJSONMapper {
 
     // MARK: file's properties
-    internal static var numberFormat: NumberFormatter = {
-        let numberFormat = NumberFormatter()
-
-        numberFormat.locale = Locale(identifier: "en_US")
-        numberFormat.formatterBehavior = .behavior10_4
-        numberFormat.generatesDecimalNumbers = false
-        numberFormat.roundingMode = .halfUp
-        numberFormat.numberStyle = .decimal
+    internal static var dateFormat: DateFormatter = {
+        let format = DateFormatter()
+        format.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         
-        return numberFormat
+        return format
+    }()
+    internal static var numberFormat: NumberFormatter = {
+        let format = NumberFormatter()
+
+        format.locale = Locale(identifier: "en_US")
+        format.formatterBehavior = .behavior10_4
+        format.generatesDecimalNumbers = false
+        format.roundingMode = .halfUp
+        format.numberStyle = .decimal
+        
+        return format
     }()
 
     // MARK: Struct's public methods
+    internal static func convert<T: NSObject>(array a: [T]) -> [Any] {
+        return a.map { (o) -> [String : Any] in
+            return convert(model: o)
+        }
+    }
+    
+    /// Convert object to dictionary.
+    ///
+    /// - parameter object (required): an object to be converted
+    internal static func convert<T: NSObject>(model m: T) -> [String : Any] {
+        var properties = FwiReflector.properties(withObject: m)
+        var d = [String : Any]()
+        
+        // Remove ignored properties
+        if let j = m as? FwiJSONModel {
+            properties <- j
+        }
+        
+        // Inject data into object's properties
+        for p in properties {
+            var value = p.isOptional ? p.mirrorType.children.first?.value : m.value(forKey: p.mirrorName)
+            
+            if (p.isCollection || p.isSet) {
+                if let array = value as? [NSObject], p.collectionType?.isObject == true {
+                    value = convert(array: array)
+                } else if p.collectionType?.isStruct == true {
+                    if let array = value as? [Data] {
+                        value = array.reduce([], { (original, data) -> [String] in
+                            guard let string = data.encodeBase64String() else {
+                                return original
+                            }
+                            
+                            var o = original
+                            o.append(string)
+                            return o
+                        })
+                    } else if let array = value as? [Date] {
+                        value = array.reduce([], { (original, date) -> [String] in
+                            let string = dateFormat.string(from: date)
+                            var o = original
+                            o.append(string)
+                            return o
+                        })
+                    } else if let array = value as? [URL] {
+                        value = array.reduce([], { (original, url) -> [String] in
+                            let string = url.absoluteString
+                            var o = original
+                            o.append(string)
+                            return o
+                        })
+                    }
+                }
+            } else if p.isDictionary {
+                // Should we stop here?
+            } else if p.isObject {
+                if let o = value as? NSObject {
+                    value = convert(model: o)
+                }
+            } else {
+                if p.isStruct {
+                    if let d = value as? Data {
+                        value = d.encodeBase64String()
+                    }
+                    else if let d = value as? Date {
+                        value = dateFormat.string(from: d)
+                    }
+                    else if let u = value as? URL {
+                        value = u.absoluteString
+                    }
+                }
+            }
+            
+            /* Condition validation: validate JSON base on https://tools.ietf.org/html/rfc7159#section-2 */
+            if value != nil && !(value is NSNumber || value is String || value is [Any] || value is [String : Any]) {
+                value = "\(value ?? "")"
+            }
+            
+            // Assign or skip value
+            if let v = value {
+                d[p.mirrorName] = v
+            }
+        }
+        
+        // Convert property to key
+        if let j = m as? FwiJSONModel {
+            d <- j
+        }
+        return d
+    }
+    
     /// Build a list of objects.
     ///
     /// - parameter array (required): a list of keys-values
@@ -63,6 +159,7 @@ internal struct FwiJSONMapper {
     internal static func map<T: NSObject>(array a: [[String : Any]], toModel m: T.Type) -> ([T]?, NSError?) {
         var userInfo = [String]()
         var array = [T]()
+        
         for (idx, d) in a.enumerated() {
             var o = m.init()
             
@@ -86,8 +183,8 @@ internal struct FwiJSONMapper {
     /// - parameter model (required): a class to be initialize for mapping
     internal static func map<T: NSObject>(dictionary d: [String : Any], toModel m: T.Type) -> (T?, NSError?) {
         var o = m.init()
+        
         let err = map(dictionary: d, toObject: &o)
-
         return (o, err)
     }
     
@@ -109,28 +206,32 @@ internal struct FwiJSONMapper {
 
         // Override dictionary if model implement FwiJSONModel
         if let j = m as? FwiJSONModel {
-            dictionary <- j
+            j <- dictionary
             properties <- j
         }
 
         // Inject data into object's properties
+        var final = [String : Any]()
         for p in properties {
             /* Condition validation: validate JSON base on https://tools.ietf.org/html/rfc7159#section-2 */
             guard let valueJSON = dictionary[p.mirrorName], !(valueJSON is NSNull) || valueJSON is NSNumber || valueJSON is String || valueJSON is [Any] || valueJSON is [String : Any] else {
-                if !p.optionalProperty { userInfo[p.mirrorName] = "Could not map 'value' to property: '\(p.mirrorName)' because of incorrect JSON grammar: '\(dictionary[p.mirrorName])'." }
+                if !p.optionalProperty {
+                    userInfo[p.mirrorName] = "Could not map 'value' to property: '\(p.mirrorName)' because of incorrect JSON grammar: '\(dictionary[p.mirrorName])'."
+                }
                 continue
             }
 
             // Try to convert raw data to right format
             var value = valueJSON
             var canAssign = false
-
             if let a = value as? [Any], p.isCollection || p.isSet {
                 if let collectionType = p.collectionType, let c = collectionType.classType as? NSObject.Type, let objects = a as? [[String : Any]] {
-                    let (list, _) = map(array: objects, toModel: c)
+                    let (list, err) = map(array: objects, toModel: c)
                     if let l = list {
                         value = l
                         canAssign = true
+                    } else {
+                        userInfo[p.mirrorName] = err?.localizedDescription ?? "Could not convert data into array."
                     }
                 } else {
                     if let array = a + p {
@@ -141,15 +242,17 @@ internal struct FwiJSONMapper {
             } else if let d = value as? [String : Any], p.isDictionary || p.isObject {
                 if p.isObject {
                     if let c = p.classType as? NSObject.Type {
-                        let (child, _) = map(dictionary: d, toModel: c)
+                        let (child, err) = map(dictionary: d, toModel: c)
                         if let c = child {
                             value = c
                             canAssign = true
+                        } else {
+                            dictionary[p.mirrorName] = err?.localizedDescription ?? "Could not convert data into object."
                         }
                     }
                 } else {
-                    if let dictionary = d + p {
-                        value = dictionary
+                    if let objects = d + p {
+                        value = objects
                         canAssign = true
                     }
                 }
@@ -171,25 +274,26 @@ internal struct FwiJSONMapper {
             
             // Assign value to property if can
             if canAssign && m.responds(to: NSSelectorFromString(p.mirrorName)) == true {
-                m.setValue(value, forKey: p.mirrorName)
+                final[p.mirrorName] = value
             } else {
                 if !p.optionalProperty {
                     userInfo[p.mirrorName] = "could not map '\(value)' to this property due to data's type conflict."
                 }
-
             }
         }
         
         // Summary error
         if userInfo.keys.count > 0 {
-            var message = "\nThere is an error when trying to map data into model: \(NSStringFromClass(type(of: m)))\n"
+            var message = "There is an error when trying to map data into model: \(NSStringFromClass(type(of: m)))\n"
             userInfo.forEach({
                 message += "-> [\($0)] \($1)\n"
             })
             FwiLog(message)
             
-            return NSError(domain: "FwiJSONMapper", code: -1, userInfo: userInfo)
+            return NSError(domain: "FwiJSONMapper", code: -1, userInfo: [NSLocalizedDescriptionKey:message])
         }
+        
+        m.setValuesForKeys(final)
         return nil
     }
 
@@ -198,7 +302,7 @@ internal struct FwiJSONMapper {
     ///
     /// parameter value (required): JSON date, can be either in string form or number form
     /// parameter format (optional): format string to convert string to date
-    internal static func transformDate(_ value: Any?, formats: [String] = ["yyyy-MM-dd'T'HH:mm:ssZ","yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd'T'HHmmss'GMT'"]) -> Date? {
+    internal static func transformDate(_ value: Any?, formats: [String] = ["yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd'T'HH:mm:ssZ", "yyyy-MM-dd'T'HHmmss'GMT'"]) -> Date? {
         if let number = value as? TimeInterval {
             return Date(timeIntervalSince1970: number)
         } else if let number = value as? NSNumber {
@@ -228,50 +332,6 @@ internal struct FwiJSONMapper {
 
 // MARK: Custom Operator
 infix operator <-
-
-public func <- <T>(left: inout T, right: AnyObject?) {
-    if let value = right as? T {
-        left = value
-    }
-}
-public func <- <T>(left: inout T?, right: AnyObject?) {
-    left = right as? T
-}
-
-public func <- <T: NSObject>(left: inout T, right: AnyObject?) {
-    let _ = FwiJSONMapper.mapObjectToModel(right, model: &left)
-}
-
-public func <- <T>(left: inout [T], right: [AnyObject]?) {
-    if let arrValue = right {
-        var temp = [T]()
-        
-        arrValue.forEach {
-            if let value = $0 as? T {
-                temp.append(value)
-            }
-        }
-        
-        if temp.count > 0 {
-            left = temp
-        }
-    }
-}
-public func <- <T>(left: inout [T]?, right: [AnyObject]?) {
-    if let arrValue = right {
-        var temp = [T]()
-        
-        arrValue.forEach {
-            if let value = $0 as? T {
-                temp.append(value)
-            }
-        }
-        
-        if temp.count > 0 {
-            left = temp
-        }
-    }
-}
 
 /// Transform array.
 ///
@@ -366,22 +426,32 @@ fileprivate func <- (left: inout [FwiReflector], right: FwiJSONModel) {
     })
 }
 
+/// Update output dictionary after mapping process occured.
+///
+/// parameter left (required): an instance of model that implemented FwiJSONModel
+/// parameter right (required): a dictionary that will be update
+fileprivate func <- (left: inout [String : Any], right: FwiJSONModel) {
+    right.keyMapper?.forEach({
+        left[$0.key] = left[$0.value]
+        left.removeValue(forKey: $0.value)
+    })
+}
+
 /// Update input dictionary before mapping process occur.
 ///
 /// parameter left (required): a dictionary that will be update
 /// parameter right (required): an instance of model that implemented FwiJSONModel
-fileprivate func <- (left: inout [String : Any], right: FwiJSONModel) {
-    left = right.convertJSON(fromOriginal: left)
-    right.keyMapper?
+fileprivate func <- (left: FwiJSONModel, right: inout [String : Any]) {
+    right = left.convertJSON(fromOriginal: right)
+    left.keyMapper?
         .filter({ (item) -> Bool in
             return (item.key != item.value)
         })
         .forEach({
-            left[$0.value] = left[$0.key]
-            left.removeValue(forKey: $0.key)
+            right[$0.value] = right[$0.key]
+            right.removeValue(forKey: $0.key)
         })
 }
-
 
 // Mirror types
 fileprivate let anyMirror = Mirror(reflecting: Any.self)

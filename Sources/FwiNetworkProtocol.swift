@@ -3,55 +3,52 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 10/31/16
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2016 Fiision Studio. All rights reserved.
+//  Copyright © 2012, 2017 Fiision Studio.
+//  All Rights Reserved.
 //  --------------------------------------------------------------
+//
+//  Permission is hereby granted, free of charge, to any person obtaining  a  copy
+//  of this software and associated documentation files (the "Software"), to  deal
+//  in the Software without restriction, including without limitation  the  rights
+//  to use, copy, modify, merge,  publish,  distribute,  sublicense,  and/or  sell
+//  copies of the Software,  and  to  permit  persons  to  whom  the  Software  is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF  ANY  KIND,  EXPRESS  OR
+//  IMPLIED, INCLUDING BUT NOT  LIMITED  TO  THE  WARRANTIES  OF  MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO  EVENT  SHALL  THE
+//  AUTHORS OR COPYRIGHT HOLDERS  BE  LIABLE  FOR  ANY  CLAIM,  DAMAGES  OR  OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING  FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN  THE
+//  SOFTWARE.
+//
+//
+//  Disclaimer
+//  __________
+//  Although reasonable care has been taken to  ensure  the  correctness  of  this
+//  software, this software should never be used in any application without proper
+//  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
+//  person or entity with respect to any loss or damage caused, or alleged  to  be
+//  caused, directly or indirectly, by the use of this software.
 
 import Foundation
 
-struct ConsoleNetwork {
-    /// - parameter request (required): request
-    /// - parameter statusCode (required): network's status
-    static func generateError(_ request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
-        let userInfo = [NSURLErrorFailingURLErrorKey:request.url?.description ?? "",
-                        NSURLErrorFailingURLStringErrorKey:request.url?.description ?? "",
-                        NSLocalizedDescriptionKey:s.description]
-        
-        return NSError(domain: NSURLErrorDomain, code: s.rawValue, userInfo: userInfo)
-    }
-    
-    /// Output error to console.
-    ///
-    /// - parameter request (required): request
-    /// - parameter data (required): response's data
-    /// - parameter error (required): response's error
-    /// - parameter statusCode (required): network's status
-    static func consoleError(_ request: URLRequest, data d: Data?, error e: Error?, statusCode s: FwiNetworkStatus) {
-        guard let err = e as? NSError, let url = request.url, let host = url.host, let method = request.httpMethod else {
-            return
-        }
-        
-        let domain     = "Domain     : \(host)\n"
-        let urlString  = "HTTP Url   : \(url)\n"
-        let httpMethod = "HTTP Method: \(method)\n"
-        let status     = "HTTP Status: \(s.rawValue) (\(err.localizedDescription))\n"
-        let dataString = "\(d?.toString() ?? "")"
-        
-        FwiLog("\n\(domain)\(urlString)\(httpMethod)\(status)\(dataString)")
-    }
-}
 
-
-public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
 public typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
+public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ statusCode: FwiNetworkStatus, _ response: HTTPURLResponse?) -> Void
 
+/// FwiNetworkProtocol defines required properties for network manager.
 public protocol FwiNetworkProtocol {
     var session: URLSession { get }
     var networkCounter: Int { get set }
 }
 
-public extension FwiNetworkProtocol where Self: FwiNetwork{
+public extension FwiNetworkProtocol where Self: FwiNetwork {
 
     /// Download resource from server.
     ///
@@ -82,9 +79,9 @@ public extension FwiNetworkProtocol where Self: FwiNetwork{
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
-                error = ConsoleNetwork.generateError(r as URLRequest, statusCode: statusCode)
+                error = FwiConsole.generateError(withRequest: r as URLRequest, statusCode: statusCode)
             }
-            ConsoleNetwork.consoleError(r, data: nil, error: error, statusCode: statusCode)
+            FwiConsole.consoleError(withRequest: r, data: nil, error: error, statusCode: statusCode)
             c(location, error, statusCode, httpResponse)
         }
 
@@ -122,9 +119,9 @@ public extension FwiNetworkProtocol where Self: FwiNetwork{
             
             // Validate HTTP status
             if !FwiNetworkStatusIsSuccces(statusCode) {
-                error = ConsoleNetwork.generateError(r as URLRequest, statusCode: statusCode)
+                error = FwiConsole.generateError(withRequest: r as URLRequest, statusCode: statusCode)
             }
-            ConsoleNetwork.consoleError(r, data: data, error: error, statusCode: statusCode)
+            FwiConsole.consoleError(withRequest: r, data: data, error: error, statusCode: statusCode)
             c(data, error, statusCode, httpResponse)
         }
         task.resume()

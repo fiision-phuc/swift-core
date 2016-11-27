@@ -3,9 +3,9 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 8/18/16
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2016 Fiision Studio.
+//  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -44,12 +44,12 @@ public extension NSManagedObject {
 
     /// Remove self from database.
     public func remove() {
-        managedObjectContext?.performAndWait() { [weak self] in
-            /* Condition validation */
-            guard let weakSelf = self else {
+        managedObjectContext?.performAndWait({ [weak self] in
+            guard let strongSelf = self, let context = self?.managedObjectContext else {
                 return
             }
-            self?.managedObjectContext?.delete(weakSelf)
-        }
+            context.delete(strongSelf)
+            try? context.save()
+        })
     }
 }

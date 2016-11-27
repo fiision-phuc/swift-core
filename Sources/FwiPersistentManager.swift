@@ -3,9 +3,9 @@
 //
 //  Author      : Dung Vu
 //  Created date: 6/8/16
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2016 Fiision Studio.
+//  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -158,12 +158,13 @@ public final class FwiPersistentManager {
     fileprivate var dataModel: String
     fileprivate var rootLocation: URL?
     fileprivate var storeType: FwiPersistentType
-
+    fileprivate let _lock = NSRecursiveLock()
 
     // MARK: Class's public methods
     @discardableResult
     public func saveContext() -> NSError? {
         var error: NSError?
+        _lock.lock()
         managedContext.performAndWait({ [weak self] in
             do {
                 try self?.managedContext.save()
@@ -171,6 +172,7 @@ public final class FwiPersistentManager {
                 error = err
             }
         })
+        _lock.unlock()
         return error
     }
 

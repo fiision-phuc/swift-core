@@ -3,9 +3,9 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/22/14
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2016 Fiision Studio.
+//  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -41,24 +41,21 @@ import Foundation
 
 public extension URL {
 
-    /** URL to main cache folder. */
+    /// URL to main cache folder.
     public static func cacheDirectory() -> URL? {
         let array = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
         return array.first
     }
 
-    /** URL to main document folder. */
+    /// URL to main document folder.
     public static func documentDirectory() -> URL? {
         let array = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return array.first
     }
-    
-    public func addHashTag(with hashTag: String?) -> URL? {
-        return URL(string: "\(self)" + (hashTag ?? ""))
-    }
 }
 
 // MARK: Custom Operator
+/// Append path component.
 public func + (left: URL?, right: String?) -> URL? {
     guard let path = right else {
         return left
@@ -73,7 +70,8 @@ public func += (left: inout URL?, right: String?) {
     left = left + right
 }
 
-public func + (left: URL?, right: [String: String]?) -> URL? {
+/// Add query params to current url.
+public func + (left: URL?, right: [String : String]?) -> URL? {
     guard let urlString = left?.absoluteString, let params = right, params.count > 0 else {
         return left
     }
@@ -103,7 +101,6 @@ public func + (left: URL?, right: [String: String]?) -> URL? {
             return URL(string: "\(urlString)?\(query)")
     }
 }
-
-public func += (left: inout URL?, right: [String:String]?) {
+public func += (left: inout URL?, right: [String : String]?) {
     left = left + right
 }

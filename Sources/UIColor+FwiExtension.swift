@@ -3,9 +3,9 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 6/13/16
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2016 Fiision Studio.
+//  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -43,7 +43,7 @@ import Foundation
 
 public extension UIColor {
 
-    /** Convert hex to color. */
+    /// Convert hex to color.
     public convenience init(rgb hex: UInt32) {
         self.init(red: CGFloat((hex & 0xff0000) >> 16) / 255.0,
                   green: CGFloat((hex & 0x00ff00) >> 8) / 255.0,

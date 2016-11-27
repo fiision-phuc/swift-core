@@ -3,9 +3,9 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 9/4/16
-//  Version     : 1.00
+//  Version     : 1.1.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2016 Fiision Studio.
+//  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
 //  --------------------------------------------------------------
 //
@@ -42,15 +42,18 @@ import Foundation
 import CoreData
 
 
-public final class FwiEntityTableViewModel<T: NSFetchRequestResult> : FwiEntityViewModel<T> {
-
+public final class FwiEntityTableViewModel<T: NSFetchRequestResult> : FwiEntityViewModel<T>, UITableViewDataSource, UITableViewDelegate {
+    public typealias CellFactory = (UITableView, IndexPath, T) -> UITableViewCell
+    
+    
     /// MARK: Class's constructors
-    public convenience init(_ tableView: UITableView?, context c: NSManagedObjectContext?) {
+    public convenience init(tableView t: UITableView?, context c: NSManagedObjectContext?) {
         self.init(c)
-        self.tableView = tableView
+        self.tableView = t
     }
     
     /// MARK: Class's properties
+    public var cellFactory: CellFactory?
     fileprivate weak var tableView: UITableView?
     
     /// MARK: Class's private methods
@@ -59,6 +62,33 @@ public final class FwiEntityTableViewModel<T: NSFetchRequestResult> : FwiEntityV
         DispatchQueue.main.async { [weak self] in
             self?.tableView?.reloadData()
         }
+    }
+    
+    // MARK: UITableViewDataSource's members
+    public func numberOfSections(in tableView: UITableView) -> Int {
+        return sectionCount()
+    }
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return itemCount(forSection: section)
+    }
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard  let cellFactory = cellFactory, let item = item(forIndexPath: indexPath) else {
+            return UITableViewCell()
+        }
+        return cellFactory(tableView, indexPath, item)
+    }
+    
+    // MARK: UITableViewDelegate's members
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard  let cellFactory = cellFactory, let item = item(forIndexPath: indexPath) else {
+            return 45.0
+        }
+        let cell = cellFactory(tableView, indexPath, item)
+        cell.setNeedsLayout()
+        cell.layoutIfNeeded()
+        
+        let size = cell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+        return fmax(size.height, 45.0)
     }
     
     /// MARK: NSFetchedResultsControllerDelegate's members
