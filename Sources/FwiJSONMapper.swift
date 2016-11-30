@@ -268,6 +268,9 @@ internal struct FwiJSONMapper {
                         canAssign = true
                     }
                 } else {
+                    if p.primitiveType == String.self {
+                        value = "\(value)"
+                    }
                     canAssign = true
                 }
             }
