@@ -55,7 +55,7 @@ public extension FwiNetworkProtocol where Self: FwiNetwork {
     /// - parameter request (required): request
     /// - parameter completion (required): call back function
     @discardableResult
-    public func download(resource r: URLRequest, completion c: @escaping DownloadCompletion) -> URLSessionDownloadTask {
+    public func download(resource r: URLRequest, completion c: DownloadCompletion?) -> URLSessionDownloadTask {
         // Turn on activity indicator
         self.networkCounter += 1
 
@@ -72,7 +72,7 @@ public extension FwiNetworkProtocol where Self: FwiNetwork {
             
             /* Condition validation: Validate HTTP response instance */
             guard let httpResponse = response as? HTTPURLResponse else {
-                c(nil, error, statusCode, nil)
+                c?(nil, error, statusCode, nil)
                 return
             }
             statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
@@ -82,7 +82,7 @@ public extension FwiNetworkProtocol where Self: FwiNetwork {
                 error = FwiConsole.generateError(withRequest: r as URLRequest, statusCode: statusCode)
             }
             FwiConsole.consoleError(withRequest: r, data: nil, error: error, statusCode: statusCode)
-            c(location, error, statusCode, httpResponse)
+            c?(location, error, statusCode, httpResponse)
         }
 
         task.resume()
@@ -95,7 +95,7 @@ public extension FwiNetworkProtocol where Self: FwiNetwork {
     /// - parameter request (required): request
     /// - parameter completion (required): call back function
     @discardableResult
-    public func send(request r: URLRequest, completion c: @escaping RequestCompletion) -> URLSessionDataTask {
+    public func send(request r: URLRequest, completion c: RequestCompletion?) -> URLSessionDataTask {
         // Turn on activity indicator
         self.networkCounter += 1
         
@@ -112,7 +112,7 @@ public extension FwiNetworkProtocol where Self: FwiNetwork {
 
             /* Condition validation: Validate HTTP response instance */
             guard let httpResponse = response as? HTTPURLResponse else {
-                c(nil, error, statusCode, nil)
+                c?(nil, error, statusCode, nil)
                 return
             }
             statusCode = FwiNetworkStatus(rawValue: httpResponse.statusCode)
@@ -122,7 +122,7 @@ public extension FwiNetworkProtocol where Self: FwiNetwork {
                 error = FwiConsole.generateError(withRequest: r as URLRequest, statusCode: statusCode)
             }
             FwiConsole.consoleError(withRequest: r, data: data, error: error, statusCode: statusCode)
-            c(data, error, statusCode, httpResponse)
+            c?(data, error, statusCode, httpResponse)
         }
         task.resume()
         return task
