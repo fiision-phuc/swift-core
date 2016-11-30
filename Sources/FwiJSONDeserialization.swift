@@ -114,14 +114,14 @@ public final class FwiJSONMap<T: NSObject> {
     /// Build a list of models.
     ///
     /// - parameter array (required): a list of set of keys-values
-    class func map(array a: [[String: Any]]) -> ([T]?, NSError?)  {
+    public class func map(array a: [[String: Any]]) -> ([T]?, NSError?)  {
         return FwiJSONMapper.map(array: a, toModel: T.self)
     }
     
     /// Create model's instance and map dictionary to that instance.
     ///
     /// - parameter dictionary (required): set of keys-values
-    class func map(dictionary d: [String : Any]) -> (T?, NSError?)  {
+    public class func map(dictionary d: [String : Any]) -> (T?, NSError?)  {
         return FwiJSONMapper.map(dictionary: d, toModel: T.self)
     }
 }
