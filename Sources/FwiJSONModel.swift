@@ -39,6 +39,10 @@
 import Foundation
 
 
+/// Define JSON type alias.
+public typealias JSON = [String : Any]
+
+
 /// FwiJSONModel represents a JSON model. This protocol is required in order to let FwiReflector
 /// working properly.
 public protocol FwiJSONModel {
@@ -55,7 +59,7 @@ public protocol FwiJSONModel {
     /// Allow developer to interact directly with json dictionary before mapping process.
     ///
     /// parameter original (required): original json dictionary
-    func convertJSON(fromOriginal original: [String:Any]) -> [String:Any]
+    func convertJSON(fromOriginal original: JSON) -> JSON
 }
 
 /// An extension to help FwiReflector and FwiJSONMapper.
@@ -77,7 +81,7 @@ public extension FwiJSONModel {
     }
 
     /// Default implementation for convertJSON function.
-    public func convertJSON(fromOriginal original: [String:Any]) -> [String:Any] {
+    public func convertJSON(fromOriginal original: JSON) -> JSON {
         return original
     }
 }
@@ -91,5 +95,5 @@ public protocol FwiJSONManual {
     ///
     /// parameter object (required): object json
     @discardableResult
-    func map(object o: [String : Any]) -> Error?
+    func map(object o: JSON) -> Error?
 }

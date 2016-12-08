@@ -721,8 +721,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B71D89C13B00738B1F /* lib-release.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				DEVELOPMENT_TEAM = "";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 			};
@@ -740,8 +738,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B61D89C13B00738B1F /* lib-debug.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				DEVELOPMENT_TEAM = "";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 			};
