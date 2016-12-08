@@ -175,7 +175,7 @@ class FwiJSONMapperTest: XCTestCase {
         
         let array2 = FwiJSONMapper.convert(array: objects)
         XCTAssertEqual(array2.count, 2, "Expected '\(array1.count)' but found: '\(array2.count)'.")
-        XCTAssertEqual((array2[0] as! [String:Any])["url"] as? String, "https://www.google.com/?gws_rd=ssl", "Expected 'https://www.google.com/?gws_rd=ssl' but found: '\((array2[0] as! [String:Any])["url"])'.")
+        XCTAssertEqual((array2[0])["url"] as? String, "https://www.google.com/?gws_rd=ssl", "Expected 'https://www.google.com/?gws_rd=ssl' but found: '\((array2[0])["url"])'.")
         
         let data = try? JSONSerialization.data(withJSONObject: array2, options: JSONSerialization.WritingOptions(rawValue: 0))
         XCTAssertNotNil(data, "Expected not nil but found nil.")
@@ -278,24 +278,14 @@ class FwiJSONMapperTest: XCTestCase {
         
         XCTAssertNotNil(err, "Expected not nil but found: '\(err)'.")
         
-        XCTAssertNotNil(o.array, "Expected not nil but found: '\(o.array)'")
-        XCTAssertEqual(o.array?.count, 2, "Expected '2' but found: '\(o.array?.count)'.")
-        XCTAssertEqual(o.array?[0].url?.absoluteString, "https://www.google.com/?gws_rd=ssl", "Expected 'https://www.google.com/?gws_rd=ssl' but found: '\(o.array?[0].url?.absoluteString)'.")
-        
-        XCTAssertNotNil(o.arrayInt1, "Expected not nil but found: '\(o.arrayInt1)'")
-        XCTAssertEqual(o.arrayInt1?.count, 3, "Expected '3' but found: '\(o.arrayInt1?.count)'.")
-        
-        XCTAssertNotNil(o.arrayString1, "Expected not nil but found: '\(o.arrayString1)'")
-        XCTAssertEqual(o.arrayString1?.count, 3, "Expected '3' but found: '\(o.arrayString1?.count)'.")
-        
-        XCTAssertNotNil(o.arrayInt2, "Expected not nil but found: '\(o.arrayInt2)'.")
-        XCTAssertEqual(o.arrayInt2?[0], 2, "Expected '2' but found: '\(o.arrayInt2?[0])'.")
-        
+        XCTAssertNil(o.array, "Expected nil but found: '\(o.array)'")
+        XCTAssertNil(o.arrayInt1, "Expected nil but found: '\(o.arrayInt1)'")
+        XCTAssertNil(o.arrayString1, "Expected nil but found: '\(o.arrayString1)'")
+        XCTAssertNil(o.arrayInt2, "Expected nil but found: '\(o.arrayInt2)'.")
         XCTAssertNil(o.arrayString2, "Expected nil but found: '\(o.arrayString2)'.")
-        
-        XCTAssertNotNil(o.arrayAny1, "Expected not nil but found: '\(o.arrayAny1)'.")
-        XCTAssertNotNil(o.arrayAny2, "Expected not nil but found: '\(o.arrayAny2)'.")
-        XCTAssertNotNil(o.arrayUrls, "Expected not nil but found: '\(o.arrayUrls)'.")
+        XCTAssertNil(o.arrayAny1, "Expected nil but found: '\(o.arrayAny1)'.")
+        XCTAssertNil(o.arrayAny2, "Expected nil but found: '\(o.arrayAny2)'.")
+        XCTAssertNil(o.arrayUrls, "Expected nil but found: '\(o.arrayUrls)'.")
     }
     
     func testConvertDictionary1() {
