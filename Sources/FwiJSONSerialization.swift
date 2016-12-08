@@ -56,7 +56,7 @@ extension NSObject: FwiJSONSerialization {
 public extension FwiJSONSerialization where Self: NSObject {
     
     /// Convert model to dictionary.
-    public func toDictionary() -> [String : Any] {
+    public func toDictionary() -> JSON {
         return FwiJSONMapper.convert(model: self)
     }
     
@@ -80,7 +80,7 @@ public final class FwiJSONConvert<T: NSObject> {
     /// Build a list from a list of models.
     ///
     /// - parameter array (required): a list of models
-    public static func convert(array a: [T]) -> [Any] {
+    public static func convert(array a: [T]) -> [JSON] {
         return FwiJSONMapper.convert(array: a)
     }
 }

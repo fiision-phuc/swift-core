@@ -245,6 +245,22 @@ class FwiJSONMapperTest: XCTestCase {
             XCTFail("Invalid array.")
         }
     }
+//    class TestJSON5: NSObject, FwiJSONModel {
+//        
+//        var array: [URLTest]?
+//        
+//        var arrayInt1: [Int]?
+//        var arrayString1: [String]?
+//        
+//        var arrayInt2: [Int]?
+//        var arrayString2: [String]?
+//        
+//        var arrayAny1: [Any]?
+//        var arrayAny2: [Any]?
+//        
+//        var arrayUrls: [URL]?
+//    }
+    
     func testMapArray2() {
         let d: [String : Any] = [
             "array":[["url": "https://www.google.com/?gws_rd=ssl"], ["url": "https://www.google.com/?gws_rd=ssl"]],

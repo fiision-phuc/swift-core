@@ -61,8 +61,8 @@ internal struct FwiJSONMapper {
     }()
 
     // MARK: Struct's public methods
-    internal static func convert<T: NSObject>(array a: [T]) -> [Any] {
-        return a.map { (o) -> [String : Any] in
+    internal static func convert<T: NSObject>(array a: [T]) -> [JSON] {
+        return a.map { (o) -> JSON in
             return convert(model: o)
         }
     }
@@ -70,7 +70,7 @@ internal struct FwiJSONMapper {
     /// Convert object to dictionary.
     ///
     /// - parameter object (required): an object to be converted
-    internal static func convert<T: NSObject>(model m: T) -> [String : Any] {
+    internal static func convert<T: NSObject>(model m: T) -> JSON {
         var properties = FwiReflector.properties(withObject: m)
         var d = [String : Any]()
         
@@ -156,7 +156,7 @@ internal struct FwiJSONMapper {
     /// - parameter array (required): a list of keys-values
     /// - parameter model (required): a class which contains a set of properties to be mapped
     @discardableResult
-    internal static func map<T: NSObject>(array a: [[String : Any]], toModel m: T.Type) -> ([T]?, NSError?) {
+    internal static func map<T: NSObject>(array a: [JSON], toModel m: T.Type) -> ([T]?, NSError?) {
         var userInfo = [String]()
         var array = [T]()
         
@@ -181,7 +181,7 @@ internal struct FwiJSONMapper {
     ///
     /// - parameter dictionary (required): set of keys-values
     /// - parameter model (required): a class to be initialize for mapping
-    internal static func map<T: NSObject>(dictionary d: [String : Any], toModel m: T.Type) -> (T?, NSError?) {
+    internal static func map<T: NSObject>(dictionary d: JSON, toModel m: T.Type) -> (T?, NSError?) {
         var o = m.init()
         
         let err = map(dictionary: d, toObject: &o)
@@ -193,7 +193,7 @@ internal struct FwiJSONMapper {
     /// - parameter dictionary (required): set of keys-values
     /// - parameter object (required): an object which contains a set of properties to be mapped
     @discardableResult
-    internal static func map<T: NSObject>(dictionary d: [String : Any], toObject m: inout T) -> NSError? {
+    internal static func map<T: NSObject>(dictionary d: JSON, toObject m: inout T) -> NSError? {
         /* Condition validation: should allow model to perform manual mapping or not */
         if let j = m as? FwiJSONManual {
             let err = j.map(object: d)
@@ -360,7 +360,7 @@ fileprivate func + (left: [Any], right: FwiReflector) -> [Any]? {
 ///
 /// parameter left (required): an original data in string form
 /// parameter right (required): a property description from model
-fileprivate func + (left: [String : Any], right: FwiReflector) -> [String : Any]? {
+fileprivate func + (left: JSON, right: FwiReflector) -> JSON? {
     guard let dictionaryType = right.dictionaryType else {
         return nil
     }
@@ -433,7 +433,7 @@ fileprivate func <- (left: inout [FwiReflector], right: FwiJSONModel) {
 ///
 /// parameter left (required): an instance of model that implemented FwiJSONModel
 /// parameter right (required): a dictionary that will be update
-fileprivate func <- (left: inout [String : Any], right: FwiJSONModel) {
+fileprivate func <- (left: inout JSON, right: FwiJSONModel) {
     right.keyMapper?.forEach({
         left[$0.key] = left[$0.value]
         left.removeValue(forKey: $0.value)
@@ -444,7 +444,7 @@ fileprivate func <- (left: inout [String : Any], right: FwiJSONModel) {
 ///
 /// parameter left (required): a dictionary that will be update
 /// parameter right (required): an instance of model that implemented FwiJSONModel
-fileprivate func <- (left: FwiJSONModel, right: inout [String : Any]) {
+fileprivate func <- (left: FwiJSONModel, right: inout JSON) {
     right = left.convertJSON(fromOriginal: right)
     left.keyMapper?
         .filter({ (item) -> Bool in
