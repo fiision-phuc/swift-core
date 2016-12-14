@@ -45,7 +45,7 @@ public protocol FwiCoreData {
 
 
 public extension FwiCoreData where Self: NSManagedObject {
-
+    
     /// Fetch all entities.
     ///
     /// - parameter context (required): a managed object context to search
@@ -58,35 +58,38 @@ public extension FwiCoreData where Self: NSManagedObject {
         guard let c = context, let entityName = NSStringFromClass(self).split(".").last else {
             return nil
         }
-
+        
+        let request = NSFetchRequest<Self>(entityName: entityName)
+        
+        // Apply standard condition
+        request.predicate = p
+        request.sortDescriptors = s
+        
+        // Apply group by condition
+        if let groupBy = g , groupBy.count > 0 {
+            request.propertiesToFetch = groupBy
+            request.returnsDistinctResults = true
+            request.resultType = .dictionaryResultType
+        }
+        
+        // Apply limit
+        if l > 0 {
+            request.fetchLimit = l
+        }
+        
         var entities: [Self]?
-        c.performAndWait {
-            let request = NSFetchRequest<Self>(entityName: entityName)
-
-            // Apply standard condition
-            request.predicate = p
-            request.sortDescriptors = s
-
-            // Apply group by condition
-            if let groupBy = g , groupBy.count > 0 {
-                request.propertiesToFetch = groupBy
-                request.returnsDistinctResults = true
-                request.resultType = .dictionaryResultType
+        c.performAndWait {[weak c] in
+            guard let c = c else {
+                return
             }
-
-            // Apply limit
-            if l > 0 {
-                request.fetchLimit = l
-            }
-
             // Perform fetch
             entities = try? c.fetch(request)
         }
-
+        
         // Return result
         return entities
     }
-
+    
     /// Fetch an entity base on search condition. Create new if necessary.
     ///
     /// - parameter context (required): a managed object context to search
@@ -97,11 +100,11 @@ public extension FwiCoreData where Self: NSManagedObject {
         guard let c = context else {
             return nil
         }
-
+        
         // Find before create
         let entities = allEntities(fromContext: c, predicate: p, limit: 1)
         var entity = entities?.first
-
+        
         if entity == nil && create {
             entity = newEntity(withContext: context)
         }
@@ -117,13 +120,18 @@ public extension FwiCoreData where Self: NSManagedObject {
         guard let c = context, let entityName = NSStringFromClass(self).split(".").last else {
             return 0
         }
-
+        
+        let request = NSFetchRequest<Self>(entityName: entityName)
+        request.includesPropertyValues = false
+        request.includesSubentities = false
+        request.predicate = p
+        
         var counter = 0
-        c.performAndWait {
-            let request = NSFetchRequest<Self>(entityName: entityName)
-            request.includesPropertyValues = false
-            request.includesSubentities = false
-            request.predicate = p
+        c.performAndWait {[weak c] in
+            guard let c = c else {
+                return
+            }
+            
             
             do {
                 counter = try c.count(for: request)
@@ -145,15 +153,17 @@ public extension FwiCoreData where Self: NSManagedObject {
         }
         return NSEntityDescription.insertNewObject(forEntityName: entityName, into: c) as? Self
     }
-
+    
     /// Delete all entities.
     ///
     /// - parameter context (required): a managed object context to delete
     /// - parameter predicate (optional): to filter entities when deleting
     public static func deleteAllEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) {
         let entities = allEntities(fromContext: context, predicate: p)
+        // Using mark and delete , it'll fast and safe
         entities?.forEach({
-            $0.remove()
+            context?.delete($0)
         })
+        try? context?.save()
     }
 }
