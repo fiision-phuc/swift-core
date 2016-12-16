@@ -119,29 +119,22 @@ public final class FwiEntityCollectionViewModel<T: NSFetchRequestResult> : FwiEn
     // MARK: NSFetchedResultsControllerDelegate's members
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         DispatchQueue.main.async { [weak self] in
-//            do {
-                self?.collectionView?.performBatchUpdates(
-                    {
-                        if let array = self?.deleteArrays {
-                            self?.collectionView?.deleteItems(at: array)
-                        }
-                        if let array = self?.insertArrays {
-                            self?.collectionView?.insertItems(at: array)
-                        }
-                        if let array = self?.reloadArrays {
-                            self?.collectionView?.reloadItems(at: array)
-                        }
-                    },
-                    completion: { _ in
-                        self?.deleteArrays = nil
-                        self?.insertArrays = nil
-                        self?.reloadArrays = nil
-                    }
-                )
-//            }
-//            catch _ {
-//                self?.collectionView?.reloadData()
-//            }
+            self?.collectionView?.performBatchUpdates({
+                if let array = self?.deleteArrays, array.count > 0 {
+                    self?.collectionView?.deleteItems(at: array)
+                }
+                if let array = self?.insertArrays, array.count > 0 {
+                    self?.collectionView?.insertItems(at: array)
+                }
+                if let array = self?.reloadArrays, array.count > 0 {
+                    self?.collectionView?.reloadItems(at: array)
+                }
+            },
+            completion: { _ in
+                self?.deleteArrays = nil
+                self?.insertArrays = nil
+                self?.reloadArrays = nil
+            })
         }
     }
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
