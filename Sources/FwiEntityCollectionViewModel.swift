@@ -118,23 +118,30 @@ public final class FwiEntityCollectionViewModel<T: NSFetchRequestResult> : FwiEn
     
     // MARK: NSFetchedResultsControllerDelegate's members
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        DispatchQueue.main.async { [weak self] in
-            self?.collectionView?.performBatchUpdates({
-                if let array = self?.deleteArrays, array.count > 0 {
-                    self?.collectionView?.deleteItems(at: array)
-                }
-                if let array = self?.insertArrays, array.count > 0 {
-                    self?.collectionView?.insertItems(at: array)
-                }
-                if let array = self?.reloadArrays, array.count > 0 {
-                    self?.collectionView?.reloadItems(at: array)
-                }
-            },
-            completion: { _ in
-                self?.deleteArrays = nil
-                self?.insertArrays = nil
-                self?.reloadArrays = nil
-            })
+        let flag = delegate?.shouldHandle(entityViewModel: self, deleteArrays: deleteArrays, insertArrays: insertArrays, reloadArrays: reloadArrays) ?? false
+        if flag {
+            deleteArrays = nil
+            insertArrays = nil
+            reloadArrays = nil
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView?.performBatchUpdates({
+                    if let array = self?.deleteArrays, array.count > 0 {
+                        self?.collectionView?.deleteItems(at: array)
+                    }
+                    if let array = self?.insertArrays, array.count > 0 {
+                        self?.collectionView?.insertItems(at: array)
+                    }
+                    if let array = self?.reloadArrays, array.count > 0 {
+                        self?.collectionView?.reloadItems(at: array)
+                    }
+                },
+                completion: { _ in
+                    self?.deleteArrays = nil
+                    self?.insertArrays = nil
+                    self?.reloadArrays = nil
+                })
+            }
         }
     }
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {

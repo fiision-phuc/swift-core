@@ -41,9 +41,9 @@ import UIKit
 import Foundation
 import CoreData
 
-
+    
 open class FwiEntityViewModel<T: NSFetchRequestResult> : NSObject, NSFetchedResultsControllerDelegate {
-
+    
     /// MARK: Class's constructors
     public convenience init(_ context: NSManagedObjectContext?) {
         self.init()
@@ -51,6 +51,8 @@ open class FwiEntityViewModel<T: NSFetchRequestResult> : NSObject, NSFetchedResu
     }
     
     /// MARK: Class's properties
+    public weak var delegate: FwiEntityViewModelDelegate?
+    
     open lazy private (set) var fetchedController: NSFetchedResultsController<T>? = {
         guard let c = self.context, let entityName = NSStringFromClass(T.self).split(".").last else {
             return nil
