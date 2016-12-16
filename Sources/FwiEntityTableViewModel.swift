@@ -94,14 +94,14 @@ public final class FwiEntityTableViewModel<T: NSFetchRequestResult> : FwiEntityV
     /// MARK: NSFetchedResultsControllerDelegate's members
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         DispatchQueue.main.async { [weak self] in
-            if let array = self?.deleteArrays {
+            if let array = self?.reloadArrays, array.count > 0 {
+                self?.tableView?.reloadRows(at: array, with:.fade)
+            }
+            if let array = self?.deleteArrays, array.count > 0 {
                 self?.tableView?.deleteRows(at: array, with: .fade)
             }
-            if let array = self?.insertArrays {
+            if let array = self?.insertArrays, array.count > 0 {
                 self?.tableView?.insertRows(at: array, with: .fade)
-            }
-            if let array = self?.reloadArrays {
-                self?.tableView?.reloadRows(at: array, with:.fade)
             }
             self?.deleteArrays = nil
             self?.insertArrays = nil
