@@ -53,7 +53,7 @@ public extension FwiCoreData where Self: NSManagedObject {
     /// - parameter sortDescriptor (optional): to sort entity list
     /// - parameter groupBy (optional): to group entity list into smaller list
     /// - parameter limit (optional): to limit the number of entities within the list
-    public static func allEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [AnyObject]? = nil, limit l: Int = 0) -> [Self]? {
+    public static func allEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [Any]? = nil, limit l: Int = 0) -> [Self]? {
         /* Condition validation */
         guard let c = context, let entityName = NSStringFromClass(self).split(".").last else {
             return nil
