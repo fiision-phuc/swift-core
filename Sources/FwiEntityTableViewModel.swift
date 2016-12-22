@@ -100,15 +100,19 @@ public final class FwiEntityTableViewModel<T: NSFetchRequestResult> : FwiEntityV
             reloadArrays = nil
         } else {
             DispatchQueue.main.async { [weak self] in
+                self?.tableView?.beginUpdates()
+                
+                if let array = self?.insertArrays, array.count > 0 {
+                    self?.tableView?.insertRows(at: array, with: .fade)
+                }
                 if let array = self?.reloadArrays, array.count > 0 {
                     self?.tableView?.reloadRows(at: array, with:.fade)
                 }
                 if let array = self?.deleteArrays, array.count > 0 {
                     self?.tableView?.deleteRows(at: array, with: .fade)
                 }
-                if let array = self?.insertArrays, array.count > 0 {
-                    self?.tableView?.insertRows(at: array, with: .fade)
-                }
+                self?.tableView?.endUpdates()
+                
                 self?.deleteArrays = nil
                 self?.insertArrays = nil
                 self?.reloadArrays = nil
