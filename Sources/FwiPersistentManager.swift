@@ -190,6 +190,7 @@ public final class FwiPersistentManager {
     // MARK: Class's private methods
     @objc
     fileprivate func handleContextDidSaveNotification(_ notification: Notification) {
+        _lock.lock(); defer { _lock.unlock() }
         guard let otherContext = notification.object as? NSManagedObjectContext , otherContext !== self.managedContext else {
             return
         }
