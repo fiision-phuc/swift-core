@@ -163,6 +163,11 @@ public final class FwiPersistentManager {
     // MARK: Class's public methods
     @discardableResult
     public func saveContext() -> NSError? {
+        
+        guard managedContext.hasChanges else {
+            return nil
+        }
+        
         var error: NSError?
         _lock.lock()
         managedContext.performAndWait({ [weak self] in
@@ -190,6 +195,7 @@ public final class FwiPersistentManager {
     // MARK: Class's private methods
     @objc
     fileprivate func handleContextDidSaveNotification(_ notification: Notification) {
+        _lock.lock(); defer { _lock.unlock() }
         guard let otherContext = notification.object as? NSManagedObjectContext , otherContext !== self.managedContext else {
             return
         }
