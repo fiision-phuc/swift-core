@@ -84,12 +84,12 @@ fileprivate let callBack: SystemConfiguration.SCNetworkReachabilityCallBack = { 
     print("Reachability Status: \(w)\(r) \(t)\(c1)\(c2)\(i)\(d1)\(l)\(d2)")
     
     // Post notification
-    reachability.stateChanged_()
+    reachability.stateChanged()
     NotificationCenter.default.post(name: reachabilityChanged, object: reachability)
 }
 
 
-public final class FwiReachability: NSObject {
+open class FwiReachability: NSObject {
 
     // MARK: Struct's constructors
     public init(withReachability r: SCNetworkReachability, shouldReturnWiFiState s: Bool = false) {
@@ -134,6 +134,10 @@ public final class FwiReachability: NSObject {
     fileprivate var backgroundQueue = DispatchQueue.global(qos: .background)
     
     // MARK: Class's public methods
+    /// Override point where reachability had changed its's state.
+    open func stateChanged() {
+    }
+    
     /// Start monitoring network.
     public func start() {
         let contextInfo = UnsafeMutableRawPointer(Unmanaged<FwiReachability>.passUnretained(self).toOpaque())
@@ -187,10 +191,6 @@ public final class FwiReachability: NSObject {
     fileprivate func statusWiFi(withFlags networkFlags: SCNetworkReachabilityFlags) -> FwiReachabilityState {
         let isReachable = networkFlags.contains(.reachable) && networkFlags.contains(.isDirect)
         return (isReachable ? .wifi : .none)
-    }
-    
-    // MARK: Class's internal methods
-    internal func stateChanged_() {
     }
 }
 
