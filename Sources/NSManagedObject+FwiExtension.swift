@@ -42,6 +42,11 @@ import CoreData
 
 public extension NSManagedObject {
 
+    /// Return entity's name.
+    public static func entityName() -> String {
+        return "\(self)"
+    }
+    
     /// Remove self from database.
     public func remove() {
         managedObjectContext?.performAndWait({ [weak self] in

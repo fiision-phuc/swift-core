@@ -163,13 +163,12 @@ public final class FwiPersistentManager {
     // MARK: Class's public methods
     @discardableResult
     public func saveContext() -> NSError? {
-        
         guard managedContext.hasChanges else {
             return nil
         }
+        _lock.lock(); defer { _lock.unlock() }
         
         var error: NSError?
-        _lock.lock()
         managedContext.performAndWait({ [weak self] in
             do {
                 try self?.managedContext.save()
@@ -177,7 +176,6 @@ public final class FwiPersistentManager {
                 error = err
             }
         })
-        _lock.unlock()
         return error
     }
 

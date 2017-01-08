@@ -103,6 +103,19 @@ public extension URLRequest {
     }
     
     // MARK: Struct's public methods
+    /// Define basic authorization.
+    public mutating func basicAuthentication(withUsername u: String?, andPassword p: String?) {
+        guard let authorization = "\(u ?? ""):\(p ?? "")".encodeBase64String() else {
+            return
+        }
+        setValue("Basic \(authorization)", forHTTPHeaderField: "Authorization")
+    }
+    
+    /// Define oauth2 authorization.
+    public mutating func oauthAuthentication(withToken t: String?) {
+        setValue("Bearer \(t ?? "")", forHTTPHeaderField: "Authorization")
+    }
+    
     /// Manual define body data.
     public mutating func generateRawForm(_ rawParam: FwiDataParam?) {
         if let p = rawParam {
