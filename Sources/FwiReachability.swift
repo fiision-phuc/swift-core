@@ -84,7 +84,7 @@ fileprivate let callBack: SystemConfiguration.SCNetworkReachabilityCallBack = { 
     print("Reachability Status: \(w)\(r) \(t)\(c1)\(c2)\(i)\(d1)\(l)\(d2)")
     
     // Post notification
-    reachability.stateChanged()
+    reachability._rx_stateChanged()
     NotificationCenter.default.post(name: reachabilityChanged, object: reachability)
 }
 
@@ -135,7 +135,7 @@ open class FwiReachability: NSObject {
     
     // MARK: Class's public methods
     /// Override point where reachability had changed its's state.
-    open func stateChanged() {
+    open func _rx_stateChanged() {
     }
     
     /// Start monitoring network.
