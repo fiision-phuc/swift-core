@@ -134,10 +134,6 @@ open class FwiReachability: NSObject {
     fileprivate var backgroundQueue = DispatchQueue.global(qos: .background)
     
     // MARK: Class's public methods
-    /// Override point where reachability had changed its's state.
-    open func _rx_stateChanged() {
-    }
-    
     /// Start monitoring network.
     public func start() {
         let contextInfo = UnsafeMutableRawPointer(Unmanaged<FwiReachability>.passUnretained(self).toOpaque())
@@ -191,6 +187,11 @@ open class FwiReachability: NSObject {
     fileprivate func statusWiFi(withFlags networkFlags: SCNetworkReachabilityFlags) -> FwiReachabilityState {
         let isReachable = networkFlags.contains(.reachable) && networkFlags.contains(.isDirect)
         return (isReachable ? .wifi : .none)
+    }
+    
+    // MARK: RX support
+    /// Override point where reachability had changed its's state.
+    open func _rx_stateChanged() {
     }
 }
 

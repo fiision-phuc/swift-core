@@ -41,6 +41,17 @@ import Foundation
 
 public extension Data {
 
+    /// Return raw data.
+    public func bytes() -> [UInt8] {
+        guard count > 0 else {
+            return []
+        }
+        var bytes = [UInt8](repeating: 0, count: count)
+        
+        copyBytes(to: &bytes, from: Range<Data.Index>(uncheckedBounds: (lower: 0, upper: count)))
+        return bytes
+    }
+    
     /// Clear all bytes data.
     public mutating func clearBytes() {
         /* Condition validation */
