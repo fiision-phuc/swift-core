@@ -88,13 +88,13 @@ class FileManagerFwiExtensionTest: XCTestCase {
     // MARK: Test Cases
     func testCreateDirectory() {
         var err = FileManager.default.createDirectory(atURL: nil)
-        XCTAssertNotNil(err, "FileManager should not allow to create nil directory '\(err?.localizedDescription)'.")
+        XCTAssertNotNil(err, "FileManager should not allow to create nil directory '\(String(describing: err))'.")
         
         err = FileManager.default.createDirectory(atURL: URL.cacheDirectory())
-        XCTAssertNotNil(err, "FileManager should not allow to create root cache directory '\(err?.localizedDescription)'.")
+        XCTAssertNotNil(err, "FileManager should not allow to create root cache directory '\(String(describing: err))'.")
         
         err = FileManager.default.createDirectory(atURL: directoryURL1)
-        XCTAssertNil(err, "FileManager should be able to create directory for a given path but found '\(err?.localizedDescription)'.")
+        XCTAssertNil(err, "FileManager should be able to create directory for a given path but found '\(String(describing: err))'.")
     }
     
     func testDirectoryExists() {
@@ -111,7 +111,7 @@ class FileManagerFwiExtensionTest: XCTestCase {
         XCTAssertFalse(FileManager.default.directoryExists(atURL: directoryURL2), "FileManager should return false when directory is not available.")
         
         let err = FileManager.default.moveDirectory(from: directoryURL1, to: directoryURL2)
-        XCTAssertNil(err, "FileManager should be able to move directory but found '\(err?.localizedDescription)'.")
+        XCTAssertNil(err, "FileManager should be able to move directory but found '\(String(describing: err))'.")
         XCTAssertFalse(FileManager.default.directoryExists(atURL: directoryURL1), "FileManager should return false when directory is not available.")
         XCTAssertTrue(FileManager.default.directoryExists(atURL: directoryURL2), "FileManager should return true when directory is available.")
     }
@@ -120,7 +120,7 @@ class FileManagerFwiExtensionTest: XCTestCase {
         FileManager.default.createDirectory(atURL: directoryURL1)
         let err = FileManager.default.removeDirectory(atURL: directoryURL1)
         
-        XCTAssertNil(err, "FileManager should be able to remove directory but found '\(err?.localizedDescription)'.")
+        XCTAssertNil(err, "FileManager should be able to remove directory but found '\(String(describing: err))'.")
         XCTAssertFalse(FileManager.default.directoryExists(atURL: directoryURL1), "FileManager should return false when directory is not available.")
     }
     

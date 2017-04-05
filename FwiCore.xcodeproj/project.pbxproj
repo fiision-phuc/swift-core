@@ -11,6 +11,8 @@
 		BE78D9441D98D8DA00091D5D /* Dictionary+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE78D91D1D98D0F800091D5D /* Dictionary+FwiExtension.swift */; };
 		BE7B5A701E03D71C004A4F35 /* FwiEntityViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7B5A6F1E03D71C004A4F35 /* FwiEntityViewModelDelegate.swift */; };
 		BE8207EF1DC7A9AD0095358C /* FwiNetworkProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8207EE1DC7A9AD0095358C /* FwiNetworkProtocol.swift */; };
+		BE8482ED1E94C9D100BE9F21 /* FwiJSONDeserialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8482EC1E94C9D100BE9F21 /* FwiJSONDeserialization.swift */; };
+		BE8482EF1E94C9FA00BE9F21 /* FwiJSONSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8482EE1E94C9FA00BE9F21 /* FwiJSONSerialization.swift */; };
 		BE8BF1471D8465BC00F710CB /* Data+FwiBase64Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF1461D8465BC00F710CB /* Data+FwiBase64Test.swift */; };
 		BE8BF1491D8465CE00F710CB /* Data+FwiHexTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF1481D8465CE00F710CB /* Data+FwiHexTest.swift */; };
 		BE8BF1501D84661C00F710CB /* Data+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF14A1D84661C00F710CB /* Data+FwiExtensionTest.swift */; };
@@ -22,8 +24,6 @@
 		BE8BF1591D84663100F710CB /* FwiReflectorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF1571D84663100F710CB /* FwiReflectorTest.swift */; };
 		BE8BF15B1D84664000F710CB /* FwiNetworkProtocolTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF15A1D84664000F710CB /* FwiNetworkProtocolTest.swift */; };
 		BE8BF15D1D84665C00F710CB /* FwiOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF15C1D84665C00F710CB /* FwiOperationTest.swift */; };
-		BE9850E81DC8705F00C3A279 /* FwiJSONDeserialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9850E61DC8705F00C3A279 /* FwiJSONDeserialization.swift */; };
-		BE9850E91DC8705F00C3A279 /* FwiJSONSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9850E71DC8705F00C3A279 /* FwiJSONSerialization.swift */; };
 		BEA221C31D8E26C60001761E /* FwiJSONMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C21D8E26C60001761E /* FwiJSONMapper.swift */; };
 		BEA221C61D8E27C10001761E /* FwiJSONMapperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA221C41D8E26D10001761E /* FwiJSONMapperTest.swift */; };
 		BEC3AE8C1DD591910044307B /* FwiConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC3AE8B1DD591910044307B /* FwiConsole.swift */; };
@@ -94,6 +94,8 @@
 		BE78D91D1D98D0F800091D5D /* Dictionary+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+FwiExtension.swift"; sourceTree = "<group>"; };
 		BE7B5A6F1E03D71C004A4F35 /* FwiEntityViewModelDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiEntityViewModelDelegate.swift; sourceTree = "<group>"; };
 		BE8207EE1DC7A9AD0095358C /* FwiNetworkProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiNetworkProtocol.swift; sourceTree = "<group>"; };
+		BE8482EC1E94C9D100BE9F21 /* FwiJSONDeserialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONDeserialization.swift; sourceTree = "<group>"; };
+		BE8482EE1E94C9FA00BE9F21 /* FwiJSONSerialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONSerialization.swift; sourceTree = "<group>"; };
 		BE8BF1461D8465BC00F710CB /* Data+FwiBase64Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiBase64Test.swift"; sourceTree = "<group>"; };
 		BE8BF1481D8465CE00F710CB /* Data+FwiHexTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiHexTest.swift"; sourceTree = "<group>"; };
 		BE8BF14A1D84661C00F710CB /* Data+FwiExtensionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiExtensionTest.swift"; sourceTree = "<group>"; };
@@ -105,8 +107,6 @@
 		BE8BF1571D84663100F710CB /* FwiReflectorTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiReflectorTest.swift; sourceTree = "<group>"; };
 		BE8BF15A1D84664000F710CB /* FwiNetworkProtocolTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiNetworkProtocolTest.swift; sourceTree = "<group>"; };
 		BE8BF15C1D84665C00F710CB /* FwiOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiOperationTest.swift; sourceTree = "<group>"; };
-		BE9850E61DC8705F00C3A279 /* FwiJSONDeserialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONDeserialization.swift; sourceTree = "<group>"; };
-		BE9850E71DC8705F00C3A279 /* FwiJSONSerialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONSerialization.swift; sourceTree = "<group>"; };
 		BEA221C21D8E26C60001761E /* FwiJSONMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONMapper.swift; sourceTree = "<group>"; };
 		BEA221C41D8E26D10001761E /* FwiJSONMapperTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiJSONMapperTest.swift; sourceTree = "<group>"; };
 		BEC3AE8B1DD591910044307B /* FwiConsole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiConsole.swift; sourceTree = "<group>"; };
@@ -269,8 +269,8 @@
 				__PBXFileRef_Sources/FwiReflector.swift /* FwiReflector.swift */,
 				__PBXFileRef_Sources/FwiJSONModel.swift /* FwiJSONModel.swift */,
 				BEA221C21D8E26C60001761E /* FwiJSONMapper.swift */,
-				BE9850E71DC8705F00C3A279 /* FwiJSONSerialization.swift */,
-				BE9850E61DC8705F00C3A279 /* FwiJSONDeserialization.swift */,
+				BE8482EE1E94C9FA00BE9F21 /* FwiJSONSerialization.swift */,
+				BE8482EC1E94C9D100BE9F21 /* FwiJSONDeserialization.swift */,
 			);
 			name = json;
 			sourceTree = "<group>";
@@ -644,13 +644,11 @@
 				"__src_cc_ref_Sources/Data+FwiHex.swift" /* Data+FwiHex.swift in Sources */,
 				"__src_cc_ref_Sources/FileManager+FwiExtension.swift" /* FileManager+FwiExtension.swift in Sources */,
 				__src_cc_ref_Sources/FwiCore.swift /* FwiCore.swift in Sources */,
-				BE9850E81DC8705F00C3A279 /* FwiJSONDeserialization.swift in Sources */,
 				__src_cc_ref_Sources/FwiCoreData.swift /* FwiCoreData.swift in Sources */,
 				__src_cc_ref_Sources/FwiDataParam.swift /* FwiDataParam.swift in Sources */,
 				__src_cc_ref_Sources/FwiEntityCollectionViewModel.swift /* FwiEntityCollectionViewModel.swift in Sources */,
 				__src_cc_ref_Sources/FwiEntityTableViewModel.swift /* FwiEntityTableViewModel.swift in Sources */,
 				BEFB00A41DCEEA33000471A4 /* FwiStoryboard.swift in Sources */,
-				BE9850E91DC8705F00C3A279 /* FwiJSONSerialization.swift in Sources */,
 				__src_cc_ref_Sources/FwiEntityViewModel.swift /* FwiEntityViewModel.swift in Sources */,
 				BE78D9441D98D8DA00091D5D /* Dictionary+FwiExtension.swift in Sources */,
 				__src_cc_ref_Sources/FwiFormParam.swift /* FwiFormParam.swift in Sources */,
@@ -670,6 +668,7 @@
 				"__src_cc_ref_Sources/String+FwiExtension.swift" /* String+FwiExtension.swift in Sources */,
 				"__src_cc_ref_Sources/String+FwiHex.swift" /* String+FwiHex.swift in Sources */,
 				"__src_cc_ref_Sources/UIApplication+FwiExtension.swift" /* UIApplication+FwiExtension.swift in Sources */,
+				BE8482ED1E94C9D100BE9F21 /* FwiJSONDeserialization.swift in Sources */,
 				"__src_cc_ref_Sources/UIButton+FwiExtension.swift" /* UIButton+FwiExtension.swift in Sources */,
 				"__src_cc_ref_Sources/UIColor+FwiExtension.swift" /* UIColor+FwiExtension.swift in Sources */,
 				BE7B5A701E03D71C004A4F35 /* FwiEntityViewModelDelegate.swift in Sources */,
@@ -678,6 +677,7 @@
 				"__src_cc_ref_Sources/UITableViewController+FwiExtension.swift" /* UITableViewController+FwiExtension.swift in Sources */,
 				"__src_cc_ref_Sources/UIView+FwiExtension.swift" /* UIView+FwiExtension.swift in Sources */,
 				"__src_cc_ref_Sources/UIViewController+FwiExtension.swift" /* UIViewController+FwiExtension.swift in Sources */,
+				BE8482EF1E94C9FA00BE9F21 /* FwiJSONSerialization.swift in Sources */,
 				BEDF0AC11DCF110400D0B8AB /* FwiCell.swift in Sources */,
 				"__src_cc_ref_Sources/URL+FwiExtension.swift" /* URL+FwiExtension.swift in Sources */,
 				"__src_cc_ref_Sources/URLRequest+FwiExtension.swift" /* URLRequest+FwiExtension.swift in Sources */,

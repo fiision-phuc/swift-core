@@ -65,7 +65,7 @@ class FwiNetworkProtocolTest: XCTestCase {
 
             FwiNetwork.instance.send(request: request) { (data, error, statusCode, response) in
                 XCTAssertTrue(FwiNetworkStatusIsSuccces(statusCode), "Success connection should return status code range 200 - 299. But found \(statusCode)")
-                XCTAssertNil(error, "Success connection should not return error. But found \(error)");
+                XCTAssertNil(error, "Success connection should not return error. But found \(String(describing: error))");
                 XCTAssertNotNil(data, "Success connection should return data. But found nil");
                 
                 if data != nil {
@@ -87,7 +87,7 @@ class FwiNetworkProtocolTest: XCTestCase {
 
             FwiNetwork.instance.send(request: request) { (data, error, statusCode, response) in
                 XCTAssertTrue(FwiNetworkStatusIsSuccces(statusCode), "Success connection should return status code range 200 - 299. But found \(statusCode)")
-                XCTAssertNil(error, "Success connection should not return error. But found \(error)");
+                XCTAssertNil(error, "Success connection should not return error. But found \(String(describing: error))");
                 XCTAssertNotNil(data, "Success connection should return data. But found nil");
                 
                 if data != nil {
@@ -157,8 +157,8 @@ class FwiNetworkProtocolTest: XCTestCase {
             let request = URLRequest(url: url)
 
             FwiNetwork.instance.send(request: request) { (data, error, statusCode, response) in
-                XCTAssertNotNil(error, "Fail connection should not return error. But found \(error)");
-                XCTAssertNil(data, "Fail connection should return nil data. But found \(data)");
+                XCTAssertNotNil(error, "Fail connection should not return error. But found \(String(describing: error))");
+                XCTAssertNil(data, "Fail connection should return nil data. But found \(String(describing: data))");
                 
                 if error != nil && data == nil {
                     completedExpectation.fulfill()
@@ -179,7 +179,7 @@ class FwiNetworkProtocolTest: XCTestCase {
 
             FwiNetwork.instance.send(request: request) { (data, error, statusCode, response) in
                 XCTAssertNotNil(error, "Cancelled connection should return error. But found nil")
-                XCTAssertNil(data, "Cancelled connection should return nil data. But found \(data)")
+                XCTAssertNil(data, "Cancelled connection should return nil data. But found \(String(describing: data))")
                 
                 if error != nil && data == nil {
                     completedExpectation.fulfill()
@@ -199,7 +199,7 @@ class FwiNetworkProtocolTest: XCTestCase {
             let request = URLRequest(url: url)
 
             FwiNetwork.instance.send(request: request) { (data, error, statusCode, response) in
-                XCTAssertNil(error, "Redirect connection should return nil error. But found \(error)")
+                XCTAssertNil(error, "Redirect connection should return nil error. But found \(String(describing: error))")
                 
                 if error == nil {
                     completedExpectation.fulfill()
