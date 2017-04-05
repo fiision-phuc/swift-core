@@ -48,7 +48,7 @@ public struct FwiConsole {
     /// - parameter error (required): response's error
     /// - parameter statusCode (required): network's status
     static func consoleError(withRequest request: URLRequest, data d: Data?, error e: Error?, statusCode s: FwiNetworkStatus) {
-        guard let err = e as? NSError, let url = request.url, let host = url.host, let method = request.httpMethod else {
+        guard let err = e as NSError?, let url = request.url, let host = url.host, let method = request.httpMethod else {
             return
         }
         

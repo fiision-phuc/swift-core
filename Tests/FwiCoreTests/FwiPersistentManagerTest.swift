@@ -102,7 +102,7 @@ class FwiPersistentManagerTest: XCTestCase {
         person?.firstName = "Test"
         person?.lastName = "Test"
         
-        XCTAssertNotNil(person?.objectID, "Expected not nil but found '\(person?.objectID)'.")
+        XCTAssertNotNil(person?.objectID, "Expected not nil but found '\(String(describing: person?.objectID))'.")
         do {
             try context.save()
         }
@@ -111,6 +111,6 @@ class FwiPersistentManagerTest: XCTestCase {
         }
         
         let persons = Person.allEntities(fromContext: context)
-        XCTAssertEqual(persons?.count, 1, "Expected '1' but found: '\(persons?.count)'.")
+        XCTAssertEqual(persons?.count, 1, "Expected '1' but found: '\(String(describing: persons?.count))'.")
     }
 }

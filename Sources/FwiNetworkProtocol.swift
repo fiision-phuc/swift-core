@@ -66,7 +66,7 @@ public extension FwiNetworkProtocol where Self: FwiNetwork {
             var error = err
             
             var statusCode = FwiNetworkStatus.unknown
-            if let error = error as? NSError {
+            if let error = error as NSError? {
                 statusCode = FwiNetworkStatus(rawValue: error.code)
             }
             
@@ -106,7 +106,7 @@ public extension FwiNetworkProtocol where Self: FwiNetwork {
             var error = err
             
             var statusCode = FwiNetworkStatus.unknown
-            if let error = error as? NSError {
+            if let error = error as NSError? {
                 statusCode = FwiNetworkStatus(rawValue: error.code)
             }
 

@@ -45,7 +45,7 @@ public protocol FwiJSONDeserialization {
 
 /// FwiJSONDeserialization is only work when Model is an instance of NSObject.
 public extension FwiJSONDeserialization {
-    public typealias Model = Self
+    public typealias DeserializeModel = Self
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ public extension FwiJSONDeserialization where Self: NSObject  {
     /// Build a list of models from data.
     ///
     /// - parameter arrayData (required): a list of keys-values as data
-    public static func map(arrayData d: Data?) -> ([Model]?, Error?) {
+    public static func map(arrayData d: Data?) -> ([DeserializeModel]?, Error?) {
         /* Condition validation: validate input data */
         guard let data = d else {
             return (nil, NSError(domain: "FwiJSONDeserialization", code: -1, userInfo: [NSLocalizedDescriptionKey:"Input data is empty."]))
@@ -75,7 +75,7 @@ public extension FwiJSONDeserialization where Self: NSObject  {
     /// Create model's instance and map dictionary to that instance from data.
     ///
     /// - parameter dictionaryData (required): a set of keys-values as data
-    public static func map(dictionaryData d: Data?) -> (Model?, Error?) {
+    public static func map(dictionaryData d: Data?) -> (DeserializeModel?, Error?) {
         /* Condition validation: validate input data */
         guard let data = d else {
             return (nil, NSError(domain: "FwiJSONDeserialization", code: -1, userInfo: [NSLocalizedDescriptionKey:"Input data is empty."]))
@@ -92,16 +92,16 @@ public extension FwiJSONDeserialization where Self: NSObject  {
     /// Build a list of models.
     ///
     /// - parameter array (required): a list of keys-values
-    public static func map(array a: [[String: Any]]) -> ([Model]?, Error?) {
-        let result = FwiJSONMapper.map(array: a, toModel: Model.self)
+    public static func map(array a: [[String: Any]]) -> ([DeserializeModel]?, Error?) {
+        let result = FwiJSONMapper.map(array: a, toModel: DeserializeModel.self)
         return (result.0, result.1)
     }
     
     /// Create model's instance and map dictionary to that instance.
     ///
     /// - parameter dictionary (required): a set of keys-values
-    public static func map(dictionary d: [String : Any]) -> (Model?, Error?) {
-        let result = FwiJSONMapper.map(dictionary: d, toModel: Model.self)
+    public static func map(dictionary d: [String : Any]) -> (DeserializeModel?, Error?) {
+        let result = FwiJSONMapper.map(dictionary: d, toModel: DeserializeModel.self)
         return (result.0, result.1)
     }
 }

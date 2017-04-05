@@ -45,7 +45,7 @@ public protocol FwiJSONSerialization {
 
 /// FwiJSONSerialization is only work when Model is an instance of NSObject.
 public extension FwiJSONSerialization {
-    public typealias Model = Self
+    public typealias SerializeModel = Self
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
