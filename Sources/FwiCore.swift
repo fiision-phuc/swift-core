@@ -39,9 +39,6 @@
 import Foundation
 
 
-/// Degree/Radians constant
-public let FLT_EPSILON: Float = 1.19209e-07
-
 // MARK: Log Function
 public func FwiLog(_ message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
     #if DEBUG

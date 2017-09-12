@@ -77,7 +77,7 @@ public extension NSCoding {
     ///
     /// - parameter key (required): object's key inside UserDefaults
     public static func unarchive(fromUserDefaults key: String) -> Self? {
-        guard let data = UserDefaults.standard.value(forKey: key) as? Data , data.count > 0 else {
+        guard let data = UserDefaults.standard.value(forKey: key) as? Data, data.count > 0 else {
             return nil
         }
         return unarchive(fromData: data)

@@ -47,6 +47,12 @@ public typealias JSON = [String : Any]
 /// working properly.
 public protocol FwiJSONModel {
 
+    init(withJSON aJSON: JSON)
+
+    func encode() -> JSON?
+
+
+
     /// Define keys mapper.
     var keyMapper: [String:String]? { get }
 
@@ -64,6 +70,58 @@ public protocol FwiJSONModel {
 
 /// An extension to help FwiReflector and FwiJSONMapper.
 public extension FwiJSONModel {
+
+    public func encode() -> JSON? {
+        // Find properties' sequences
+        let s = sequence(first: Mirror(reflecting: self), next: {
+            guard let superMirror = $0.superclassMirror, superMirror.subjectType != NSObject.self else {
+                return nil
+            }
+            return superMirror
+        })
+        .flatMap { $0.children }
+
+        // Define JSON
+        var d = JSON(minimumCapacity: s.count)
+
+        s.forEach { (k, v) in
+            guard let key = k else {
+                return
+            }
+
+            if let aBool = v as? Bool {
+                d[key] = aBool
+            } else if let aNumber = v as? NSNumber {
+                d[key] <- aNumber
+            } else if let aData = v as? Data {
+                d[key] <- aData
+            } else if let aDate = v as? Date {
+                d[key] <- aDate
+            } else if let aString = v as? String {
+                d[key] <- aString
+            } else if let aCustom = v as? CustomStringConvertible {
+                d[key] <- aCustom.description
+            } else if let aUrl = v as? URL {
+                d[key] <- aUrl
+            } else if let aModel = v as? FwiJSONModel {
+                d[key] <- aModel
+            } else if let aArray = v as? [Any] {
+                d[key] <- aArray
+            } else if let aDictionary = v as? [String:Any] {
+                d[key] <- aDictionary
+            } else {
+                let m = Mirror(reflecting: v)
+                guard m.children.count == 1, let v = m.children.first else {
+                    return
+                }
+
+                if let value = v.value as? FwiJSONModel {
+                    d[key] <- value
+                }
+            }
+        }
+        return d.count > 0 ? d : nil
+    }
 
     /// Default implementation for keys mapper.
     public var keyMapper: [String:String]? {
