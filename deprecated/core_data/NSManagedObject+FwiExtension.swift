@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiConsole.swift
+//  File name   : NSManagedObject+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/11/16
+//  Created date: 8/18/16
 //  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
@@ -37,41 +37,24 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
+import CoreData
 
 
-public struct FwiConsole {
+public extension NSManagedObject {
 
-    /// Output error to console.
-    ///
-    /// @param
-    /// - request {URLRequest} (an original request to server)
-    /// - data {Data} (response's data)
-    /// - error {Error} (response's error)
-    /// - statusCode {FwiNetworkStatus} (network's status)
-    public static func consoleError(withRequest request: URLRequest, data d: Data?, error e: Error?, statusCode s: FwiNetworkStatus) {
-        guard let err = e as NSError?, let url = request.url, let host = url.host, let method = request.httpMethod else {
-            return
-        }
-        
-        let domain     = "Domain     : \(host)\n"
-        let urlString  = "HTTP Url   : \(url)\n"
-        let httpMethod = "HTTP Method: \(method)\n"
-        let status     = "HTTP Status: \(s.rawValue) (\(err.localizedDescription))\n"
-        let dataString = "\(d?.toString() ?? "")"
-        
-        FwiLog("\n\(domain)\(urlString)\(httpMethod)\(status)\(dataString)")
+    /// Return entity's name.
+    public static func entityName() -> String {
+        return "\(self)"
     }
     
-    /// Generate network error.
-    ///
-    /// @param
-    /// - request {URLRequest} (an original request to server)
-    /// - statusCode {FwiNetworkStatus} (network's status)
-    public static func generateError(withRequest request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
-        let userInfo = [NSURLErrorFailingURLErrorKey:request.url?.description ?? "",
-                        NSURLErrorFailingURLStringErrorKey:request.url?.description ?? "",
-                        NSLocalizedDescriptionKey:s.description]
-
-        return NSError(domain: NSURLErrorDomain, code: s.rawValue, userInfo: userInfo)
+    /// Remove self from database.
+    public func remove() {
+        managedObjectContext?.performAndWait({ [weak self] in
+            guard let strongSelf = self, let context = self?.managedObjectContext else {
+                return
+            }
+            context.delete(strongSelf)
+            try? context.save()
+        })
     }
 }

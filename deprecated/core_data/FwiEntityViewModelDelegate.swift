@@ -49,6 +49,6 @@ public protocol FwiEntityViewModelDelegate: class {
     /// - parameter deleteArrays (required): array of indexPath to be deleted.
     /// - parameter insertArrays (required): array of indexPath to be inserted.
     /// - parameter reloadArrays (required): array of indexPath to be reloaded.
-    func shouldHandle<T: NSFetchRequestResult>(entityViewModel vm: FwiEntityViewModel<T>, deleteArrays d: [IndexPath]?, insertArrays i: [IndexPath]?, reloadArrays r: [IndexPath]?) -> Bool
+    func shouldHandle<T>(entityViewModel vm: FwiEntityViewModel<T>, deleteArrays d: [IndexPath]?, insertArrays i: [IndexPath]?, reloadArrays r: [IndexPath]?) -> Bool
 }
 #endif

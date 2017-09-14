@@ -1,9 +1,9 @@
 //  Project name: FwiCore
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : Codable+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
-//  Version     : 1.1.0
+//  Created date: 9/13/17
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -37,24 +37,35 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
-import CoreData
 
+public extension Encodable {
 
-public extension NSManagedObject {
-
-    /// Return entity's name.
-    public static func entityName() -> String {
-        return "\(self)"
+    /// Convert a model to JSON.
+    public func encodeJSON() -> Data? {
+        let encoder = JSONEncoder()
+        do {
+            return try encoder.encode(self)
+        } catch let err as NSError {
+            FwiLog("There was an error during JSON encoding! (\(err.localizedDescription))")
+            return nil
+        }
     }
-    
-    /// Remove self from database.
-    public func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let strongSelf = self, let context = self?.managedObjectContext else {
-                return
-            }
-            context.delete(strongSelf)
-            try? context.save()
-        })
+}
+
+public extension Decodable {
+
+    /// Map JSON to model.
+    static public func decodeJSON(_ json: Data?) -> Self? {
+        guard let json = json else {
+            return nil
+        }
+
+        let decoder = JSONDecoder()
+        do {
+            return try decoder.decode(self, from: json)
+        } catch let err as NSError {
+            FwiLog("There was an error during JSON decoding! (\(err.localizedDescription))")
+            return nil
+        }
     }
 }

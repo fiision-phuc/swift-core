@@ -3,7 +3,7 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/22/14
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -143,9 +143,9 @@ public extension String {
             FwiLog("Start index and reverse index should not overlap each other.")
             return ""
         }
-        
+
         let range = characters.index(self.startIndex, offsetBy: strIndex) ..< characters.index(self.endIndex, offsetBy: endIndex)
-        return self.substring(with: range)
+        return String(self[range])
     }
     
     /// Trim all spaces before and after a string.
