@@ -3,7 +3,7 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/23/14
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -65,9 +65,12 @@ class DataFwiHexTest: XCTestCase {
         var hexData = "FwiCore".toData()
         XCTAssertNil(hexData?.decodeHexData(), "Expected nil data for invalid hex.")
 
-        let data = "FwiCore".toData()
         hexData = "467769436f7265".toData()
-        XCTAssertEqual(hexData?.decodeHexData(), data, "Expected 'FwiCore'.")
+        if let text = hexData?.decodeHexData()?.toString() {
+            XCTAssertEqual(text, "FwiCore", "Expected 'FwiCore'.")
+        } else {
+            XCTFail("Expected 'FwiCore'.")
+        }
     }
     func testDecodeHexString() {
         let hexData = "467769436f7265".toData()
@@ -87,5 +90,32 @@ class DataFwiHexTest: XCTestCase {
 
         let data = "FwiCore".toData()
         XCTAssertEqual(data?.encodeHexString(), "467769436f7265", "Expected '467769436f7265'.")
+
+        let text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+        let size = text.utf8.count * 2
+
+        text.withCString { (pointer) in
+            
+        }
+    }
+
+    // MARK: Performance test cases
+    func testPerformance() {
+////        let text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+////        var counter = 0
+////
+////        text.withCString { (pointer) in
+////            pointer.pointee
+////        }
+//        let text = "100000"
+//        var a: Int?
+//        self.measure {
+//            for _ in (0..<1000000) {
+//                a <- text
+////                _ = text.encodeHexString()
+////                counter += 1
+//            }
+//        }
+////        debugPrint(counter)
     }
 }

@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : FwiJSONSerialization.swift
+//  File name   : FwiEntityViewModelDelegate.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 10/31/16
+//  Created date: 12/16/16
 //  Version     : 1.1.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
@@ -36,51 +36,19 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
+#if os(iOS)
 import Foundation
+import CoreData
 
 
-/// FwiJSONSerialization defines default functions to convert model to JSON.
-public protocol FwiJSONSerialization {
-}
-
-/// FwiJSONSerialization is only work when Model is an instance of NSObject.
-public extension FwiJSONSerialization {
-    public typealias SerializeModel = Self
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// It's only using for non-generic.
-extension NSObject: FwiJSONSerialization {
-}
-
-public extension FwiJSONSerialization where Self: NSObject {
+public protocol FwiEntityViewModelDelegate: class {
     
-    /// Convert model to dictionary.
-    public func toDictionary() -> JSON {
-        return FwiJSONMapper.convert(model: self)
-    }
-    
-    /// Convert model to JSON as data.
-    public func toJSONData() -> Data? {
-        let d = toDictionary()
-        return try? JSONSerialization.data(withJSONObject: d, options: JSONSerialization.WritingOptions(rawValue: 0))
-    }
-    
-    /// Convert model to JSON as string.
-    public func toJSONString() -> String? {
-        return toJSONData()?.toString()
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Class using for convert, because FwiJSONSerialization is dynamic protocol, using this for
-/// generic object.
-public final class FwiJSONConvert<T: NSObject> {
-    
-    /// Build a list from a list of models.
+    /// Should allow entity view model to perform specific action.
     ///
-    /// - parameter array (required): a list of models
-    public static func convert(array a: [T]) -> [JSON] {
-        return FwiJSONMapper.convert(array: a)
-    }
+    /// - parameter entity view model (required): entity view model
+    /// - parameter deleteArrays (required): array of indexPath to be deleted.
+    /// - parameter insertArrays (required): array of indexPath to be inserted.
+    /// - parameter reloadArrays (required): array of indexPath to be reloaded.
+    func shouldHandle<T>(entityViewModel vm: FwiEntityViewModel<T>, deleteArrays d: [IndexPath]?, insertArrays i: [IndexPath]?, reloadArrays r: [IndexPath]?) -> Bool
 }
+#endif

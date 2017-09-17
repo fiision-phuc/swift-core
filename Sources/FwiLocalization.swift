@@ -3,7 +3,7 @@
 //
 //  Author      : Phuc Tran
 //  Created date: 4/13/15
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.

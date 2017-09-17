@@ -3,7 +3,7 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 12/3/14
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -39,7 +39,7 @@
 import Foundation
 
 
-public struct FwiDataParam: CustomDebugStringConvertible, CustomStringConvertible {
+public struct FwiDataParam {
 
     // MARK: Class's constructors
     public init(data: Data = Data(), contentType type: String = "text/plain; charset=UTF-8") {
@@ -55,13 +55,11 @@ public struct FwiDataParam: CustomDebugStringConvertible, CustomStringConvertibl
     public var hashValue: Int {
         return contentType.hashValue ^ data.hashValue
     }
+}
 
-    // MARK: CustomDebugStringConvertible's members
-    public var debugDescription: String {
-        return description
-    }
+// MARK: CustomStringConvertible's members
+extension FwiDataParam: CustomStringConvertible {
 
-    // MARK: CustomStringConvertible's members
     public var description: String {
         if let encoded = data.encodeBase64String() {
             return "\n\(contentType)\n\(encoded)\n"
@@ -71,6 +69,16 @@ public struct FwiDataParam: CustomDebugStringConvertible, CustomStringConvertibl
 }
 
 // MARK: Custom Operator
-public func == (left: FwiDataParam?, right: FwiDataParam?) -> Bool {
-    return left?.hashValue == right?.hashValue
+public extension FwiDataParam {
+
+    public static func ==(left: FwiDataParam, right: FwiDataParam) -> Bool {
+        return left.hashValue == right.hashValue
+    }
+
+    public static func ==(left: FwiDataParam, right: FwiDataParam?) -> Bool {
+        guard let r = right else {
+            return false
+        }
+        return left == r
+    }
 }

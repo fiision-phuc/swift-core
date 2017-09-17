@@ -1,9 +1,9 @@
-//  Project name: FwiCore
+ //  Project name: FwiCore
 //  File name   : Data+FwiHex.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/20/14
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -48,21 +48,44 @@ public extension Data {
             return false
         }
 
-        let step = count >> 1
-        var end = count - 1
-
-        // Validate each byte
         var isHex = true
-        for i in 0 ..< step {
-            let hex1 = self[i]
-            let hex2 = self[end]
+        withUnsafeBytes { (pointer: UnsafePointer<UInt8>) in
+            var p1 = pointer
+            var p2 = pointer.advanced(by: (count - 1))
 
-            isHex = isHex && (hex1 >= 0 || hex1 < UInt8(decodingTable.count))
-            isHex = isHex && (hex2 >= 0 || hex2 < UInt8(decodingTable.count))
-            if !isHex {
-                break
+            let step = count >> 2
+            for _ in 0...step {
+                let v1 = p1.pointee
+                let v2 = p2.pointee
+
+                // Check v1
+                isHex = isHex && (
+                    (48 <= v1 && v1 <= 57)  ||    // '0-9'
+                    (65 <= v1 && v1 <= 70)  ||    // 'A-F'
+                    (97 <= v1 && v1 <= 102)       // 'a-f'
+//                    v1 == 9                 ||    // '\t'
+//                    v1 == 10                ||    // '\n'
+//                    v1 == 13                ||    // '\r'
+//                    v1 == 32                      // ' '
+                )
+                // Check v2
+                isHex = isHex && (
+                    (48 <= v2 && v2 <= 57)  ||    // '0-9'
+                    (65 <= v2 && v2 <= 70)  ||    // 'A-F'
+                    (97 <= v2 && v2 <= 102)       // 'a-f'
+//                    v2 == 9                 ||    // '\t'
+//                    v2 == 10                ||    // '\n'
+//                    v2 == 13                ||    // '\r'
+//                    v2 == 32                      // ' '
+                )
+
+                if isHex {
+                    p1 = p1.advanced(by: 1)
+                    p2 = p2.advanced(by: -1)
+                } else {
+                    break
+                }
             }
-            end -= 1
         }
         return isHex
     }
@@ -76,9 +99,26 @@ public extension Data {
 
         var output = [UInt8](repeating:0, count: (count >> 1))
         for i in stride(from: 0, to: count, by: 2) {
-            let b1 = self[i]
-            let b2 = self[i + 1]
-            output[i / 2] = ((decodingTable[Int(b1)] << 4) | decodingTable[Int(b2)])
+            var b1 = self[i]
+            var b2 = self[i + 1]
+
+            if 48 <= b1 && b1 <= 57 {           // '0-9'
+                b1 -= 48
+            } else if 65 <= b1 && b1 <= 70 {    // 'A-F'
+                b1 -= 55                            // A = 10, 'A' = 65 -> b = 65 - 55
+            } else {                            // 'a-f'
+                b1 -= 87                            // a = 10, 'a' = 97 -> b = 97 - 87
+            }
+
+            if 48 <= b2 && b2 <= 57 {           // '0-9'
+                b2 -= 48
+            } else if 65 <= b2 && b2 <= 70 {    // 'A-F'
+                b2 -= 55                            // A = 10, 'A' = 65 -> b = 65 - 55
+            } else {                            // 'a-f'
+                b2 -= 87                            // a = 10, 'a' = 97 -> b = 97 - 87
+            }
+
+            output[i / 2] = (b1 << 4 | b2)
         }
         return Data(bytes: output)
     }
@@ -96,12 +136,28 @@ public extension Data {
         var j = 0
         let l = count << 1
         var output = [UInt8](repeatElement(0, count: l))
+
         for i in stride(from: 0, to: l, by: 2) {
             let b = self[j]
             j += 1
 
-            output[i] = encodingTable[Int(b >> 4)]
-            output[i + 1] = encodingTable[Int(b & 0x0f)]
+            var v1 = (b & 0xf0) >> 4
+            var v2 = b & 0x0f
+
+            if 0 <= v1 && v1 <= 9 {             // '0-9'
+                v1 += 48
+            } else {                            // 'a-f'
+                v1 += 87                            // a = 10, 'a' = 97 -> b = 10 + 87
+            }
+
+            if 0 <= v2 && v2 <= 9 {             // '0-9'
+                v2 += 48
+            } else {                            // 'a-f'
+                v2 += 87                            // a = 10, 'a' = 97 -> b = 10 + 87
+            }
+
+            output[i] = v1
+            output[i + 1] = v2
         }
         return Data(bytes: output)
     }
@@ -111,15 +167,16 @@ public extension Data {
 }
 
 
-// MARK: Lookup table
-fileprivate let encodingTable: [UInt8] = Array("0123456789abcdef".utf8)
-fileprivate let decodingTable: [UInt8] = [
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-]
+//// MARK: Lookup table
+//fileprivate let encodingTable: [UInt8] = Array("0123456789abcdef".utf8)
+//fileprivate let decodingTable: [UInt8] = [
+//    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+//    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+//    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+//    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+//    0x00, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+//    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+//    0x00, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+//    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+//]
+

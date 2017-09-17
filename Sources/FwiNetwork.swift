@@ -3,7 +3,7 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 4/13/14
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -36,66 +36,121 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if os(iOS)
-    import UIKit
-#endif
 import Foundation
+import Alamofire
 
 
-public final class FwiNetwork: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, FwiNetworkProtocol {
-    // MARK: Singleton instance
-    public static let instance = FwiNetwork()
-    
-    // MARK: Class's properties
-    public fileprivate (set) lazy var configuration: URLSessionConfiguration = {
-        let config = URLSessionConfiguration.default
+public typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
+public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
 
-        // Config request policy
-        config.allowsCellularAccess = true
-        config.timeoutIntervalForRequest = 60.0
-        config.timeoutIntervalForResource = 60.0
-        config.networkServiceType = .background
 
-        // Config cache policy
-        config.requestCachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData
-        return config
-    }()
+public struct FwiNetwork {
 
-    public fileprivate (set) lazy var session: URLSession = {
-        return URLSession(configuration: self.configuration, delegate: self, delegateQueue: operationQueue)
-    }()
-
-    fileprivate var networkCounter_ = 0
-    public var networkCounter: Int {
-        get {
-            return networkCounter_
+    /// Download resource from server.
+    ///
+    /// @params
+    /// - request {String} (an endpoint)
+    /// - method {HTTPMethod} (a HTTP method)
+    /// - params {[String:String]} (a query params)
+    /// - encoding {ParameterEncoding} (define how to encode query params)
+    /// - headers {[String: String]} (additional headers)
+    ///
+    /// - parameter completion (required): call back function
+    @discardableResult
+    public static func download(resource r: String?, method m: HTTPMethod = .get, params p: [String:String]? = nil, encoding e: ParameterEncoding = URLEncoding.`default`, headers h: [String: String]? = nil, completion c: @escaping DownloadCompletion) -> DownloadRequest? {
+        /* Condition validation: validate endpoint */
+        guard let url = r else {
+            return nil
         }
-        set {
-            objc_sync_enter(networkCounter_); defer { objc_sync_exit(networkCounter_) }
-            networkCounter_ = newValue
-            #if os(iOS)
-                if networkCounter_ > 0 {
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = true
-                } else {
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                }
-            #endif
+
+        let task = Alamofire.download(url, method: m, parameters: p, encoding: e, headers: h, to: nil)
+        task.validate(statusCode: 200..<300)
+        task.response { (r) in
+            c(r.temporaryURL, r.error, r.response)
+        }
+        return task
+    }
+
+    /// Send request to server.
+    ///
+    /// @params
+    /// - request {String} (an endpoint)
+    /// - method {HTTPMethod} (a HTTP method)
+    /// - params {[String:String]} (a query params)
+    /// - encoding {ParameterEncoding} (define how to encode query params)
+    /// - headers {[String: String]} (additional headers)
+    ///
+    /// - parameter completion (required): call back function
+    @discardableResult
+    public static func send(request r: String?, method m: HTTPMethod = .get, params p: [String:String]? = nil, encoding e: ParameterEncoding = URLEncoding.`default`, headers h: [String: String]? = nil, completion c: @escaping RequestCompletion) -> DataRequest? {
+        /* Condition validation: validate endpoint */
+        guard let url = r else {
+            return nil
+        }
+
+        let task = Alamofire.request(url, method: m, parameters: p, encoding: e, headers: h)
+        task.validate(statusCode: 200..<300)
+        task.response { (r) in
+            c(r.data, r.error, r.response)
+        }
+        return task
+    }
+
+    /// Cancel all running Tasks.
+    public static func cancelTasks() {
+        let session = SessionManager.`default`.session
+
+        if #available(OSX 10.11, iOS 9.0, *) {
+            session.getAllTasks { (tasks) in
+                tasks.forEach({
+                    $0.cancel()
+                })
+            }
+        } else {
+            session.getTasksWithCompletionHandler({ (sessionTasks, uploadTasks, downloadTasks) in
+                sessionTasks.forEach({
+                    $0.cancel()
+                })
+
+                uploadTasks.forEach({
+                    $0.cancel()
+                })
+
+                downloadTasks.forEach({
+                    $0.cancel()
+                })
+            })
         }
     }
 
-    // MARK: NSURLSessionDelegate's members
-    public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        if let serverTrust = challenge.protectionSpace.serverTrust, challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
-            let credential = URLCredential(trust: serverTrust)
-            completionHandler(.useCredential, credential)
-        }
-        else {
-            completionHandler(.cancelAuthenticationChallenge, nil)
-        }
+    /// Cancel all data Tasks.
+    public static func cancelDataTasks() {
+        let session = SessionManager.`default`.session
+        session.getTasksWithCompletionHandler({ (sessionTasks, _, _) in
+            sessionTasks.forEach({
+                $0.cancel()
+            })
+        })
     }
 
-    // MARK: NSURLSessionTaskDelegate's members
-    public func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
-        completionHandler(request)
+    /// Cancel all download Tasks.
+    public static func cancelDownloadTasks() {
+        let session = SessionManager.`default`.session
+        session.getTasksWithCompletionHandler({ (_, _, downloadTasks) in
+            downloadTasks.forEach({
+                $0.cancel()
+            })
+        })
+    }
+
+    /// Cancel all upload Tasks.
+    public static func cancelUploadTasks() {
+        let session = SessionManager.`default`.session
+        session.getTasksWithCompletionHandler({ (_, uploadTasks, _) in
+            uploadTasks.forEach({
+                $0.cancel()
+            })
+        })
     }
 }
+

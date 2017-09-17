@@ -1,9 +1,9 @@
 //  Project name: FwiCore
-//  File name   : FwiMultipartParam.swift
+//  File name   : Codable+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 12/3/14
-//  Version     : 1.1.0
+//  Created date: 9/13/17
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -38,50 +38,34 @@
 
 import Foundation
 
+public extension Encodable {
 
-public struct FwiMultipartParam: CustomDebugStringConvertible, CustomStringConvertible {
-
-    // MARK: Struct's constructors
-    public init(name: String = "", fileName file: String = "", contentData data: Data = Data(), contentType type: String = "") {
-        self.name = name
-        self.fileName = file
-        self.contentData = data
-        self.contentType = type
-    }
-
-    // MARK: Struct's properties
-    public fileprivate (set) var name: String
-    public fileprivate (set) var fileName: String
-    public fileprivate (set) var contentData: Data
-    public fileprivate (set) var contentType: String
-
-    // MARK: Struct's private methods
-    fileprivate var hashValue: Int {
-        var hash = name.hashValue
-        hash ^= fileName.hashValue
-        hash ^= contentData.hashValue
-        hash ^= contentType.hashValue
-        return hash
-    }
-
-    // MARK: CustomDebugStringConvertible's members
-    public var debugDescription: String {
-        return description
-    }
-
-    // MARK: CustomStringConvertible's members
-    public var description: String {
-        let type = "Content-Type: \(contentType)"
-        let disposition = "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(fileName)\"\r\n"
-
-        if let encoded = contentData.encodeBase64String() {
-            return "\n\(type)\n\(disposition)\n\(encoded)"
+    /// Convert a model to JSON.
+    public func encodeJSON() -> Data? {
+        let encoder = JSONEncoder()
+        do {
+            return try encoder.encode(self)
+        } catch let err as NSError {
+            FwiLog("There was an error during JSON encoding! (\(err.localizedDescription))")
+            return nil
         }
-        return "\n\(type)\n\(disposition)"
     }
 }
 
-// MARK: Custom Operator
-public func == (left: FwiMultipartParam?, right: FwiMultipartParam?) -> Bool {
-    return left?.hashValue == right?.hashValue
+public extension Decodable {
+
+    /// Map JSON to model.
+    public static func decodeJSON(_ json: Data?) -> Self? {
+        guard let json = json else {
+            return nil
+        }
+
+        let decoder = JSONDecoder()
+        do {
+            return try decoder.decode(self, from: json)
+        } catch let err as NSError {
+            FwiLog("There was an error during JSON decoding! (\(err.localizedDescription))")
+            return nil
+        }
+    }
 }

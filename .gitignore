@@ -19,3 +19,4 @@ LICENSE
 *.txt
 *.zip
 .DS_Store
+Package.resolved

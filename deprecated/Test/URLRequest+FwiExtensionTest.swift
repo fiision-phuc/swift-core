@@ -74,9 +74,9 @@ class URLRequestFwiExtensionTest: XCTestCase {
             return
         }
         
-        generalValidation(FwiRequestType.Raw(url: url, requestMethod: .get, extraHeaders: nil, rawParam: nil).request)
-        generalValidation(FwiRequestType.URLEncode(url: url, requestMethod: .get, extraHeaders: nil, queryParams: nil).request)
-        generalValidation(FwiRequestType.Multipart(url: url, requestMethod: .get, extraHeaders: nil, queryParams: nil, fileParams: nil).request)
+//        generalValidation(FwiRequestType.Raw(url: url, requestMethod: .get, extraHeaders: nil, rawParam: nil).request)
+//        generalValidation(FwiRequestType.URLEncode(url: url, requestMethod: .get, extraHeaders: nil, queryParams: nil).request)
+//        generalValidation(FwiRequestType.Multipart(url: url, requestMethod: .get, extraHeaders: nil, queryParams: nil, fileParams: nil).request)
     }
     
     

@@ -1,9 +1,9 @@
 //  Project name: FwiCore
-//  File name   : FwiConsole.swift
+//  File name   : FwiMultipartParam.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/11/16
-//  Version     : 1.1.0
+//  Created date: 12/3/14
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -39,37 +39,57 @@
 import Foundation
 
 
-public struct FwiConsole {
+public struct FwiMultipartParam {
 
-    /// Output error to console.
-    ///
-    /// - parameter request (required): request
-    /// - parameter data (required): response's data
-    /// - parameter error (required): response's error
-    /// - parameter statusCode (required): network's status
-    static func consoleError(withRequest request: URLRequest, data d: Data?, error e: Error?, statusCode s: FwiNetworkStatus) {
-        guard let err = e as NSError?, let url = request.url, let host = url.host, let method = request.httpMethod else {
-            return
-        }
-        
-        let domain     = "Domain     : \(host)\n"
-        let urlString  = "HTTP Url   : \(url)\n"
-        let httpMethod = "HTTP Method: \(method)\n"
-        let status     = "HTTP Status: \(s.rawValue) (\(err.localizedDescription))\n"
-        let dataString = "\(d?.toString() ?? "")"
-        
-        FwiLog("\n\(domain)\(urlString)\(httpMethod)\(status)\(dataString)")
+    // MARK: Struct's constructors
+    public init(name: String = "", fileName file: String = "", contentData data: Data = Data(), contentType type: String = "") {
+        self.name = name
+        self.fileName = file
+        self.contentData = data
+        self.contentType = type
     }
-    
-    /// Generate network error.
-    ///
-    /// - parameter request (required): request
-    /// - parameter statusCode (required): network's status
-    static func generateError(withRequest request: URLRequest, statusCode s: FwiNetworkStatus) -> NSError {
-        let userInfo = [NSURLErrorFailingURLErrorKey:request.url?.description ?? "",
-                        NSURLErrorFailingURLStringErrorKey:request.url?.description ?? "",
-                        NSLocalizedDescriptionKey:s.description]
 
-        return NSError(domain: NSURLErrorDomain, code: s.rawValue, userInfo: userInfo)
+    // MARK: Struct's properties
+    public fileprivate (set) var name: String
+    public fileprivate (set) var fileName: String
+    public fileprivate (set) var contentData: Data
+    public fileprivate (set) var contentType: String
+
+    // MARK: Struct's private methods
+    fileprivate var hashValue: Int {
+        var hash = name.hashValue
+        hash ^= fileName.hashValue
+        hash ^= contentData.hashValue
+        hash ^= contentType.hashValue
+        return hash
+    }
+}
+
+// MARK: CustomStringConvertible's members
+extension FwiMultipartParam: CustomStringConvertible {
+
+    public var description: String {
+        let type = "Content-Type: \(contentType)"
+        let disposition = "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(fileName)\"\r\n"
+
+        if let encoded = contentData.encodeBase64String() {
+            return "\n\(type)\n\(disposition)\n\(encoded)"
+        }
+        return "\n\(type)\n\(disposition)"
+    }
+}
+
+// MARK: Custom Operator
+public extension FwiMultipartParam {
+
+    public static func ==(left: FwiMultipartParam, right: FwiMultipartParam) -> Bool {
+        return left.hashValue == right.hashValue
+    }
+
+    public static func ==(left: FwiMultipartParam, right: FwiMultipartParam?) -> Bool {
+        guard let r = right else {
+            return false
+        }
+        return left == r
     }
 }

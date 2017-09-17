@@ -3,7 +3,7 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 12/3/14
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -39,7 +39,7 @@
 import Foundation
 
 
-public struct FwiFormParam: CustomDebugStringConvertible, CustomStringConvertible {
+struct FwiFormParam {
 
     // MARK: Class's constructors
     public init(key: String = "", value: String = "") {
@@ -55,13 +55,11 @@ public struct FwiFormParam: CustomDebugStringConvertible, CustomStringConvertibl
     public var hashValue: Int {
         return key.hashValue ^ value.hashValue
     }
+}
 
-    // MARK: CustomDebugStringConvertible's members
-    public var debugDescription: String {
-        return description
-    }
+// MARK: CustomStringConvertible's members
+extension FwiFormParam: CustomStringConvertible {
 
-    // MARK: CustomStringConvertible's members
     public var description: String {
         if key[0] == "#" {
             return "#\(key.substring(startIndex: 1).encodeHTML())=\(value.encodeHTML())"
@@ -71,35 +69,36 @@ public struct FwiFormParam: CustomDebugStringConvertible, CustomStringConvertibl
 }
 
 // MARK: Custom Operator
-public func < (left: FwiFormParam?, right: FwiFormParam?) -> Bool {
-    /* Condition validation: Validate left nil */
-    if left == nil && right != nil {
-        return true
-    }
-    
-    /* Condition validation: Validate right nil */
-    if left != nil && right == nil {
-        return false
-    }
-    
-    guard let l = left, let r = right else {
-        return false
-    }
-    
-    if l.key[l.key.startIndex] == "#" && r.key[r.key.startIndex] != "#" {
-        return true
-    }
-    else if l.key[l.key.startIndex] != "#" && r.key[r.key.startIndex] == "#" {
-        return false
-    }
-    else if l.key[l.key.startIndex] == "#" && r.key[r.key.startIndex] == "#" {
-        let key1 = l.key.substring(startIndex: 1, reverseIndex: 0)
-        let key2 = r.key.substring(startIndex: 1, reverseIndex: 0)
-        return key1 < key2
-    }
-    return l.key < r.key
-}
+extension FwiFormParam {
 
-public func == (left: FwiFormParam?, right: FwiFormParam?) -> Bool {
-    return left?.hashValue == right?.hashValue
+    static func <(left: FwiFormParam, right: FwiFormParam) -> Bool {
+        if left.key[left.key.startIndex] == "#" && right.key[right.key.startIndex] != "#" {
+            return true
+        }
+        else if left.key[left.key.startIndex] != "#" && right.key[right.key.startIndex] == "#" {
+            return false
+        }
+        else if left.key[left.key.startIndex] == "#" && right.key[right.key.startIndex] == "#" {
+            let key1 = left.key.substring(startIndex: 1, reverseIndex: 0)
+            let key2 = right.key.substring(startIndex: 1, reverseIndex: 0)
+            return key1 < key2
+        }
+        return left.key < right.key
+    }
+    static func <(left: FwiFormParam, right: FwiFormParam?) -> Bool {
+        guard let r = right else {
+            return false
+        }
+        return left < r
+    }
+
+    static func ==(left: FwiFormParam, right: FwiFormParam) -> Bool {
+        return left.hashValue == right.hashValue
+    }
+    static func ==(left: FwiFormParam, right: FwiFormParam?) -> Bool {
+        guard let r = right else {
+            return false
+        }
+        return left == r
+    }
 }

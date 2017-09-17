@@ -3,7 +3,7 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 9/3/16
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -77,7 +77,7 @@ public extension NSCoding {
     ///
     /// - parameter key (required): object's key inside UserDefaults
     public static func unarchive(fromUserDefaults key: String) -> Self? {
-        guard let data = UserDefaults.standard.value(forKey: key) as? Data , data.count > 0 else {
+        guard let data = UserDefaults.standard.value(forKey: key) as? Data, data.count > 0 else {
             return nil
         }
         return unarchive(fromData: data)

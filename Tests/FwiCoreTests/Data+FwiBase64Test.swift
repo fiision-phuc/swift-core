@@ -3,7 +3,7 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/23/14
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -59,6 +59,15 @@ class NSDataFwiBase64Test: XCTestCase {
 
         base64Data = "RndpQ29yZQ==".toData()
         XCTAssert(base64Data?.isBase64() == true, "'RndpQ29yZQ==' is a valid base64.")
+
+        let text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+        let base64 = text.encodeBase64String()!
+        let begin = Date()
+        _ = base64.isBase64()
+        let end = Date()
+
+        let time = end.timeIntervalSince(end)
+        debugPrint(time)
     }
 
     func testDecodeBase64Data() {
@@ -87,5 +96,28 @@ class NSDataFwiBase64Test: XCTestCase {
 
         let data = "FwiCore".toData()
         XCTAssertEqual(data?.encodeBase64String(), "RndpQ29yZQ==", "Expected 'RndpQ29yZQ=='.")
+    }
+
+    // MARK: Performance test cases
+    func testIsBase64Performance() {
+        let text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+        let base64 = text.encodeBase64String()!
+
+        self.measure {
+            for _ in (0..<100000) {
+                _ = base64.isBase64()
+            }
+        }
+        // Time: 5.189 sec
+    }
+
+    func testPerformance() {
+        let text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+
+        self.measure {
+            for _ in (0..<100000) {
+                _ = text.encodeBase64String()
+            }
+        }
     }
 }

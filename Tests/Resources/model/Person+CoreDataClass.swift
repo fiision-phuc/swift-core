@@ -6,11 +6,12 @@
 //  Copyright © 2016 Fiision Studio. All rights reserved.
 //
 
-import Foundation
-import CoreData
-import FwiCore
+//import Foundation
+//import CoreData
+//import FwiCore
+//
+//
+//public class Person: NSManagedObject, FwiCoreData {
+//
+//}
 
-
-public class Person: NSManagedObject, FwiCoreData {
-
-}
