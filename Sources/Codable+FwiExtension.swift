@@ -55,7 +55,7 @@ public extension Encodable {
 public extension Decodable {
 
     /// Map JSON to model.
-    static public func decodeJSON(_ json: Data?) -> Self? {
+    public static func decodeJSON(_ json: Data?) -> Self? {
         guard let json = json else {
             return nil
         }

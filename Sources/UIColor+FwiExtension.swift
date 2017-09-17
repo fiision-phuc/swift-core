@@ -3,7 +3,7 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 6/13/16
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -38,7 +38,6 @@
 
 #if os(iOS)
 import UIKit
-import Foundation
 
 
 public extension UIColor {

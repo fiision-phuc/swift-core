@@ -3,7 +3,7 @@
 //
 //  Author      : Dung Vu
 //  Created date: 8/10/16
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -38,7 +38,6 @@
 
 #if os(iOS)
 import UIKit
-import Foundation
 
 
 /// FwiStoryboard defines instruction on how to load a storyboard.
@@ -52,7 +51,7 @@ public protocol FwiStoryboard {
 }
 
 /// Default implementation for FwiStoryboard.
-public extension FwiCell {
+public extension FwiStoryboard {
     
     static var bundle: Bundle?  {
         return nil

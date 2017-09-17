@@ -42,8 +42,8 @@ import XCTest
 
 class FwiReachabilityTest: XCTestCase {
     
-    var reachability: FwiReachability?
-    
+//    var reachability: FwiReachability?
+
     // MARK: Setup
     override func setUp() {
         super.setUp()

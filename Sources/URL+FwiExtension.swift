@@ -55,52 +55,121 @@ public extension URL {
 }
 
 // MARK: Custom Operator
-/// Append path component.
-public func + (left: URL?, right: String?) -> URL? {
-    guard let path = right else {
+public extension URL {
+
+    /// Append path component.
+    public static func +(left: URL, right: String) -> URL {
+        if left.absoluteString.hasSuffix("/") && right.hasPrefix("/") {
+            return left.appendingPathComponent(right.substring(startIndex: 1))
+        }
+        return left.appendingPathComponent(right)
+    }
+    public static func +(left: URL, right: String?) -> URL {
+        guard let path = right else {
+            return left
+        }
+        return left + path
+    }
+
+    public static func +=(left: inout URL, right: String) {
+        left = left + right
+    }
+    public static func +=(left: inout URL, right: String?) {
+        guard let r = right else {
+            return
+        }
+        left = left + r
+    }
+
+    /// Add query params to current url.
+    public static func +(left: URL, right: [String:String]) -> URL {
+        guard right.count > 0 else {
+            return left
+        }
+        let forms = right.map { FwiFormParam(key: $0, value: $1) }
+        let urlString = left.absoluteString
+
+        // Define # if there is any
+        let hashtag = forms.filter { $0.key[0] == "#"}
+                          .sorted(by: <)
+                          .first?.description ?? ""
+
+        // Define query
+        let query = forms.filter { $0.key[0] != "#" }
+                        .sorted(by: <)
+                        .map { $0.description }
+                        .joined(separator: "&")
+
+        // Finalize url
+        let isHaveHashTag = hashtag.length() > 0
+        let isHaveQuery = query.length() > 0
+
+        switch (isHaveHashTag, isHaveQuery) {
+        case (true, true):
+            return URL(string: "\(urlString)\(hashtag)?\(query)") ?? left
+        case (true, false):
+            return URL(string: "\(urlString)\(hashtag)") ?? left
+        default:
+            return URL(string: "\(urlString)?\(query)") ?? left
+        }
+    }
+    public static func +(left: URL, right: [String:String]?) -> URL {
+        guard let params = right, params.count > 0 else {
+            return left
+        }
+        return left + params
+    }
+
+    public static func +=(left: inout URL, right: [String : String]) {
+        left = left + right
+    }
+    public static func +=(left: inout URL, right: [String : String]?) {
+        left = left + right
+    }
+}
+
+// MARK: Custom Operator for Optional URL
+public func +(left: URL?, right: String) -> URL? {
+    guard let url = left else {
         return left
     }
-    
-    if left?.absoluteString.hasSuffix("/") == true && path.hasPrefix("/") {
-        return left?.appendingPathComponent(path.substring(startIndex: 1))
-    }
-    return left?.appendingPathComponent(path)
+    let final = url + right
+    return final
 }
-public func += (left: inout URL?, right: String?) {
+public func +(left: URL?, right: String?) -> URL? {
+    guard let url = left else {
+        return left
+    }
+    let final = url + right
+    return final
+}
+
+public func +=(left: inout URL?, right: String) {
+    left = left + right
+}
+public func +=(left: inout URL?, right: String?) {
     left = left + right
 }
 
 /// Add query params to current url.
-public func + (left: URL?, right: [String : String]?) -> URL? {
-    guard let urlString = left?.absoluteString, let params = right, params.count > 0 else {
+public func +(left: URL?, right: [String:String]) -> URL? {
+    guard let url = left else {
         return left
     }
-    let forms = params.map({ FwiFormParam(key: $0, value: $1) })
-
-    // Define # if there is any
-    let hashtag = forms.filter({ $0.key[0] == "#"})
-                       .sorted(by: <)
-                       .first?.description ?? ""
-
-    // Define query
-    let query = forms.filter({ $0.key[0] != "#" })
-                     .sorted(by: <)
-                     .map({ $0.description })
-                     .joined(separator: "&")
-
-    // Finalize url
-    let isHaveHashTag = hashtag.length() > 0
-    let isHaveQuery = query.length() > 0
-    
-    switch (isHaveHashTag, isHaveQuery) {
-        case (true, true):
-            return URL(string: "\(urlString)\(hashtag)?\(query)")
-        case (true, false):
-            return URL(string: "\(urlString)\(hashtag)")
-        default:
-            return URL(string: "\(urlString)?\(query)")
-    }
+    let final = url + right
+    return final
 }
-public func += (left: inout URL?, right: [String : String]?) {
+public func +(left: URL?, right: [String:String]?) -> URL? {
+    guard let url = left else {
+        return left
+    }
+    let final = url + right
+    return final
+}
+
+public func +=(left: inout URL?, right: [String : String]) {
+    left = left + right
+}
+public func +=(left: inout URL?, right: [String : String]?) {
     left = left + right
 }

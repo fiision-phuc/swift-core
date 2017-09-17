@@ -1,9 +1,9 @@
 //  Project name: FwiCore
-//  File name   : FwiMultipartParam.swift
+//  File name   : FwiDataParam.swift
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 12/3/14
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -39,49 +39,46 @@
 import Foundation
 
 
-public struct FwiMultipartParam: CustomDebugStringConvertible, CustomStringConvertible {
+public struct FwiDataParam {
 
-    // MARK: Struct's constructors
-    public init(name: String = "", fileName file: String = "", contentData data: Data = Data(), contentType type: String = "") {
-        self.name = name
-        self.fileName = file
-        self.contentData = data
+    // MARK: Class's constructors
+    public init(data: Data = Data(), contentType type: String = "text/plain; charset=UTF-8") {
         self.contentType = type
+        self.data = data
     }
 
-    // MARK: Struct's properties
-    public fileprivate (set) var name: String
-    public fileprivate (set) var fileName: String
-    public fileprivate (set) var contentData: Data
+    // MARK: Class's properties
+    public fileprivate (set) var data: Data
     public fileprivate (set) var contentType: String
 
     // MARK: Struct's private methods
-    fileprivate var hashValue: Int {
-        var hash = name.hashValue
-        hash ^= fileName.hashValue
-        hash ^= contentData.hashValue
-        hash ^= contentType.hashValue
-        return hash
+    public var hashValue: Int {
+        return contentType.hashValue ^ data.hashValue
     }
+}
 
-    // MARK: CustomDebugStringConvertible's members
-    public var debugDescription: String {
-        return description
-    }
+// MARK: CustomStringConvertible's members
+extension FwiDataParam: CustomStringConvertible {
 
-    // MARK: CustomStringConvertible's members
     public var description: String {
-        let type = "Content-Type: \(contentType)"
-        let disposition = "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(fileName)\"\r\n"
-
-        if let encoded = contentData.encodeBase64String() {
-            return "\n\(type)\n\(disposition)\n\(encoded)"
+        if let encoded = data.encodeBase64String() {
+            return "\n\(contentType)\n\(encoded)\n"
         }
-        return "\n\(type)\n\(disposition)"
+        return "\n\(contentType)\n"
     }
 }
 
 // MARK: Custom Operator
-public func == (left: FwiMultipartParam?, right: FwiMultipartParam?) -> Bool {
-    return left?.hashValue == right?.hashValue
+public extension FwiDataParam {
+
+    public static func ==(left: FwiDataParam, right: FwiDataParam) -> Bool {
+        return left.hashValue == right.hashValue
+    }
+
+    public static func ==(left: FwiDataParam, right: FwiDataParam?) -> Bool {
+        guard let r = right else {
+            return false
+        }
+        return left == r
+    }
 }
