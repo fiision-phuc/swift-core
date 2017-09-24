@@ -44,7 +44,7 @@ public typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ resp
 public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
 
 
-public struct FwiNetwork {
+public final class FwiNetwork {
 
     /// Download resource from server.
     ///
@@ -64,7 +64,7 @@ public struct FwiNetwork {
         }
 
         let task = Alamofire.download(url, method: m, parameters: p, encoding: e, headers: h, to: nil)
-        task.validate(statusCode: 200..<300)
+//        task.validate(statusCode: 200..<300)
         task.response { (r) in
             c(r.temporaryURL, r.error, r.response)
         }
@@ -89,7 +89,7 @@ public struct FwiNetwork {
         }
 
         let task = Alamofire.request(url, method: m, parameters: p, encoding: e, headers: h)
-        task.validate(statusCode: 200..<300)
+//        task.validate(statusCode: 200..<300)
         task.response { (r) in
             c(r.data, r.error, r.response)
         }
