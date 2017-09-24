@@ -45,22 +45,22 @@ import FwiCore
 #endif
 
 
-public extension Reactive where Base: FwiNetwork {
+public extension FwiNetwork {
 
     /// Reactive wrapper for `download(resource:method:params:encoding:headers:completion:)` function.
     ///
     /// - seealso:
     /// [The FwiCore Library Reference]
     /// (https://github.com/phuc0302/swift-core/blob/master/Sources/FwiNetwork.swift)
-    public static func download(resource r: String?, method m: HTTPMethod = .get, params p: [String:String]? = nil, encoding e: ParameterEncoding = URLEncoding.`default`, headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, URL)> {
+    public static func downloadResource(_ r: String?, method m: HTTPMethod = .get, params p: [String:String]? = nil, encoding e: ParameterEncoding = URLEncoding.`default`, headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, URL)> {
         return Observable.create { observer in
-            let t = FwiNetwork.download(resource: r, method: m, params: p, encoding: e, headers: h, completion: { result in
+            let t = FwiNetwork.download(resource: r, method: m, params: p, encoding: e, headers: h, completion: { (url, err, res) in
                 /* Condition validation: validate network's status */
-                guard let response = result.2, let location = result.0, 200 <= response.statusCode && response.statusCode < 300 else {
-                    observer.on(.error(result.1 ?? NSError(domain: NSURLErrorDomain, code: URLError.badServerResponse.rawValue, userInfo: nil)))
+                guard let response = res, let location = url, 200 <= response.statusCode && response.statusCode < 300 else {
+                    observer.on(.error(err ?? NSError(domain: NSURLErrorDomain, code: URLError.badServerResponse.rawValue, userInfo: nil)))
                     return
                 }
-                observer.on(.next(response, location))
+                observer.on(.next((response, location)))
                 observer.on(.completed)
             })
 
@@ -77,15 +77,15 @@ public extension Reactive where Base: FwiNetwork {
     /// - seealso:
     /// [The FwiCore Library Reference]
     /// (https://github.com/phuc0302/swift-core/blob/master/Sources/FwiNetwork.swift)
-    public static func send(request r: String?, method m: HTTPMethod = .get, params p: [String:String]? = nil, encoding e: ParameterEncoding = URLEncoding.`default`, headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, Data)> {
+    public static func sendRequest(_ r: String?, method m: HTTPMethod = .get, params p: [String:String]? = nil, encoding e: ParameterEncoding = URLEncoding.`default`, headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, Data)> {
         return Observable.create { observer in
-            let t = FwiNetwork.send(request: r, method: m, params: p, encoding: e, headers: h, completion: { result in
+            let t = FwiNetwork.send(request: r, method: m, params: p, encoding: e, headers: h, completion: { (d, err, res) in
                 /* Condition validation: validate network's status */
-                guard let response = result.2, let data = result.0, 200 <= response.statusCode && response.statusCode < 300 else {
-                    observer.on(.error(result.1 ?? NSError(domain: NSURLErrorDomain, code: URLError.badServerResponse.rawValue, userInfo: nil)))
+                guard let response = res, let data = d, 200 <= response.statusCode && response.statusCode < 300 else {
+                    observer.on(.error(err ?? NSError(domain: NSURLErrorDomain, code: URLError.badServerResponse.rawValue, userInfo: nil)))
                     return
                 }
-                observer.on(.next(response, data))
+                observer.on(.next((response, data)))
                 observer.on(.completed)
             })
 

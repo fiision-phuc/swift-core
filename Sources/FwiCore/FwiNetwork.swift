@@ -44,7 +44,7 @@ public typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ resp
 public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
 
 
-public final class FwiNetwork {
+public struct FwiNetwork {
 
     /// Download resource from server.
     ///
