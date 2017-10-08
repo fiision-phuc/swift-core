@@ -43,8 +43,13 @@ import Foundation
 #endif
 
 
-open class FwiViewModel {
-    
+open class FwiViewModel: NSObject {
+
+    // MARK: Class's constructors
+    public override init() {
+        super.init()
+    }
+
     deinit {
         disposeBag = nil
     }

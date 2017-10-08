@@ -41,8 +41,22 @@ import Foundation
 public extension Encodable {
 
     /// Convert a model to JSON.
-    public func encodeJSON() -> Data? {
+    public func encodeJSON(format f: JSONEncoder.OutputFormatting? = nil, dataDecoding d: JSONEncoder.DataEncodingStrategy = .base64, dateDecoding dt: JSONEncoder.DateEncodingStrategy? = nil) -> Data? {
         let encoder = JSONEncoder()
+        encoder.dataEncodingStrategy = d
+
+        // Output format
+        if let format = f {
+            encoder.outputFormatting = format
+        }
+
+        // Encode datetime
+        if #available(iOS 10.0, *) {
+            encoder.dateEncodingStrategy = dt ?? .iso8601
+        } else {
+            encoder.dateEncodingStrategy = dt ?? .secondsSince1970
+        }
+
         do {
             return try encoder.encode(self)
         } catch let err as NSError {
@@ -55,12 +69,22 @@ public extension Encodable {
 public extension Decodable {
 
     /// Map JSON to model.
-    public static func decodeJSON(_ json: Data?) -> Self? {
+    public static func decodeJSON(_ json: Data?, dataDecoding d: JSONDecoder.DataDecodingStrategy = .base64, dateDecoding dt: JSONDecoder.DateDecodingStrategy? = nil) -> Self? {
         guard let json = json else {
             return nil
         }
 
+
         let decoder = JSONDecoder()
+        decoder.dataDecodingStrategy = d
+
+        // Decode datetime
+        if #available(iOS 10.0, *) {
+            decoder.dateDecodingStrategy = dt ?? .iso8601
+        } else {
+            decoder.dateDecodingStrategy = dt ?? .secondsSince1970
+        }
+
         do {
             return try decoder.decode(self, from: json)
         } catch let err as NSError {
