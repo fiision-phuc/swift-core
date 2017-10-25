@@ -3,7 +3,7 @@
 //
 //  Author      : Dung Vu
 //  Created date: 6/8/16
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -91,7 +91,7 @@ public final class FwiPersistentManager {
 
     // MARK: Class's properties
     /// Return managed object model instance.
-    public fileprivate (set) lazy var managedModel: NSManagedObjectModel = {
+    public fileprivate(set) lazy var managedModel: NSManagedObjectModel = {
         guard let modelURL = self.bundle.url(forResource: self.dataModel, withExtension: "momd"), let managedModel = NSManagedObjectModel(contentsOf: modelURL) else {
             fatalError("\(self.dataModel) model is not available!")
         }
@@ -99,7 +99,7 @@ public final class FwiPersistentManager {
     }()
 
     /// Return main managed object context.
-    public fileprivate (set) lazy var managedContext: NSManagedObjectContext = {
+    public fileprivate(set) lazy var managedContext: NSManagedObjectContext = {
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = self.persistentCoordinator
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
@@ -108,7 +108,7 @@ public final class FwiPersistentManager {
     }()
 
     /// Return persistent store coordinator.
-    public fileprivate (set) lazy var persistentCoordinator: NSPersistentStoreCoordinator = {
+    public fileprivate(set) lazy var persistentCoordinator: NSPersistentStoreCoordinator = {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedModel)
         
         if self.storeType == .memory {
@@ -182,13 +182,11 @@ public final class FwiPersistentManager {
     /// Return a sub managed object context that had been optimized to serve the update data process.
     public func importContext() -> NSManagedObjectContext {
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        managedObjectContext.persistentStoreCoordinator = self.persistentCoordinator
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
+        managedObjectContext.persistentStoreCoordinator = persistentCoordinator
         managedObjectContext.undoManager = nil
-
         return managedObjectContext
     }
-
 
     // MARK: Class's private methods
     @objc

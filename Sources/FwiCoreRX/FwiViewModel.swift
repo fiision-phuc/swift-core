@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : Codable+FwiExtension.swift
+//  File name   : FwiViewModel.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 9/13/17
+//  Created date: 11/12/16
 //  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
@@ -38,34 +38,27 @@
 
 import Foundation
 
-public extension Encodable {
+#if !RX_NO_MODULE
+    import RxSwift
+#endif
 
-    /// Convert a model to JSON.
-    public func encodeJSON() -> Data? {
-        let encoder = JSONEncoder()
-        do {
-            return try encoder.encode(self)
-        } catch let err as NSError {
-            FwiLog("There was an error during JSON encoding! (\(err.localizedDescription))")
-            return nil
-        }
+
+open class FwiViewModel: NSObject {
+
+    // MARK: Class's constructors
+    public override init() {
+        super.init()
     }
-}
 
-public extension Decodable {
-
-    /// Map JSON to model.
-    public static func decodeJSON(_ json: Data?) -> Self? {
-        guard let json = json else {
-            return nil
-        }
-
-        let decoder = JSONDecoder()
-        do {
-            return try decoder.decode(self, from: json)
-        } catch let err as NSError {
-            FwiLog("There was an error during JSON decoding! (\(err.localizedDescription))")
-            return nil
-        }
+    deinit {
+        disposeBag = nil
+    }
+    
+    // MARK: Class's properties
+    public fileprivate(set) var disposeBag: DisposeBag! = DisposeBag()
+    
+    // MARK: Class's public methods
+    open func setupRX() {
+        fatalError("\(#function) should be overrided by sub class!")
     }
 }

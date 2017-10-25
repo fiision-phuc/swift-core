@@ -3,7 +3,7 @@
 //
 //  Author      : Dung Vu
 //  Created date: 6/22/16
-//  Version     : 1.1.0
+//  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
 //  All Rights Reserved.
@@ -43,20 +43,20 @@ import CoreData
 public protocol FwiCoreData {
 }
 
-
 public extension FwiCoreData where Self: NSManagedObject {
     
     /// Fetch all entities.
     ///
-    /// - parameter context (required): a managed object context to search
-    /// - parameter predicate (optional): to filter entity list
-    /// - parameter sortDescriptor (optional): to sort entity list
-    /// - parameter groupBy (optional): to group entity list into smaller list
-    /// - parameter limit (optional): to limit the number of entities within the list
-    public static func allEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [Any]? = nil, limit l: Int = 0) -> [Self]? {
+    /// @params
+    /// - context {NSManagedObjectContext} (a managed object context to search)
+    /// - predicate {NSPredicate} (to filter entity list)
+    /// - sortDescriptor {[NSSortDescriptor]} (to sort entity list)
+    /// - groupBy {[Any]} (to group entity list into smaller list)
+    /// - limit {Int} (to limit the number of entities within the list)
+    public static func allEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [Any]? = nil, limit l: Int = 0) -> [Self] {
         /* Condition validation */
         guard let c = context, let entityName = NSStringFromClass(self).split(".").last else {
-            return nil
+            return []
         }
         
         let request = NSFetchRequest<Self>(entityName: entityName)
@@ -78,46 +78,42 @@ public extension FwiCoreData where Self: NSManagedObject {
         }
         
         var entities: [Self]?
-        c.performAndWait {[weak c] in
-            guard let c = c else {
-                return
-            }
-            // Perform fetch
+        c.performAndWait {
             entities = try? c.fetch(request)
         }
-        
-        // Return result
-        return entities
+        return entities ?? []
     }
     
     /// Fetch an entity base on search condition. Create new if necessary.
     ///
-    /// - parameter context (required): a managed object context to search
-    /// - parameter predicate (optional): to filter entity list
-    /// - parameter shouldCreate (optional): create new entity if necessary
+    /// @params
+    /// - context {NSManagedObjectContext} (a managed object context to search)
+    /// - predicate {NSPredicate} (to filter entity list)
+    /// - shouldCreate {Bool} (create new entity if necessary)
     public static func entity(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, shouldCreate create: Bool = false) -> Self? {
         /* Condition validation */
         guard let c = context else {
             return nil
         }
-        
+
         // Find before create
         let entities = allEntities(fromContext: c, predicate: p, limit: 1)
-        var entity = entities?.first
+        var entity = entities.first
         
         if entity == nil && create {
-            entity = newEntity(withContext: context)
+            entity = newEntity(withContext: c)
         }
         return entity
     }
     
     /// Count all entities.
     ///
-    /// - parameter context (required): a managed object context to count
-    /// - parameter predicate (optional): to filter entity list
+    /// @params
+    /// - context {NSManagedObjectContext} (a managed object context to search)
+    /// - predicate {NSPredicate} (to filter entity list)
     public static func count(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) -> Int {
         /* Condition validation */
-        guard let c = context, let entityName = NSStringFromClass(self).split(".").last else {
+        guard let c = context else {
             return 0
         }
         
@@ -127,28 +123,19 @@ public extension FwiCoreData where Self: NSManagedObject {
         request.predicate = p
         
         var counter = 0
-        c.performAndWait {[weak c] in
-            guard let c = c else {
-                return
-            }
-            
-            
-            do {
-                counter = try c.count(for: request)
-            }
-            catch _ {
-                counter = 0
-            }
+        c.performAndWait {
+            counter = (try? c.count(for: request)) ?? 0
         }
         return counter
     }
-    
+
     /// Insert new entity.
     ///
-    /// - parameter context (required): a managed object context to insert
+    /// @params
+    /// - context {NSManagedObjectContext} (a managed object context to search)
     public static func newEntity(withContext context: NSManagedObjectContext?) -> Self? {
         /* Condition validation */
-        guard let c = context, let entityName = NSStringFromClass(self).split(".").last else {
+        guard let c = context else {
             return nil
         }
         return NSEntityDescription.insertNewObject(forEntityName: entityName, into: c) as? Self
@@ -156,14 +143,14 @@ public extension FwiCoreData where Self: NSManagedObject {
     
     /// Delete all entities.
     ///
-    /// - parameter context (required): a managed object context to delete
-    /// - parameter predicate (optional): to filter entities when deleting
+    /// @params
+    /// - context {NSManagedObjectContext} (a managed object context to search)
+    /// - predicate {NSPredicate} (to filter entity list)
     public static func deleteAllEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) {
         let entities = allEntities(fromContext: context, predicate: p)
-        // Using mark and delete , it'll fast and safe
-        entities?.forEach({
+        entities.forEach {
             context?.delete($0)
-        })
+        }
         try? context?.save()
     }
 }

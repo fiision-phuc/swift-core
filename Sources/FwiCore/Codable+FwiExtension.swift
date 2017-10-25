@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : Codable+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Created date: 9/13/17
 //  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
@@ -37,24 +37,60 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
-import CoreData
 
 
-public extension NSManagedObject {
+public extension Encodable {
 
-    /// Return entity's name.
-    public static func entityName() -> String {
-        return "\(self)"
+    /// Convert a model to JSON.
+    public func encodeJSON(format f: JSONEncoder.OutputFormatting? = nil, dataDecoding d: JSONEncoder.DataEncodingStrategy = .base64, dateDecoding dt: JSONEncoder.DateEncodingStrategy? = nil) -> Data? {
+        let encoder = JSONEncoder()
+        encoder.dataEncodingStrategy = d
+
+        // Output format
+        if let format = f {
+            encoder.outputFormatting = format
+        }
+
+        // Encode datetime
+        if #available(iOS 10.0, *) {
+            encoder.dateEncodingStrategy = dt ?? .iso8601
+        } else {
+            encoder.dateEncodingStrategy = dt ?? .secondsSince1970
+        }
+
+        do {
+            return try encoder.encode(self)
+        } catch let err as NSError {
+            FwiLog("There was an error during JSON encoding! (\(err.localizedDescription))")
+            return nil
+        }
     }
-    
-    /// Remove self from database.
-    public func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let strongSelf = self, let context = self?.managedObjectContext else {
-                return
-            }
-            context.delete(strongSelf)
-            try? context.save()
-        })
+}
+
+public extension Decodable {
+
+    /// Map JSON to model.
+    public static func decodeJSON(_ json: Data?, dataDecoding d: JSONDecoder.DataDecodingStrategy = .base64, dateDecoding dt: JSONDecoder.DateDecodingStrategy? = nil) -> Self? {
+        guard let json = json else {
+            return nil
+        }
+
+
+        let decoder = JSONDecoder()
+        decoder.dataDecodingStrategy = d
+
+        // Decode datetime
+        if #available(iOS 10.0, *) {
+            decoder.dateDecodingStrategy = dt ?? .iso8601
+        } else {
+            decoder.dateDecodingStrategy = dt ?? .secondsSince1970
+        }
+
+        do {
+            return try decoder.decode(self, from: json)
+        } catch let err as NSError {
+            FwiLog("There was an error during JSON decoding! (\(err.localizedDescription))")
+            return nil
+        }
     }
 }
