@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : Codable+FwiExtension.swift
+//  File name   : UIImage+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 9/13/17
+//  Created date: 11/22/14
 //  Version     : 2.0.0
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio.
@@ -36,61 +36,54 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import Foundation
+#if os(iOS)
+import UIKit
 
 
-public extension Encodable {
+public extension UIImage {
 
-    /// Convert a model to JSON.
-    public func encodeJSON(format f: JSONEncoder.OutputFormatting? = nil, dataDecoding d: JSONEncoder.DataEncodingStrategy = .base64, dateDecoding dt: JSONEncoder.DateEncodingStrategy? = nil) -> Data? {
-        let encoder = JSONEncoder()
-        encoder.dataEncodingStrategy = d
+    /// Create circular image from original image with specific size.
+    ///
+    /// @param
+    /// - size {CGFloat} (the circular image's diameter)
+    public func circularImage(withSize size: CGFloat) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: size, height: size), false, UIScreen.main.scale)
+        let rect = CGRect(x: 0, y: 0, width: size, height: size)
 
-        // Output format
-        if let format = f {
-            encoder.outputFormatting = format
-        }
+        UIBezierPath(roundedRect: rect, cornerRadius: (rect.width / 2)).addClip()
+        draw(in: rect)
 
-        // Encode datetime
-        if #available(iOS 10.0, *) {
-            encoder.dateEncodingStrategy = dt ?? .iso8601
-        } else {
-            encoder.dateEncodingStrategy = dt ?? .secondsSince1970
-        }
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
 
-        do {
-            return try encoder.encode(self)
-        } catch let err as NSError {
-            FwiLog("There was an error during JSON encoding! (\(err.localizedDescription))")
-            return nil
-        }
+        return newImage
+    }
+
+    /// Create circular image from original image with specific size and badge.
+    ///
+    /// @param
+    /// - size {CGFloat} (the circular image's diameter)
+    public func circularImage(withSize size: CGFloat, point p: CGPoint, radius r: CGFloat = 2) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: size, height: size), false, UIScreen.main.scale)
+        let rect = CGRect(x: 0, y: 0, width: size, height: size)
+        let ctx = UIGraphicsGetCurrentContext()!
+
+        // Draw circular
+        ctx.saveGState()
+        UIBezierPath(roundedRect: rect, cornerRadius: (rect.width / 2)).addClip()
+        draw(in: rect)
+        ctx.restoreGState()
+
+
+        ctx.saveGState()
+        UIColor.red.setFill()
+        ctx.fillEllipse(in: CGRect(x: p.x, y: p.y, width: r*2, height: r*2))
+        ctx.saveGState()
+
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return newImage
     }
 }
-
-public extension Decodable {
-
-    /// Map JSON to model.
-    public static func decodeJSON(_ json: Data?, dataDecoding d: JSONDecoder.DataDecodingStrategy = .base64, dateDecoding dt: JSONDecoder.DateDecodingStrategy? = nil) -> Self? {
-        guard let json = json else {
-            return nil
-        }
-
-
-        let decoder = JSONDecoder()
-        decoder.dataDecodingStrategy = d
-
-        // Decode datetime
-        if #available(iOS 10.0, *) {
-            decoder.dateDecodingStrategy = dt ?? .iso8601
-        } else {
-            decoder.dateDecodingStrategy = dt ?? .secondsSince1970
-        }
-
-        do {
-            return try decoder.decode(self, from: json)
-        } catch let err as NSError {
-            FwiLog("There was an error during JSON decoding! (\(err.localizedDescription))")
-            return nil
-        }
-    }
-}
+#endif
