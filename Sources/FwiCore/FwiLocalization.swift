@@ -39,17 +39,44 @@
 import Foundation
 
 
-public struct FwiLocalization {
-    // MARK: Singleton instance
-    public static let instance = FwiLocalization()
+public var FwiCurrentLocale: String {
+    get {
+        return sharedInstance.locale
+    }
+    set {
+        sharedInstance.locale = newValue
+    }
+}
+
+/// Localize string for string. The original string will be returned if a localized string could not
+/// be found.
+///
+/// @params:
+/// - string {String} (an original string)
+public func FwiLocalized(forString s: String?) -> String {
+    guard let text = s else {
+        return ""
+    }
+    return sharedInstance.localized(forString: text)
+}
+
+/// Reset current locale to english.
+public func FwiResetLocale() {
+    sharedInstance.reset()
+}
+
+
+fileprivate var sharedInstance = FwiLocalization()
+fileprivate struct FwiLocalization {
+
     
     // MARK: Class's constructors
-    public init() {
+    fileprivate init() {
         reset()
     }
 
     // MARK: Class's properties
-    public var locale: String = "en" {
+    fileprivate var locale: String = "en" {
         didSet {
             guard let path = Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: locale) else {
                 reset()
@@ -63,17 +90,17 @@ public struct FwiLocalization {
             bundle = Bundle(path: (path as NSString).deletingLastPathComponent)
         }
     }
-    public fileprivate(set) var bundle: Bundle?
+    fileprivate var bundle: Bundle?
     
     // MARK: Class's public methods
-    public func localized(forString s: String) -> String {
+    fileprivate func localized(forString s: String) -> String {
         if let localized = bundle?.localizedString(forKey: s, value: s, table: nil) {
             return localized
         }
         return s
     }
 
-    public mutating func reset() {
+    fileprivate mutating func reset() {
         let languages = Bundle.main.preferredLocalizations
         locale = languages.count > 0 ? languages[0] : "en"
     }
