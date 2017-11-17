@@ -75,7 +75,6 @@ public extension Decodable {
             return nil
         }
 
-
         let decoder = JSONDecoder()
         decoder.dataDecodingStrategy = d
 

@@ -66,7 +66,7 @@ public struct FwiNetwork {
         }
 
         let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h, to: nil)
-        task.validate(statusCode: 200 ..< 300)
+//        task.validate(statusCode: 200 ..< 300)
         task.response { (r) in
             c(r.temporaryURL, r.error, r.response)
         }
@@ -91,7 +91,7 @@ public struct FwiNetwork {
         }
 
         let task = manager.request(url, method: m, parameters: p, encoding: e, headers: h)
-        task.validate(statusCode: 200 ..< 300)
+//        task.validate(statusCode: 200 ..< 300)
         task.response { (r) in
             c(r.data, r.error, r.response)
         }

@@ -81,52 +81,108 @@ public extension KeyedDecodingContainer {
     }
 
     /// Signed/Unsigned integer.
-    static public func +<T: Codable & BinaryInteger>(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> T? {
+    static public func +<T: Codable & SignedInteger>(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> T? {
         do {
-            if T.self == Int.self {
-                return T(try left.decode(Int.self, forKey: right))
-            } else if T.self == Int8.self {
-                return T(try left.decode(Int8.self, forKey: right))
-            } else if T.self == Int16.self {
-                return T(try left.decode(Int16.self, forKey: right))
-            } else if T.self == Int32.self {
-                return T(try left.decode(Int32.self, forKey: right))
-            } else if T.self == Int64.self {
-                return T(try left.decode(Int64.self, forKey: right))
-            } else if T.self == UInt.self {
-                return T(try left.decode(UInt.self, forKey: right))
-            } else if T.self == UInt8.self {
-                return T(try left.decode(UInt8.self, forKey: right))
-            } else if T.self == UInt16.self {
-                return T(try left.decode(UInt16.self, forKey: right))
-            } else if T.self == UInt32.self {
-                return T(try left.decode(UInt32.self, forKey: right))
-            } else if T.self == UInt64.self {
-                return T(try left.decode(UInt64.self, forKey: right))
-            }
+            return numericCast(try left.decode(Int64.self, forKey: right))
+//            if T.self == Int.self {
+//                return T(try left.decode(Int.self, forKey: right))
+//            } else if T.self == Int8.self {
+//                return T(try left.decode(Int8.self, forKey: right))
+//            } else if T.self == Int16.self {
+//                return T(try left.decode(Int16.self, forKey: right))
+//            } else if T.self == Int32.self {
+//                return T(try left.decode(Int32.self, forKey: right))
+//            } else if T.self == Int64.self {
+//                return T(try left.decode(Int64.self, forKey: right))
+//            } else if T.self == UInt.self {
+//                return T(try left.decode(UInt.self, forKey: right))
+//            } else if T.self == UInt8.self {
+//                return T(try left.decode(UInt8.self, forKey: right))
+//            } else if T.self == UInt16.self {
+//                return T(try left.decode(UInt16.self, forKey: right))
+//            } else if T.self == UInt32.self {
+//                return T(try left.decode(UInt32.self, forKey: right))
+//            } else if T.self == UInt64.self {
+//                return T(try left.decode(UInt64.self, forKey: right))
+//            }
         } catch DecodingError.typeMismatch {
             if let value = try? left.decode(String.self, forKey: right), let n = numberFormatter.number(from: value) {
-                if T.self == Int.self {
-                    return T(Int64(n.intValue))
-                } else if T.self == Int8.self {
-                    return T(Int64(n.int8Value))
-                } else if T.self == Int16.self {
-                    return T(Int64(n.int16Value))
-                } else if T.self == Int32.self {
-                    return T(Int64(n.int32Value))
-                } else if T.self == Int64.self {
-                    return T(Int64(n.int64Value))
-                } else if T.self == UInt.self {
-                    return T(UInt64(n.uintValue))
-                } else if T.self == UInt8.self {
-                    return T(UInt64(n.uint8Value))
-                } else if T.self == UInt16.self {
-                    return T(UInt64(n.uint16Value))
-                } else if T.self == UInt32.self {
-                    return T(UInt64(n.uint32Value))
-                } else if T.self == UInt64.self {
-                    return T(UInt64(n.uint64Value))
-                }
+                return numericCast(n.int64Value)
+//                if T.self == Int.self {
+//                    return T(Int64(n.intValue))
+//                } else if T.self == Int8.self {
+//                    return T(Int64(n.int8Value))
+//                } else if T.self == Int16.self {
+//                    return T(Int64(n.int16Value))
+//                } else if T.self == Int32.self {
+//                    return T(Int64(n.int32Value))
+//                } else if T.self == Int64.self {
+//                    return T(Int64(n.int64Value))
+//                } else if T.self == UInt.self {
+//                    return T(UInt64(n.uintValue))
+//                } else if T.self == UInt8.self {
+//                    return T(UInt64(n.uint8Value))
+//                } else if T.self == UInt16.self {
+//                    return T(UInt64(n.uint16Value))
+//                } else if T.self == UInt32.self {
+//                    return T(UInt64(n.uint32Value))
+//                } else if T.self == UInt64.self {
+//                    return T(UInt64(n.uint64Value))
+//                }
+            }
+        } catch {
+            // Ignore others
+        }
+        return nil
+    }
+    static public func +<T: Codable & UnsignedInteger>(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> T? {
+        do {
+            return numericCast(try left.decode(UInt64.self, forKey: right))
+//            if T.self == Int.self {
+//                return T(try left.decode(Int.self, forKey: right))
+//            } else if T.self == Int8.self {
+//                return T(try left.decode(Int8.self, forKey: right))
+//            } else if T.self == Int16.self {
+//                return T(try left.decode(Int16.self, forKey: right))
+//            } else if T.self == Int32.self {
+//                return T(try left.decode(Int32.self, forKey: right))
+//            } else if T.self == Int64.self {
+//                return T(try left.decode(Int64.self, forKey: right))
+//            } else if T.self == UInt.self {
+//                return T(try left.decode(UInt.self, forKey: right))
+//            } else if T.self == UInt8.self {
+//                return T(try left.decode(UInt8.self, forKey: right))
+//            } else if T.self == UInt16.self {
+//                return T(try left.decode(UInt16.self, forKey: right))
+//            } else if T.self == UInt32.self {
+//                return T(try left.decode(UInt32.self, forKey: right))
+//            } else if T.self == UInt64.self {
+//                return T(try left.decode(UInt64.self, forKey: right))
+//            }
+        } catch DecodingError.typeMismatch {
+            if let value = try? left.decode(String.self, forKey: right), let n = numberFormatter.number(from: value) {
+                return numericCast(n.uint64Value)
+//                if T.self == Int.self {
+//                    return T(Int64(n.intValue))
+//                } else if T.self == Int8.self {
+//                    return T(Int64(n.int8Value))
+//                } else if T.self == Int16.self {
+//                    return T(Int64(n.int16Value))
+//                } else if T.self == Int32.self {
+//                    return T(Int64(n.int32Value))
+//                } else if T.self == Int64.self {
+//                    return T(Int64(n.int64Value))
+//                } else if T.self == UInt.self {
+//                    return T(UInt64(n.uintValue))
+//                } else if T.self == UInt8.self {
+//                    return T(UInt64(n.uint8Value))
+//                } else if T.self == UInt16.self {
+//                    return T(UInt64(n.uint16Value))
+//                } else if T.self == UInt32.self {
+//                    return T(UInt64(n.uint32Value))
+//                } else if T.self == UInt64.self {
+//                    return T(UInt64(n.uint64Value))
+//                }
             }
         } catch {
             // Ignore others
@@ -164,7 +220,10 @@ public extension KeyedDecodingContainer {
     }
 
     /// Signed/Unsigned integer.
-    static public func +<T: Codable & BinaryInteger>(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> T {
+    static public func +<T: Codable & SignedInteger>(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> T {
+        return (left + right) ?? 0
+    }
+    static public func +<T: Codable & UnsignedInteger>(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> T {
         return (left + right) ?? 0
     }
 
