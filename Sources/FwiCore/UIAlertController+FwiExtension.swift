@@ -1,8 +1,8 @@
-//  Project name: FwiCore
-//  File name   : UIButton+FwiExtension.swift
+//  File name   : UIAlertController+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/22/14
+//  Created date: 12/20/17
+//  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -38,32 +38,10 @@
 import UIKit
 
 
-public extension UIButton {
+extension UIAlertController {
 
-    /// Apply background to button.
-    public func applyBackgroundImage(_ imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)) {
-        let imageDefault = UIImage(named: "\(imageName)_Default")?.resizableImage(withCapInsets: edgeInsets)
-        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImage(withCapInsets: edgeInsets)
-        let imageSelected = UIImage(named: "\(imageName)_Selected")?.resizableImage(withCapInsets: edgeInsets)
-        let imageDisabled = UIImage(named: "\(imageName)_Disabled")?.resizableImage(withCapInsets: edgeInsets)
-
-        self.setImage(imageDefault, for: UIControlState())
-        self.setImage(imageHighlighted, for: UIControlState.highlighted)
-        self.setImage(imageSelected, for: UIControlState.selected)
-        self.setImage(imageDisabled, for: UIControlState.disabled)
-    }
-
-    /// Apply image to button.
-    public func applyImage(_ imageName: String) {
-        let imageDefault = UIImage(named: "\(imageName)_Default")
-        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")
-        let imageSelected = UIImage(named: "\(imageName)_Selected")
-        let imageDisabled = UIImage(named: "\(imageName)_Disabled")
-
-        self.setImage(imageDefault, for: UIControlState())
-        self.setImage(imageHighlighted, for: UIControlState.highlighted)
-        self.setImage(imageSelected, for: UIControlState.selected)
-        self.setImage(imageDisabled, for: UIControlState.disabled)
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .all
     }
 }
 #endif

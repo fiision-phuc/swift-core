@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : UIButton+FwiExtension.swift
+//  File name   : Array+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/22/14
+//  Created date: 11/5/17
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2017 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -34,36 +34,21 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if os(iOS)
-import UIKit
+import Foundation
 
 
-public extension UIButton {
+public extension Array {
 
-    /// Apply background to button.
-    public func applyBackgroundImage(_ imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)) {
-        let imageDefault = UIImage(named: "\(imageName)_Default")?.resizableImage(withCapInsets: edgeInsets)
-        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImage(withCapInsets: edgeInsets)
-        let imageSelected = UIImage(named: "\(imageName)_Selected")?.resizableImage(withCapInsets: edgeInsets)
-        let imageDisabled = UIImage(named: "\(imageName)_Disabled")?.resizableImage(withCapInsets: edgeInsets)
+    /// Shuffles the contents of this collection.
+    public mutating func shuffle() {
+        guard count > 1 else {
+            return
+        }
 
-        self.setImage(imageDefault, for: UIControlState())
-        self.setImage(imageHighlighted, for: UIControlState.highlighted)
-        self.setImage(imageSelected, for: UIControlState.selected)
-        self.setImage(imageDisabled, for: UIControlState.disabled)
-    }
-
-    /// Apply image to button.
-    public func applyImage(_ imageName: String) {
-        let imageDefault = UIImage(named: "\(imageName)_Default")
-        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")
-        let imageSelected = UIImage(named: "\(imageName)_Selected")
-        let imageDisabled = UIImage(named: "\(imageName)_Disabled")
-
-        self.setImage(imageDefault, for: UIControlState())
-        self.setImage(imageHighlighted, for: UIControlState.highlighted)
-        self.setImage(imageSelected, for: UIControlState.selected)
-        self.setImage(imageDisabled, for: UIControlState.disabled)
+        for (first, remain) in zip(indices, stride(from: count, to: 1, by: -1)) {
+            let d: IndexDistance = numericCast(arc4random_uniform(numericCast(remain)))
+            let i = index(first, offsetBy: d)
+            swapAt(first, i)
+        }
     }
 }
-#endif

@@ -3,10 +3,8 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 4/13/14
-//  Version     : 2.0.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2017 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -66,7 +64,7 @@ public struct FwiNetwork {
         }
 
         let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h, to: nil)
-//        task.validate(statusCode: 200 ..< 300)
+        task.validate(statusCode: 200 ..< 300)
         task.response { (r) in
             c(r.temporaryURL, r.error, r.response)
         }
@@ -91,7 +89,7 @@ public struct FwiNetwork {
         }
 
         let task = manager.request(url, method: m, parameters: p, encoding: e, headers: h)
-//        task.validate(statusCode: 200 ..< 300)
+        task.validate(statusCode: 200 ..< 300)
         task.response { (r) in
             c(r.data, r.error, r.response)
         }
