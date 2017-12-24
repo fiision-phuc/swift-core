@@ -4,7 +4,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/20/14
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -40,8 +40,8 @@ import Foundation
 public extension String {
     
     // MARK: Validate base64
-    public func isBase64() -> Bool {
-        return toData()?.isBase64() ?? false
+    public var isBase64: Bool {
+        return toData()?.isBase64 ?? false
     }
     
     // MARK: Decode base64

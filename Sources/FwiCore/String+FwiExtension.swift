@@ -4,7 +4,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/22/14
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -40,28 +40,34 @@ import Foundation
 public extension String {
     
     /// Generate random identifier base on uuid.
-    public static func randomIdentifier() -> String {
+    public static var randomIdentifier: String {
         return UUID().uuidString
     }
 
     /// Generate timestamp string.
-    public static func timestamp() -> String {
+    public static var timestamp: String {
         return "\(time(nil))"
     }
     
     
     /// Convert html string compatible to string.
     public func decodeHTML() -> String {
-        let options: [NSAttributedString.DocumentReadingOptionKey:Any] = [
-            .documentType : NSAttributedString.DocumentType.html,
-            .characterEncoding : String.Encoding.utf8
-        ]
-
-        guard let data = self.data(using: .utf8), let attributedString = try? NSAttributedString(data: data, options: options, documentAttributes: nil) else {
-            return ""
-        }
-        return attributedString.string
-//        return removingPercentEncoding ?? ""
+        return removingPercentEncoding ?? ""
+//        // Remove percent encoding
+//        guard let decoded = removingPercentEncoding, let data = decoded.toData() else {
+//            return ""
+//        }
+//
+//        // Remove special char encoding
+//
+//        let options: [NSAttributedString.DocumentReadingOptionKey:Any] = [
+//            .documentType : NSAttributedString.DocumentType.html,
+//            .characterEncoding : String.Encoding.utf8
+//        ]
+//        guard let attributedString = try? NSAttributedString(data: data, options: options, documentAttributes: nil) else {
+//            return decoded
+//        }
+//        return attributedString.string
     }
     
     /// Convert string to html string compatible.

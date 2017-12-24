@@ -4,7 +4,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 9/26/16
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -44,7 +44,7 @@ public extension Dictionary {
     /// - parameter plistname (required): the plist's name
     /// - parameter plistFormat (optional): the plist's format, default is xml
     /// - parameter bundle (optional): which bundle contains the plist file
-    public static func loadPlist(withPlistname n: String, plistFormat f: PropertyListSerialization.PropertyListFormat = .xml, fromBundle b: Bundle = Bundle.main) -> [String : Any]? {
+    public static func loadPlist(withPlistname n: String, plistFormat f: PropertyListSerialization.PropertyListFormat = .xml, fromBundle b: Bundle = Bundle.main) -> [String:Any]? {
         guard let url = Bundle.main.url(forResource: n, withExtension: "plist"),let data = try? Data(contentsOf: url) else {
             return nil
         }

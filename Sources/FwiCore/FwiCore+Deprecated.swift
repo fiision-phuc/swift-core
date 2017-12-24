@@ -4,7 +4,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 12/20/17
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -36,6 +36,19 @@
 
 import Foundation
 
+
+public extension Data {
+
+    @available(*, deprecated, message: "No longer available.", renamed: "read(fromFile:readingMode:)")
+    public static func readFromFile(atURL url: URL?, readingMode mode: Data.ReadingOptions = []) -> Data? {
+        return Data.read(fromFile:url, readingMode: mode)
+    }
+
+    @available(*, deprecated, message: "No longer available.", renamed: "write(toFile:options:)")
+    public func writeToFile(toUrl url: URL?, options: Data.WritingOptions = []) -> Error? {
+        return write(toFile: url, options: options)
+    }
+}
 
 public extension String {
 

@@ -4,7 +4,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 10/24/17
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -41,156 +41,151 @@ import Foundation
 public extension KeyedDecodingContainer {
 
     /// Bool.
-    static public func +(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> Bool? {
-        return try? left.decode(Bool.self, forKey: right)
+    public func parse(_ input: inout Bool?, key: KeyedDecodingContainer.Key) {
+        do {
+            input = try decode(Bool.self, forKey: key)
+        } catch DecodingError.typeMismatch {
+            if let value = try? decode(String.self, forKey: key).lowercased() {
+                if let n = numberFormatter.number(from: value) {
+                    input = n.boolValue
+                } else if value == "false" {
+                    input = false
+                } else if value == "true" {
+                    input = true
+                } else {
+                    input = nil
+                }
+            } else if let value = try? decode(Int.self, forKey: key) {
+                input = value == 0 ? false : true
+            } else {
+                input = nil
+            }
+        } catch {
+            input = nil
+        }
     }
 
     /// Float.
-    static public func +(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> Float? {
+    public func parse(_ input: inout Float?, key: KeyedDecodingContainer.Key) {
         do {
-            return try left.decode(Float.self, forKey: right)
+            input = try decode(Float.self, forKey: key)
         } catch DecodingError.typeMismatch {
-            if let value = try? left.decode(String.self, forKey: right), let n = numberFormatter.number(from: value) {
-                return n.floatValue
+            if let value = try? decode(String.self, forKey: key), let n = numberFormatter.number(from: value) {
+                input = n.floatValue
+            } else {
+                input = nil
             }
         } catch {
-            // Ignore others
+            input = nil
         }
-        return nil
     }
 
     /// Double.
-    static public func +(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> Double? {
+    public func parse(_ input: inout Double?, key: KeyedDecodingContainer.Key) {
         do {
-            return try left.decode(Double.self, forKey: right)
+            input = try decode(Double.self, forKey: key)
         } catch DecodingError.typeMismatch {
-            if let value = try? left.decode(String.self, forKey: right), let n = numberFormatter.number(from: value) {
-                return n.doubleValue
+            if let value = try? decode(String.self, forKey: key), let n = numberFormatter.number(from: value) {
+                input = n.doubleValue
+            } else {
+                input = nil
             }
         } catch {
-            // Ignore others
+            input = nil
         }
-        return nil
-    }
-
-    /// String.
-    static public func +(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> String? {
-        return try? left.decode(String.self, forKey: right)
     }
 
     /// Signed/Unsigned integer.
-    static public func +<T: Codable & SignedInteger>(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> T? {
+    public func parse<T: Codable & SignedInteger>(_ input: inout T?, key: KeyedDecodingContainer.Key) {
         do {
-            return numericCast(try left.decode(Int64.self, forKey: right))
-//            if T.self == Int.self {
-//                return T(try left.decode(Int.self, forKey: right))
-//            } else if T.self == Int8.self {
-//                return T(try left.decode(Int8.self, forKey: right))
-//            } else if T.self == Int16.self {
-//                return T(try left.decode(Int16.self, forKey: right))
-//            } else if T.self == Int32.self {
-//                return T(try left.decode(Int32.self, forKey: right))
-//            } else if T.self == Int64.self {
-//                return T(try left.decode(Int64.self, forKey: right))
-//            } else if T.self == UInt.self {
-//                return T(try left.decode(UInt.self, forKey: right))
-//            } else if T.self == UInt8.self {
-//                return T(try left.decode(UInt8.self, forKey: right))
-//            } else if T.self == UInt16.self {
-//                return T(try left.decode(UInt16.self, forKey: right))
-//            } else if T.self == UInt32.self {
-//                return T(try left.decode(UInt32.self, forKey: right))
-//            } else if T.self == UInt64.self {
-//                return T(try left.decode(UInt64.self, forKey: right))
-//            }
+            input = numericCast(try decode(Int64.self, forKey: key))
         } catch DecodingError.typeMismatch {
-            if let value = try? left.decode(String.self, forKey: right), let n = numberFormatter.number(from: value) {
-                return numericCast(n.int64Value)
-//                if T.self == Int.self {
-//                    return T(Int64(n.intValue))
-//                } else if T.self == Int8.self {
-//                    return T(Int64(n.int8Value))
-//                } else if T.self == Int16.self {
-//                    return T(Int64(n.int16Value))
-//                } else if T.self == Int32.self {
-//                    return T(Int64(n.int32Value))
-//                } else if T.self == Int64.self {
-//                    return T(Int64(n.int64Value))
-//                } else if T.self == UInt.self {
-//                    return T(UInt64(n.uintValue))
-//                } else if T.self == UInt8.self {
-//                    return T(UInt64(n.uint8Value))
-//                } else if T.self == UInt16.self {
-//                    return T(UInt64(n.uint16Value))
-//                } else if T.self == UInt32.self {
-//                    return T(UInt64(n.uint32Value))
-//                } else if T.self == UInt64.self {
-//                    return T(UInt64(n.uint64Value))
-//                }
+            if let value = try? decode(String.self, forKey: key), let n = numberFormatter.number(from: value) {
+                input = numericCast(n.int64Value)
+            } else {
+                input = nil
             }
         } catch {
-            // Ignore others
+            input = nil
         }
-        return nil
     }
-    static public func +<T: Codable & UnsignedInteger>(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> T? {
+    public func parse<T: Codable & UnsignedInteger>(_ input: inout T?, key: KeyedDecodingContainer.Key) {
         do {
-            return numericCast(try left.decode(UInt64.self, forKey: right))
-//            if T.self == Int.self {
-//                return T(try left.decode(Int.self, forKey: right))
-//            } else if T.self == Int8.self {
-//                return T(try left.decode(Int8.self, forKey: right))
-//            } else if T.self == Int16.self {
-//                return T(try left.decode(Int16.self, forKey: right))
-//            } else if T.self == Int32.self {
-//                return T(try left.decode(Int32.self, forKey: right))
-//            } else if T.self == Int64.self {
-//                return T(try left.decode(Int64.self, forKey: right))
-//            } else if T.self == UInt.self {
-//                return T(try left.decode(UInt.self, forKey: right))
-//            } else if T.self == UInt8.self {
-//                return T(try left.decode(UInt8.self, forKey: right))
-//            } else if T.self == UInt16.self {
-//                return T(try left.decode(UInt16.self, forKey: right))
-//            } else if T.self == UInt32.self {
-//                return T(try left.decode(UInt32.self, forKey: right))
-//            } else if T.self == UInt64.self {
-//                return T(try left.decode(UInt64.self, forKey: right))
-//            }
+            input = numericCast(try decode(UInt64.self, forKey: key))
         } catch DecodingError.typeMismatch {
-            if let value = try? left.decode(String.self, forKey: right), let n = numberFormatter.number(from: value) {
-                return numericCast(n.uint64Value)
-//                if T.self == Int.self {
-//                    return T(Int64(n.intValue))
-//                } else if T.self == Int8.self {
-//                    return T(Int64(n.int8Value))
-//                } else if T.self == Int16.self {
-//                    return T(Int64(n.int16Value))
-//                } else if T.self == Int32.self {
-//                    return T(Int64(n.int32Value))
-//                } else if T.self == Int64.self {
-//                    return T(Int64(n.int64Value))
-//                } else if T.self == UInt.self {
-//                    return T(UInt64(n.uintValue))
-//                } else if T.self == UInt8.self {
-//                    return T(UInt64(n.uint8Value))
-//                } else if T.self == UInt16.self {
-//                    return T(UInt64(n.uint16Value))
-//                } else if T.self == UInt32.self {
-//                    return T(UInt64(n.uint32Value))
-//                } else if T.self == UInt64.self {
-//                    return T(UInt64(n.uint64Value))
-//                }
+            if let value = try? decode(String.self, forKey: key), let n = numberFormatter.number(from: value) {
+                input = numericCast(n.uint64Value)
+            } else {
+                input = nil
             }
         } catch {
-            // Ignore others
+            input = nil
         }
-        return nil
+    }
+
+    /// Data.
+    public func parse(_ input: inout Data?, key: KeyedDecodingContainer.Key) {
+        do {
+            input = try decode(Data.self, forKey: key)
+        } catch {
+            if let value = try? decode(String.self, forKey: key) {
+                if value.isHex, let d = value.decodeHexData() {
+                    input = d
+                } else if let d = value.toData() {
+                    input = d
+                } else {
+                    input = nil
+                }
+            } else {
+                input = nil
+            }
+        }
+    }
+
+    /// Date.
+    public func parse(_ input: inout Date?, key: KeyedDecodingContainer.Key) {
+        do {
+            input = try decode(Date.self, forKey: key)
+        } catch DecodingError.typeMismatch {
+            if let value = try? decode(TimeInterval.self, forKey: key) {
+                input = Date(timeIntervalSince1970: value)
+            } else {
+                input = nil
+            }
+        } catch {
+            if let value = try? decode(String.self, forKey: key), let n = numberFormatter.number(from: value) {
+                input = Date(timeIntervalSince1970: n.doubleValue)
+            } else {
+                input = nil
+            }
+        }
+    }
+
+    /// String.
+    public func parse(_ input: inout String?, key: KeyedDecodingContainer.Key) {
+        do {
+            input = try decode(String.self, forKey: key)
+        } catch {
+            input = nil
+        }
+    }
+
+    /// URL.
+    public func parse(_ input: inout URL?, key: KeyedDecodingContainer.Key) {
+        do {
+            input = try decode(URL.self, forKey: key)
+        } catch {
+            input = nil
+        }
     }
 
     /// Other.
-    static public func +<T: Codable>(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> T? {
-        return try? left.decode(T.self, forKey: right)
+    public func parse<T: Codable>(_ input: inout T?, key: KeyedDecodingContainer.Key) {
+        do {
+            input = try decode(T.self, forKey: key)
+        } catch {
+            input = nil
+        }
     }
 }
 
@@ -198,36 +193,44 @@ public extension KeyedDecodingContainer {
 public extension KeyedDecodingContainer {
 
     /// Bool.
-    static public func +(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> Bool {
-        return (left + right) ?? false
+    public func parse(_ input: inout Bool, key: KeyedDecodingContainer.Key) {
+//        return (left + right) ?? false
     }
 
     /// Float.
-    static public func +(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> Float {
-        return (left + right) ?? 0.0
+    public func parse(_ input: inout Float, key: KeyedDecodingContainer.Key) {
+//        return (left + right) ?? 0.0
     }
 
     /// Double.
-    static public func +(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> Double {
-        return (left + right) ?? 0.0
-    }
-
-    /// String.
-    static public func +(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> String {
-        return (left + right) ?? ""
+    public func parse(_ input: inout Double, key: KeyedDecodingContainer.Key) {
+//        return (left + right) ?? 0.0
     }
 
     /// Signed/Unsigned integer.
-    static public func +<T: Codable & SignedInteger>(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> T {
-        return (left + right) ?? 0
+    public func parse<T: Codable & SignedInteger>(_ input: inout T, key: KeyedDecodingContainer.Key) {
+//        return (left + right) ?? 0
     }
-    static public func +<T: Codable & UnsignedInteger>(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) -> T {
-        return (left + right) ?? 0
+    public func parse<T: Codable & UnsignedInteger>(_ input: inout T, key: KeyedDecodingContainer.Key) {
+//        return (left + right) ?? 0
+    }
+
+    /// Data.
+    public func parse(_ input: inout Data, key: KeyedDecodingContainer.Key) {
+    }
+
+    /// Date.
+    public func parse(_ input: inout Date, key: KeyedDecodingContainer.Key) {
+    }
+
+    /// String.
+    public func parse(_ input: inout String, key: KeyedDecodingContainer.Key) {
+        //        return (left + right) ?? ""
     }
 
     /// Other.
-    static public func +<T: Codable>(left: KeyedDecodingContainer, right: KeyedDecodingContainer.Key) throws -> T {
-        return try left.decode(T.self, forKey: right)
+    public func parse<T: Codable>(_ input: inout T, key: KeyedDecodingContainer.Key) {
+//        return try left.decode(T.self, forKey: right)
     }
 }
 

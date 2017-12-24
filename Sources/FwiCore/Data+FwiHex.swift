@@ -4,7 +4,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/20/14
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -40,7 +40,7 @@ import Foundation
 public extension Data {
 
     // MARK: Validate Hex
-    public func isHex() -> Bool {
+    public var isHex: Bool {
         /* Condition validation */
         if count <= 0 || (count % 2) != 0 {
             return false
@@ -83,7 +83,7 @@ public extension Data {
     // MARK: Decode Hex
     public func decodeHexData() -> Data? {
         /* Condition validation */
-        if !isHex() {
+        if !isHex {
             return nil
         }
 

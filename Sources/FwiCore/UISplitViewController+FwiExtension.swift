@@ -4,7 +4,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 8/4/16
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -42,26 +42,26 @@ extension UISplitViewController {
 
     // MARK: Class's override methods
     open override var prefersStatusBarHidden: Bool {
-        if UIApplication.isPhone() {
+        if UIApplication.isPhone {
             return viewControllers.first?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
         }
         return super.prefersStatusBarHidden
     }
     open override var preferredStatusBarStyle: UIStatusBarStyle {
-        if UIApplication.isPhone() {
+        if UIApplication.isPhone {
             return viewControllers.first?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
         }
         return super.preferredStatusBarStyle
     }
 
     open override var shouldAutorotate: Bool {
-        if UIApplication.isPhone() {
+        if UIApplication.isPhone {
             return viewControllers.first?.shouldAutorotate ?? super.shouldAutorotate
         }
         return super.shouldAutorotate
     }
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIApplication.isPhone() {
+        if UIApplication.isPhone {
             return viewControllers.first?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
         }
         return super.supportedInterfaceOrientations
