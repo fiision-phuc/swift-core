@@ -50,7 +50,7 @@ public extension Encodable {
         }
 
         // Encode datetime
-        if #available(iOS 10.0, *) {
+        if #available(OSX 10.12, iOS 10.0, *) {
             encoder.dateEncodingStrategy = dt ?? .iso8601
         } else {
             encoder.dateEncodingStrategy = dt ?? .secondsSince1970
@@ -77,7 +77,7 @@ public extension Decodable {
         decoder.dataDecodingStrategy = d
 
         // Decode datetime
-        if #available(iOS 10.0, *) {
+        if #available(OSX 10.12, iOS 10.0, *) {
             decoder.dateDecodingStrategy = dt ?? .iso8601
         } else {
             decoder.dateDecodingStrategy = dt ?? .secondsSince1970

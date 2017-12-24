@@ -56,7 +56,6 @@
 		BEDBB4E01FE9DB7900059325 /* UIAlertController+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDBB4DF1FE9DB7900059325 /* UIAlertController+FwiExtension.swift */; };
 		BEF01E7A1F71214800F25389 /* NSManagedObject+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF01E791F71214700F25389 /* NSManagedObject+FwiExtension.swift */; };
 		_LinkFileRef_FwiCore_via_FwiCoreTests /* FwiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_FwiCore" /* FwiCore.framework */; };
-		__src_cc_ref_Tests/FwiCoreTests/FwiCoreTests.swift /* FwiCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/FwiCoreTests/FwiCoreTests.swift /* FwiCoreTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -320,7 +319,6 @@
 		BEDBB4DF1FE9DB7900059325 /* UIAlertController+FwiExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIAlertController+FwiExtension.swift"; path = "FwiCore/UIAlertController+FwiExtension.swift"; sourceTree = "<group>"; };
 		BEF01E791F71214700F25389 /* NSManagedObject+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSManagedObject+FwiExtension.swift"; path = "FwiCore/NSManagedObject+FwiExtension.swift"; sourceTree = "<group>"; };
 		__PBXFileRef_Package.swift /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Tests/FwiCoreTests/FwiCoreTests.swift /* FwiCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FwiCoreTests.swift; sourceTree = "<group>"; };
 		"_____Product_FwiCore" /* FwiCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FwiCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"_____Product_FwiCoreTests" /* FwiCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = FwiCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -671,7 +669,6 @@
 		"_______Group_FwiCoreTests" /* FwiCoreTests */ = {
 			isa = PBXGroup;
 			children = (
-				__PBXFileRef_Tests/FwiCoreTests/FwiCoreTests.swift /* FwiCoreTests.swift */,
 				BE8BF13A1D8464F500F710CB /* extension */,
 				BE8BF13B1D84650500F710CB /* codec */,
 				BE7A1D6B1FEC12640004B986 /* Json */,
@@ -1076,7 +1073,6 @@
 				BE8BF1511D84661C00F710CB /* FileManager+FwiExtensionTest.swift in Sources */,
 				BE8BF1491D8465CE00F710CB /* Data+FwiHexTest.swift in Sources */,
 				BE8BF1521D84661C00F710CB /* NSNumber+FwiExtensionTest.swift in Sources */,
-				__src_cc_ref_Tests/FwiCoreTests/FwiCoreTests.swift /* FwiCoreTests.swift in Sources */,
 				BE7EA4771FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift in Sources */,
 				BE8BF1501D84661C00F710CB /* Data+FwiExtensionTest.swift in Sources */,
 				BE8BF1471D8465BC00F710CB /* Data+FwiBase64Test.swift in Sources */,
