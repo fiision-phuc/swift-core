@@ -1,0 +1,12 @@
+language: objective-c
+
+os: osx
+language: generic
+sudo: required
+dist: trusty
+osx_image: xcode9
+
+script:
+  - swift package update
+    swift build
+    swift test

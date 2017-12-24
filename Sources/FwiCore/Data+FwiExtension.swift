@@ -3,10 +3,8 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/22/14
-//  Version     : 2.0.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -109,7 +107,7 @@ public extension Data {
     ///
     /// - parameter url (required): source url to read from
     /// - parameter readingMode (optional): seealso `Data.ReadingOptions`
-    public static func readFromFile(atURL url: URL?, readingMode mode: Data.ReadingOptions = []) -> Data? {
+    public static func read(fromFile url: URL?, readingMode mode: Data.ReadingOptions = []) -> Data? {
         guard let url = url, url.isFileURL else {
             return nil
         }
@@ -121,7 +119,7 @@ public extension Data {
     /// - parameter url (required): destination url to write to
     /// - parameter readingMode (optional): seealso `Data.ReadingOptions`
     @discardableResult
-    public func writeToFile(toUrl url: URL?, options: Data.WritingOptions = []) -> Error? {
+    public func write(toFile url: URL?, options: Data.WritingOptions = []) -> Error? {
         guard let url = url, url.isFileURL else {
             return NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: nil)
         }

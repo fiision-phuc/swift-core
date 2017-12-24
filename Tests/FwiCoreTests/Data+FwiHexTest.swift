@@ -3,10 +3,8 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/23/14
-//  Version     : 2.0.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -42,23 +40,13 @@ import XCTest
 
 class DataFwiHexTest: XCTestCase {
 
-    // MARK: Setup
-    override func setUp() {
-        super.setUp()
-    }
-
-    // MARK: Tear Down
-    override func tearDown() {
-        super.tearDown()
-    }
-
     // MARK: Test Cases
     func testIsHex() {
         var hexData = "FwiCore".toData()
-        XCTAssert(hexData?.isHex() == false, "Invalid hex data should always return false.")
+        XCTAssert(hexData?.isHex == false, "Invalid hex data should always return false.")
 
         hexData = "467769436f7265".toData()
-        XCTAssert(hexData?.isHex() == true, "467769436f7265 is a valid hex.")
+        XCTAssert(hexData?.isHex == true, "467769436f7265 is a valid hex.")
     }
 
     func testDecodeHexData() {
@@ -90,32 +78,23 @@ class DataFwiHexTest: XCTestCase {
 
         let data = "FwiCore".toData()
         XCTAssertEqual(data?.encodeHexString(), "467769436f7265", "Expected '467769436f7265'.")
-
-        let text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-        let size = text.utf8.count * 2
-
-        text.withCString { (pointer) in
-            
-        }
     }
 
     // MARK: Performance test cases
+    func testIsHexPerformance() {
+        let text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+        let hex = text.encodeHexString()!
+
+        measure {
+            _ = hex.isHex
+        }
+    }
+
     func testPerformance() {
-////        let text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-////        var counter = 0
-////
-////        text.withCString { (pointer) in
-////            pointer.pointee
-////        }
-//        let text = "100000"
-//        var a: Int?
-//        self.measure {
-//            for _ in (0..<1000000) {
-//                a <- text
-////                _ = text.encodeHexString()
-////                counter += 1
-//            }
-//        }
-////        debugPrint(counter)
+        let text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+
+        measure {
+            _ = text.encodeHexString()
+        }
     }
 }

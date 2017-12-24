@@ -5,8 +5,7 @@
 //  Created date: 11/27/14
 //  Version     : 2.0.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -42,22 +41,9 @@ import XCTest
 
 class StringFwiExtensionTest: XCTestCase {
 
-    // MARK: Setup
-    override func setUp() {
-        super.setUp()
-    }
-
-    // MARK: Tear Down
-    override func tearDown() {
-        super.tearDown()
-    }
-
     // MARK: Test Cases
     func testRandomIdentifier() {
-        guard let identifier = String.randomIdentifier() else {
-            XCTFail("Invalid random identifier")
-            return
-        }
+        let identifier = String.randomIdentifier
         XCTAssertTrue(identifier.matchPattern("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"), "\(identifier) should be in form of UUID.")
     }
     
@@ -74,10 +60,6 @@ class StringFwiExtensionTest: XCTestCase {
         let text1 = "FWICORE"
         let text2 = "fwicore"
         XCTAssertTrue(text1.isEqualToStringIgnoreCase(text2), "FWICORE compares with fwicore should return true.")
-    }
-    func testLength() {
-        let text = "FwiCore"
-        XCTAssertEqual(text.length(), 7, "\(text) should have 7 characters.")
     }
     func testMatchPattern() {
         let text1 = " 12345 "

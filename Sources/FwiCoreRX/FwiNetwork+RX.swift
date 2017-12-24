@@ -3,10 +3,8 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 10/21/16
-//  Version     : 2.0.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -56,7 +54,7 @@ public extension FwiNetwork {
         return Observable.create { observer in
             let t = FwiNetwork.download(resource: r, method: m, params: p, encoding: e, headers: h, completion: { (url, err, res) in
                 /* Condition validation: validate network's status */
-                guard let response = res, let location = url, 200 <= response.statusCode && response.statusCode < 300 else {
+                guard let response = res, let location = url else {
                     observer.on(.error(err ?? NSError(domain: NSURLErrorDomain, code: URLError.badServerResponse.rawValue, userInfo: nil)))
                     return
                 }
@@ -81,7 +79,7 @@ public extension FwiNetwork {
         return Observable.create { observer in
             let t = FwiNetwork.send(request: r, method: m, params: p, encoding: e, headers: h, completion: { (d, err, res) in
                 /* Condition validation: validate network's status */
-                guard let response = res, let data = d, 200 <= response.statusCode && response.statusCode < 300 else {
+                guard let response = res, let data = d else {
                     observer.on(.error(err ?? NSError(domain: NSURLErrorDomain, code: URLError.badServerResponse.rawValue, userInfo: nil)))
                     return
                 }

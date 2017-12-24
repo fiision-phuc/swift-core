@@ -3,10 +3,8 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 8/27/16
-//  Version     : 2.0.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -35,13 +33,6 @@
 //  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
-
-//  FileManager+FwiExtensionTest.swift
-//  FwiCore
-//
-//  Created by Phuc, Tran Huu on 8/27/16.
-//  Copyright © 2016 Fiision Studio. All rights reserved.
-//
 
 import XCTest
 @testable import FwiCore

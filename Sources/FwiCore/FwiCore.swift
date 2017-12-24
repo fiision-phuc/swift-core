@@ -3,10 +3,8 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/20/14
-//  Version     : 2.0.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -41,8 +39,8 @@ import Foundation
 
 public func FwiLog(_ message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
     #if DEBUG
-        if let name = className.split("/").last, name.length() > 0 {
-            print("\(NSDate()) \(name) > [\(methodName) \(line)]: \(message)")
+        if let name = className.split("/").last, name.count > 0 {
+            debugPrint("\(NSDate()) \(name) > [\(methodName) \(line)]: \(message)")
         }
     #endif
 }

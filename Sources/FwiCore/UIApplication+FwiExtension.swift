@@ -3,10 +3,8 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 6/13/16
-//  Version     : 2.0.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -43,16 +41,16 @@ import UIKit
 public extension UIApplication {
 
     /// Define whether the device is iPad or not.
-    public class func isPad() -> Bool {
+    public class var isPad: Bool {
         return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad
     }
     /// Define whether the device is iPhone or not.
-    public class func isPhone() -> Bool {
+    public class var isPhone: Bool {
         return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone
     }
 
     /// Return iOS major version.
-    public class func osMajor() -> Int {
+    public class var osMajor: Int {
         let token = UIDevice.current.systemVersion.split(".")
         if let major = Int(token[0]) {
             return major
@@ -60,7 +58,7 @@ public extension UIApplication {
         return 0
     }
     /// Return iOS minor version.
-    public class func osMinor() -> Int {
+    public class var osMinor: Int {
         let token = UIDevice.current.systemVersion.split(".")
         if let minor = Int(token[1]) , token.count >= 2 {
             return minor

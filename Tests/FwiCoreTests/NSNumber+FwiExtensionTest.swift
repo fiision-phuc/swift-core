@@ -3,10 +3,8 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/27/14
-//  Version     : 2.0.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -41,17 +39,6 @@ import XCTest
 
 
 class NSNumberFwiExtensionTest: XCTestCase {
-
-    // MARK: Setup
-    override func setUp() {
-        super.setUp()
-    }
-
-    // MARK: Tear Down
-    override func tearDown() {
-        super.tearDown()
-    }
-
     
     // MARK: Test Cases
     func testCurrency() {

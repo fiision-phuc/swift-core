@@ -3,10 +3,8 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 9/13/17
-//  Version     : 2.0.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -52,7 +50,7 @@ public extension Encodable {
         }
 
         // Encode datetime
-        if #available(iOS 10.0, *) {
+        if #available(OSX 10.12, iOS 10.0, *) {
             encoder.dateEncodingStrategy = dt ?? .iso8601
         } else {
             encoder.dateEncodingStrategy = dt ?? .secondsSince1970
@@ -75,12 +73,11 @@ public extension Decodable {
             return nil
         }
 
-
         let decoder = JSONDecoder()
         decoder.dataDecodingStrategy = d
 
         // Decode datetime
-        if #available(iOS 10.0, *) {
+        if #available(OSX 10.12, iOS 10.0, *) {
             decoder.dateDecodingStrategy = dt ?? .iso8601
         } else {
             decoder.dateDecodingStrategy = dt ?? .secondsSince1970

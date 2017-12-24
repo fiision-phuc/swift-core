@@ -1,9 +1,8 @@
 //  Project name: FwiCore
-//  File name   : Data+FwiExtensionTest.swift
+//  File name   : NSCodingFwiExtensionTest.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/27/14
-//  Version     : 2.0.0
+//  Created date: 12/20/17
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -36,39 +35,50 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import XCTest
-@testable import FwiCore
 
 
-class DataFwiExtensionTest: XCTestCase {
+final class TestNSCoding: NSObject, NSCoding {
+
+    var text: String?
+
+    override init() {
+        super.init()
+    }
+
+    init?(coder aDecoder: NSCoder) {
+        text = aDecoder.decodeObject(forKey: "text") as? String
+    }
+
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(text, forKey: "text")
+    }
+}
+
+
+class NSCodingFwiExtensionTest: XCTestCase {
     
     // MARK: Test Cases
-    func testClearBytes() {
-        var data1 = Data(bytes: [0x40, 0x41, 0x42])
-        let data2 = Data(bytes: [0x00, 0x00, 0x00])
-
-        data1.clearBytes()
-        XCTAssertEqual(data1, data2, "Data1 should contain all zero.")
-    }
-
-    func testReverseBytes() {
-        var data1: Data = Data(bytes: [0x40, 0x41, 0x42])
-        let data2: Data = Data(bytes: [0x42, 0x41, 0x40])
-
-        data1.reverseBytes()
-        XCTAssertEqual(data1, data2, "Data1 should be reversed.")
-    }
-
-    func testToString() {
-        guard let data = "FwiCore".data(using: String.Encoding.utf8, allowLossyConversion: false), let text = data.toString() else {
-            XCTFail("Could not convert string to data.")
-            return
+    func testReadWriteToUserDefaults() {
+        let manager = UserDefaults.standard
+        defer {
+            manager.removeObject(forKey: "sample")
         }
-        XCTAssertEqual(text, "FwiCore", "Expected 'FwiCore' but found '\(text)'.")
+
+        let model1 = TestNSCoding()
+        model1.text = "FwiCore"
+
+        model1.archive(toUserDefaults: "sample")
+        let data1 = manager.object(forKey: "sample") as? Data
+        XCTAssertNotNil(data1, "Expected data existed but found: '\(String(describing: data1))'.")
+
+        let model2 = TestNSCoding.unarchive(fromUserDefaults: "sample")
+        XCTAssertNotNil(model2, "Expected model2 must not be nil.")
+        XCTAssertEqual(model2?.text ?? "", "FwiCore", "Expected 'FwiCore' but found: \(String(describing: model2?.text)).")
     }
 
     func testReadWriteToFile() {
-        guard let data1 = "FwiCore".toData(), let url = URL.documentDirectory()?.appendingPathComponent("sample") else {
-            XCTFail("Could not convert string to data.")
+        guard let url = URL.documentDirectory()?.appendingPathComponent("sample") else {
+            XCTFail("Could not create url.")
             return
         }
 
@@ -77,11 +87,14 @@ class DataFwiExtensionTest: XCTestCase {
             manager.removeFile(atURL: url)
         }
 
-        data1.write(toFile: url, options: .atomic)
+        let model1 = TestNSCoding()
+        model1.text = "FwiCore"
+
+        model1.archive(toFile: url)
         XCTAssertTrue(manager.fileExists(atURL: url), "Expected file existed at: '\(url.absoluteString)'.")
 
-        let data2 = Data.read(fromFile: url)
-        XCTAssertNotNil(data2, "Expected data2 must not be nil.")
-        XCTAssertEqual(data2, data1, "Expected data2 must be equal data1.")
+        let model2 = TestNSCoding.unarchive(fromFile: url)
+        XCTAssertNotNil(model2, "Expected model2 must not be nil.")
+        XCTAssertEqual(model2?.text ?? "", "FwiCore", "Expected 'FwiCore' but found: \(String(describing: model2?.text)).")
     }
 }

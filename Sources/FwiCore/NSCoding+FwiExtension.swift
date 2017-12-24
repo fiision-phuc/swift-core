@@ -3,10 +3,8 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 9/3/16
-//  Version     : 2.0.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -62,14 +60,15 @@ public extension NSCoding {
     ///
     /// - parameter file (required): destination url
     public static func unarchive(fromFile url: URL?) -> Self? {
-        return unarchive(fromData: Data.readFromFile(atURL: url))
+        return unarchive(fromData: Data.read(fromFile: url))
     }
     
     /// Archive to file.
     ///
     /// - parameter file (required): source url
+    @discardableResult
     public func archive(toFile url: URL?) -> Error? {
-        return archive().writeToFile(toUrl: url)
+        return archive().write(toFile: url)
     }
     
     // MARK: I/O to UserDefaults

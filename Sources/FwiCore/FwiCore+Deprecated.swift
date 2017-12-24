@@ -1,12 +1,10 @@
 //  Project name: FwiCore
-//  File name   : UIColor+FwiExtension.swift
+//  File name   : FwiCore+Deprecated.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 6/13/16
-//  Version     : 2.0.0
+//  Created date: 12/20/17
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -36,24 +34,28 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if os(iOS)
-import UIKit
+import Foundation
 
 
-public extension UIColor {
+public extension Data {
 
-    /// Convert hex to color.
-    public convenience init(rgb hex: UInt32) {
-        self.init(red: CGFloat((hex & 0xff0000) >> 16) / 255.0,
-                  green: CGFloat((hex & 0x00ff00) >> 8) / 255.0,
-                  blue: CGFloat(hex & 0x0000ff) / 255.0,
-                  alpha: CGFloat(1.0))
+    @available(*, deprecated, message: "No longer available.", renamed: "read(fromFile:readingMode:)")
+    public static func readFromFile(atURL url: URL?, readingMode mode: Data.ReadingOptions = []) -> Data? {
+        return Data.read(fromFile:url, readingMode: mode)
     }
-    public convenience init(rgba hex: UInt32) {
-        self.init(red: CGFloat((hex & 0xff000000) >> 24) / 255.0,
-                  green: CGFloat((hex & 0x00ff0000) >> 16) / 255.0,
-                  blue: CGFloat((hex & 0x0000ff00) >> 8) / 255.0,
-                  alpha: CGFloat(hex & 0x000000ff) / 255.0)
+
+    @available(*, deprecated, message: "No longer available.", renamed: "write(toFile:options:)")
+    public func writeToFile(toUrl url: URL?, options: Data.WritingOptions = []) -> Error? {
+        return write(toFile: url, options: options)
     }
 }
-#endif
+
+public extension String {
+
+    /// Calculate string length.
+    @available(*, deprecated, message: "No longer available.", renamed: "count")
+    public func length() -> Int {
+        return count
+    }
+}
+

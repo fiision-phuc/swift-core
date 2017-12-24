@@ -1,8 +1,8 @@
 //  Project name: FwiCore
-//  File name   : String+FwiHex.swift
+//  File name   : Array+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/26/14
+//  Created date: 11/5/17
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -37,26 +37,18 @@
 import Foundation
 
 
-public extension String {
+public extension Array {
 
-    // MARK: Validate Hex
-    public var isHex: Bool {
-        return toData()?.isHex ?? false
-    }
+    /// Shuffles the contents of this collection.
+    public mutating func shuffle() {
+        guard count > 1 else {
+            return
+        }
 
-    // MARK: Decode Hex
-    public func decodeHexData() -> Data? {
-        return toData()?.decodeHexData()
-    }
-    public func decodeHexString() -> String? {
-        return toData()?.decodeHexString()
-    }
-
-    // MARK: Encode Hex
-    public func encodeHexData() -> Data? {
-        return toData()?.encodeHexData()
-    }
-    public func encodeHexString() -> String? {
-        return toData()?.encodeHexString()
+        for (first, remain) in zip(indices, stride(from: count, to: 1, by: -1)) {
+            let d: IndexDistance = numericCast(arc4random_uniform(numericCast(remain)))
+            let i = index(first, offsetBy: d)
+            swapAt(first, i)
+        }
     }
 }

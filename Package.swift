@@ -15,8 +15,8 @@ let package = Package(
     targets: [
         .target(name: "FwiCore", dependencies: ["Alamofire"], path: "Sources/FwiCore"),
         .target(name: "FwiCoreRX", dependencies: ["Alamofire", "RxSwift", "FwiCore"], path: "Sources/FwiCoreRX"),
-//        .testTarget(name: "FwiCoreTests", dependencies: ["Alamofire", "FwiCore"]),
-//        .testTarget(name: "FwiCoreRXTests", dependencies: ["Alamofire", "RxBlocking", "RxCocoa", "RxSwift", "FwiCore", "FwiCoreRX"]),
+
+        .testTarget(name: "FwiCoreTests", dependencies: ["Alamofire", "FwiCore"])
     ],
-    swiftLanguageVersions: [4]
+    swiftLanguageVersions: [3,4]
 )

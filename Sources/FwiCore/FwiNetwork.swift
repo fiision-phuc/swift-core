@@ -3,10 +3,8 @@
 //
 //  Author      : Phuc, Tran Huu
 //  Created date: 4/13/14
-//  Version     : 2.0.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -45,6 +43,8 @@ public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ response
 
 
 public struct FwiNetwork {
+    public static var manager = SessionManager.`default`
+
 
     /// Download resource from server.
     ///
@@ -63,8 +63,8 @@ public struct FwiNetwork {
             return nil
         }
 
-        let task = Alamofire.download(url, method: m, parameters: p, encoding: e, headers: h, to: nil)
-//        task.validate(statusCode: 200..<300)
+        let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h, to: nil)
+        task.validate(statusCode: 200 ..< 300)
         task.response { (r) in
             c(r.temporaryURL, r.error, r.response)
         }
@@ -88,8 +88,8 @@ public struct FwiNetwork {
             return nil
         }
 
-        let task = Alamofire.request(url, method: m, parameters: p, encoding: e, headers: h)
-//        task.validate(statusCode: 200..<300)
+        let task = manager.request(url, method: m, parameters: p, encoding: e, headers: h)
+        task.validate(statusCode: 200 ..< 300)
         task.response { (r) in
             c(r.data, r.error, r.response)
         }

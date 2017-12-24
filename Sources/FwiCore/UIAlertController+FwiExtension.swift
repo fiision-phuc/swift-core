@@ -1,8 +1,8 @@
-//  Project name: FwiCore
-//  File name   : String+FwiHex.swift
+//  File name   : UIAlertController+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 11/26/14
+//  Created date: 12/20/17
+//  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -34,29 +34,14 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import Foundation
+#if os(iOS)
+import UIKit
 
 
-public extension String {
+extension UIAlertController {
 
-    // MARK: Validate Hex
-    public var isHex: Bool {
-        return toData()?.isHex ?? false
-    }
-
-    // MARK: Decode Hex
-    public func decodeHexData() -> Data? {
-        return toData()?.decodeHexData()
-    }
-    public func decodeHexString() -> String? {
-        return toData()?.decodeHexString()
-    }
-
-    // MARK: Encode Hex
-    public func encodeHexData() -> Data? {
-        return toData()?.encodeHexData()
-    }
-    public func encodeHexString() -> String? {
-        return toData()?.encodeHexString()
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .all
     }
 }
+#endif
