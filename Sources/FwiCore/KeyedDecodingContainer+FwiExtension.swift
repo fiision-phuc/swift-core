@@ -194,43 +194,80 @@ public extension KeyedDecodingContainer {
 
     /// Bool.
     public func parse(_ input: inout Bool, key: KeyedDecodingContainer.Key) {
-//        return (left + right) ?? false
+        var value: Bool?
+        parse(&value, key: key)
+
+        input = value ?? false
     }
 
     /// Float.
     public func parse(_ input: inout Float, key: KeyedDecodingContainer.Key) {
-//        return (left + right) ?? 0.0
+        var value: Float?
+        parse(&value, key: key)
+
+        input = value ?? 0.0
     }
 
     /// Double.
     public func parse(_ input: inout Double, key: KeyedDecodingContainer.Key) {
-//        return (left + right) ?? 0.0
+        var value: Double?
+        parse(&value, key: key)
+
+        input = value ?? 0.0
     }
 
     /// Signed/Unsigned integer.
     public func parse<T: Codable & SignedInteger>(_ input: inout T, key: KeyedDecodingContainer.Key) {
-//        return (left + right) ?? 0
+        var value: T?
+        parse(&value, key: key)
+
+        input = value ?? 0
     }
     public func parse<T: Codable & UnsignedInteger>(_ input: inout T, key: KeyedDecodingContainer.Key) {
-//        return (left + right) ?? 0
+        var value: T?
+        parse(&value, key: key)
+
+        input = value ?? 0
     }
 
     /// Data.
     public func parse(_ input: inout Data, key: KeyedDecodingContainer.Key) {
+        var value: Data?
+        parse(&value, key: key)
+
+        if let data = value {
+            input = data
+        }
     }
 
     /// Date.
     public func parse(_ input: inout Date, key: KeyedDecodingContainer.Key) {
+        var value: Date?
+        parse(&value, key: key)
+
+        if let date = value {
+            input = date
+        }
     }
 
     /// String.
     public func parse(_ input: inout String, key: KeyedDecodingContainer.Key) {
-        //        return (left + right) ?? ""
+        var value: String?
+        parse(&value, key: key)
+
+        if let string = value {
+            input = string
+        }
     }
 
     /// Other.
     public func parse<T: Codable>(_ input: inout T, key: KeyedDecodingContainer.Key) {
-//        return try left.decode(T.self, forKey: right)
+        var value: T?
+        parse(&value, key: key)
+
+        if let object = value {
+            input = object
+        }
     }
 }
 
