@@ -10,6 +10,7 @@
 		BE19C3141F77F8F1003DF3D8 /* FwiCoreData+RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30B1F77F8DF003DF3D8 /* FwiCoreData+RX.swift */; };
 		BE19C3171F77F8F1003DF3D8 /* FwiNetwork+RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30C1F77F8DF003DF3D8 /* FwiNetwork+RX.swift */; };
 		BE19C3181F77F8F1003DF3D8 /* FwiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30A1F77F8DE003DF3D8 /* FwiViewModel.swift */; };
+		BE6B962D1FF2A8E900BCDEFC /* FwiLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE91D84C1F701AF600EEE620 /* FwiLocalization.swift */; };
 		BE7A1D6D1FEC129F0004B986 /* CodableFwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7A1D6C1FEC129F0004B986 /* CodableFwiExtensionTest.swift */; };
 		BE7EA4771FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7EA4761FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift */; };
 		BE882F411F8DC5D20080FB42 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE882F341F8DC5C90080FB42 /* Alamofire.framework */; };
@@ -1062,6 +1063,7 @@
 				BE91D8D41F7027C300EEE620 /* String+FwiHex.swift in Sources */,
 				BEF01E7A1F71214800F25389 /* NSManagedObject+FwiExtension.swift in Sources */,
 				BE91D8CC1F70277C00EEE620 /* FwiCell.swift in Sources */,
+				BE6B962D1FF2A8E900BCDEFC /* FwiLocalization.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
