@@ -77,7 +77,9 @@ fileprivate struct FwiLocalization {
     fileprivate var locale: String = "en" {
         didSet {
             guard let path = Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: locale) else {
-                reset()
+                if locale != "en" {
+                    reset()
+                }
                 return
             }
             let userDefaults = UserDefaults.standard
