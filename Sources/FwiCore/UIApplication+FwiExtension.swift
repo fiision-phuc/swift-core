@@ -34,7 +34,7 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if os(iOS)
+#if canImport(UIKit)
 import UIKit
 
 
@@ -68,7 +68,7 @@ public extension UIApplication {
 
     /// Enable remote notification.
     public class func enableRemoteNotification() {
-        #if (arch(i386) || arch(x86_64)) && os(iOS)
+        #if targetEnvironment(simulator)
             print("Remote notification does not support this device.")
         #else
             let notificationType = UIUserNotificationType.alert.union(UIUserNotificationType.badge)

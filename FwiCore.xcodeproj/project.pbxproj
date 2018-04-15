@@ -759,7 +759,7 @@
 			attributes = {
 				CLASSPREFIX = Fwi;
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Fiision Studio";
 				TargetAttributes = {
 					BE91D8851F70239C00EEE620 = {
@@ -1098,12 +1098,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B61D89C13B00738B1F /* lib-debug.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				DEFINES_MODULE = YES;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1111,11 +1106,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B71D89C13B00738B1F /* lib-release.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				DEFINES_MODULE = YES;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
-				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1123,7 +1114,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B71D89C13B00738B1F /* lib-release.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 			};
@@ -1141,7 +1131,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B61D89C13B00738B1F /* lib-debug.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 			};
@@ -1159,6 +1148,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B91D89C13B00738B1F /* project-release.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 			};
 			name = Release;
 		};
@@ -1166,6 +1156,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B81D89C13B00738B1F /* project-debug.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 			};
 			name = Debug;
 		};

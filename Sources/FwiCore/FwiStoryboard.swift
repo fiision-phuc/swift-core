@@ -34,7 +34,7 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if os(iOS)
+#if canImport(UIKit)
 import UIKit
 
 
@@ -62,14 +62,14 @@ public extension FwiStoryboard where Self: UIViewController {
     /// Create view controller from storyboard.
     public static func instantiate() -> Self? {
         let storyboard = UIStoryboard(name: name, bundle: bundle)
-        return instantiate(fromStoryboard: storyboard)
+        return instantiate(from: storyboard)
     }
     
     /// Create view controller from defined storyboard.
     ///
     /// - parameter storyboard (required): storyboard's instance
-    public static func instantiate(fromStoryboard s: UIStoryboard) -> Self? {
-        return s.instantiateViewController(withIdentifier: identifier) as? Self
+    public static func instantiate(from storyboard: UIStoryboard) -> Self? {
+        return storyboard.instantiateViewController(withIdentifier: identifier) as? Self
     }
 }
 #endif
