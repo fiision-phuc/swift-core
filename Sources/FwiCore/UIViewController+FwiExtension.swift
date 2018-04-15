@@ -34,7 +34,7 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if os(iOS)
+#if canImport(UIKit)
 import UIKit
 
 
@@ -48,7 +48,7 @@ public extension UIViewController {
     /// Add initial view controller from other storyboard into defined view. Default is view
     /// controller's view.
     @discardableResult
-    public func addFlow(fromStoryboard storyboardName: String, intoView rootView: UIView, inBundle bundle: Bundle = Bundle.main) -> UIViewController? {
+    public func addFlow(from storyboardName: String, into rootView: UIView, in bundle: Bundle = Bundle.main) -> UIViewController? {
         let flow = UIStoryboard(name: storyboardName, bundle: bundle)
         guard let controller = flow.instantiateInitialViewController(), let subView = controller.view else {
             return nil

@@ -46,7 +46,7 @@ public extension Array {
         }
 
         for (first, remain) in zip(indices, stride(from: count, to: 1, by: -1)) {
-            let d: IndexDistance = numericCast(arc4random_uniform(numericCast(remain)))
+            let d: Int = numericCast(arc4random_uniform(numericCast(remain)))
             let i = index(first, offsetBy: d)
             swapAt(first, i)
         }

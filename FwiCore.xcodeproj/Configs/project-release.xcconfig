@@ -86,6 +86,9 @@ CLANG_WARN_OBJC_LITERAL_CONVERSION = YES
 GCC_WARN_UNDECLARED_SELECTOR = YES
 CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR
 
+// Apple LLVM 9.x - Warnings - Objective C and ARC
+CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES
+
 // Static Analyzer - Generic Issues
 CLANG_ANALYZER_NONNULL = YES
 
@@ -93,7 +96,8 @@ CLANG_ANALYZER_NONNULL = YES
 CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE
 
 // Swift Compiler - Code Generation
-SWIFT_OPTIMIZATION_LEVEL = -Owholemodule
+SWIFT_COMPILATION_MODE = wholemodule
+SWIFT_OPTIMIZATION_LEVEL = -Osize
 
 // Swift Compiler - Custom Flags
 OTHER_SWIFT_FLAGS = -DXcode
@@ -109,4 +113,3 @@ SWIFT_VERSION = 4.0
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 COMBINE_HIDPI_IMAGES = YES
 MTL_ENABLE_DEBUG_INFO = NO
-SWIFT_OPTIMIZATION_LEVEL = -Owholemodule
