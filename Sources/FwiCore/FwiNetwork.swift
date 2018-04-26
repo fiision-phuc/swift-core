@@ -57,18 +57,36 @@ public struct FwiNetwork {
     ///
     /// - parameter completion (required): call back function
     @discardableResult
-    public static func download(resource r: String?, method m: HTTPMethod = .get, params p: [String:String]? = nil, encoding e: ParameterEncoding = URLEncoding.`default`, headers h: [String: String]? = nil, completion c: @escaping DownloadCompletion) -> DownloadRequest? {
+    public static func download(resource r: URLConvertible?,
+                                method m: HTTPMethod = .get,
+                                params p: [String:String]? = nil,
+                                encoding e: ParameterEncoding = URLEncoding.`default`,
+                                headers h: [String: String]? = nil,
+                                destination d: URLConvertible? = nil,
+                                completion c: @escaping DownloadCompletion) -> DownloadRequest?
+    {
         /* Condition validation: validate endpoint */
         guard let url = r else {
             return nil
         }
-
-        let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h, to: nil)
-        task.validate(statusCode: 200 ..< 300)
-        task.response { (r) in
-            c(r.temporaryURL, r.error, r.response)
+        
+        if let d = d, let destinationURL = try? d.asURL() {
+            let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h) { (tempURL, response) -> (URL, DownloadRequest.DownloadOptions) in
+                return (destinationURL, [DownloadRequest.DownloadOptions.createIntermediateDirectories, DownloadRequest.DownloadOptions.removePreviousFile])
+            }
+            task.validate(statusCode: 200 ..< 300)
+            task.response { (r) in
+                c(destinationURL, r.error, r.response)
+            }
+            return task
+        } else {
+            let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h, to: nil)
+            task.validate(statusCode: 200 ..< 300)
+            task.response { (r) in
+                c(r.temporaryURL, r.error, r.response)
+            }
+            return task
         }
-        return task
     }
 
     /// Send request to server.
@@ -82,12 +100,18 @@ public struct FwiNetwork {
     ///
     /// - parameter completion (required): call back function
     @discardableResult
-    public static func send(request r: String?, method m: HTTPMethod = .get, params p: [String:String]? = nil, encoding e: ParameterEncoding = URLEncoding.`default`, headers h: [String: String]? = nil, completion c: @escaping RequestCompletion) -> DataRequest? {
+    public static func send(request r: URLConvertible?,
+                            method m: HTTPMethod = .get,
+                            params p: [String:String]? = nil,
+                            encoding e: ParameterEncoding = URLEncoding.`default`,
+                            headers h: [String: String]? = nil,
+                            completion c: @escaping RequestCompletion) -> DataRequest?
+    {
         /* Condition validation: validate endpoint */
         guard let url = r else {
             return nil
         }
-
+        
         let task = manager.request(url, method: m, parameters: p, encoding: e, headers: h)
         task.validate(statusCode: 200 ..< 300)
         task.response { (r) in
