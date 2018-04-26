@@ -50,9 +50,15 @@ public extension FwiNetwork {
     /// - seealso:
     /// [The FwiCore Library Reference]
     /// (https://github.com/phuc0302/swift-core/blob/master/Sources/FwiNetwork.swift)
-    public static func downloadResource(_ r: String?, method m: HTTPMethod = .get, params p: [String:String]? = nil, encoding e: ParameterEncoding = URLEncoding.`default`, headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, URL)> {
+    public static func downloadResource(_ r: URLConvertible?,
+                                        method m: HTTPMethod = .get,
+                                        params p: [String:String]? = nil,
+                                        encoding e: ParameterEncoding = URLEncoding.`default`,
+                                        headers h: [String: String]? = nil,
+                                        destination d: URLConvertible? = nil) -> Observable<(HTTPURLResponse, URL)>
+    {
         return Observable.create { observer in
-            let t = FwiNetwork.download(resource: r, method: m, params: p, encoding: e, headers: h, completion: { (url, err, res) in
+            let t = FwiNetwork.download(resource: r, method: m, params: p, encoding: e, headers: h, destination: d, completion: { (url, err, res) in
                 /* Condition validation: validate network's status */
                 guard let response = res, let location = url else {
                     observer.on(.error(err ?? NSError(domain: NSURLErrorDomain, code: URLError.badServerResponse.rawValue, userInfo: nil)))
@@ -75,7 +81,12 @@ public extension FwiNetwork {
     /// - seealso:
     /// [The FwiCore Library Reference]
     /// (https://github.com/phuc0302/swift-core/blob/master/Sources/FwiNetwork.swift)
-    public static func sendRequest(_ r: String?, method m: HTTPMethod = .get, params p: [String:String]? = nil, encoding e: ParameterEncoding = URLEncoding.`default`, headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, Data)> {
+    public static func sendRequest(_ r: URLConvertible?,
+                                   method m: HTTPMethod = .get,
+                                   params p: [String:String]? = nil,
+                                   encoding e: ParameterEncoding = URLEncoding.`default`,
+                                   headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, Data)>
+    {
         return Observable.create { observer in
             let t = FwiNetwork.send(request: r, method: m, params: p, encoding: e, headers: h, completion: { (d, err, res) in
                 /* Condition validation: validate network's status */
