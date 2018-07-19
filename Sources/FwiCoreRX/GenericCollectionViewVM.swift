@@ -53,7 +53,8 @@ open class GenericCollectionViewVM<T>: CollectionViewVM {
             currentItemSubject.on(.next(currentItem))
         }
     }
-    internal var items: ArraySlice<T>?
+    
+    public var items: ArraySlice<T>?
     
     // MARK: UICollectionViewDataSource's members
     open override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

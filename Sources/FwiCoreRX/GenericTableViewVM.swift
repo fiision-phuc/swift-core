@@ -53,7 +53,8 @@ open class GenericTableViewVM<T>: TableViewVM {
             currentItemSubject.on(.next(currentItem))
         }
     }
-    internal var items: ArraySlice<T>?
+    
+    public var items: ArraySlice<T>?
     
     // MARK: UITableViewDataSource's members
     open override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
