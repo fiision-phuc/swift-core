@@ -11,6 +11,12 @@
 		BE19C3171F77F8F1003DF3D8 /* FwiNetwork+RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30C1F77F8DF003DF3D8 /* FwiNetwork+RX.swift */; };
 		BE19C3181F77F8F1003DF3D8 /* FwiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30A1F77F8DE003DF3D8 /* FwiViewModel.swift */; };
 		BE6B962D1FF2A8E900BCDEFC /* FwiLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE91D84C1F701AF600EEE620 /* FwiLocalization.swift */; };
+		BE73154721002ED400C569A6 /* CollectionViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73152421002ED300C569A6 /* CollectionViewVM.swift */; };
+		BE73154821002ED400C569A6 /* GenericTableViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154221002ED300C569A6 /* GenericTableViewVM.swift */; };
+		BE73154921002ED400C569A6 /* TableViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154321002ED400C569A6 /* TableViewVM.swift */; };
+		BE73154A21002ED400C569A6 /* GenericCollectionViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154421002ED400C569A6 /* GenericCollectionViewVM.swift */; };
+		BE73154B21002ED400C569A6 /* GenericTableViewCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154521002ED400C569A6 /* GenericTableViewCellVM.swift */; };
+		BE73154C21002ED400C569A6 /* GenericCollectionViewCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154621002ED400C569A6 /* GenericCollectionViewCellVM.swift */; };
 		BE7A1D6D1FEC129F0004B986 /* CodableFwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7A1D6C1FEC129F0004B986 /* CodableFwiExtensionTest.swift */; };
 		BE7EA4771FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7EA4761FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift */; };
 		BE882F411F8DC5D20080FB42 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE882F341F8DC5C90080FB42 /* Alamofire.framework */; };
@@ -275,6 +281,12 @@
 		BE19C30A1F77F8DE003DF3D8 /* FwiViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiViewModel.swift; sourceTree = "<group>"; };
 		BE19C30B1F77F8DF003DF3D8 /* FwiCoreData+RX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FwiCoreData+RX.swift"; sourceTree = "<group>"; };
 		BE19C30C1F77F8DF003DF3D8 /* FwiNetwork+RX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FwiNetwork+RX.swift"; sourceTree = "<group>"; };
+		BE73152421002ED300C569A6 /* CollectionViewVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewVM.swift; sourceTree = "<group>"; };
+		BE73154221002ED300C569A6 /* GenericTableViewVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericTableViewVM.swift; sourceTree = "<group>"; };
+		BE73154321002ED400C569A6 /* TableViewVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewVM.swift; sourceTree = "<group>"; };
+		BE73154421002ED400C569A6 /* GenericCollectionViewVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericCollectionViewVM.swift; sourceTree = "<group>"; };
+		BE73154521002ED400C569A6 /* GenericTableViewCellVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericTableViewCellVM.swift; sourceTree = "<group>"; };
+		BE73154621002ED400C569A6 /* GenericCollectionViewCellVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericCollectionViewCellVM.swift; sourceTree = "<group>"; };
 		BE7A1D6C1FEC129F0004B986 /* CodableFwiExtensionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableFwiExtensionTest.swift; sourceTree = "<group>"; };
 		BE7EA4761FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSCoding+FwiExtensionTest.swift"; sourceTree = "<group>"; };
 		BE882F281F8DC5C90080FB42 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = ".build/checkouts/Alamofire.git-6801331143877184500/Alamofire.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -574,6 +586,12 @@
 			isa = PBXGroup;
 			children = (
 				BE19C30A1F77F8DE003DF3D8 /* FwiViewModel.swift */,
+				BE73152421002ED300C569A6 /* CollectionViewVM.swift */,
+				BE73154621002ED400C569A6 /* GenericCollectionViewCellVM.swift */,
+				BE73154421002ED400C569A6 /* GenericCollectionViewVM.swift */,
+				BE73154321002ED400C569A6 /* TableViewVM.swift */,
+				BE73154521002ED400C569A6 /* GenericTableViewCellVM.swift */,
+				BE73154221002ED300C569A6 /* GenericTableViewVM.swift */,
 			);
 			name = ViewModel;
 			sourceTree = "<group>";
@@ -1022,9 +1040,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE73154921002ED400C569A6 /* TableViewVM.swift in Sources */,
+				BE73154A21002ED400C569A6 /* GenericCollectionViewVM.swift in Sources */,
+				BE73154C21002ED400C569A6 /* GenericCollectionViewCellVM.swift in Sources */,
+				BE73154B21002ED400C569A6 /* GenericTableViewCellVM.swift in Sources */,
 				BE19C3141F77F8F1003DF3D8 /* FwiCoreData+RX.swift in Sources */,
+				BE73154821002ED400C569A6 /* GenericTableViewVM.swift in Sources */,
 				BE19C3181F77F8F1003DF3D8 /* FwiViewModel.swift in Sources */,
 				BE19C3171F77F8F1003DF3D8 /* FwiNetwork+RX.swift in Sources */,
+				BE73154721002ED400C569A6 /* CollectionViewVM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
