@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : NSNumber+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu

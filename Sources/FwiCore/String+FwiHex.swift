@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : String+FwiHex.swift
 //
 //  Author      : Phuc, Tran Huu

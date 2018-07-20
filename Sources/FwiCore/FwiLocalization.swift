@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : FwiLocalization.swift
 //
 //  Author      : Phuc Tran

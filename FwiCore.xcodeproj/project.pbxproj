@@ -11,12 +11,12 @@
 		BE19C3171F77F8F1003DF3D8 /* FwiNetwork+RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30C1F77F8DF003DF3D8 /* FwiNetwork+RX.swift */; };
 		BE19C3181F77F8F1003DF3D8 /* FwiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30A1F77F8DE003DF3D8 /* FwiViewModel.swift */; };
 		BE6B962D1FF2A8E900BCDEFC /* FwiLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE91D84C1F701AF600EEE620 /* FwiLocalization.swift */; };
-		BE73154721002ED400C569A6 /* CollectionViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73152421002ED300C569A6 /* CollectionViewVM.swift */; };
-		BE73154821002ED400C569A6 /* GenericTableViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154221002ED300C569A6 /* GenericTableViewVM.swift */; };
-		BE73154921002ED400C569A6 /* TableViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154321002ED400C569A6 /* TableViewVM.swift */; };
-		BE73154A21002ED400C569A6 /* GenericCollectionViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154421002ED400C569A6 /* GenericCollectionViewVM.swift */; };
-		BE73154B21002ED400C569A6 /* GenericTableViewCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154521002ED400C569A6 /* GenericTableViewCellVM.swift */; };
-		BE73154C21002ED400C569A6 /* GenericCollectionViewCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154621002ED400C569A6 /* GenericCollectionViewCellVM.swift */; };
+		BE73154721002ED400C569A6 /* FwiCollectionViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73152421002ED300C569A6 /* FwiCollectionViewVM.swift */; };
+		BE73154821002ED400C569A6 /* FwiGenericTableViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154221002ED300C569A6 /* FwiGenericTableViewVM.swift */; };
+		BE73154921002ED400C569A6 /* FwiTableViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154321002ED400C569A6 /* FwiTableViewVM.swift */; };
+		BE73154A21002ED400C569A6 /* FwiGenericCollectionViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154421002ED400C569A6 /* FwiGenericCollectionViewVM.swift */; };
+		BE73154B21002ED400C569A6 /* FwiGenericTableViewCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154521002ED400C569A6 /* FwiGenericTableViewCellVM.swift */; };
+		BE73154C21002ED400C569A6 /* FwiGenericCollectionViewCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154621002ED400C569A6 /* FwiGenericCollectionViewCellVM.swift */; };
 		BE7A1D6D1FEC129F0004B986 /* CodableFwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7A1D6C1FEC129F0004B986 /* CodableFwiExtensionTest.swift */; };
 		BE7EA4771FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7EA4761FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift */; };
 		BE882F411F8DC5D20080FB42 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE882F341F8DC5C90080FB42 /* Alamofire.framework */; };
@@ -59,7 +59,6 @@
 		BEA89C4B1F9A6DB00099413F /* UIImage+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA89C4A1F9A6DAF0099413F /* UIImage+FwiExtension.swift */; };
 		BEDBB4DA1FE9D48C00059325 /* Array+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDBB4BC1FE9D48B00059325 /* Array+FwiExtension.swift */; };
 		BEDBB4DC1FE9D57B00059325 /* KeyedDecodingContainer+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDBB4DB1FE9D57B00059325 /* KeyedDecodingContainer+FwiExtension.swift */; };
-		BEDBB4DE1FE9D6BB00059325 /* FwiCore+Deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDBB4DD1FE9D6BB00059325 /* FwiCore+Deprecated.swift */; };
 		BEDBB4E01FE9DB7900059325 /* UIAlertController+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDBB4DF1FE9DB7900059325 /* UIAlertController+FwiExtension.swift */; };
 		BEF01E7A1F71214800F25389 /* NSManagedObject+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF01E791F71214700F25389 /* NSManagedObject+FwiExtension.swift */; };
 		_LinkFileRef_FwiCore_via_FwiCoreTests /* FwiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_FwiCore" /* FwiCore.framework */; };
@@ -281,12 +280,12 @@
 		BE19C30A1F77F8DE003DF3D8 /* FwiViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiViewModel.swift; sourceTree = "<group>"; };
 		BE19C30B1F77F8DF003DF3D8 /* FwiCoreData+RX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FwiCoreData+RX.swift"; sourceTree = "<group>"; };
 		BE19C30C1F77F8DF003DF3D8 /* FwiNetwork+RX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FwiNetwork+RX.swift"; sourceTree = "<group>"; };
-		BE73152421002ED300C569A6 /* CollectionViewVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewVM.swift; sourceTree = "<group>"; };
-		BE73154221002ED300C569A6 /* GenericTableViewVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericTableViewVM.swift; sourceTree = "<group>"; };
-		BE73154321002ED400C569A6 /* TableViewVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewVM.swift; sourceTree = "<group>"; };
-		BE73154421002ED400C569A6 /* GenericCollectionViewVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericCollectionViewVM.swift; sourceTree = "<group>"; };
-		BE73154521002ED400C569A6 /* GenericTableViewCellVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericTableViewCellVM.swift; sourceTree = "<group>"; };
-		BE73154621002ED400C569A6 /* GenericCollectionViewCellVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericCollectionViewCellVM.swift; sourceTree = "<group>"; };
+		BE73152421002ED300C569A6 /* FwiCollectionViewVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiCollectionViewVM.swift; sourceTree = "<group>"; };
+		BE73154221002ED300C569A6 /* FwiGenericTableViewVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiGenericTableViewVM.swift; sourceTree = "<group>"; };
+		BE73154321002ED400C569A6 /* FwiTableViewVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiTableViewVM.swift; sourceTree = "<group>"; };
+		BE73154421002ED400C569A6 /* FwiGenericCollectionViewVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiGenericCollectionViewVM.swift; sourceTree = "<group>"; };
+		BE73154521002ED400C569A6 /* FwiGenericTableViewCellVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiGenericTableViewCellVM.swift; sourceTree = "<group>"; };
+		BE73154621002ED400C569A6 /* FwiGenericCollectionViewCellVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FwiGenericCollectionViewCellVM.swift; sourceTree = "<group>"; };
 		BE7A1D6C1FEC129F0004B986 /* CodableFwiExtensionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableFwiExtensionTest.swift; sourceTree = "<group>"; };
 		BE7EA4761FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSCoding+FwiExtensionTest.swift"; sourceTree = "<group>"; };
 		BE882F281F8DC5C90080FB42 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = ".build/checkouts/Alamofire.git-6801331143877184500/Alamofire.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -328,7 +327,6 @@
 		BEA89C4A1F9A6DAF0099413F /* UIImage+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+FwiExtension.swift"; path = "FwiCore/UIImage+FwiExtension.swift"; sourceTree = "<group>"; };
 		BEDBB4BC1FE9D48B00059325 /* Array+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+FwiExtension.swift"; path = "FwiCore/Array+FwiExtension.swift"; sourceTree = "<group>"; };
 		BEDBB4DB1FE9D57B00059325 /* KeyedDecodingContainer+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "KeyedDecodingContainer+FwiExtension.swift"; path = "FwiCore/KeyedDecodingContainer+FwiExtension.swift"; sourceTree = "<group>"; };
-		BEDBB4DD1FE9D6BB00059325 /* FwiCore+Deprecated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FwiCore+Deprecated.swift"; path = "FwiCore/FwiCore+Deprecated.swift"; sourceTree = "<group>"; };
 		BEDBB4DF1FE9DB7900059325 /* UIAlertController+FwiExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIAlertController+FwiExtension.swift"; path = "FwiCore/UIAlertController+FwiExtension.swift"; sourceTree = "<group>"; };
 		BEF01E791F71214700F25389 /* NSManagedObject+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSManagedObject+FwiExtension.swift"; path = "FwiCore/NSManagedObject+FwiExtension.swift"; sourceTree = "<group>"; };
 		__PBXFileRef_Package.swift /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
@@ -586,12 +584,12 @@
 			isa = PBXGroup;
 			children = (
 				BE19C30A1F77F8DE003DF3D8 /* FwiViewModel.swift */,
-				BE73152421002ED300C569A6 /* CollectionViewVM.swift */,
-				BE73154621002ED400C569A6 /* GenericCollectionViewCellVM.swift */,
-				BE73154421002ED400C569A6 /* GenericCollectionViewVM.swift */,
-				BE73154321002ED400C569A6 /* TableViewVM.swift */,
-				BE73154521002ED400C569A6 /* GenericTableViewCellVM.swift */,
-				BE73154221002ED300C569A6 /* GenericTableViewVM.swift */,
+				BE73152421002ED300C569A6 /* FwiCollectionViewVM.swift */,
+				BE73154421002ED400C569A6 /* FwiGenericCollectionViewVM.swift */,
+				BE73154621002ED400C569A6 /* FwiGenericCollectionViewCellVM.swift */,
+				BE73154321002ED400C569A6 /* FwiTableViewVM.swift */,
+				BE73154221002ED300C569A6 /* FwiGenericTableViewVM.swift */,
+				BE73154521002ED400C569A6 /* FwiGenericTableViewCellVM.swift */,
 			);
 			name = ViewModel;
 			sourceTree = "<group>";
@@ -673,7 +671,6 @@
 			isa = PBXGroup;
 			children = (
 				BE91D84A1F7019C300EEE620 /* FwiCore.swift */,
-				BEDBB4DD1FE9D6BB00059325 /* FwiCore+Deprecated.swift */,
 				BE8BF12D1D832CC900F710CB /* Extension */,
 				BE8BF12A1D832C4200F710CB /* Codec */,
 				BEF01E7B1F71219B00F25389 /* CoreData */,
@@ -1040,15 +1037,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE73154921002ED400C569A6 /* TableViewVM.swift in Sources */,
-				BE73154A21002ED400C569A6 /* GenericCollectionViewVM.swift in Sources */,
-				BE73154C21002ED400C569A6 /* GenericCollectionViewCellVM.swift in Sources */,
-				BE73154B21002ED400C569A6 /* GenericTableViewCellVM.swift in Sources */,
+				BE73154921002ED400C569A6 /* FwiTableViewVM.swift in Sources */,
+				BE73154A21002ED400C569A6 /* FwiGenericCollectionViewVM.swift in Sources */,
+				BE73154C21002ED400C569A6 /* FwiGenericCollectionViewCellVM.swift in Sources */,
+				BE73154B21002ED400C569A6 /* FwiGenericTableViewCellVM.swift in Sources */,
 				BE19C3141F77F8F1003DF3D8 /* FwiCoreData+RX.swift in Sources */,
-				BE73154821002ED400C569A6 /* GenericTableViewVM.swift in Sources */,
+				BE73154821002ED400C569A6 /* FwiGenericTableViewVM.swift in Sources */,
 				BE19C3181F77F8F1003DF3D8 /* FwiViewModel.swift in Sources */,
 				BE19C3171F77F8F1003DF3D8 /* FwiNetwork+RX.swift in Sources */,
-				BE73154721002ED400C569A6 /* CollectionViewVM.swift in Sources */,
+				BE73154721002ED400C569A6 /* FwiCollectionViewVM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1066,7 +1063,6 @@
 				BEDBB4DC1FE9D57B00059325 /* KeyedDecodingContainer+FwiExtension.swift in Sources */,
 				BE91D87F1F701B7900EEE620 /* Data+FwiBase64.swift in Sources */,
 				BE91D8CF1F70277C00EEE620 /* UIViewController+FwiExtension.swift in Sources */,
-				BEDBB4DE1FE9D6BB00059325 /* FwiCore+Deprecated.swift in Sources */,
 				BE91D84B1F7019C300EEE620 /* FwiCore.swift in Sources */,
 				BE91D8D81F7027EA00EEE620 /* FwiNetwork.swift in Sources */,
 				BE91D8BA1F70273700EEE620 /* Dictionary+FwiExtension.swift in Sources */,

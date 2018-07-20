@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : FwiStoryboard.swift
 //
 //  Author      : Dung Vu

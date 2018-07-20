@@ -1,8 +1,7 @@
-//  Project name: FwiCore
-//  File name   : GenericCollectionViewVM.swift
+//  File name   : FwiGenericTableViewCellVM.swift
 //
 //  Author      : Phuc Tran
-//  Created date: 7/15/18
+//  Created date: 7/16/18
 //  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
@@ -39,59 +38,26 @@
 import UIKit
 import Foundation
 
-#if !RX_NO_MODULE
-    import RxSwift
-#endif
 
-
-open class GenericCollectionViewVM<T>: CollectionViewVM {
+open class FwiGenericTableViewCellVM<C: UITableViewCell, M>: FwiGenericTableViewVM<M> {
     
-    // MARK: Class's properties
-    public let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
-    public fileprivate(set) var currentItem: T? = nil {
-        didSet {
-            currentItemSubject.on(.next(currentItem))
+    // MARK: Class's public methods
+    /// Initialize cell at index.
+    ///
+    /// - Parameters:
+    ///   - cell: a UITableView's cell according to index
+    ///   - item: an item at index
+    open func configure(forCell cell: C, with item: M) {
+        fatalError("Child class should override func \(#function)")
+    }
+    
+    // MARK: UITableViewDataSource's members
+    open override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = C.dequeueCell(tableView: tableView)
+        if let item = self[indexPath] {
+            configure(forCell: cell, with: item)
         }
-    }
-    
-    public var items: ArraySlice<T>?
-    
-    // MARK: UICollectionViewDataSource's members
-    open override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return count
-    }
-
-    open override func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        items?.swapAt(sourceIndexPath.row, destinationIndexPath.row)
-    }
-
-    // MARK: UICollectionViewDelegate's members
-    open override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        currentItem = self[indexPath]
-    }
-    open override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        currentItem = nil
-    }
-}
-
-// MARK: Class's subscript
-extension GenericCollectionViewVM {
-    
-    open var count: Int {
-        return items?.count ?? 0
-    }
-    
-    open subscript(index: Int) -> T? {
-        guard 0 <= index && index < count else {
-            return nil
-        }
-        return items?[index]
-    }
-    open subscript(index: IndexPath) -> T? {
-        guard 0 <= index.row && index.row < count else {
-            return nil
-        }
-        return items?[index.row]
+        return cell
     }
 }
 #endif

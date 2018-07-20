@@ -1,8 +1,7 @@
-//  Project name: FwiCore
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : FwiGenericCollectionViewVM.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 12/20/17
+//  Author      : Phuc Tran
+//  Created date: 7/15/18
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -34,28 +33,63 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
+#if canImport(UIKit)
+import UIKit
 import Foundation
 
+#if !RX_NO_MODULE
+    import RxSwift
+#endif
 
-public extension Data {
 
-    @available(*, deprecated, message: "No longer available.", renamed: "read(fromFile:readingMode:)")
-    public static func readFromFile(atURL url: URL?, readingMode mode: Data.ReadingOptions = []) -> Data? {
-        return Data.read(fromFile:url, readingMode: mode)
+open class FwiGenericCollectionViewVM<T>: FwiCollectionViewVM {
+    
+    // MARK: Class's properties
+    public let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
+    public private(set) var currentItem: T? = nil {
+        didSet {
+            currentItemSubject.on(.next(currentItem))
+        }
     }
-
-    @available(*, deprecated, message: "No longer available.", renamed: "write(toFile:options:)")
-    public func writeToFile(toUrl url: URL?, options: Data.WritingOptions = []) -> Error? {
-        return write(toFile: url, options: options)
-    }
-}
-
-public extension String {
-
-    /// Calculate string length.
-    @available(*, deprecated, message: "No longer available.", renamed: "count")
-    public func length() -> Int {
+    
+    public var items: ArraySlice<T>?
+    
+    // MARK: UICollectionViewDataSource's members
+    open override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return count
     }
+
+    open override func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        items?.swapAt(sourceIndexPath.row, destinationIndexPath.row)
+    }
+
+    // MARK: UICollectionViewDelegate's members
+    open override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        currentItem = self[indexPath]
+    }
+    open override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        currentItem = nil
+    }
 }
 
+// MARK: Class's subscript
+extension FwiGenericCollectionViewVM {
+    
+    open var count: Int {
+        return items?.count ?? 0
+    }
+    
+    open subscript(index: Int) -> T? {
+        guard 0 <= index && index < count else {
+            return nil
+        }
+        return items?[index]
+    }
+    open subscript(index: IndexPath) -> T? {
+        guard 0 <= index.row && index.row < count else {
+            return nil
+        }
+        return items?[index.row]
+    }
+}
+#endif

@@ -1,12 +1,9 @@
-//  Project name: FwiCore
-//  File name   : FwiEntityViewModelDelegate.swift
+//  File name   : FwiGenericCollectionViewCellVM.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 12/16/16
-//  Version     : 1.1.0
+//  Author      : Phuc Tran
+//  Created date: 7/19/18
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2017 Fiision Studio.
-//  All Rights Reserved.
+//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -36,19 +33,29 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if os(iOS)
+#if canImport(UIKit)
+import UIKit
 import Foundation
-import CoreData
 
 
-public protocol FwiEntityViewModelDelegate: class {
-    
-    /// Should allow entity view model to perform specific action.
+open class FwiGenericCollectionViewCellVM<C: UICollectionViewCell, M>: FwiGenericCollectionViewVM<M> {
+
+    // MARK: Class's public methods
+    /// Initialize cell at index.
     ///
-    /// - parameter entity view model (required): entity view model
-    /// - parameter deleteArrays (required): array of indexPath to be deleted.
-    /// - parameter insertArrays (required): array of indexPath to be inserted.
-    /// - parameter reloadArrays (required): array of indexPath to be reloaded.
-    func shouldHandle<T>(entityViewModel vm: FwiEntityViewModel<T>, deleteArrays d: [IndexPath]?, insertArrays i: [IndexPath]?, reloadArrays r: [IndexPath]?) -> Bool
+    /// - Parameters:
+    ///   - cell: a UITableView's cell according to index
+    ///   - item: an item at index
+    open func configure(forCell cell: C, with item: M) {
+        fatalError("Child class should override func \(#function)")
+    }
+
+    open override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = C.dequeueCell(collectionView: collectionView, indexPath: indexPath)
+        if let item = self[indexPath] {
+            configure(forCell: cell, with: item)
+        }
+        return cell
+    }
 }
 #endif

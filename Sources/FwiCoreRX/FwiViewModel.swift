@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : FwiViewModel.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -53,7 +52,7 @@ open class FwiViewModel: NSObject {
     }
     
     // MARK: Class's properties
-    public fileprivate(set) var disposeBag: DisposeBag! = DisposeBag()
+    public private(set) var disposeBag: DisposeBag! = DisposeBag()
     
     // MARK: Class's public methods
     open func setupRX() {
