@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : FwiCell.swift
 //
 //  Author      : Dung Vu

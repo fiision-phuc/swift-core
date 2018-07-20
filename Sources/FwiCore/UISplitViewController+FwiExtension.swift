@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : UISplitViewController+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu

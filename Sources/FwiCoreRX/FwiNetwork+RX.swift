@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : FwiNetwork+RX.swift
 //
 //  Author      : Phuc, Tran Huu

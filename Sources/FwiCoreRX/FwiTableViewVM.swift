@@ -1,9 +1,7 @@
-//  Project name: FwiCore
-//  File name   : TableViewVM.swift
+//  File name   : FwiTableViewVM.swift
 //
 //  Author      : Phuc Tran
 //  Created date: 7/14/18
-//  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -47,12 +45,12 @@ import FwiCore
 #endif
 
 
-open class TableViewVM: FwiViewModel {
+open class FwiTableViewVM: FwiViewModel {
 
     // MARK: Class's properties
     public var isEnableEditing = false
     public var isEnableSelecting = false
-    public fileprivate(set) weak var tableView: UITableView?
+    public private(set) weak var tableView: UITableView?
 
     // MARK: Class's constructors
     public init(with tableView: UITableView?) {
@@ -85,7 +83,7 @@ open class TableViewVM: FwiViewModel {
 }
 
 // MARK: UITableViewDataSource's members
-extension TableViewVM: UITableViewDataSource {
+extension FwiTableViewVM: UITableViewDataSource {
     
     open func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -127,7 +125,7 @@ extension TableViewVM: UITableViewDataSource {
 }
 
 // MARK: UITableViewDelegate's members
-extension TableViewVM: UITableViewDelegate {
+extension FwiTableViewVM: UITableViewDelegate {
     
     /// Display customization.
     open func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

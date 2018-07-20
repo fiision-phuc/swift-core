@@ -1,5 +1,4 @@
-//  Project name: FwiCore
-//  File name   : GenericTableViewVM.swift
+//  File name   : FwiGenericTableViewVM.swift
 //
 //  Author      : Phuc Tran
 //  Created date: 7/15/18
@@ -44,11 +43,11 @@ import Foundation
 #endif
 
 
-open class GenericTableViewVM<T>: TableViewVM {
+open class FwiGenericTableViewVM<T>: FwiTableViewVM {
 
     // MARK: Class's properties
     public let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
-    public fileprivate(set) var currentItem: T? = nil {
+    public private(set) var currentItem: T? = nil {
         didSet {
             currentItemSubject.on(.next(currentItem))
         }
@@ -82,7 +81,7 @@ open class GenericTableViewVM<T>: TableViewVM {
 }
 
 // MARK: Class's subscript
-extension GenericTableViewVM {
+extension FwiGenericTableViewVM {
     
     open var count: Int {
         return items?.count ?? 0

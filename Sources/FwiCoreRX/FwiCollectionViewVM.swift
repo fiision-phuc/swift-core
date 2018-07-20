@@ -1,9 +1,7 @@
-//  Project name: FwiCore
-//  File name   : CollectionViewVM.swift
+//  File name   : FwiCollectionViewVM.swift
 //
 //  Author      : Phuc Tran
 //  Created date: 7/14/18
-//  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -47,15 +45,26 @@ import FwiCore
 #endif
 
 
-open class CollectionViewVM: FwiViewModel {
+open class FwiCollectionViewVM: FwiViewModel {
 
     // MARK: Class's properties
-    public fileprivate(set) weak var collectionView: UICollectionView?
-    
+    public private(set) weak var collectionView: UICollectionView?
+    public var isEnableOrdering = false {
+        didSet {
+            longPressGesture?.isEnabled = isEnableOrdering
+        }
+    }
+
+    private var longPressGesture: UILongPressGestureRecognizer?
+
     // MARK: Class's constructors
     public init(with collectionView: UICollectionView?) {
         super.init()
         self.collectionView = collectionView
+
+        if #available(iOS 9.0, *) {
+            self.longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(FwiCollectionViewVM.handle(longPressGesture:)))
+        }
     }
     
     // MARK: Class's public methods
@@ -67,11 +76,41 @@ open class CollectionViewVM: FwiViewModel {
         collectionView?.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
+
+        if #available(iOS 9.0, *) {
+            longPressGesture?.isEnabled = isEnableOrdering
+            if let gesture = longPressGesture {
+                collectionView?.addGestureRecognizer(gesture)
+            }
+        }
+    }
+
+    // MARK: Class's private methods
+    @available(iOS 9.0, *)
+    @objc private func handle(longPressGesture gesture: UILongPressGestureRecognizer) {
+        let location = gesture.location(in: gesture.view)
+
+        switch(gesture.state) {
+        case .began:
+            guard let indexPath = collectionView?.indexPathForItem(at: location) else {
+                break
+            }
+            collectionView?.beginInteractiveMovementForItem(at: indexPath)
+
+        case .changed:
+            collectionView?.updateInteractiveMovementTargetPosition(location)
+
+        case .ended:
+            collectionView?.endInteractiveMovement()
+
+        default:
+            collectionView?.cancelInteractiveMovement()
+        }
     }
 }
 
 // MARK: UICollectionViewDataSource's members
-extension CollectionViewVM: UICollectionViewDataSource {
+extension FwiCollectionViewVM: UICollectionViewDataSource {
 
     open func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -106,7 +145,7 @@ extension CollectionViewVM: UICollectionViewDataSource {
 }
 
 // MARK: UICollectionViewDelegate's members
-extension CollectionViewVM: UICollectionViewDelegate {
+extension FwiCollectionViewVM: UICollectionViewDelegate {
 
     /// Display customization.
     open func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -158,7 +197,7 @@ extension CollectionViewVM: UICollectionViewDelegate {
 }
 
 // MARK: UICollectionViewDelegateFlowLayout's members
-extension CollectionViewVM: UICollectionViewDelegateFlowLayout {
+extension FwiCollectionViewVM: UICollectionViewDelegateFlowLayout {
     
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         fatalError("Child class should override func \(#function)")

@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : FileManager+FwiExtension.swift
 //
 //  Author      : Dung Vu

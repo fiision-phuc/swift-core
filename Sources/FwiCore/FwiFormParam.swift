@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : FwiFormParam.swift
 //
 //  Author      : Phuc, Tran Huu
@@ -46,8 +45,8 @@ struct FwiFormParam {
     }
 
     // MARK: Class's properties
-    public fileprivate (set) var key: String
-    public fileprivate (set) var value: String
+    public private(set) var key: String
+    public private(set) var value: String
 
     // MARK: Struct's private methods
     public var hashValue: Int {

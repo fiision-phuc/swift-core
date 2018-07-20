@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : FwiCore.swift
 //
 //  Author      : Phuc, Tran Huu

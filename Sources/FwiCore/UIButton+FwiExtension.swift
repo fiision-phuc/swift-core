@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : UIButton+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu

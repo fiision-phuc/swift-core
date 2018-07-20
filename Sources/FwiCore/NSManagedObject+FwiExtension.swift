@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : NSManagedObject+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu

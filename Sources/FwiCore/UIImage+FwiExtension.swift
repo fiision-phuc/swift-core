@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : UIImage+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu

@@ -1,4 +1,3 @@
-//  Project name: FwiCore
 //  File name   : UITabBarController+FwiExtension.swift
 //
 //  Author      : Phuc, Tran Huu
