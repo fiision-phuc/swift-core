@@ -47,7 +47,7 @@ open class FwiGenericTableViewVM<T>: FwiTableViewVM {
 
     // MARK: Class's properties
     public let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
-    public private(set) var currentItem: T? = nil {
+    open var currentItem: T? = nil {
         didSet {
             currentItemSubject.on(.next(currentItem))
         }
