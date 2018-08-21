@@ -2,6 +2,7 @@ xcshareddata/
 xcuserdata/
 .build/
 build/
+Carthage/
 
 **/*-LICENSE
 *-LICENSE
@@ -18,5 +19,4 @@ LICENSE
 *.md
 *.txt
 *.zip
-.DS_Store
-Package.resolved
+*.resolved
