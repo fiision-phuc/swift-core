@@ -1,3 +1,4 @@
+import Foundation
 //  File name   : FwiGenericTableViewVM.swift
 //
 //  Author      : Phuc Tran
@@ -35,69 +36,64 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
-import Foundation
-
-#if !RX_NO_MODULE
     import RxSwift
-#endif
+    import UIKit
 
+    open class FwiGenericTableViewVM<T>: FwiTableViewVM {
+        // MARK: Class's properties
+        public let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
+        open var currentItem: T? {
+            didSet {
+                currentItemSubject.on(.next(currentItem))
+            }
+        }
 
-open class FwiGenericTableViewVM<T>: FwiTableViewVM {
+        public var items: ArraySlice<T>?
 
-    // MARK: Class's properties
-    public let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
-    open var currentItem: T? = nil {
-        didSet {
-            currentItemSubject.on(.next(currentItem))
+        // MARK: UITableViewDataSource's members
+        open override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return count
+        }
+
+        open override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+            if editingStyle == .delete {
+                items?.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .left)
+            }
+        }
+
+        open override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+            items?.swapAt(sourceIndexPath.row, destinationIndexPath.row)
+        }
+
+        // MARK: UITableViewDelegate's members
+        open override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            currentItem = self[indexPath]
+        }
+
+        open override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+            currentItem = nil
         }
     }
-    
-    public var items: ArraySlice<T>?
-    
-    // MARK: UITableViewDataSource's members
-    open override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return count
-    }
 
-    open override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            items?.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .left)
+    // MARK: Class's subscript
+    extension FwiGenericTableViewVM {
+        open var count: Int {
+            return items?.count ?? 0
+        }
+
+        open subscript(index: Int) -> T? {
+            guard 0 <= index && index < count else {
+                return nil
+            }
+            return items?[index]
+        }
+
+        open subscript(index: IndexPath) -> T? {
+            guard 0 <= index.row && index.row < count else {
+                return nil
+            }
+            return items?[index.row]
         }
     }
-    
-    open override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        items?.swapAt(sourceIndexPath.row, destinationIndexPath.row)
-    }
-
-    // MARK: UITableViewDelegate's members
-    open override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        currentItem = self[indexPath]
-    }
-    open override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        currentItem = nil
-    }
-}
-
-// MARK: Class's subscript
-extension FwiGenericTableViewVM {
-    
-    open var count: Int {
-        return items?.count ?? 0
-    }
-    
-    open subscript(index: Int) -> T? {
-        guard 0 <= index && index < count else {
-            return nil
-        }
-        return items?[index]
-    }
-    open subscript(index: IndexPath) -> T? {
-        guard 0 <= index.row && index.row < count else {
-            return nil
-        }
-        return items?[index.row]
-    }
-}
 #endif

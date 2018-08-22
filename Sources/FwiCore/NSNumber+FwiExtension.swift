@@ -35,9 +35,7 @@
 
 import Foundation
 
-
 public extension NSNumber {
-
     /// Display number to specific currency format.
     ///
     /// - parameter ISO3 (required): currency's ISO3
@@ -48,14 +46,14 @@ public extension NSNumber {
         // Initialize currency format object
         let locale = Locale(identifier: "en_US")
         let currencyFormat = NumberFormatter()
-        
+
         // Layout currency
         currencyFormat.formatterBehavior = NumberFormatter.Behavior.behavior10_4
         currencyFormat.roundingMode = NumberFormatter.RoundingMode.halfUp
         currencyFormat.numberStyle = NumberFormatter.Style.currency
         currencyFormat.generatesDecimalNumbers = true
         currencyFormat.locale = locale
-        
+
         currencyFormat.currencyDecimalSeparator = decimal
         currencyFormat.currencyGroupingSeparator = grouping
         if isSymbol {

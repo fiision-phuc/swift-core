@@ -35,10 +35,8 @@
 
 import Foundation
 
-
 // MARK: Optional
 public extension KeyedDecodingContainer {
-
     /// Bool.
     public func parse(_ input: inout Bool?, key: KeyedDecodingContainer.Key) {
         do {
@@ -108,6 +106,7 @@ public extension KeyedDecodingContainer {
             input = nil
         }
     }
+
     public func parse<T: Codable & UnsignedInteger>(_ input: inout T?, key: KeyedDecodingContainer.Key) {
         do {
             input = numericCast(try decode(UInt64.self, forKey: key))
@@ -190,7 +189,6 @@ public extension KeyedDecodingContainer {
 
 // MARK: Non optional
 public extension KeyedDecodingContainer {
-
     /// Bool.
     public func parse(_ input: inout Bool, key: KeyedDecodingContainer.Key) {
         var value: Bool?
@@ -222,6 +220,7 @@ public extension KeyedDecodingContainer {
 
         input = value ?? 0
     }
+
     public func parse<T: Codable & UnsignedInteger>(_ input: inout T, key: KeyedDecodingContainer.Key) {
         var value: T?
         parse(&value, key: key)

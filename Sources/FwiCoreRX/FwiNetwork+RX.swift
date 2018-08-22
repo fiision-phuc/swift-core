@@ -33,17 +33,12 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import Foundation
 import Alamofire
+import Foundation
 import FwiCore
-
-#if !RX_NO_MODULE
-    import RxSwift
-#endif
-
+import RxSwift
 
 public extension FwiNetwork {
-
     /// Reactive wrapper for `download(resource:method:params:encoding:headers:completion:)` function.
     ///
     /// - seealso:
@@ -51,13 +46,12 @@ public extension FwiNetwork {
     /// (https://github.com/phuc0302/swift-core/blob/master/Sources/FwiNetwork.swift)
     public static func downloadResource(_ r: URLConvertible?,
                                         method m: HTTPMethod = .get,
-                                        params p: [String:String]? = nil,
+                                        params p: [String: String]? = nil,
                                         encoding e: ParameterEncoding = URLEncoding.`default`,
                                         headers h: [String: String]? = nil,
-                                        destination d: URLConvertible? = nil) -> Observable<(HTTPURLResponse, URL)>
-    {
+                                        destination d: URLConvertible? = nil) -> Observable<(HTTPURLResponse, URL)> {
         return Observable.create { observer in
-            let t = FwiNetwork.download(resource: r, method: m, params: p, encoding: e, headers: h, destination: d, completion: { (url, err, res) in
+            let t = FwiNetwork.download(resource: r, method: m, params: p, encoding: e, headers: h, destination: d, completion: { url, err, res in
                 /* Condition validation: validate network's status */
                 guard let response = res, let location = url else {
                     observer.on(.error(err ?? NSError(domain: NSURLErrorDomain, code: URLError.badServerResponse.rawValue, userInfo: nil)))
@@ -82,12 +76,11 @@ public extension FwiNetwork {
     /// (https://github.com/phuc0302/swift-core/blob/master/Sources/FwiNetwork.swift)
     public static func sendRequest(_ r: URLConvertible?,
                                    method m: HTTPMethod = .get,
-                                   params p: [String:String]? = nil,
+                                   params p: [String: String]? = nil,
                                    encoding e: ParameterEncoding = URLEncoding.`default`,
-                                   headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, Data)>
-    {
+                                   headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, Data)> {
         return Observable.create { observer in
-            let t = FwiNetwork.send(request: r, method: m, params: p, encoding: e, headers: h, completion: { (d, err, res) in
+            let t = FwiNetwork.send(request: r, method: m, params: p, encoding: e, headers: h, completion: { d, err, res in
                 /* Condition validation: validate network's status */
                 guard let response = res, let data = d else {
                     observer.on(.error(err ?? NSError(domain: NSURLErrorDomain, code: URLError.badServerResponse.rawValue, userInfo: nil)))

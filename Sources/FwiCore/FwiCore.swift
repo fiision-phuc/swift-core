@@ -35,7 +35,6 @@
 
 import Foundation
 
-
 public func FwiLog(_ message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
     #if DEBUG
         if let name = className.split("/").last, name.count > 0 {

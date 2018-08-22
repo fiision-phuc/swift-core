@@ -1,3 +1,4 @@
+import Foundation
 //  File name   : FwiGenericTableViewCellVM.swift
 //
 //  Author      : Phuc Tran
@@ -35,29 +36,26 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
-import Foundation
+    import UIKit
 
-
-open class FwiGenericTableViewCellVM<C: UITableViewCell, M>: FwiGenericTableViewVM<M> {
-    
-    // MARK: Class's public methods
-    /// Initialize cell at index.
-    ///
-    /// - Parameters:
-    ///   - cell: a UITableView's cell according to index
-    ///   - item: an item at index
-    open func configure(forCell cell: C, with item: M) {
-        fatalError("Child class should override func \(#function)")
-    }
-    
-    // MARK: UITableViewDataSource's members
-    open override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = C.dequeueCell(tableView: tableView)
-        if let item = self[indexPath] {
-            configure(forCell: cell, with: item)
+    open class FwiGenericTableViewCellVM<C: UITableViewCell, M>: FwiGenericTableViewVM<M> {
+        // MARK: Class's public methods
+        /// Initialize cell at index.
+        ///
+        /// - Parameters:
+        ///   - cell: a UITableView's cell according to index
+        ///   - item: an item at index
+        open func configure(forCell cell: C, with item: M) {
+            fatalError("Child class should override func \(#function)")
         }
-        return cell
+
+        // MARK: UITableViewDataSource's members
+        open override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = C.dequeueCell(tableView: tableView)
+            if let item = self[indexPath] {
+                configure(forCell: cell, with: item)
+            }
+            return cell
+        }
     }
-}
 #endif

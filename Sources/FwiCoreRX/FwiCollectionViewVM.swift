@@ -1,3 +1,7 @@
+import Foundation
+/// Optional
+import RxCocoa
+import UIKit
 //  File name   : FwiCollectionViewVM.swift
 //
 //  Author      : Phuc Tran
@@ -34,179 +38,178 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
-import Foundation
-/// Optional
-import FwiCore
-
-#if !RX_NO_MODULE
+    import FwiCore
     import RxSwift
-    import RxCocoa
-#endif
 
-
-open class FwiCollectionViewVM: FwiViewModel {
-
-    // MARK: Class's properties
-    public private(set) weak var collectionView: UICollectionView?
-    public var isEnableOrdering = false {
-        didSet {
-            longPressGesture?.isEnabled = isEnableOrdering
+    open class FwiCollectionViewVM: FwiViewModel {
+        // MARK: Class's properties
+        public private(set) weak var collectionView: UICollectionView?
+        public var isEnableOrdering = false {
+            didSet {
+                longPressGesture?.isEnabled = isEnableOrdering
+            }
         }
-    }
 
-    private var longPressGesture: UILongPressGestureRecognizer?
+        private var longPressGesture: UILongPressGestureRecognizer?
 
-    // MARK: Class's constructors
-    public init(with collectionView: UICollectionView?) {
-        super.init()
-        self.collectionView = collectionView
+        // MARK: Class's constructors
+        public init(with collectionView: UICollectionView?) {
+            super.init()
+            self.collectionView = collectionView
 
-        if #available(iOS 9.0, *) {
-            self.longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(FwiCollectionViewVM.handle(longPressGesture:)))
+            if #available(iOS 9.0, *) {
+                self.longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(FwiCollectionViewVM.handle(longPressGesture:)))
+            }
         }
-    }
-    
-    // MARK: Class's public methods
-    open override func setupRX() {
-        collectionView?.rx
-            .setDataSource(self)
-            .disposed(by: disposeBag)
 
-        collectionView?.rx
-            .setDelegate(self)
-            .disposed(by: disposeBag)
+        // MARK: Class's public methods
+        open override func setupRX() {
+            collectionView?.rx
+                .setDataSource(self)
+                .disposed(by: disposeBag)
 
-        if #available(iOS 9.0, *) {
-            longPressGesture?.isEnabled = isEnableOrdering
-            if let gesture = longPressGesture {
-                collectionView?.addGestureRecognizer(gesture)
+            collectionView?.rx
+                .setDelegate(self)
+                .disposed(by: disposeBag)
+
+            if #available(iOS 9.0, *) {
+                longPressGesture?.isEnabled = isEnableOrdering
+                if let gesture = longPressGesture {
+                    collectionView?.addGestureRecognizer(gesture)
+                }
+            }
+        }
+
+        // MARK: Class's private methods
+        @available(iOS 9.0, *)
+        @objc private func handle(longPressGesture gesture: UILongPressGestureRecognizer) {
+            let location = gesture.location(in: gesture.view)
+
+            switch gesture.state {
+            case .began:
+                guard let indexPath = collectionView?.indexPathForItem(at: location) else {
+                    break
+                }
+                collectionView?.beginInteractiveMovementForItem(at: indexPath)
+
+            case .changed:
+                collectionView?.updateInteractiveMovementTargetPosition(location)
+
+            case .ended:
+                collectionView?.endInteractiveMovement()
+
+            default:
+                collectionView?.cancelInteractiveMovement()
             }
         }
     }
 
-    // MARK: Class's private methods
-    @available(iOS 9.0, *)
-    @objc private func handle(longPressGesture gesture: UILongPressGestureRecognizer) {
-        let location = gesture.location(in: gesture.view)
+    // MARK: UICollectionViewDataSource's members
+    extension FwiCollectionViewVM: UICollectionViewDataSource {
+        open func numberOfSections(in collectionView: UICollectionView) -> Int {
+            return 1
+        }
 
-        switch(gesture.state) {
-        case .began:
-            guard let indexPath = collectionView?.indexPathForItem(at: location) else {
-                break
-            }
-            collectionView?.beginInteractiveMovementForItem(at: indexPath)
+        open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+            fatalError("Child class should override func \(#function)")
+        }
 
-        case .changed:
-            collectionView?.updateInteractiveMovementTargetPosition(location)
+        open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            fatalError("Child class should override func \(#function)")
+        }
 
-        case .ended:
-            collectionView?.endInteractiveMovement()
+        /// Moving/reordering
+        @available(iOS 9.0, *)
+        open func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+            return true
+        }
 
-        default:
-            collectionView?.cancelInteractiveMovement()
+        /// Index.
+        open func indexTitles(for collectionView: UICollectionView) -> [String]? {
+            return nil
+        }
+
+        open func collectionView(_ collectionView: UICollectionView, indexPathForIndexTitle title: String, at index: Int) -> IndexPath {
+            return IndexPath(item: 0, section: 0)
+        }
+
+        /// Data manipulation - reorder / moving support.
+        @available(iOS 9.0, *)
+        open func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         }
     }
-}
 
-// MARK: UICollectionViewDataSource's members
-extension FwiCollectionViewVM: UICollectionViewDataSource {
+    // MARK: UICollectionViewDelegate's members
+    extension FwiCollectionViewVM: UICollectionViewDelegate {
+        /// Display customization.
+        open func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        }
 
-    open func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
+        open func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        }
 
-    open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        fatalError("Child class should override func \(#function)")
-    }
-    
-    open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        fatalError("Child class should override func \(#function)")
-    }
+        open func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+        }
 
-    /// Moving/reordering
-    @available(iOS 9.0, *)
-    open func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
+        open func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
+        }
 
-    /// Index.
-    open func indexTitles(for collectionView: UICollectionView) -> [String]? {
-        return nil
-    }
-    open func collectionView(_ collectionView: UICollectionView, indexPathForIndexTitle title: String, at index: Int) -> IndexPath {
-        return IndexPath(item: 0, section: 0)
-    }
+        /// Selection.
+        open func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+            return true
+        }
 
-    /// Data manipulation - reorder / moving support.
-    @available(iOS 9.0, *)
-    open func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-    }
-}
+        open func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        }
 
-// MARK: UICollectionViewDelegate's members
-extension FwiCollectionViewVM: UICollectionViewDelegate {
+        open func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+        }
 
-    /// Display customization.
-    open func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-    }
-    open func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-    }
+        open func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+            return true
+        }
 
-    open func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
-    }
-    open func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
-    }
+        open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        }
 
-    /// Selection.
-    open func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    open func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-    }
-    open func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-    }
+        open func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
+            return true
+        }
 
-    open func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        open func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        }
+
+        /// Moving/reordering
+        @available(iOS 9.0, *)
+        open func collectionView(_ collectionView: UICollectionView, targetIndexPathForMoveFromItemAt originalIndexPath: IndexPath, toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath {
+            return proposedIndexPath
+        }
+
+        /// Copy/Paste. All three methods must be implemented by the delegate.
+        open func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
+            return false
+        }
+
+        open func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
+            return false
+        }
+
+        open func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
+        }
     }
 
-    open func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    open func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-    }
+    // MARK: UICollectionViewDelegateFlowLayout's members
+    extension FwiCollectionViewVM: UICollectionViewDelegateFlowLayout {
+        open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+            fatalError("Child class should override func \(#function)")
+        }
 
-    /// Moving/reordering
-    @available(iOS 9.0, *)
-    open func collectionView(_ collectionView: UICollectionView, targetIndexPathForMoveFromItemAt originalIndexPath: IndexPath, toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath {
-        return proposedIndexPath
-    }
+        open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+            return 10.0
+        }
 
-    /// Copy/Paste. All three methods must be implemented by the delegate.
-    open func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
+        open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+            return 10.0
+        }
     }
-    open func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-    open func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    }
-}
-
-// MARK: UICollectionViewDelegateFlowLayout's members
-extension FwiCollectionViewVM: UICollectionViewDelegateFlowLayout {
-    
-    open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        fatalError("Child class should override func \(#function)")
-    }
-    open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10.0
-    }
-    open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 10.0
-    }
-}
 #endif

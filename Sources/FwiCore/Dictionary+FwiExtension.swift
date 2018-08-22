@@ -35,19 +35,17 @@
 
 import Foundation
 
-
 public extension Dictionary {
-
     /// Load dictionary from plist.
     ///
     /// - parameter plistname (required): the plist's name
     /// - parameter plistFormat (optional): the plist's format, default is xml
     /// - parameter bundle (optional): which bundle contains the plist file
-    public static func loadPlist(withPlistname n: String, plistFormat f: PropertyListSerialization.PropertyListFormat = .xml, fromBundle b: Bundle = Bundle.main) -> [String:Any]? {
-        guard let url = Bundle.main.url(forResource: n, withExtension: "plist"),let data = try? Data(contentsOf: url) else {
+    public static func loadPlist(withPlistname n: String, plistFormat f: PropertyListSerialization.PropertyListFormat = .xml, fromBundle b: Bundle = Bundle.main) -> [String: Any]? {
+        guard let url = Bundle.main.url(forResource: n, withExtension: "plist"), let data = try? Data(contentsOf: url) else {
             return nil
         }
-        
-        return (try? PropertyListSerialization.propertyList(from: data, options: .mutableContainers, format: nil)) as? [String : Any]
+
+        return (try? PropertyListSerialization.propertyList(from: data, options: .mutableContainers, format: nil)) as? [String: Any]
     }
 }

@@ -35,9 +35,7 @@
 
 import Foundation
 
-
 public extension FileManager {
-    
     // MARK: Directory manager
     /// Create directory for a given URL.
     ///
@@ -48,7 +46,7 @@ public extension FileManager {
         guard let url = url, url.isFileURL && url != URL.documentDirectory() && url != URL.cacheDirectory() else {
             return NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Invalid directory's URL."])
         }
-        
+
         do {
             try createDirectory(at: url, withIntermediateDirectories: intermediate, attributes: attributes)
             return nil
@@ -56,7 +54,7 @@ public extension FileManager {
             return err
         }
     }
-    
+
     /// Check if directory is available for a given URL.
     ///
     /// - parameter url (required): destination url
@@ -64,7 +62,7 @@ public extension FileManager {
         guard let path = url?.path else {
             return false
         }
-        
+
         var isDirectory: ObjCBool = false
         let isExist = fileExists(atPath: path, isDirectory: &isDirectory)
         return isExist && isDirectory.boolValue
@@ -86,7 +84,7 @@ public extension FileManager {
     public func removeDirectory(atURL url: URL?) -> Error? {
         return removeFile(atURL: url)
     }
-    
+
     // MARK: File manager
     /// Check if file is available for a given URL.
     ///
@@ -97,7 +95,7 @@ public extension FileManager {
         }
         return fileExists(atPath: path)
     }
-    
+
     /// Move file from source's URL to destination's URL.
     ///
     /// - parameter from (required): source url
@@ -107,7 +105,7 @@ public extension FileManager {
         guard let srcURL = srcURL, let dstURL = dstURL else {
             return NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Invalid file's source's URL or destination's URL."])
         }
-        
+
         do {
             try moveItem(at: srcURL, to: dstURL)
             return nil
@@ -115,16 +113,16 @@ public extension FileManager {
             return err
         }
     }
-    
+
     /// Remove file for a given URL.
     ///
     /// - parameter url (required): source url
     @discardableResult
     public func removeFile(atURL url: URL?) -> Error? {
-        guard let url = url , fileExists(atURL: url) else {
+        guard let url = url, fileExists(atURL: url) else {
             return NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Invalid file's URL."])
         }
-        
+
         do {
             try removeItem(at: url)
             return nil
@@ -133,4 +131,3 @@ public extension FileManager {
         }
     }
 }
-

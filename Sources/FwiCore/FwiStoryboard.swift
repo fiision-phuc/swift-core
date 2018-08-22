@@ -34,41 +34,37 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 
+    /// FwiStoryboard defines instruction on how to load a storyboard.
+    public protocol FwiStoryboard {
+        /// Storyboard's name
+        static var name: String { get }
 
-/// FwiStoryboard defines instruction on how to load a storyboard.
-public protocol FwiStoryboard {
-    
-    /// Storyboard's name
-    static var name: String { get }
-    
-    /// Which bundle that a storyboard comes from. If nil, default bundle will be used.
-    static var bundle: Bundle? { get }
-}
+        /// Which bundle that a storyboard comes from. If nil, default bundle will be used.
+        static var bundle: Bundle? { get }
+    }
 
-/// Default implementation for FwiStoryboard.
-public extension FwiStoryboard {
-    
-    static var bundle: Bundle?  {
-        return nil
+    /// Default implementation for FwiStoryboard.
+    public extension FwiStoryboard {
+        static var bundle: Bundle? {
+            return nil
+        }
     }
-}
-    
-/// FwiStoryboard has addon function only when self is UIViewController.
-public extension FwiStoryboard where Self: UIViewController {
-    
-    /// Create view controller from storyboard.
-    public static func instantiate() -> Self? {
-        let storyboard = UIStoryboard(name: name, bundle: bundle)
-        return instantiate(from: storyboard)
+
+    /// FwiStoryboard has addon function only when self is UIViewController.
+    public extension FwiStoryboard where Self: UIViewController {
+        /// Create view controller from storyboard.
+        public static func instantiate() -> Self? {
+            let storyboard = UIStoryboard(name: name, bundle: bundle)
+            return instantiate(from: storyboard)
+        }
+
+        /// Create view controller from defined storyboard.
+        ///
+        /// - parameter storyboard (required): storyboard's instance
+        public static func instantiate(from storyboard: UIStoryboard) -> Self? {
+            return storyboard.instantiateViewController(withIdentifier: identifier) as? Self
+        }
     }
-    
-    /// Create view controller from defined storyboard.
-    ///
-    /// - parameter storyboard (required): storyboard's instance
-    public static func instantiate(from storyboard: UIStoryboard) -> Self? {
-        return storyboard.instantiateViewController(withIdentifier: identifier) as? Self
-    }
-}
 #endif

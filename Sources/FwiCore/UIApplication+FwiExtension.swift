@@ -34,49 +34,49 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 
-
-public extension UIApplication {
-
-    /// Define whether the device is iPad or not.
-    public class var isPad: Bool {
-        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad
-    }
-    /// Define whether the device is iPhone or not.
-    public class var isPhone: Bool {
-        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone
-    }
-
-    /// Return iOS major version.
-    public class var osMajor: Int {
-        let token = UIDevice.current.systemVersion.split(".")
-        if let major = Int(token[0]) {
-            return major
+    public extension UIApplication {
+        /// Define whether the device is iPad or not.
+        public class var isPad: Bool {
+            return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad
         }
-        return 0
-    }
-    /// Return iOS minor version.
-    public class var osMinor: Int {
-        let token = UIDevice.current.systemVersion.split(".")
-        if let minor = Int(token[1]) , token.count >= 2 {
-            return minor
+
+        /// Define whether the device is iPhone or not.
+        public class var isPhone: Bool {
+            return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone
         }
-        return 0
-    }
 
-    /// Enable remote notification.
-    public class func enableRemoteNotification() {
-        #if targetEnvironment(simulator)
-            print("Remote notification does not support this device.")
-        #else
-            let notificationType = UIUserNotificationType.alert.union(UIUserNotificationType.badge)
-                                                               .union(UIUserNotificationType.sound)
+        /// Return iOS major version.
+        public class var osMajor: Int {
+            let token = UIDevice.current.systemVersion.split(".")
+            if let major = Int(token[0]) {
+                return major
+            }
+            return 0
+        }
 
-            let settings = UIUserNotificationSettings(types: notificationType, categories: nil)
-            UIApplication.shared.registerUserNotificationSettings(settings)
-            UIApplication.shared.registerForRemoteNotifications()
-        #endif
+        /// Return iOS minor version.
+        public class var osMinor: Int {
+            let token = UIDevice.current.systemVersion.split(".")
+            if let minor = Int(token[1]), token.count >= 2 {
+                return minor
+            }
+            return 0
+        }
+
+        /// Enable remote notification.
+        public class func enableRemoteNotification() {
+            #if targetEnvironment(simulator)
+                print("Remote notification does not support this device.")
+            #else
+                let notificationType = UIUserNotificationType.alert.union(UIUserNotificationType.badge)
+                    .union(UIUserNotificationType.sound)
+
+                let settings = UIUserNotificationSettings(types: notificationType, categories: nil)
+                UIApplication.shared.registerUserNotificationSettings(settings)
+                UIApplication.shared.registerForRemoteNotifications()
+            #endif
+        }
     }
-}
 #endif

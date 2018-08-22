@@ -33,17 +33,15 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import Foundation
 import CoreData
-
+import Foundation
 
 public extension NSManagedObject {
-
     /// Return entity's name.
     public static var entityName: String {
         return "\(self)"
     }
-    
+
     /// Remove self from database.
     public func remove() {
         managedObjectContext?.performAndWait({ [weak self] in

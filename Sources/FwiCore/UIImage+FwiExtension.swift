@@ -34,53 +34,50 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 
+    public extension UIImage {
+        /// Create circular image from original image with specific size.
+        ///
+        /// @param
+        /// - size {CGFloat} (the circular image's diameter)
+        public func circularImage(withSize size: CGFloat) -> UIImage? {
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: size, height: size), false, UIScreen.main.scale)
+            let rect = CGRect(x: 0, y: 0, width: size, height: size)
 
-public extension UIImage {
+            UIBezierPath(roundedRect: rect, cornerRadius: (rect.width / 2)).addClip()
+            draw(in: rect)
 
-    /// Create circular image from original image with specific size.
-    ///
-    /// @param
-    /// - size {CGFloat} (the circular image's diameter)
-    public func circularImage(withSize size: CGFloat) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(CGSize(width: size, height: size), false, UIScreen.main.scale)
-        let rect = CGRect(x: 0, y: 0, width: size, height: size)
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
 
-        UIBezierPath(roundedRect: rect, cornerRadius: (rect.width / 2)).addClip()
-        draw(in: rect)
+            return newImage
+        }
 
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
+        /// Create circular image from original image with specific size and badge.
+        ///
+        /// @param
+        /// - size {CGFloat} (the circular image's diameter)
+        public func circularImage(withSize size: CGFloat, point p: CGPoint, radius r: CGFloat = 2) -> UIImage? {
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: size, height: size), false, UIScreen.main.scale)
+            let rect = CGRect(x: 0, y: 0, width: size, height: size)
+            let ctx = UIGraphicsGetCurrentContext()!
 
-        return newImage
+            // Draw circular
+            ctx.saveGState()
+            UIBezierPath(roundedRect: rect, cornerRadius: (rect.width / 2)).addClip()
+            draw(in: rect)
+            ctx.restoreGState()
+
+            ctx.saveGState()
+            UIColor.red.setFill()
+            ctx.fillEllipse(in: CGRect(x: p.x, y: p.y, width: r * 2, height: r * 2))
+            ctx.saveGState()
+
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+
+            return newImage
+        }
     }
-
-    /// Create circular image from original image with specific size and badge.
-    ///
-    /// @param
-    /// - size {CGFloat} (the circular image's diameter)
-    public func circularImage(withSize size: CGFloat, point p: CGPoint, radius r: CGFloat = 2) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(CGSize(width: size, height: size), false, UIScreen.main.scale)
-        let rect = CGRect(x: 0, y: 0, width: size, height: size)
-        let ctx = UIGraphicsGetCurrentContext()!
-
-        // Draw circular
-        ctx.saveGState()
-        UIBezierPath(roundedRect: rect, cornerRadius: (rect.width / 2)).addClip()
-        draw(in: rect)
-        ctx.restoreGState()
-
-
-        ctx.saveGState()
-        UIColor.red.setFill()
-        ctx.fillEllipse(in: CGRect(x: p.x, y: p.y, width: r*2, height: r*2))
-        ctx.saveGState()
-
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
-        return newImage
-    }
-}
 #endif

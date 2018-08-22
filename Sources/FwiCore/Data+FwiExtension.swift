@@ -35,31 +35,29 @@
 
 import Foundation
 
-
 public extension Data {
-
     /// Return raw data.
     public func bytes() -> [UInt8] {
         guard count > 0 else {
             return []
         }
         var bytes = [UInt8](repeating: 0, count: count)
-        
+
         copyBytes(to: &bytes, from: Range<Data.Index>(uncheckedBounds: (lower: 0, upper: count)))
         return bytes
     }
-    
+
     /// Clear all bytes data.
     public mutating func clearBytes() {
         /* Condition validation */
         if count <= 0 {
             return
         }
-        
+
         let step = count >> 1
         var end = count - 1
-        
-        for i in 0 ..< step {
+
+        for i in 0..<step {
             self[end] = 0
             self[i] = 0
             end -= 1
@@ -81,7 +79,7 @@ public extension Data {
         let step = count >> 1
         var end = count - 1
 
-        for i in 0 ..< step {
+        for i in 0..<step {
             let temp = self[i]
 
             self[i] = self[end]
@@ -89,7 +87,7 @@ public extension Data {
             end -= 1
         }
     }
-    
+
     /// Convert data to string base on string encoding type.
     ///
     /// - parameter stringEncoding (optional): string encoding, default is UTF-8
@@ -100,7 +98,7 @@ public extension Data {
         }
         return String(data: self, encoding: encoding)
     }
-    
+
     // MARK: File I/O
     /// Read data from file.
     ///
@@ -112,7 +110,7 @@ public extension Data {
         }
         return try? Data(contentsOf: url, options: mode)
     }
-    
+
     /// Write data to file.
     ///
     /// - parameter url (required): destination url to write to
@@ -122,7 +120,7 @@ public extension Data {
         guard let url = url, url.isFileURL else {
             return NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: nil)
         }
-        
+
         do {
             try self.write(to: url, options: options)
             return nil

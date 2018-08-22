@@ -35,13 +35,11 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 
-
-extension UIAlertController {
-
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .all
+    extension UIAlertController {
+        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+            return .all
+        }
     }
-}
 #endif

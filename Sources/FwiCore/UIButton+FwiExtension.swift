@@ -34,35 +34,33 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 
+    public extension UIButton {
+        /// Apply background to button.
+        public func applyBackgroundImage(_ imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)) {
+            let imageDefault = UIImage(named: "\(imageName)_Default")?.resizableImage(withCapInsets: edgeInsets)
+            let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImage(withCapInsets: edgeInsets)
+            let imageSelected = UIImage(named: "\(imageName)_Selected")?.resizableImage(withCapInsets: edgeInsets)
+            let imageDisabled = UIImage(named: "\(imageName)_Disabled")?.resizableImage(withCapInsets: edgeInsets)
 
-public extension UIButton {
+            self.setImage(imageDefault, for: UIControlState())
+            self.setImage(imageHighlighted, for: UIControlState.highlighted)
+            self.setImage(imageSelected, for: UIControlState.selected)
+            self.setImage(imageDisabled, for: UIControlState.disabled)
+        }
 
-    /// Apply background to button.
-    public func applyBackgroundImage(_ imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)) {
-        let imageDefault = UIImage(named: "\(imageName)_Default")?.resizableImage(withCapInsets: edgeInsets)
-        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImage(withCapInsets: edgeInsets)
-        let imageSelected = UIImage(named: "\(imageName)_Selected")?.resizableImage(withCapInsets: edgeInsets)
-        let imageDisabled = UIImage(named: "\(imageName)_Disabled")?.resizableImage(withCapInsets: edgeInsets)
+        /// Apply image to button.
+        public func applyImage(_ imageName: String) {
+            let imageDefault = UIImage(named: "\(imageName)_Default")
+            let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")
+            let imageSelected = UIImage(named: "\(imageName)_Selected")
+            let imageDisabled = UIImage(named: "\(imageName)_Disabled")
 
-        self.setImage(imageDefault, for: UIControlState())
-        self.setImage(imageHighlighted, for: UIControlState.highlighted)
-        self.setImage(imageSelected, for: UIControlState.selected)
-        self.setImage(imageDisabled, for: UIControlState.disabled)
+            self.setImage(imageDefault, for: UIControlState())
+            self.setImage(imageHighlighted, for: UIControlState.highlighted)
+            self.setImage(imageSelected, for: UIControlState.selected)
+            self.setImage(imageDisabled, for: UIControlState.disabled)
+        }
     }
-
-    /// Apply image to button.
-    public func applyImage(_ imageName: String) {
-        let imageDefault = UIImage(named: "\(imageName)_Default")
-        let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")
-        let imageSelected = UIImage(named: "\(imageName)_Selected")
-        let imageDisabled = UIImage(named: "\(imageName)_Disabled")
-
-        self.setImage(imageDefault, for: UIControlState())
-        self.setImage(imageHighlighted, for: UIControlState.highlighted)
-        self.setImage(imageSelected, for: UIControlState.selected)
-        self.setImage(imageDisabled, for: UIControlState.disabled)
-    }
-}
 #endif

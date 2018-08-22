@@ -35,9 +35,7 @@
 
 import Foundation
 
-
 public extension String {
-    
     /// Generate random identifier base on uuid.
     public static var randomIdentifier: String {
         return UUID().uuidString
@@ -47,8 +45,7 @@ public extension String {
     public static var timestamp: String {
         return "\(time(nil))"
     }
-    
-    
+
     /// Convert html string compatible to string.
     public func decodeHTML() -> String {
         return removingPercentEncoding ?? ""
@@ -68,12 +65,12 @@ public extension String {
 //        }
 //        return attributedString.string
     }
-    
+
     /// Convert string to html string compatible.
     public func encodeHTML() -> String {
         return addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed) ?? ""
     }
-    
+
     /// Compare 2 string regardless case sensitive.
     ///
     /// - parameter otherString (required): other string to compare
@@ -86,7 +83,7 @@ public extension String {
         let (text1, text2) = (self.lowercased().trim(), otherString?.lowercased().trim())
         return text1 == text2
     }
-    
+
     /// Validate string.
     ///
     /// - parameter pattern (required): regular expression to validate string
@@ -100,7 +97,7 @@ public extension String {
         do {
             let regex = try NSRegularExpression(pattern: pattern, options: option)
             let matches = regex.numberOfMatches(in: self, options: .anchored, range: NSMakeRange(0, count))
-            
+
             return (matches == 1)
         } catch _ {
             FwiLog("Invalid regex pattern.")
@@ -114,7 +111,7 @@ public extension String {
     public func split(_ separator: String) -> [String] {
         return components(separatedBy: separator)
     }
-    
+
     /// Sub string to index.
     public func substring(endIndex index: Int) -> String {
         /* Condition validation: Validate end index */
@@ -124,7 +121,7 @@ public extension String {
         }
         return substring(startIndex: 0, reverseIndex: -(count - index))
     }
-    
+
     /// Sub string from index to reverse index.
     ///
     /// - parameter startIndex (required): beginning index
@@ -135,28 +132,28 @@ public extension String {
             FwiLog("Start index should not be a negative number or larger than string's length.")
             return ""
         }
-        
+
         /* Condition validation: Validate end index */
         if endIdx > 0 || abs(endIdx) > count {
             FwiLog("Reverse index should be a negative number but absolute value must less than string's length.")
             return ""
         }
-        
+
         /* Condition validation: Validate overlap index */
         if strIdx >= count + endIdx {
             FwiLog("Start index and reverse index should not overlap each other.")
             return ""
         }
 
-        let range = index(startIndex, offsetBy: strIdx) ..< index(endIndex, offsetBy: endIdx)
+        let range = index(startIndex, offsetBy: strIdx)..<index(endIndex, offsetBy: endIdx)
         return String(self[range])
     }
-    
+
     /// Trim all spaces before and after a string.
     public func trim() -> String {
         return trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
-    
+
     /// Convert string to data.
     public func toData(dataEncoding encoding: String.Encoding = .utf8) -> Data? {
         return data(using: encoding, allowLossyConversion: false)
@@ -164,7 +161,6 @@ public extension String {
 }
 
 extension String {
-    
     /// Subscript get character at index.
     public subscript(idx: Int) -> Character? {
         guard !(idx < 0 || idx >= count) else {

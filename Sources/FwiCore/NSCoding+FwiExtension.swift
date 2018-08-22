@@ -35,9 +35,7 @@
 
 import Foundation
 
-
 public extension NSCoding {
-    
     // MARK: I/O to Data
     /// Unarchive from data.
     ///
@@ -48,12 +46,12 @@ public extension NSCoding {
         }
         return NSKeyedUnarchiver.unarchiveObject(with: data) as? Self
     }
-    
+
     /// Archive to data.
     public func archive() -> Data {
         return NSKeyedArchiver.archivedData(withRootObject: self)
     }
-    
+
     // MARK: I/O to File
     /// Unarchive from file.
     ///
@@ -61,7 +59,7 @@ public extension NSCoding {
     public static func unarchive(fromFile url: URL?) -> Self? {
         return unarchive(fromData: Data.read(fromFile: url))
     }
-    
+
     /// Archive to file.
     ///
     /// - parameter file (required): source url
@@ -69,7 +67,7 @@ public extension NSCoding {
     public func archive(toFile url: URL?) -> Error? {
         return archive().write(toFile: url)
     }
-    
+
     // MARK: I/O to UserDefaults
     /// Unarchive from UserDefaults.
     ///
@@ -80,14 +78,14 @@ public extension NSCoding {
         }
         return unarchive(fromData: data)
     }
-    
+
     /// Archive to UserDefaults.
     ///
     /// - parameter key (required): object's key to store inside UserDefaults
     @discardableResult
     public func archive(toUserDefaults key: String) -> Bool {
         let userDefault = UserDefaults.standard
-        
+
         userDefault.set(archive(), forKey: key)
         return userDefault.synchronize()
     }
