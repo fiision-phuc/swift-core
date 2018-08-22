@@ -34,24 +34,24 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 
+    extension UITabBarController {
+        // MARK: Class's override methods
+        open override var prefersStatusBarHidden: Bool {
+            return selectedViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
+        }
 
-extension UITabBarController {
+        open override var preferredStatusBarStyle: UIStatusBarStyle {
+            return selectedViewController?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
+        }
 
-    // MARK: Class's override methods
-    open override var prefersStatusBarHidden: Bool {
-        return selectedViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
-    }
-    open override var preferredStatusBarStyle: UIStatusBarStyle {
-        return selectedViewController?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
-    }
+        open override var shouldAutorotate: Bool {
+            return selectedViewController?.shouldAutorotate ?? super.shouldAutorotate
+        }
 
-    open override var shouldAutorotate: Bool {
-        return selectedViewController?.shouldAutorotate ?? super.shouldAutorotate
+        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+            return selectedViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
+        }
     }
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return selectedViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
-    }
-}
 #endif

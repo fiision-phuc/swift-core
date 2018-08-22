@@ -34,54 +34,49 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 
-
-/// FwiCell defines instruction on how to load a cell.
-public protocol FwiCell {
-    
-    /// Return cell's identifier.
-    static var identifier: String { get }
-}
-
-/// Default implementation for FwiCell.
-public extension FwiCell {
-    
-    static var identifier: String  {
-        return "\(self)"
+    /// FwiCell defines instruction on how to load a cell.
+    public protocol FwiCell {
+        /// Return cell's identifier.
+        static var identifier: String { get }
     }
-}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Default added FwiCell to UICollection view cell.
-extension UICollectionViewCell : FwiCell {
-}
- 
-/// FwiCell has addon function only when self is UICollectionViewCell.
-public extension FwiCell where Self: UICollectionViewCell {
-    
-    /// Dequeue and cast to self.
-    ///
-    /// - parameter collectionView (required): collectionView instance
-    /// - parameter indexPath (required): indexPath
-    public static func dequeueCell(collectionView c: UICollectionView, indexPath i: IndexPath) -> Self {
-        return c.dequeueReusableCell(withReuseIdentifier: identifier, for: i) as! Self
+    /// Default implementation for FwiCell.
+    public extension FwiCell {
+        static var identifier: String {
+            return "\(self)"
+        }
     }
-}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Default added FwiCell to UITableView view cell.
-extension UITableViewCell : FwiCell {
-}
-    
-/// FwiCell has addon function only when self is UITableViewCell.
-public extension FwiCell where Self: UITableViewCell {
-    
-    /// Dequeue and cast to self.
-    ///
-    /// - parameter tableView (required): tableView instance
-    public static func dequeueCell(tableView t: UITableView) -> Self {
-        return t.dequeueReusableCell(withIdentifier: identifier) as! Self
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Default added FwiCell to UICollection view cell.
+    extension UICollectionViewCell: FwiCell {
     }
-}
+
+    /// FwiCell has addon function only when self is UICollectionViewCell.
+    public extension FwiCell where Self: UICollectionViewCell {
+        /// Dequeue and cast to self.
+        ///
+        /// - parameter collectionView (required): collectionView instance
+        /// - parameter indexPath (required): indexPath
+        public static func dequeueCell(collectionView c: UICollectionView, indexPath i: IndexPath) -> Self {
+            return c.dequeueReusableCell(withReuseIdentifier: identifier, for: i) as! Self
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Default added FwiCell to UITableView view cell.
+    extension UITableViewCell: FwiCell {
+    }
+
+    /// FwiCell has addon function only when self is UITableViewCell.
+    public extension FwiCell where Self: UITableViewCell {
+        /// Dequeue and cast to self.
+        ///
+        /// - parameter tableView (required): tableView instance
+        public static func dequeueCell(tableView t: UITableView) -> Self {
+            return t.dequeueReusableCell(withIdentifier: identifier) as! Self
+        }
+    }
 #endif

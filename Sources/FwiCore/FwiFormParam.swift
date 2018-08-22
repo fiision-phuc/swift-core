@@ -35,9 +35,7 @@
 
 import Foundation
 
-
 struct FwiFormParam {
-
     // MARK: Class's constructors
     public init(key: String = "", value: String = "") {
         self.key = key
@@ -56,7 +54,6 @@ struct FwiFormParam {
 
 // MARK: CustomStringConvertible's members
 extension FwiFormParam: CustomStringConvertible {
-
     public var description: String {
         if key[0] == "#" {
             return "#\(key.substring(startIndex: 1).encodeHTML())=\(value.encodeHTML())"
@@ -67,32 +64,31 @@ extension FwiFormParam: CustomStringConvertible {
 
 // MARK: Custom Operator
 extension FwiFormParam {
-
-    static func <(left: FwiFormParam, right: FwiFormParam) -> Bool {
+    static func < (left: FwiFormParam, right: FwiFormParam) -> Bool {
         if left.key[left.key.startIndex] == "#" && right.key[right.key.startIndex] != "#" {
             return true
-        }
-        else if left.key[left.key.startIndex] != "#" && right.key[right.key.startIndex] == "#" {
+        } else if left.key[left.key.startIndex] != "#" && right.key[right.key.startIndex] == "#" {
             return false
-        }
-        else if left.key[left.key.startIndex] == "#" && right.key[right.key.startIndex] == "#" {
+        } else if left.key[left.key.startIndex] == "#" && right.key[right.key.startIndex] == "#" {
             let key1 = left.key.substring(startIndex: 1, reverseIndex: 0)
             let key2 = right.key.substring(startIndex: 1, reverseIndex: 0)
             return key1 < key2
         }
         return left.key < right.key
     }
-    static func <(left: FwiFormParam, right: FwiFormParam?) -> Bool {
+
+    static func < (left: FwiFormParam, right: FwiFormParam?) -> Bool {
         guard let r = right else {
             return false
         }
         return left < r
     }
 
-    static func ==(left: FwiFormParam, right: FwiFormParam) -> Bool {
+    static func == (left: FwiFormParam, right: FwiFormParam) -> Bool {
         return left.hashValue == right.hashValue
     }
-    static func ==(left: FwiFormParam, right: FwiFormParam?) -> Bool {
+
+    static func == (left: FwiFormParam, right: FwiFormParam?) -> Bool {
         guard let r = right else {
             return false
         }

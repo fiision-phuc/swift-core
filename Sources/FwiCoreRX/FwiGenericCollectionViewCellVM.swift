@@ -1,3 +1,4 @@
+import Foundation
 //  File name   : FwiGenericCollectionViewCellVM.swift
 //
 //  Author      : Phuc Tran
@@ -34,28 +35,25 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
-import Foundation
+    import UIKit
 
-
-open class FwiGenericCollectionViewCellVM<C: UICollectionViewCell, M>: FwiGenericCollectionViewVM<M> {
-
-    // MARK: Class's public methods
-    /// Initialize cell at index.
-    ///
-    /// - Parameters:
-    ///   - cell: a UITableView's cell according to index
-    ///   - item: an item at index
-    open func configure(forCell cell: C, with item: M) {
-        fatalError("Child class should override func \(#function)")
-    }
-
-    open override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = C.dequeueCell(collectionView: collectionView, indexPath: indexPath)
-        if let item = self[indexPath] {
-            configure(forCell: cell, with: item)
+    open class FwiGenericCollectionViewCellVM<C: UICollectionViewCell, M>: FwiGenericCollectionViewVM<M> {
+        // MARK: Class's public methods
+        /// Initialize cell at index.
+        ///
+        /// - Parameters:
+        ///   - cell: a UITableView's cell according to index
+        ///   - item: an item at index
+        open func configure(forCell cell: C, with item: M) {
+            fatalError("Child class should override func \(#function)")
         }
-        return cell
+
+        open override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            let cell = C.dequeueCell(collectionView: collectionView, indexPath: indexPath)
+            if let item = self[indexPath] {
+                configure(forCell: cell, with: item)
+            }
+            return cell
+        }
     }
-}
 #endif

@@ -1,3 +1,4 @@
+import Foundation
 //  File name   : FwiGenericCollectionViewVM.swift
 //
 //  Author      : Phuc Tran
@@ -34,62 +35,57 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
-import Foundation
-
-#if !RX_NO_MODULE
     import RxSwift
-#endif
+    import UIKit
 
+    open class FwiGenericCollectionViewVM<T>: FwiCollectionViewVM {
+        // MARK: Class's properties
+        public let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
+        open var currentItem: T? {
+            didSet {
+                currentItemSubject.on(.next(currentItem))
+            }
+        }
 
-open class FwiGenericCollectionViewVM<T>: FwiCollectionViewVM {
-    
-    // MARK: Class's properties
-    public let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
-    open var currentItem: T? = nil {
-        didSet {
-            currentItemSubject.on(.next(currentItem))
+        public var items: ArraySlice<T>?
+
+        // MARK: UICollectionViewDataSource's members
+        open override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+            return count
+        }
+
+        open override func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+            items?.swapAt(sourceIndexPath.row, destinationIndexPath.row)
+        }
+
+        // MARK: UICollectionViewDelegate's members
+        open override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            currentItem = self[indexPath]
+        }
+
+        open override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+            currentItem = nil
         }
     }
-    
-    public var items: ArraySlice<T>?
-    
-    // MARK: UICollectionViewDataSource's members
-    open override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return count
-    }
 
-    open override func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        items?.swapAt(sourceIndexPath.row, destinationIndexPath.row)
-    }
-
-    // MARK: UICollectionViewDelegate's members
-    open override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        currentItem = self[indexPath]
-    }
-    open override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        currentItem = nil
-    }
-}
-
-// MARK: Class's subscript
-extension FwiGenericCollectionViewVM {
-    
-    open var count: Int {
-        return items?.count ?? 0
-    }
-    
-    open subscript(index: Int) -> T? {
-        guard 0 <= index && index < count else {
-            return nil
+    // MARK: Class's subscript
+    extension FwiGenericCollectionViewVM {
+        open var count: Int {
+            return items?.count ?? 0
         }
-        return items?[index]
-    }
-    open subscript(index: IndexPath) -> T? {
-        guard 0 <= index.row && index.row < count else {
-            return nil
+
+        open subscript(index: Int) -> T? {
+            guard 0 <= index && index < count else {
+                return nil
+            }
+            return items?[index]
         }
-        return items?[index.row]
+
+        open subscript(index: IndexPath) -> T? {
+            guard 0 <= index.row && index.row < count else {
+                return nil
+            }
+            return items?[index.row]
+        }
     }
-}
 #endif

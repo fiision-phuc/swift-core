@@ -35,7 +35,6 @@
 
 import Foundation
 
-
 public var FwiCurrentLocale: String {
     get {
         return sharedInstance.locale
@@ -62,11 +61,8 @@ public func FwiResetLocale() {
     sharedInstance.reset()
 }
 
-
 fileprivate var sharedInstance = FwiLocalization()
 fileprivate struct FwiLocalization {
-
-    
     // MARK: Class's constructors
     fileprivate init() {
         reset()
@@ -82,15 +78,16 @@ fileprivate struct FwiLocalization {
                 return
             }
             let userDefaults = UserDefaults.standard
-            
+
             userDefaults.set([locale], forKey: "AppleLanguages")
             userDefaults.synchronize()
-            
+
             bundle = Bundle(path: (path as NSString).deletingLastPathComponent)
         }
     }
+
     fileprivate var bundle: Bundle?
-    
+
     // MARK: Class's public methods
     fileprivate func localized(forString s: String) -> String {
         if let localized = bundle?.localizedString(forKey: s, value: s, table: nil) {

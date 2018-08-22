@@ -35,9 +35,7 @@
 
 import Foundation
 
-
 public extension URL {
-
     /// URL to main cache folder.
     public static func cacheDirectory() -> URL? {
         let array = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
@@ -53,25 +51,26 @@ public extension URL {
 
 // MARK: Custom Operator
 public extension URL {
-
     /// Append path component.
-    public static func +(left: URL, right: String) -> URL {
+    public static func + (left: URL, right: String) -> URL {
         if left.absoluteString.hasSuffix("/") && right.hasPrefix("/") {
             return left.appendingPathComponent(right.substring(startIndex: 1))
         }
         return left.appendingPathComponent(right)
     }
-    public static func +(left: URL, right: String?) -> URL {
+
+    public static func + (left: URL, right: String?) -> URL {
         guard let path = right else {
             return left
         }
         return left + path
     }
 
-    public static func +=(left: inout URL, right: String) {
+    public static func += (left: inout URL, right: String) {
         left = left + right
     }
-    public static func +=(left: inout URL, right: String?) {
+
+    public static func += (left: inout URL, right: String?) {
         guard let r = right else {
             return
         }
@@ -79,7 +78,7 @@ public extension URL {
     }
 
     /// Add query params to current url.
-    public static func +(left: URL, right: [String:String]) -> URL {
+    public static func + (left: URL, right: [String: String]) -> URL {
         guard right.count > 0 else {
             return left
         }
@@ -87,15 +86,15 @@ public extension URL {
         let urlString = left.absoluteString
 
         // Define # if there is any
-        let hashtag = forms.filter { $0.key[0] == "#"}
-                          .sorted(by: <)
-                          .first?.description ?? ""
+        let hashtag = forms.filter { $0.key[0] == "#" }
+            .sorted(by: <)
+            .first?.description ?? ""
 
         // Define query
         let query = forms.filter { $0.key[0] != "#" }
-                        .sorted(by: <)
-                        .map { $0.description }
-                        .joined(separator: "&")
+            .sorted(by: <)
+            .map { $0.description }
+            .joined(separator: "&")
 
         // Finalize url
         let isHaveHashTag = hashtag.count > 0
@@ -110,30 +109,25 @@ public extension URL {
             return URL(string: "\(urlString)?\(query)") ?? left
         }
     }
-    public static func +(left: URL, right: [String:String]?) -> URL {
+
+    public static func + (left: URL, right: [String: String]?) -> URL {
         guard let params = right, params.count > 0 else {
             return left
         }
         return left + params
     }
 
-    public static func +=(left: inout URL, right: [String : String]) {
+    public static func += (left: inout URL, right: [String: String]) {
         left = left + right
     }
-    public static func +=(left: inout URL, right: [String : String]?) {
+
+    public static func += (left: inout URL, right: [String: String]?) {
         left = left + right
     }
 }
 
 // MARK: Custom Operator for Optional URL
-public func +(left: URL?, right: String) -> URL? {
-    guard let url = left else {
-        return left
-    }
-    let final = url + right
-    return final
-}
-public func +(left: URL?, right: String?) -> URL? {
+public func + (left: URL?, right: String) -> URL? {
     guard let url = left else {
         return left
     }
@@ -141,22 +135,24 @@ public func +(left: URL?, right: String?) -> URL? {
     return final
 }
 
-public func +=(left: inout URL?, right: String) {
+public func + (left: URL?, right: String?) -> URL? {
+    guard let url = left else {
+        return left
+    }
+    let final = url + right
+    return final
+}
+
+public func += (left: inout URL?, right: String) {
     left = left + right
 }
-public func +=(left: inout URL?, right: String?) {
+
+public func += (left: inout URL?, right: String?) {
     left = left + right
 }
 
 /// Add query params to current url.
-public func +(left: URL?, right: [String:String]) -> URL? {
-    guard let url = left else {
-        return left
-    }
-    let final = url + right
-    return final
-}
-public func +(left: URL?, right: [String:String]?) -> URL? {
+public func + (left: URL?, right: [String: String]) -> URL? {
     guard let url = left else {
         return left
     }
@@ -164,9 +160,18 @@ public func +(left: URL?, right: [String:String]?) -> URL? {
     return final
 }
 
-public func +=(left: inout URL?, right: [String : String]) {
+public func + (left: URL?, right: [String: String]?) -> URL? {
+    guard let url = left else {
+        return left
+    }
+    let final = url + right
+    return final
+}
+
+public func += (left: inout URL?, right: [String: String]) {
     left = left + right
 }
-public func +=(left: inout URL?, right: [String : String]?) {
+
+public func += (left: inout URL?, right: [String: String]?) {
     left = left + right
 }

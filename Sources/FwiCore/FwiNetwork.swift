@@ -33,17 +33,14 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import Foundation
 import Alamofire
-
+import Foundation
 
 public typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
 public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
 
-
 public struct FwiNetwork {
     public static var manager = SessionManager.`default`
-
 
     /// Download resource from server.
     ///
@@ -58,30 +55,29 @@ public struct FwiNetwork {
     @discardableResult
     public static func download(resource r: URLConvertible?,
                                 method m: HTTPMethod = .get,
-                                params p: [String:String]? = nil,
+                                params p: [String: String]? = nil,
                                 encoding e: ParameterEncoding = URLEncoding.`default`,
                                 headers h: [String: String]? = nil,
                                 destination d: URLConvertible? = nil,
-                                completion c: @escaping DownloadCompletion) -> DownloadRequest?
-    {
+                                completion c: @escaping DownloadCompletion) -> DownloadRequest? {
         /* Condition validation: validate endpoint */
         guard let url = r else {
             return nil
         }
-        
+
         if let d = d, let destinationURL = try? d.asURL() {
             let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h) { (tempURL, response) -> (URL, DownloadRequest.DownloadOptions) in
                 return (destinationURL, [DownloadRequest.DownloadOptions.createIntermediateDirectories, DownloadRequest.DownloadOptions.removePreviousFile])
             }
-            task.validate(statusCode: 200 ..< 300)
-            task.response { (r) in
+            task.validate(statusCode: 200..<300)
+            task.response { r in
                 c(destinationURL, r.error, r.response)
             }
             return task
         } else {
             let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h, to: nil)
-            task.validate(statusCode: 200 ..< 300)
-            task.response { (r) in
+            task.validate(statusCode: 200..<300)
+            task.response { r in
                 c(r.temporaryURL, r.error, r.response)
             }
             return task
@@ -101,19 +97,18 @@ public struct FwiNetwork {
     @discardableResult
     public static func send(request r: URLConvertible?,
                             method m: HTTPMethod = .get,
-                            params p: [String:String]? = nil,
+                            params p: [String: String]? = nil,
                             encoding e: ParameterEncoding = URLEncoding.`default`,
                             headers h: [String: String]? = nil,
-                            completion c: @escaping RequestCompletion) -> DataRequest?
-    {
+                            completion c: @escaping RequestCompletion) -> DataRequest? {
         /* Condition validation: validate endpoint */
         guard let url = r else {
             return nil
         }
-        
+
         let task = manager.request(url, method: m, parameters: p, encoding: e, headers: h)
-        task.validate(statusCode: 200 ..< 300)
-        task.response { (r) in
+        task.validate(statusCode: 200..<300)
+        task.response { r in
             c(r.data, r.error, r.response)
         }
         return task
@@ -124,13 +119,13 @@ public struct FwiNetwork {
         let session = SessionManager.`default`.session
 
         if #available(OSX 10.11, iOS 9.0, *) {
-            session.getAllTasks { (tasks) in
+            session.getAllTasks { tasks in
                 tasks.forEach({
                     $0.cancel()
                 })
             }
         } else {
-            session.getTasksWithCompletionHandler({ (sessionTasks, uploadTasks, downloadTasks) in
+            session.getTasksWithCompletionHandler({ sessionTasks, uploadTasks, downloadTasks in
                 sessionTasks.forEach({
                     $0.cancel()
                 })
@@ -149,7 +144,7 @@ public struct FwiNetwork {
     /// Cancel all data Tasks.
     public static func cancelDataTasks() {
         let session = SessionManager.`default`.session
-        session.getTasksWithCompletionHandler({ (sessionTasks, _, _) in
+        session.getTasksWithCompletionHandler({ sessionTasks, _, _ in
             sessionTasks.forEach({
                 $0.cancel()
             })
@@ -159,7 +154,7 @@ public struct FwiNetwork {
     /// Cancel all download Tasks.
     public static func cancelDownloadTasks() {
         let session = SessionManager.`default`.session
-        session.getTasksWithCompletionHandler({ (_, _, downloadTasks) in
+        session.getTasksWithCompletionHandler({ _, _, downloadTasks in
             downloadTasks.forEach({
                 $0.cancel()
             })
@@ -169,11 +164,10 @@ public struct FwiNetwork {
     /// Cancel all upload Tasks.
     public static func cancelUploadTasks() {
         let session = SessionManager.`default`.session
-        session.getTasksWithCompletionHandler({ (_, uploadTasks, _) in
+        session.getTasksWithCompletionHandler({ _, uploadTasks, _ in
             uploadTasks.forEach({
                 $0.cancel()
             })
         })
     }
 }
-

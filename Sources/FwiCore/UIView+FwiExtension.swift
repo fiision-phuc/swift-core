@@ -34,82 +34,80 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 
-
-public extension UIView {
-
-    /// Create image from current view.
-    public func createImage(_ scaleFactor: CGFloat = UIScreen.main.scale) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, scaleFactor)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return nil
-        }
-        
-        // Translate graphic context to offset before render if view is table view
-        if let tableView = self as? UITableView {
-            let contentOffset = tableView.contentOffset
-            context.translateBy(x: contentOffset.x, y: -contentOffset.y)
-        }
-        self.layer.render(in: context)
-
-        // Create image
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
-    }
-
-    /// Create image from region of interest.
-    public func createImageWithROI(_ roiRect: CGRect, scaleFactor scale: CGFloat = UIScreen.main.scale) -> UIImage? {
-        /* Condition validation: Validate ROI */
-        if !self.bounds.contains(roiRect) {
-            return nil
-        }
-        
-        UIGraphicsBeginImageContextWithOptions(roiRect.size, false, scale)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return nil
-        }
-        
-        context.translateBy(x: -roiRect.origin.x, y: -roiRect.origin.y)
-        self.layer.render(in: context)
-
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
-    }
-
-    /// Find first responder within tree views.
-    public func findFirstResponder() -> UIView? {
-        /* Condition validation */
-        if self.isFirstResponder {
-            return self
-        }
-
-        // Find and resign first responder
-        for view in self.subviews {
-            if view.isFirstResponder {
-                return view
-            } else {
-                guard let nView = view.findFirstResponder() else {
-                    continue
-                }
-                return nView
+    public extension UIView {
+        /// Create image from current view.
+        public func createImage(_ scaleFactor: CGFloat = UIScreen.main.scale) -> UIImage? {
+            UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, scaleFactor)
+            guard let context = UIGraphicsGetCurrentContext() else {
+                return nil
             }
+
+            // Translate graphic context to offset before render if view is table view
+            if let tableView = self as? UITableView {
+                let contentOffset = tableView.contentOffset
+                context.translateBy(x: contentOffset.x, y: -contentOffset.y)
+            }
+            self.layer.render(in: context)
+
+            // Create image
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return image
         }
-        return nil
-    }
 
-    /// Find and resign first responder within tree views.
-    public func findAndResignFirstResponder() {
-        self.findFirstResponder()?.resignFirstResponder()
-    }
+        /// Create image from region of interest.
+        public func createImageWithROI(_ roiRect: CGRect, scaleFactor scale: CGFloat = UIScreen.main.scale) -> UIImage? {
+        /* Condition validation: Validate ROI */
+            if !self.bounds.contains(roiRect) {
+                return nil
+            }
 
-    /// Round corner of an UIView with specific radius.
-    public func roundCorner(_ radius: CGFloat) {
-        let bgLayer = self.layer
-        bgLayer.masksToBounds = true
-        bgLayer.cornerRadius = radius
+            UIGraphicsBeginImageContextWithOptions(roiRect.size, false, scale)
+            guard let context = UIGraphicsGetCurrentContext() else {
+                return nil
+            }
+
+            context.translateBy(x: -roiRect.origin.x, y: -roiRect.origin.y)
+            self.layer.render(in: context)
+
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return image
+        }
+
+        /// Find first responder within tree views.
+        public func findFirstResponder() -> UIView? {
+        /* Condition validation */
+            if self.isFirstResponder {
+                return self
+            }
+
+            // Find and resign first responder
+            for view in self.subviews {
+                if view.isFirstResponder {
+                    return view
+                } else {
+                    guard let nView = view.findFirstResponder() else {
+                        continue
+                    }
+                    return nView
+                }
+            }
+            return nil
+        }
+
+        /// Find and resign first responder within tree views.
+        public func findAndResignFirstResponder() {
+            self.findFirstResponder()?.resignFirstResponder()
+        }
+
+        /// Round corner of an UIView with specific radius.
+        public func roundCorner(_ radius: CGFloat) {
+            let bgLayer = self.layer
+            bgLayer.masksToBounds = true
+            bgLayer.cornerRadius = radius
+        }
     }
-}
 #endif

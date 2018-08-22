@@ -33,15 +33,13 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import Foundation
 import CoreData
-
+import Foundation
 
 public protocol FwiCoreData {
 }
 
 public extension FwiCoreData where Self: NSManagedObject {
-    
     /// Fetch all entities.
     ///
     /// @params
@@ -55,32 +53,32 @@ public extension FwiCoreData where Self: NSManagedObject {
         guard let c = context, let entityName = NSStringFromClass(self).split(".").last else {
             return []
         }
-        
+
         let request = NSFetchRequest<Self>(entityName: entityName)
-        
+
         // Apply standard condition
         request.predicate = p
         request.sortDescriptors = s
-        
+
         // Apply group by condition
-        if let groupBy = g , groupBy.count > 0 {
+        if let groupBy = g, groupBy.count > 0 {
             request.propertiesToFetch = groupBy
             request.returnsDistinctResults = true
             request.resultType = .dictionaryResultType
         }
-        
+
         // Apply limit
         if l > 0 {
             request.fetchLimit = l
         }
-        
+
         var entities: [Self]?
         c.performAndWait {
             entities = try? c.fetch(request)
         }
         return entities ?? []
     }
-    
+
     /// Fetch an entity base on search condition. Create new if necessary.
     ///
     /// @params
@@ -96,13 +94,13 @@ public extension FwiCoreData where Self: NSManagedObject {
         // Find before create
         let entities = allEntities(fromContext: c, predicate: p, limit: 1)
         var entity = entities.first
-        
+
         if entity == nil && create {
             entity = newEntity(withContext: c)
         }
         return entity
     }
-    
+
     /// Count all entities.
     ///
     /// @params
@@ -113,12 +111,12 @@ public extension FwiCoreData where Self: NSManagedObject {
         guard let c = context else {
             return 0
         }
-        
+
         let request = NSFetchRequest<Self>(entityName: entityName)
         request.includesPropertyValues = false
         request.includesSubentities = false
         request.predicate = p
-        
+
         var counter = 0
         c.performAndWait {
             counter = (try? c.count(for: request)) ?? 0
@@ -137,7 +135,7 @@ public extension FwiCoreData where Self: NSManagedObject {
         }
         return NSEntityDescription.insertNewObject(forEntityName: entityName, into: c) as? Self
     }
-    
+
     /// Delete all entities.
     ///
     /// @params

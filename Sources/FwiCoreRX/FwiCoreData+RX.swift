@@ -33,23 +33,18 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import Foundation
 import CoreData
+import Foundation
 import FwiCore
-
-#if !RX_NO_MODULE
-    import RxSwift
-#endif
-
+import RxSwift
 
 public extension Reactive where Base: NSManagedObject, Base: FwiCoreData {
-
     /// Reactive wrapper for `allEntities(fromContext:predicate:sortDescriptor:groupBy:limit:)` function.
     ///
     /// - seealso:
     /// [The FwiCore Library Reference]
     /// (https://github.com/phuc0302/swift-core/blob/master/Sources/FwiCoreData.swift)
-    public static func allEntities(fromContext c: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [Any]? = nil, limit l: Int = 0) ->  Observable<[Base]?> {
+    public static func allEntities(fromContext c: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [Any]? = nil, limit l: Int = 0) -> Observable<[Base]?> {
         return Observable.just(Base.allEntities(fromContext: c, predicate: p, sortDescriptor: s, groupBy: g, limit: l))
     }
 

@@ -35,9 +35,7 @@
 
 import Foundation
 
-
 public extension String {
-
     // MARK: Validate Hex
     public var isHex: Bool {
         return toData()?.isHex ?? false
@@ -47,6 +45,7 @@ public extension String {
     public func decodeHexData() -> Data? {
         return toData()?.decodeHexData()
     }
+
     public func decodeHexString() -> String? {
         return toData()?.decodeHexString()
     }
@@ -55,6 +54,7 @@ public extension String {
     public func encodeHexData() -> Data? {
         return toData()?.encodeHexData()
     }
+
     public func encodeHexString() -> String? {
         return toData()?.encodeHexString()
     }

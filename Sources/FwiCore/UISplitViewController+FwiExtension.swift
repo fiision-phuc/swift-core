@@ -34,36 +34,36 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 
+    extension UISplitViewController {
+        // MARK: Class's override methods
+        open override var prefersStatusBarHidden: Bool {
+            if UIApplication.isPhone {
+                return viewControllers.first?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
+            }
+            return super.prefersStatusBarHidden
+        }
 
-extension UISplitViewController {
+        open override var preferredStatusBarStyle: UIStatusBarStyle {
+            if UIApplication.isPhone {
+                return viewControllers.first?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
+            }
+            return super.preferredStatusBarStyle
+        }
 
-    // MARK: Class's override methods
-    open override var prefersStatusBarHidden: Bool {
-        if UIApplication.isPhone {
-            return viewControllers.first?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
+        open override var shouldAutorotate: Bool {
+            if UIApplication.isPhone {
+                return viewControllers.first?.shouldAutorotate ?? super.shouldAutorotate
+            }
+            return super.shouldAutorotate
         }
-        return super.prefersStatusBarHidden
-    }
-    open override var preferredStatusBarStyle: UIStatusBarStyle {
-        if UIApplication.isPhone {
-            return viewControllers.first?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
-        }
-        return super.preferredStatusBarStyle
-    }
 
-    open override var shouldAutorotate: Bool {
-        if UIApplication.isPhone {
-            return viewControllers.first?.shouldAutorotate ?? super.shouldAutorotate
+        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+            if UIApplication.isPhone {
+                return viewControllers.first?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
+            }
+            return super.supportedInterfaceOrientations
         }
-        return super.shouldAutorotate
     }
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIApplication.isPhone {
-            return viewControllers.first?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
-        }
-        return super.supportedInterfaceOrientations
-    }
-}
 #endif

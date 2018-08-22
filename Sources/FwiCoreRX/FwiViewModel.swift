@@ -34,14 +34,9 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
-
-#if !RX_NO_MODULE
-    import RxSwift
-#endif
-
+import RxSwift
 
 open class FwiViewModel: NSObject {
-
     // MARK: Class's constructors
     public override init() {
         super.init()
@@ -50,10 +45,10 @@ open class FwiViewModel: NSObject {
     deinit {
         disposeBag = nil
     }
-    
+
     // MARK: Class's properties
     public private(set) var disposeBag: DisposeBag! = DisposeBag()
-    
+
     // MARK: Class's public methods
     open func setupRX() {
         fatalError("\(#function) should be overrided by sub class!")

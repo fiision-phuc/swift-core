@@ -35,9 +35,7 @@
 
 import Foundation
 
-
 public extension Array {
-
     /// Shuffles the contents of this collection.
     public mutating func shuffle() {
         guard count > 1 else {

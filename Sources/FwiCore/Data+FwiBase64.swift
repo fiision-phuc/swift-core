@@ -35,9 +35,7 @@
 
 import Foundation
 
-
 public extension Data {
-    
     // MARK: Validate base64
     public var isBase64: Bool {
         /* Condition validation */
@@ -56,31 +54,28 @@ public extension Data {
                 let v2 = p2.pointee
 
                 // Check v1
-                isBase64 = isBase64 && (
-                    (48 <= v1 && v1 <= 57)  ||    // '0-9'
-                    (65 <= v1 && v1 <= 90)  ||    // 'A-Z'
-                    (97 <= v1 && v1 <= 122) ||    // 'a-z'
-                    v1 == 9                 ||    // '\t'
-                    v1 == 10                ||    // '\n'
-                    v1 == 13                ||    // '\r'
-                    v1 == 32                ||    // ' '
-                    v1 == 43                ||    // '+'
-                    v1 == 47                ||    // '/'
-                    v1 == 61                      // '='
-                )
+                isBase64 = isBase64 && ((48 <= v1 && v1 <= 57) || // '0-9'
+                    (65 <= v1 && v1 <= 90) || // 'A-Z'
+                    (97 <= v1 && v1 <= 122) || // 'a-z'
+                    v1 == 9 || // '\t'
+                    v1 == 10 || // '\n'
+                    v1 == 13 || // '\r'
+                    v1 == 32 || // ' '
+                    v1 == 43 || // '+'
+                    v1 == 47 || // '/'
+                    v1 == 61) // '='
+
                 // Check v2
-                isBase64 = isBase64 && (
-                    (48 <= v2 && v2 <= 57)  ||    // '0-9'
-                    (65 <= v2 && v2 <= 90)  ||    // 'A-Z'
-                    (97 <= v2 && v2 <= 122) ||    // 'a-z'
-                    v2 == 9                 ||    // '\t'
-                    v2 == 10                ||    // '\n'
-                    v2 == 13                ||    // '\r'
-                    v2 == 32                ||    // ' '
-                    v2 == 43                ||    // '+'
-                    v2 == 47                ||    // '/'
-                    v2 == 61                      // '='
-                )
+                isBase64 = isBase64 && ((48 <= v2 && v2 <= 57) || // '0-9'
+                    (65 <= v2 && v2 <= 90) || // 'A-Z'
+                    (97 <= v2 && v2 <= 122) || // 'a-z'
+                    v2 == 9 || // '\t'
+                    v2 == 10 || // '\n'
+                    v2 == 13 || // '\r'
+                    v2 == 32 || // ' '
+                    v2 == 43 || // '+'
+                    v2 == 47 || // '/'
+                    v2 == 61) // '='
 
                 if isBase64 {
                     p1 = p1.advanced(by: 1)
@@ -92,19 +87,21 @@ public extension Data {
         }
         return isBase64
     }
-    
+
     // MARK: Decode base64
     public func decodeBase64Data() -> Data? {
         return isBase64 ? Data(base64Encoded: self, options: .ignoreUnknownCharacters) : nil
     }
+
     public func decodeBase64String() -> String? {
         return decodeBase64Data()?.toString()
     }
-    
+
     // MARK: Encode base64
     public func encodeBase64Data() -> Data? {
         return count > 0 ? base64EncodedData(options: .endLineWithCarriageReturn) : nil
     }
+
     public func encodeBase64String() -> String? {
         return self.encodeBase64Data()?.toString()
     }
