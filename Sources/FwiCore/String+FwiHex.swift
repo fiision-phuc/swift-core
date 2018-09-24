@@ -37,11 +37,13 @@ import Foundation
 
 public extension String {
     // MARK: Validate Hex
+
     public var isHex: Bool {
         return toData()?.isHex ?? false
     }
 
     // MARK: Decode Hex
+
     public func decodeHexData() -> Data? {
         return toData()?.decodeHexData()
     }
@@ -51,6 +53,7 @@ public extension String {
     }
 
     // MARK: Encode Hex
+
     public func encodeHexData() -> Data? {
         return toData()?.encodeHexData()
     }

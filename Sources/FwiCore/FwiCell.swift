@@ -51,8 +51,7 @@
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Default added FwiCell to UICollection view cell.
-    extension UICollectionViewCell: FwiCell {
-    }
+    extension UICollectionViewCell: FwiCell {}
 
     /// FwiCell has addon function only when self is UICollectionViewCell.
     public extension FwiCell where Self: UICollectionViewCell {
@@ -67,8 +66,7 @@
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Default added FwiCell to UITableView view cell.
-    extension UITableViewCell: FwiCell {
-    }
+    extension UITableViewCell: FwiCell {}
 
     /// FwiCell has addon function only when self is UITableViewCell.
     public extension FwiCell where Self: UITableViewCell {

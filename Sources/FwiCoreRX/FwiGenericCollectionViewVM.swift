@@ -1,4 +1,3 @@
-import Foundation
 //  File name   : FwiGenericCollectionViewVM.swift
 //
 //  Author      : Phuc Tran
@@ -35,21 +34,20 @@ import Foundation
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
+    import Foundation
     import RxSwift
     import UIKit
 
     open class FwiGenericCollectionViewVM<T>: FwiCollectionViewVM {
-        // MARK: Class's properties
-        public let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
-        open var currentItem: T? {
-            didSet {
-                currentItemSubject.on(.next(currentItem))
-            }
+        /// Class's public properties.
+        public var currentItem: Observable<T> {
+            return currentItemSubject.asObservable()
         }
 
-        public var items: ArraySlice<T>?
+        open var items: ArraySlice<T>?
 
         // MARK: UICollectionViewDataSource's members
+
         open override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             return count
         }
@@ -59,16 +57,17 @@ import Foundation
         }
 
         // MARK: UICollectionViewDelegate's members
+
         open override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            currentItem = self[indexPath]
+            select(itemAt: indexPath)
         }
 
-        open override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-            currentItem = nil
-        }
+        /// Class's private properties.
+        private let currentItemSubject = ReplaySubject<T>.create(bufferSize: 1)
     }
 
     // MARK: Class's subscript
+
     extension FwiGenericCollectionViewVM {
         open var count: Int {
             return items?.count ?? 0

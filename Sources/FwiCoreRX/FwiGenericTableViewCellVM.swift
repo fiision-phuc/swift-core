@@ -1,4 +1,3 @@
-import Foundation
 //  File name   : FwiGenericTableViewCellVM.swift
 //
 //  Author      : Phuc Tran
@@ -38,8 +37,7 @@ import Foundation
 #if canImport(UIKit)
     import UIKit
 
-    open class FwiGenericTableViewCellVM<C: UITableViewCell, M>: FwiGenericTableViewVM<M> {
-        // MARK: Class's public methods
+    open class FwiGenericTableViewCellVM<C: UITableViewCell, M: Equatable>: FwiGenericTableViewVM<M> {
         /// Initialize cell at index.
         ///
         /// - Parameters:
@@ -50,6 +48,7 @@ import Foundation
         }
 
         // MARK: UITableViewDataSource's members
+
         open override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = C.dequeueCell(tableView: tableView)
             if let item = self[indexPath] {

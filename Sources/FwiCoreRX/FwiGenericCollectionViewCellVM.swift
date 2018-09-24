@@ -1,4 +1,3 @@
-import Foundation
 //  File name   : FwiGenericCollectionViewCellVM.swift
 //
 //  Author      : Phuc Tran
@@ -39,6 +38,7 @@ import Foundation
 
     open class FwiGenericCollectionViewCellVM<C: UICollectionViewCell, M>: FwiGenericCollectionViewVM<M> {
         // MARK: Class's public methods
+
         /// Initialize cell at index.
         ///
         /// - Parameters:

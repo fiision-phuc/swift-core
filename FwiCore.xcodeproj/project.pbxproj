@@ -60,6 +60,7 @@
 		BEDBB4DA1FE9D48C00059325 /* Array+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDBB4BC1FE9D48B00059325 /* Array+FwiExtension.swift */; };
 		BEDBB4DC1FE9D57B00059325 /* KeyedDecodingContainer+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDBB4DB1FE9D57B00059325 /* KeyedDecodingContainer+FwiExtension.swift */; };
 		BEDBB4E01FE9DB7900059325 /* UIAlertController+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDBB4DF1FE9DB7900059325 /* UIAlertController+FwiExtension.swift */; };
+		BEDF614221591C38006BC59B /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED7E467212B9A91008DE156 /* Alamofire.framework */; };
 		BEF01E7A1F71214800F25389 /* NSManagedObject+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF01E791F71214700F25389 /* NSManagedObject+FwiExtension.swift */; };
 		_LinkFileRef_FwiCore_via_FwiCoreTests /* FwiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_FwiCore" /* FwiCore.framework */; };
 /* End PBXBuildFile section */
@@ -136,7 +137,7 @@
 		BEF01E791F71214700F25389 /* NSManagedObject+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSManagedObject+FwiExtension.swift"; path = "FwiCore/NSManagedObject+FwiExtension.swift"; sourceTree = "<group>"; };
 		__PBXFileRef_Package.swift /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		"_____Product_FwiCore" /* FwiCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FwiCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		"_____Product_FwiCoreTests" /* FwiCoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = FwiCoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"_____Product_FwiCoreTests" /* FwiCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = FwiCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
+				BEDF614221591C38006BC59B /* Alamofire.framework in Frameworks */,
 				_LinkFileRef_FwiCore_via_FwiCoreTests /* FwiCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -386,7 +388,7 @@
 		TestProducts_ /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				"_____Product_FwiCoreTests" /* FwiCoreTests.framework */,
+				"_____Product_FwiCoreTests" /* FwiCoreTests.xctest */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -519,6 +521,7 @@
 				CompilePhase_FwiCoreTests /* Sources */,
 				BEF4FFE81D929751008B9BFE /* Resources */,
 				"___LinkPhase_FwiCoreTests" /* Frameworks */,
+				BEDF614621591C94006BC59B /* Carthage */,
 			);
 			buildRules = (
 			);
@@ -527,7 +530,7 @@
 			);
 			name = FwiCoreTests;
 			productName = FwiCoreTests;
-			productReference = "_____Product_FwiCoreTests" /* FwiCoreTests.framework */;
+			productReference = "_____Product_FwiCoreTests" /* FwiCoreTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -585,6 +588,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BEDF614621591C94006BC59B /* Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
+			);
+			name = Carthage;
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BE91D8811F70239C00EEE620 /* Sources */ = {
@@ -709,6 +731,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735BB1D89C13B00738B1F /* test-release.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				OTHER_LDFLAGS = "$(inherited)";
 			};
 			name = Release;
@@ -730,6 +756,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735BA1D89C13B00738B1F /* test-debug.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				OTHER_LDFLAGS = "$(inherited)";
 			};
 			name = Debug;

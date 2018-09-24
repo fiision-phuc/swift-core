@@ -1,4 +1,3 @@
-import Foundation
 //  File name   : FwiGenericTableViewVM.swift
 //
 //  Author      : Phuc Tran
@@ -36,21 +35,39 @@ import Foundation
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit)
+    import Foundation
     import RxSwift
     import UIKit
 
-    open class FwiGenericTableViewVM<T>: FwiTableViewVM {
-        // MARK: Class's properties
-        public let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
-        open var currentItem: T? {
-            didSet {
-                currentItemSubject.on(.next(currentItem))
+    open class FwiGenericTableViewVM<T: Equatable>: FwiTableViewVM {
+        /// Class's public properties
+        public var currentItem: Observable<T> {
+            return currentItemSubject.asObservable()
+        }
+
+        open var items: ArraySlice<T>?
+
+        // MARK: Class's public methods
+
+        open override func select(itemAt indexPath: IndexPath) {
+            guard
+                0 <= indexPath.row && indexPath.row < count,
+                let item = self[indexPath]
+            else {
+                return
+            }
+            super.select(itemAt: indexPath)
+            currentItemSubject.on(.next(item))
+        }
+
+        open func select(item: T) {
+            if let index = items?.index(where: { $0 == item }) {
+                select(itemAt: index)
             }
         }
 
-        public var items: ArraySlice<T>?
-
         // MARK: UITableViewDataSource's members
+
         open override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             return count
         }
@@ -67,16 +84,17 @@ import Foundation
         }
 
         // MARK: UITableViewDelegate's members
+
         open override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            currentItem = self[indexPath]
+            select(itemAt: indexPath)
         }
 
-        open override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-            currentItem = nil
-        }
+        /// Class's private properties.
+        private let currentItemSubject = ReplaySubject<T>.create(bufferSize: 1)
     }
 
     // MARK: Class's subscript
+
     extension FwiGenericTableViewVM {
         open var count: Int {
             return items?.count ?? 0

@@ -1,7 +1,3 @@
-import Foundation
-/// Optional
-import RxCocoa
-import UIKit
 //  File name   : FwiTableViewVM.swift
 //
 //  Author      : Phuc Tran
@@ -39,21 +35,28 @@ import UIKit
 
 #if canImport(UIKit)
     import FwiCore
+    import RxCocoa
     import RxSwift
+    import UIKit
 
     open class FwiTableViewVM: FwiViewModel {
-        // MARK: Class's properties
-        public var isEnableEditing = false
-        public var isEnableSelecting = false
+        /// Class's public properties.
         public private(set) weak var tableView: UITableView?
+        public var isEnableSelecting = false
+        public var isEnableEditing = false
 
-        // MARK: Class's constructors
+        public var currentIndexPath: Observable<IndexPath> {
+            return currentIndexPathSubject.asObservable()
+        }
+
+        /// Class's constructors.
         public init(with tableView: UITableView?) {
             super.init()
             self.tableView = tableView
         }
 
         // MARK: Class's public methods
+
         open override func setupRX() {
             tableView?.rx
                 .setDataSource(self)
@@ -64,6 +67,31 @@ import UIKit
                 .disposed(by: disposeBag)
         }
 
+        /// Select item at index
+        ///
+        /// - Parameter index: item's index
+        open func select(itemAt index: Int) {
+            let indexPath = IndexPath(item: index, section: 0)
+            select(itemAt: indexPath)
+        }
+
+        /// Select item at index path
+        ///
+        /// - Parameter indexPath: item's index path
+        open func select(itemAt indexPath: IndexPath) {
+            guard let tableView = self.tableView else {
+                return
+            }
+
+            let count = self.tableView(tableView, numberOfRowsInSection: indexPath.row)
+            guard 0 <= indexPath.row && indexPath.row < count else {
+                return
+            }
+
+            currentIndexPathSubject.on(.next(indexPath))
+        }
+
+        /// Toggle edit mode on/off.
         open func toggleEdit() {
             guard let isEditing = tableView?.isEditing else {
                 return
@@ -75,14 +103,14 @@ import UIKit
                 tableView?.setEditing(true, animated: true)
             }
         }
+
+        /// Class's private properties.
+        private let currentIndexPathSubject = ReplaySubject<IndexPath>.create(bufferSize: 1)
     }
 
     // MARK: UITableViewDataSource's members
-    extension FwiTableViewVM: UITableViewDataSource {
-        open func numberOfSections(in tableView: UITableView) -> Int {
-            return 1
-        }
 
+    extension FwiTableViewVM: UITableViewDataSource {
         open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             fatalError("Child class should override func \(#function)")
         }
@@ -111,34 +139,27 @@ import UIKit
         }
 
         /// Data manipulation - insert and delete support.
-        open func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        }
+        open func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
 
         /// Data manipulation - reorder / moving support.
-        open func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        }
+        open func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {}
     }
 
     // MARK: UITableViewDelegate's members
+
     extension FwiTableViewVM: UITableViewDelegate {
         /// Display customization.
-        open func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        }
+        open func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {}
 
-        open func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        }
+        open func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {}
 
-        open func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
-        }
+        open func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {}
 
-        open func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        }
+        open func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {}
 
-        open func tableView(_ tableView: UITableView, didEndDisplayingHeaderView view: UIView, forSection section: Int) {
-        }
+        open func tableView(_ tableView: UITableView, didEndDisplayingHeaderView view: UIView, forSection section: Int) {}
 
-        open func tableView(_ tableView: UITableView, didEndDisplayingFooterView view: UIView, forSection section: Int) {
-        }
+        open func tableView(_ tableView: UITableView, didEndDisplayingFooterView view: UIView, forSection section: Int) {}
 
         /// Variable height support.
         open func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -158,33 +179,28 @@ import UIKit
             return nil
         }
 
-        open func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        }
+        open func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {}
 
         /// Selection.
         open func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
             return true
         }
 
-        open func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        }
+        open func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {}
 
-        open func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
-        }
+        open func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {}
 
         open func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
             return indexPath
         }
 
-        open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        }
+        open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
 
         open func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
             return indexPath
         }
 
-        open func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        }
+        open func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {}
 
         /// Editing.
         open func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -201,11 +217,9 @@ import UIKit
             }
         }
 
-        open func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
-        }
+        open func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {}
 
-        open func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
-        }
+        open func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {}
 
         /// Copy/Paste. All three methods must be implemented by the delegate.
         open func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
@@ -216,7 +230,6 @@ import UIKit
             return false
         }
 
-        open func tableView(_ tableView: UITableView, performAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) {
-        }
+        open func tableView(_ tableView: UITableView, performAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) {}
     }
 #endif
