@@ -50,6 +50,7 @@ public extension URL {
 }
 
 // MARK: Custom Operator
+
 public extension URL {
     /// Append path component.
     public static func + (left: URL, right: String) -> URL {
@@ -127,6 +128,7 @@ public extension URL {
 }
 
 // MARK: Custom Operator for Optional URL
+
 public func + (left: URL?, right: String) -> URL? {
     guard let url = left else {
         return left

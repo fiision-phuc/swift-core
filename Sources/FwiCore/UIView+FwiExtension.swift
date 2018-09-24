@@ -59,7 +59,7 @@
 
         /// Create image from region of interest.
         public func createImageWithROI(_ roiRect: CGRect, scaleFactor scale: CGFloat = UIScreen.main.scale) -> UIImage? {
-        /* Condition validation: Validate ROI */
+            /* Condition validation: Validate ROI */
             if !self.bounds.contains(roiRect) {
                 return nil
             }
@@ -79,7 +79,7 @@
 
         /// Find first responder within tree views.
         public func findFirstResponder() -> UIView? {
-        /* Condition validation */
+            /* Condition validation */
             if self.isFirstResponder {
                 return self
             }

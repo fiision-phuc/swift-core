@@ -64,11 +64,13 @@ public func FwiResetLocale() {
 fileprivate var sharedInstance = FwiLocalization()
 fileprivate struct FwiLocalization {
     // MARK: Class's constructors
+
     fileprivate init() {
         reset()
     }
 
     // MARK: Class's properties
+
     fileprivate var locale: String = "en" {
         didSet {
             guard let path = Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: locale) else {
@@ -89,6 +91,7 @@ fileprivate struct FwiLocalization {
     fileprivate var bundle: Bundle?
 
     // MARK: Class's public methods
+
     fileprivate func localized(forString s: String) -> String {
         if let localized = bundle?.localizedString(forKey: s, value: s, table: nil) {
             return localized

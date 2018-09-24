@@ -37,6 +37,7 @@ import Foundation
 
 public extension NSCoding {
     // MARK: I/O to Data
+
     /// Unarchive from data.
     ///
     /// - parameter data (required): object's data
@@ -53,6 +54,7 @@ public extension NSCoding {
     }
 
     // MARK: I/O to File
+
     /// Unarchive from file.
     ///
     /// - parameter file (required): destination url
@@ -69,6 +71,7 @@ public extension NSCoding {
     }
 
     // MARK: I/O to UserDefaults
+
     /// Unarchive from UserDefaults.
     ///
     /// - parameter key (required): object's key inside UserDefaults

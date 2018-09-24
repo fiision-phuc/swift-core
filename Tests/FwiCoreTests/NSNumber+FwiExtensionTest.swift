@@ -52,5 +52,8 @@ class NSNumberFwiExtensionTest: XCTestCase {
 
         currencyString = currencyNumber.currency(withISO3: "USD", decimalSeparator: ",", groupingSeparator: ".")
         XCTAssertEqual(currencyString, "$2.000,00", "Currency string should be: $2.000,00")
+        
+        currencyString = currencyNumber.currency(withISO3: "VND", decimalSeparator: ",", groupingSeparator: ".", placeSymbolFront: false)
+        XCTAssertEqual(currencyString, "2.000₫", "Currency string should be: 2.000₫")
     }
 }

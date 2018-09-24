@@ -38,6 +38,7 @@
 
     extension UINavigationController {
         // MARK: Class's override methods
+
         open override var prefersStatusBarHidden: Bool {
             return visibleViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
         }

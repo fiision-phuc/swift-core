@@ -36,6 +36,7 @@
 import Foundation
 
 // MARK: Optional
+
 public extension KeyedDecodingContainer {
     /// Bool.
     public func parse(_ input: inout Bool?, key: KeyedDecodingContainer.Key) {
@@ -188,6 +189,7 @@ public extension KeyedDecodingContainer {
 }
 
 // MARK: Non optional
+
 public extension KeyedDecodingContainer {
     /// Bool.
     public func parse(_ input: inout Bool, key: KeyedDecodingContainer.Key) {

@@ -37,22 +37,26 @@ import Foundation
 
 struct FwiFormParam {
     // MARK: Class's constructors
+
     public init(key: String = "", value: String = "") {
         self.key = key
         self.value = value
     }
 
     // MARK: Class's properties
+
     public private(set) var key: String
     public private(set) var value: String
 
     // MARK: Struct's private methods
+
     public var hashValue: Int {
         return key.hashValue ^ value.hashValue
     }
 }
 
 // MARK: CustomStringConvertible's members
+
 extension FwiFormParam: CustomStringConvertible {
     public var description: String {
         if key[0] == "#" {
@@ -63,6 +67,7 @@ extension FwiFormParam: CustomStringConvertible {
 }
 
 // MARK: Custom Operator
+
 extension FwiFormParam {
     static func < (left: FwiFormParam, right: FwiFormParam) -> Bool {
         if left.key[left.key.startIndex] == "#" && right.key[right.key.startIndex] != "#" {

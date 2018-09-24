@@ -37,6 +37,7 @@ import Foundation
 
 public extension Data {
     // MARK: Validate Hex
+
     public var isHex: Bool {
         /* Condition validation */
         if count <= 0 || (count % 2) != 0 {
@@ -75,6 +76,7 @@ public extension Data {
     }
 
     // MARK: Decode Hex
+
     public func decodeHexData() -> Data? {
         /* Condition validation */
         if !isHex {
@@ -112,6 +114,7 @@ public extension Data {
     }
 
     // MARK: Encode Hex
+
     public func encodeHexData() -> Data? {
         /* Condition validation */
         if count <= 0 {

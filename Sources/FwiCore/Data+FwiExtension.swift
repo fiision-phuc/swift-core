@@ -100,6 +100,7 @@ public extension Data {
     }
 
     // MARK: File I/O
+
     /// Read data from file.
     ///
     /// - parameter url (required): source url to read from

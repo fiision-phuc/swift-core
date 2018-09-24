@@ -36,8 +36,7 @@
 import CoreData
 import Foundation
 
-public protocol FwiCoreData {
-}
+public protocol FwiCoreData {}
 
 public extension FwiCoreData where Self: NSManagedObject {
     /// Fetch all entities.
