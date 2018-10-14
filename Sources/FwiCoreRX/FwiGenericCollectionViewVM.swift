@@ -38,7 +38,7 @@
     import RxSwift
     import UIKit
 
-    open class FwiGenericCollectionViewVM<T>: FwiCollectionViewVM {
+    open class FwiGenericCollectionViewVM<T: Equatable>: FwiCollectionViewVM {
         /// Class's public properties.
         public var currentItem: Observable<T> {
             return currentItemSubject.asObservable()
@@ -46,8 +46,25 @@
 
         open var items: ArraySlice<T>?
 
-        // MARK: UICollectionViewDataSource's members
+        // MARK: Class's public methods
+        open override func select(itemAt indexPath: IndexPath, scrollPosition: UICollectionView.ScrollPosition = .centeredHorizontally) {
+            guard
+                0 <= indexPath.item && indexPath.item < count,
+                let item = self[indexPath]
+            else {
+                return
+            }
+            currentItemSubject.on(.next(item))
+            super.select(itemAt: indexPath, scrollPosition: scrollPosition)
+        }
 
+        open func select(item: T, scrollPosition: UICollectionView.ScrollPosition = .centeredHorizontally) {
+            if let index = items?.index(where: { $0 == item }) {
+                select(itemAt: index, scrollPosition: scrollPosition)
+            }
+        }
+
+        // MARK: UICollectionViewDataSource's members
         open override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             return count
         }
@@ -57,7 +74,6 @@
         }
 
         // MARK: UICollectionViewDelegate's members
-
         open override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             select(itemAt: indexPath)
         }
@@ -67,7 +83,6 @@
     }
 
     // MARK: Class's subscript
-
     extension FwiGenericCollectionViewVM {
         open var count: Int {
             return items?.count ?? 0

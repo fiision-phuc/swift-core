@@ -63,7 +63,6 @@
         }
 
         // MARK: Class's public methods
-
         open override func setupRX() {
             collectionView?.rx
                 .setDataSource(self)
@@ -84,15 +83,15 @@
         /// Select item at index
         ///
         /// - Parameter index: item's index
-        open func select(itemAt index: Int) {
+        open func select(itemAt index: Int, scrollPosition: UICollectionView.ScrollPosition = .centeredHorizontally) {
             let indexPath = IndexPath(item: index, section: 0)
-            select(itemAt: indexPath)
+            select(itemAt: indexPath, scrollPosition: scrollPosition)
         }
 
         /// Select item at index path
         ///
         /// - Parameter indexPath: item's index path
-        open func select(itemAt indexPath: IndexPath) {
+        open func select(itemAt indexPath: IndexPath, scrollPosition: UICollectionView.ScrollPosition = .centeredHorizontally) {
             guard let collectionView = self.collectionView else {
                 return
             }
@@ -102,6 +101,7 @@
                 return
             }
 
+            collectionView.selectItem(at: indexPath, animated: true, scrollPosition: scrollPosition)
             currentIndexPathSubject.on(.next(indexPath))
         }
 

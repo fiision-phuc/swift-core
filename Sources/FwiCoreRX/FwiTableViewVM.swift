@@ -70,15 +70,15 @@
         /// Select item at index
         ///
         /// - Parameter index: item's index
-        open func select(itemAt index: Int) {
+        open func select(itemAt index: Int, scrollPosition: UITableView.ScrollPosition = .middle) {
             let indexPath = IndexPath(item: index, section: 0)
-            select(itemAt: indexPath)
+            select(itemAt: indexPath, scrollPosition: scrollPosition)
         }
 
         /// Select item at index path
         ///
         /// - Parameter indexPath: item's index path
-        open func select(itemAt indexPath: IndexPath) {
+        open func select(itemAt indexPath: IndexPath, scrollPosition: UITableView.ScrollPosition = .middle) {
             guard let tableView = self.tableView else {
                 return
             }
@@ -88,6 +88,7 @@
                 return
             }
 
+            tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
             currentIndexPathSubject.on(.next(indexPath))
         }
 
@@ -139,7 +140,7 @@
         }
 
         /// Data manipulation - insert and delete support.
-        open func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
+        open func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {}
 
         /// Data manipulation - reorder / moving support.
         open func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {}
@@ -203,11 +204,11 @@
         open func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {}
 
         /// Editing.
-        open func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        open func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
             let option = (isEnableEditing, isEnableSelecting)
             switch option {
             case (false, true):
-                return UITableViewCellEditingStyle(rawValue: 3) ?? .none
+                return UITableViewCell.EditingStyle(rawValue: 3) ?? .none
 
             case (true, false):
                 return .delete

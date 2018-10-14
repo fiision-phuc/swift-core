@@ -44,10 +44,10 @@
             let imageSelected = UIImage(named: "\(imageName)_Selected")?.resizableImage(withCapInsets: edgeInsets)
             let imageDisabled = UIImage(named: "\(imageName)_Disabled")?.resizableImage(withCapInsets: edgeInsets)
 
-            self.setImage(imageDefault, for: UIControlState())
-            self.setImage(imageHighlighted, for: UIControlState.highlighted)
-            self.setImage(imageSelected, for: UIControlState.selected)
-            self.setImage(imageDisabled, for: UIControlState.disabled)
+            self.setImage(imageDefault, for: .normal)
+            self.setImage(imageHighlighted, for: .highlighted)
+            self.setImage(imageSelected, for: .selected)
+            self.setImage(imageDisabled, for: .disabled)
         }
 
         /// Apply image to button.
@@ -57,10 +57,10 @@
             let imageSelected = UIImage(named: "\(imageName)_Selected")
             let imageDisabled = UIImage(named: "\(imageName)_Disabled")
 
-            self.setImage(imageDefault, for: UIControlState())
-            self.setImage(imageHighlighted, for: UIControlState.highlighted)
-            self.setImage(imageSelected, for: UIControlState.selected)
-            self.setImage(imageDisabled, for: UIControlState.disabled)
+            self.setImage(imageDefault, for: .normal)
+            self.setImage(imageHighlighted, for: .highlighted)
+            self.setImage(imageSelected, for: .selected)
+            self.setImage(imageDisabled, for: .disabled)
         }
     }
 #endif

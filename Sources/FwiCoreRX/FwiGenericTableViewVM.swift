@@ -49,20 +49,20 @@
 
         // MARK: Class's public methods
 
-        open override func select(itemAt indexPath: IndexPath) {
+        open override func select(itemAt indexPath: IndexPath, scrollPosition: UITableView.ScrollPosition = .middle) {
             guard
                 0 <= indexPath.row && indexPath.row < count,
                 let item = self[indexPath]
             else {
                 return
             }
-            super.select(itemAt: indexPath)
             currentItemSubject.on(.next(item))
+            super.select(itemAt: indexPath, scrollPosition: scrollPosition)
         }
 
-        open func select(item: T) {
+        open func select(item: T, scrollPosition: UITableView.ScrollPosition = .middle) {
             if let index = items?.index(where: { $0 == item }) {
-                select(itemAt: index)
+                select(itemAt: index, scrollPosition: scrollPosition)
             }
         }
 
@@ -72,7 +72,7 @@
             return count
         }
 
-        open override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        open override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
             if editingStyle == .delete {
                 items?.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .left)
