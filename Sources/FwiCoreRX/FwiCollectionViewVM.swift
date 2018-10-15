@@ -41,15 +41,25 @@
 
     open class FwiCollectionViewVM: FwiViewModel {
         /// Class's public properties.
+        public var currentOptionalIndexPath: Observable<IndexPath?> {
+            return currentIndexPathSubject.asObservable()
+        }
+
+        public var currentIndexPath: Observable<IndexPath> {
+            return currentIndexPathSubject.asObservable()
+                .flatMap { indexPath -> Observable<IndexPath> in
+                    guard let indexPath = indexPath else {
+                        return Observable<IndexPath>.empty()
+                    }
+                    return Observable<IndexPath>.just(indexPath)
+                }
+        }
+
         public private(set) weak var collectionView: UICollectionView?
         public var isEnableOrdering = false {
             didSet {
                 longPressGesture?.isEnabled = isEnableOrdering
             }
-        }
-
-        public var currentIndexPath: Observable<IndexPath> {
-            return currentIndexPathSubject.asObservable()
         }
 
         /// Class's constructors.
@@ -81,18 +91,43 @@
             }
         }
 
-        /// Select item at index
+        /// Deselect item at index
         ///
         /// - Parameter index: item's index
-        open func select(itemAt index: Int) {
+        open func deselect(itemAt index: Int) {
             let indexPath = IndexPath(item: index, section: 0)
-            select(itemAt: indexPath)
+            deselect(itemAt: indexPath)
+        }
+
+        /// Deselect item at index path
+        ///
+        /// - Parameter indexPath: item's index path
+        open func deselect(itemAt indexPath: IndexPath) {
+            guard
+                let collectionView = self.collectionView,
+                self.collectionView(collectionView, shouldDeselectItemAt: indexPath)
+            else {
+                return
+            }
+            self.collectionView(collectionView, didDeselectItemAt: indexPath)
+        }
+
+        /// Select item at index
+        ///
+        /// - Parameters:
+        ///   - index: item's index
+        ///   - scrollPosition: how to scroll to that item
+        open func select(itemAt index: Int, scrollPosition: UICollectionView.ScrollPosition = .centeredHorizontally) {
+            let indexPath = IndexPath(item: index, section: 0)
+            select(itemAt: indexPath, scrollPosition: scrollPosition)
         }
 
         /// Select item at index path
         ///
-        /// - Parameter indexPath: item's index path
-        open func select(itemAt indexPath: IndexPath) {
+        /// - Parameters:
+        ///   - indexPath: item's index path
+        ///   - scrollPosition: how to scroll to that item
+        open func select(itemAt indexPath: IndexPath, scrollPosition: UICollectionView.ScrollPosition = .centeredHorizontally) {
             guard let collectionView = self.collectionView else {
                 return
             }
@@ -102,11 +137,12 @@
                 return
             }
 
-            currentIndexPathSubject.on(.next(indexPath))
+            collectionView.scrollToItem(at: indexPath, at: scrollPosition, animated: true)
+            self.collectionView(collectionView, didSelectItemAt: indexPath)
         }
 
         /// Class's private properties.
-        private let currentIndexPathSubject = ReplaySubject<IndexPath>.create(bufferSize: 1)
+        private let currentIndexPathSubject = ReplaySubject<IndexPath?>.create(bufferSize: 1)
         private var longPressGesture: UILongPressGestureRecognizer?
     }
 
@@ -191,9 +227,21 @@
         open func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
             return true
         }
-
         open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             currentIndexPathSubject.on(.next(indexPath))
+        }
+
+        public func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
+            return true
+        }
+        public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+            currentIndexPathSubject.bind(onNext: { [weak self] currentIndex in
+                guard let currentIndex = currentIndex, currentIndex == indexPath else {
+                    return
+                }
+                self?.currentIndexPathSubject.on(.next(nil))
+            })
+                .dispose()
         }
 
         /// Moving/reordering

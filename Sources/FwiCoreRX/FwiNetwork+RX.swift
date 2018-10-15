@@ -46,8 +46,8 @@ public extension FwiNetwork {
     /// (https://github.com/phuc0302/swift-core/blob/master/Sources/FwiNetwork.swift)
     public static func downloadResource(_ r: URLConvertible?,
                                         method m: HTTPMethod = .get,
-                                        params p: [String: String]? = nil,
-                                        encoding e: ParameterEncoding = URLEncoding.`default`,
+                                        params p: [String: Any]? = nil,
+                                        encoding e: ParameterEncoding = URLEncoding.default,
                                         headers h: [String: String]? = nil,
                                         destination d: URLConvertible? = nil) -> Observable<(HTTPURLResponse, URL)> {
         return Observable.create { observer in
@@ -76,8 +76,8 @@ public extension FwiNetwork {
     /// (https://github.com/phuc0302/swift-core/blob/master/Sources/FwiNetwork.swift)
     public static func sendRequest(_ r: URLConvertible?,
                                    method m: HTTPMethod = .get,
-                                   params p: [String: String]? = nil,
-                                   encoding e: ParameterEncoding = URLEncoding.`default`,
+                                   params p: [String: Any]? = nil,
+                                   encoding e: ParameterEncoding = URLEncoding.default,
                                    headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, Data)> {
         return Observable.create { observer in
             let t = FwiNetwork.send(request: r, method: m, params: p, encoding: e, headers: h, completion: { d, err, res in

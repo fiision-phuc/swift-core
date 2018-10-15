@@ -41,13 +41,23 @@
 
     open class FwiTableViewVM: FwiViewModel {
         /// Class's public properties.
-        public private(set) weak var tableView: UITableView?
-        public var isEnableSelecting = false
-        public var isEnableEditing = false
+        public var currentOptionalIndexPath: Observable<IndexPath?> {
+            return currentIndexPathSubject.asObservable()
+        }
 
         public var currentIndexPath: Observable<IndexPath> {
             return currentIndexPathSubject.asObservable()
+                .flatMap { indexPath -> Observable<IndexPath> in
+                    guard let indexPath = indexPath else {
+                        return Observable<IndexPath>.empty()
+                    }
+                    return Observable<IndexPath>.just(indexPath)
+                }
         }
+
+        public private(set) weak var tableView: UITableView?
+        public var isEnableSelecting = false
+        public var isEnableEditing = false
 
         /// Class's constructors.
         public init(with tableView: UITableView?) {
@@ -67,18 +77,43 @@
                 .disposed(by: disposeBag)
         }
 
-        /// Select item at index
+        /// Deselect item at index
         ///
         /// - Parameter index: item's index
-        open func select(itemAt index: Int) {
-            let indexPath = IndexPath(item: index, section: 0)
-            select(itemAt: indexPath)
+        open func deselect(itemAt index: Int) {
+            let indexPath = IndexPath(row: index, section: 0)
+            deselect(itemAt: indexPath)
+        }
+
+        /// Deselect item at index path
+        ///
+        /// - Parameter indexPath: item's index path
+        open func deselect(itemAt indexPath: IndexPath) {
+            guard
+                let tableView = self.tableView,
+                let deselectedIndex = self.tableView(tableView, willDeselectRowAt: indexPath)
+            else {
+                return
+            }
+            self.tableView(tableView, didDeselectRowAt: deselectedIndex)
+        }
+
+        /// Select item at index
+        ///
+        /// - Parameters:
+        ///   - index: item's index
+        ///   - scrollPosition: how to scroll to that item
+        open func select(itemAt index: Int, scrollPosition: UITableView.ScrollPosition = .middle) {
+            let indexPath = IndexPath(row: index, section: 0)
+            select(itemAt: indexPath, scrollPosition: scrollPosition)
         }
 
         /// Select item at index path
         ///
-        /// - Parameter indexPath: item's index path
-        open func select(itemAt indexPath: IndexPath) {
+        /// - Parameters:
+        ///   - indexPath: item's index path
+        ///   - scrollPosition: how to scroll to that item
+        open func select(itemAt indexPath: IndexPath, scrollPosition: UITableView.ScrollPosition = .middle) {
             guard let tableView = self.tableView else {
                 return
             }
@@ -88,7 +123,8 @@
                 return
             }
 
-            currentIndexPathSubject.on(.next(indexPath))
+            tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+            self.tableView(tableView, didSelectRowAt: indexPath)
         }
 
         /// Toggle edit mode on/off.
@@ -105,7 +141,7 @@
         }
 
         /// Class's private properties.
-        private let currentIndexPathSubject = ReplaySubject<IndexPath>.create(bufferSize: 1)
+        private let currentIndexPathSubject = ReplaySubject<IndexPath?>.create(bufferSize: 1)
     }
 
     // MARK: UITableViewDataSource's members
@@ -139,7 +175,7 @@
         }
 
         /// Data manipulation - insert and delete support.
-        open func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {}
+        open func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {}
 
         /// Data manipulation - reorder / moving support.
         open func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {}
@@ -163,11 +199,11 @@
 
         /// Variable height support.
         open func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-            return 1.0
+            return 0.1
         }
 
         open func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-            return 1.0
+            return 0.1
         }
 
         /// Section header & footer information. Views are preferred over title should you decide to provide both.
@@ -194,20 +230,30 @@
             return indexPath
         }
 
-        open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
+        open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            currentIndexPathSubject.on(.next(indexPath))
+        }
 
         open func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
             return indexPath
         }
 
-        open func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {}
+        open func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+            currentIndexPathSubject.bind(onNext: { [weak self] currentIndex in
+                guard let currentIndex = currentIndex, currentIndex == indexPath else {
+                    return
+                }
+                self?.currentIndexPathSubject.on(.next(nil))
+            })
+                .dispose()
+        }
 
         /// Editing.
-        open func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        open func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
             let option = (isEnableEditing, isEnableSelecting)
             switch option {
             case (false, true):
-                return UITableViewCellEditingStyle(rawValue: 3) ?? .none
+                return UITableViewCell.EditingStyle(rawValue: 3) ?? .none
 
             case (true, false):
                 return .delete

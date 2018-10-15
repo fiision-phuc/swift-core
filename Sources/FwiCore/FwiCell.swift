@@ -47,6 +47,11 @@
         static var identifier: String {
             return "\(self)"
         }
+
+        static var nib: UINib {
+            let nib = UINib(nibName: identifier, bundle: nil)
+            return nib
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

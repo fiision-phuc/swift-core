@@ -55,8 +55,8 @@ public struct FwiNetwork {
     @discardableResult
     public static func download(resource r: URLConvertible?,
                                 method m: HTTPMethod = .get,
-                                params p: [String: String]? = nil,
-                                encoding e: ParameterEncoding = URLEncoding.`default`,
+                                params p: [String: Any]? = nil,
+                                encoding e: ParameterEncoding = URLEncoding.default,
                                 headers h: [String: String]? = nil,
                                 destination d: URLConvertible? = nil,
                                 completion c: @escaping DownloadCompletion) -> DownloadRequest? {
@@ -97,8 +97,8 @@ public struct FwiNetwork {
     @discardableResult
     public static func send(request r: URLConvertible?,
                             method m: HTTPMethod = .get,
-                            params p: [String: String]? = nil,
-                            encoding e: ParameterEncoding = URLEncoding.`default`,
+                            params p: [String: Any]? = nil,
+                            encoding e: ParameterEncoding = URLEncoding.default,
                             headers h: [String: String]? = nil,
                             completion c: @escaping RequestCompletion) -> DataRequest? {
         /* Condition validation: validate endpoint */

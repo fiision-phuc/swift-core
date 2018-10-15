@@ -36,7 +36,7 @@
 #if canImport(UIKit)
     import UIKit
 
-    open class FwiGenericCollectionViewCellVM<C: UICollectionViewCell, M>: FwiGenericCollectionViewVM<M> {
+    open class FwiGenericCollectionViewCellVM<C: UICollectionViewCell, M: Equatable>: FwiGenericCollectionViewVM<M> {
         // MARK: Class's public methods
 
         /// Initialize cell at index.

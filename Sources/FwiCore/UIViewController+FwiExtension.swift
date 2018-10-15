@@ -41,29 +41,5 @@
         public static var identifier: String {
             return "\(self)"
         }
-
-        /// Add initial view controller from other storyboard into defined view. Default is view
-        /// controller's view.
-        @discardableResult
-        public func addFlow(from storyboardName: String, into rootView: UIView, in bundle: Bundle = Bundle.main) -> UIViewController? {
-            let flow = UIStoryboard(name: storyboardName, bundle: bundle)
-            guard let controller = flow.instantiateInitialViewController(), let subView = controller.view else {
-                return nil
-            }
-
-            controller.view.translatesAutoresizingMaskIntoConstraints = false
-            self.addChildViewController(controller)
-            view.addSubview(subView)
-
-            let views = ["subView": subView]
-            let constraints1 = NSLayoutConstraint.constraints(withVisualFormat: "|[subView]|", options: .alignAllLeading, metrics: nil, views: views)
-            let constraints2 = NSLayoutConstraint.constraints(withVisualFormat: "V:|[subView]|", options: .alignAllLeading, metrics: nil, views: views)
-            view.addConstraints(constraints1)
-            view.addConstraints(constraints2)
-
-            controller.willMove(toParentViewController: self)
-            controller.didMove(toParentViewController: self)
-            return controller
-        }
     }
 #endif

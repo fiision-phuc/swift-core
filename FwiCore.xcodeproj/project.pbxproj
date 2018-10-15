@@ -694,10 +694,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B61D89C13B00738B1F /* lib-debug.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
 			};
 			name = Debug;
@@ -706,10 +702,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B71D89C13B00738B1F /* lib-release.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
 			};
 			name = Release;
@@ -718,10 +710,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B71D89C13B00738B1F /* lib-release.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 			};
@@ -743,10 +731,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B61D89C13B00738B1F /* lib-debug.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 			};

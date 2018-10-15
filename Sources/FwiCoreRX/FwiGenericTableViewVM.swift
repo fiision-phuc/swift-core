@@ -41,28 +41,57 @@
 
     open class FwiGenericTableViewVM<T: Equatable>: FwiTableViewVM {
         /// Class's public properties
-        public var currentItem: Observable<T> {
+        public var currentOptionalItem: Observable<T?> {
             return currentItemSubject.asObservable()
+        }
+
+        public var currentItem: Observable<T> {
+            return currentItemSubject.asObservable().flatMap { item -> Observable<T> in
+                guard let item = item else {
+                    return Observable<T>.empty()
+                }
+                return Observable<T>.just(item)
+            }
         }
 
         open var items: ArraySlice<T>?
 
         // MARK: Class's public methods
 
-        open override func select(itemAt indexPath: IndexPath) {
-            guard
-                0 <= indexPath.row && indexPath.row < count,
-                let item = self[indexPath]
-            else {
-                return
+        open override func setupRX() {
+            super.setupRX()
+
+            currentOptionalIndexPath.map { [weak self] (indexPath) -> T? in
+                guard let indexPath = indexPath else {
+                    return nil
+                }
+                return self?[indexPath]
             }
-            super.select(itemAt: indexPath)
-            currentItemSubject.on(.next(item))
+            .bind(to: currentItemSubject)
+            .disposed(by: disposeBag)
         }
 
-        open func select(item: T) {
+        open func deselect(item: T?) {
+            if let item = item {
+                deselect(item: item)
+            }
+        }
+
+        open func deselect(item: T) {
             if let index = items?.index(where: { $0 == item }) {
-                select(itemAt: index)
+                deselect(itemAt: index)
+            }
+        }
+
+        open func select(item: T?, scrollPosition: UITableView.ScrollPosition = .middle) {
+            if let item = item {
+                select(item: item, scrollPosition: scrollPosition)
+            }
+        }
+
+        open func select(item: T, scrollPosition: UITableView.ScrollPosition = .middle) {
+            if let index = items?.index(where: { $0 == item }) {
+                select(itemAt: index, scrollPosition: scrollPosition)
             }
         }
 
@@ -72,25 +101,19 @@
             return count
         }
 
-        open override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        open override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+            items?.swapAt(sourceIndexPath.row, destinationIndexPath.row)
+        }
+
+        open override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
             if editingStyle == .delete {
                 items?.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .left)
             }
         }
 
-        open override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-            items?.swapAt(sourceIndexPath.row, destinationIndexPath.row)
-        }
-
-        // MARK: UITableViewDelegate's members
-
-        open override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            select(itemAt: indexPath)
-        }
-
         /// Class's private properties.
-        private let currentItemSubject = ReplaySubject<T>.create(bufferSize: 1)
+        private let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
     }
 
     // MARK: Class's subscript
