@@ -40,22 +40,52 @@
 
     open class FwiGenericCollectionViewVM<T: Equatable>: FwiCollectionViewVM {
         /// Class's public properties.
-        public var currentItem: Observable<T> {
+        public var currentOptionalItem: Observable<T?> {
             return currentItemSubject.asObservable()
+        }
+
+        public var currentItem: Observable<T> {
+            return currentItemSubject.asObservable().flatMap { item -> Observable<T> in
+                guard let item = item else {
+                    return Observable<T>.empty()
+                }
+                return Observable<T>.just(item)
+            }
         }
 
         open var items: ArraySlice<T>?
 
         // MARK: Class's public methods
-        open override func select(itemAt indexPath: IndexPath, scrollPosition: UICollectionView.ScrollPosition = .centeredHorizontally) {
-            guard
-                0 <= indexPath.item && indexPath.item < count,
-                let item = self[indexPath]
-            else {
-                return
+
+        open override func setupRX() {
+            super.setupRX()
+
+            currentOptionalIndexPath.map { [weak self] (indexPath) -> T? in
+                guard let indexPath = indexPath else {
+                    return nil
+                }
+                return self?[indexPath]
             }
-            currentItemSubject.on(.next(item))
-            super.select(itemAt: indexPath, scrollPosition: scrollPosition)
+            .bind(to: currentItemSubject)
+            .disposed(by: disposeBag)
+        }
+
+        open func deselect(item: T?) {
+            if let item = item {
+                deselect(item: item)
+            }
+        }
+
+        open func deselect(item: T) {
+            if let index = items?.index(where: { $0 == item }) {
+                deselect(itemAt: index)
+            }
+        }
+
+        open func select(item: T?, scrollPosition: UICollectionView.ScrollPosition = .centeredHorizontally) {
+            if let item = item {
+                select(item: item, scrollPosition: scrollPosition)
+            }
         }
 
         open func select(item: T, scrollPosition: UICollectionView.ScrollPosition = .centeredHorizontally) {
@@ -65,6 +95,7 @@
         }
 
         // MARK: UICollectionViewDataSource's members
+
         open override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             return count
         }
@@ -73,16 +104,12 @@
             items?.swapAt(sourceIndexPath.row, destinationIndexPath.row)
         }
 
-        // MARK: UICollectionViewDelegate's members
-        open override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            select(itemAt: indexPath)
-        }
-
         /// Class's private properties.
-        private let currentItemSubject = ReplaySubject<T>.create(bufferSize: 1)
+        private let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
     }
 
     // MARK: Class's subscript
+
     extension FwiGenericCollectionViewVM {
         open var count: Int {
             return items?.count ?? 0
