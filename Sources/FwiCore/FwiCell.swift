@@ -40,6 +40,9 @@
     public protocol FwiCell {
         /// Return cell's identifier.
         static var identifier: String { get }
+
+        /// Return cell's nib from main bundle.
+        static var nib: UINib { get }
     }
 
     /// Default implementation for FwiCell.
@@ -47,19 +50,30 @@
         static var identifier: String {
             return "\(self)"
         }
-
-        static var nib: UINib {
-            let nib = UINib(nibName: identifier, bundle: nil)
-            return nib
-        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Default added FwiCell to UICollection view cell.
-    extension UICollectionViewCell: FwiCell {}
+    extension UICollectionViewCell: FwiCell {
+        public static var nib: UINib {
+            return loadNib()
+        }
+    }
 
     /// FwiCell has addon function only when self is UICollectionViewCell.
     public extension FwiCell where Self: UICollectionViewCell {
+        /// Load nib from bundle.
+        ///
+        /// - Parameter bundle: a bundle which contains cell's xib.
+        public static func loadNib(from bundle: Bundle? = nil) -> UINib {
+            let b = bundle ?? Bundle.main
+
+            guard b.path(forResource: identifier, ofType: "nib") != nil else {
+                fatalError("Could not load nib: \(identifier) from bundle: \(b.bundleURL.lastPathComponent).")
+            }
+            return UINib(nibName: identifier, bundle: b)
+        }
+
         /// Dequeue and cast to self.
         ///
         /// - parameter collectionView (required): collectionView instance
@@ -71,10 +85,26 @@
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Default added FwiCell to UITableView view cell.
-    extension UITableViewCell: FwiCell {}
+    extension UITableViewCell: FwiCell {
+        public static var nib: UINib {
+            return loadNib()
+        }
+    }
 
     /// FwiCell has addon function only when self is UITableViewCell.
     public extension FwiCell where Self: UITableViewCell {
+        /// Load nib from bundle.
+        ///
+        /// - Parameter bundle: a bundle which contains cell's xib.
+        public static func loadNib(from bundle: Bundle? = nil) -> UINib {
+            let b = bundle ?? Bundle.main
+
+            guard b.path(forResource: identifier, ofType: "nib") != nil else {
+                fatalError("Could not load nib: \(identifier) from bundle: \(b.bundleURL.lastPathComponent).")
+            }
+            return UINib(nibName: identifier, bundle: b)
+        }
+
         /// Dequeue and cast to self.
         ///
         /// - parameter tableView (required): tableView instance
