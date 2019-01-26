@@ -73,7 +73,7 @@ public extension FwiCoreData where Self: NSManagedObject {
 
         var entities: [Self]?
         c.performAndWait {
-            entities = try? c.fetch(request)
+            entities = FwiCore.tryOmitsThrow({ try c.fetch(request) }, default: nil)
         }
         return entities ?? []
     }
@@ -118,7 +118,7 @@ public extension FwiCoreData where Self: NSManagedObject {
 
         var counter = 0
         c.performAndWait {
-            counter = (try? c.count(for: request)) ?? 0
+            counter = FwiCore.tryOmitsThrow({ try c.count(for: request) }, default: 0)
         }
         return counter
     }
@@ -145,6 +145,6 @@ public extension FwiCoreData where Self: NSManagedObject {
         entities.forEach {
             context?.delete($0)
         }
-        try? context?.save()
+        FwiCore.tryOmitsThrow({ try context?.save() }, default: ())
     }
 }

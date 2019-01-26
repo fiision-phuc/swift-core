@@ -42,18 +42,12 @@ public extension FileManager {
     ///
     /// - parameter url (required): destination url to create directory
     /// - parameter intermediateDirectories (optional): should create intermediate directories as well
-    @discardableResult
-    public func createDirectory(atURL url: URL?, withIntermediateDirectories intermediate: Bool = true, attributes: [FileAttributeKey: Any]? = nil) -> Error? {
+    public func createDirectory(atURL url: URL?, withIntermediateDirectories intermediate: Bool = true, attributes: [FileAttributeKey: Any]? = nil) throws {
         guard let url = url, url.isFileURL && url != URL.documentDirectory() && url != URL.cacheDirectory() else {
-            return NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Invalid directory's URL."])
+            let info = [NSLocalizedDescriptionKey: "Invalid directory's URL."]
+            throw NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: info)
         }
-
-        do {
-            try createDirectory(at: url, withIntermediateDirectories: intermediate, attributes: attributes)
-            return nil
-        } catch let err as NSError {
-            return err
-        }
+        return try createDirectory(at: url, withIntermediateDirectories: intermediate, attributes: attributes)
     }
 
     /// Check if directory is available for a given URL.
@@ -66,6 +60,7 @@ public extension FileManager {
 
         var isDirectory: ObjCBool = false
         let isExist = fileExists(atPath: path, isDirectory: &isDirectory)
+
         return isExist && isDirectory.boolValue
     }
 
@@ -73,17 +68,15 @@ public extension FileManager {
     ///
     /// - parameter from (required): source url
     /// - parameter to (required): destination url
-    @discardableResult
-    public func moveDirectory(from srcURL: URL?, to dstURL: URL?) -> Error? {
-        return moveFile(from: srcURL, to: dstURL)
+    public func moveDirectory(from srcURL: URL?, to dstURL: URL?) throws {
+        return try moveFile(from: srcURL, to: dstURL)
     }
 
     /// Remove directory for a given URL.
     ///
     /// - parameter url (required): source url
-    @discardableResult
-    public func removeDirectory(atURL url: URL?) -> Error? {
-        return removeFile(atURL: url)
+    public func removeDirectory(atURL url: URL?) throws {
+        return try removeFile(atURL: url)
     }
 
     // MARK: File manager
@@ -102,34 +95,21 @@ public extension FileManager {
     ///
     /// - parameter from (required): source url
     /// - parameter to (required): destination url
-    @discardableResult
-    public func moveFile(from srcURL: URL?, to dstURL: URL?) -> Error? {
+    public func moveFile(from srcURL: URL?, to dstURL: URL?) throws {
         guard let srcURL = srcURL, let dstURL = dstURL else {
-            return NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Invalid file's source's URL or destination's URL."])
+            let info = [NSLocalizedDescriptionKey: "Invalid file's source's URL or destination's URL."]
+            throw NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: info)
         }
-
-        do {
-            try moveItem(at: srcURL, to: dstURL)
-            return nil
-        } catch let err as NSError {
-            return err
-        }
+        try moveItem(at: srcURL, to: dstURL)
     }
 
     /// Remove file for a given URL.
     ///
     /// - parameter url (required): source url
-    @discardableResult
-    public func removeFile(atURL url: URL?) -> Error? {
+    public func removeFile(atURL url: URL?) throws {
         guard let url = url, fileExists(atURL: url) else {
-            return NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Invalid file's URL."])
+            throw NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Invalid file's URL."])
         }
-
-        do {
-            try removeItem(at: url)
-            return nil
-        } catch let err as NSError {
-            return err
-        }
+        try removeItem(at: url)
     }
 }

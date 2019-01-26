@@ -36,92 +36,92 @@
 #if canImport(UIKit)
     import UIKit
 
-@IBDesignable
-public extension UIView {
-    @IBInspectable
-    public var borderColor: UIColor? {
-        get {
-            if let color = layer.borderColor {
-                return UIColor(cgColor: color)
+    @IBDesignable
+    public extension UIView {
+        @IBInspectable
+        public var borderColor: UIColor? {
+            get {
+                if let color = layer.borderColor {
+                    return UIColor(cgColor: color)
+                }
+                return nil
             }
-            return nil
-        }
-        set(color) {
-            if let color = color {
-                layer.borderColor = color.cgColor
+            set(color) {
+                if let color = color {
+                    layer.borderColor = color.cgColor
+                }
+                layer.borderColor = nil
             }
-            layer.borderColor = nil
         }
-    }
 
-    @IBInspectable
-    public var borderWidth: CGFloat {
-        get {
-            return layer.borderWidth
-        }
-        set(borderWidth) {
-            layer.borderWidth = borderWidth
-        }
-    }
-
-    @IBInspectable
-    public var cornerRadius: CGFloat {
-        get {
-            return layer.cornerRadius
-        }
-        set(radius) {
-            let bgLayer = self.layer
-            bgLayer.cornerRadius = radius
-            bgLayer.masksToBounds = (radius > 0)
-        }
-    }
-
-    @IBInspectable
-    var shadowColor: UIColor? {
-        get {
-            if let color = layer.shadowColor {
-                return UIColor(cgColor: color)
+        @IBInspectable
+        public var borderWidth: CGFloat {
+            get {
+                return layer.borderWidth
             }
-            return nil
-        }
-        set(color) {
-            if let color = color {
-                layer.shadowColor = color.cgColor
+            set(borderWidth) {
+                layer.borderWidth = borderWidth
             }
-            layer.shadowColor = nil
         }
-    }
 
-    @IBInspectable
-    var shadowOffset: CGSize {
-        get {
-            return layer.shadowOffset
+        @IBInspectable
+        public var cornerRadius: CGFloat {
+            get {
+                return layer.cornerRadius
+            }
+            set(radius) {
+                let bgLayer = self.layer
+                bgLayer.cornerRadius = radius
+                bgLayer.masksToBounds = (radius > 0)
+            }
         }
-        set(shadowOffset) {
-            layer.shadowOffset = shadowOffset
-        }
-    }
 
-    @IBInspectable
-    var shadowOpacity: Float {
-        get {
-            return layer.shadowOpacity
+        @IBInspectable
+        var shadowColor: UIColor? {
+            get {
+                if let color = layer.shadowColor {
+                    return UIColor(cgColor: color)
+                }
+                return nil
+            }
+            set(color) {
+                if let color = color {
+                    layer.shadowColor = color.cgColor
+                }
+                layer.shadowColor = nil
+            }
         }
-        set(shadowOpacity) {
-            layer.shadowOpacity = shadowOpacity
-        }
-    }
 
-    @IBInspectable
-    var shadowRadius: CGFloat {
-        get {
-            return layer.shadowRadius
+        @IBInspectable
+        var shadowOffset: CGSize {
+            get {
+                return layer.shadowOffset
+            }
+            set(shadowOffset) {
+                layer.shadowOffset = shadowOffset
+            }
         }
-        set(shadowRadius) {
-            layer.shadowRadius = shadowRadius
+
+        @IBInspectable
+        var shadowOpacity: Float {
+            get {
+                return layer.shadowOpacity
+            }
+            set(shadowOpacity) {
+                layer.shadowOpacity = shadowOpacity
+            }
+        }
+
+        @IBInspectable
+        var shadowRadius: CGFloat {
+            get {
+                return layer.shadowRadius
+            }
+            set(shadowRadius) {
+                layer.shadowRadius = shadowRadius
+            }
         }
     }
-}
 
     public extension UIView {
         /// Create image from current view.

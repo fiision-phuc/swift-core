@@ -35,241 +35,215 @@
 
 import Foundation
 
-// MARK: Optional
-
 public extension KeyedDecodingContainer {
     /// Bool.
-    public func parse(_ input: inout Bool?, key: KeyedDecodingContainer.Key) {
+    public func decode(key: KeyedDecodingContainer.Key) throws -> Bool {
         do {
-            input = try decode(Bool.self, forKey: key)
-        } catch DecodingError.typeMismatch {
+            return try decode(Bool.self, forKey: key)
+        } catch DecodingError.typeMismatch(let type, let context) {
             if let value = try? decode(String.self, forKey: key).lowercased() {
                 if let n = numberFormatter.number(from: value) {
-                    input = n.boolValue
+                    return n.boolValue
                 } else if value == "false" {
-                    input = false
+                    return false
                 } else if value == "true" {
-                    input = true
-                } else {
-                    input = nil
+                    return true
                 }
             } else if let value = try? decode(Int.self, forKey: key) {
-                input = value == 0 ? false : true
-            } else {
-                input = nil
+                return (value == 0 ? false : true)
             }
-        } catch {
-            input = nil
+            throw DecodingError.typeMismatch(type, context)
         }
     }
 
     /// Float.
-    public func parse(_ input: inout Float?, key: KeyedDecodingContainer.Key) {
+    public func decode(key: KeyedDecodingContainer.Key) throws -> Float {
         do {
-            input = try decode(Float.self, forKey: key)
-        } catch DecodingError.typeMismatch {
+            return try decode(Float.self, forKey: key)
+        } catch DecodingError.typeMismatch(let type, let context) {
             if let value = try? decode(String.self, forKey: key), let n = numberFormatter.number(from: value) {
-                input = n.floatValue
-            } else {
-                input = nil
+                return n.floatValue
             }
-        } catch {
-            input = nil
+            throw DecodingError.typeMismatch(type, context)
         }
     }
 
     /// Double.
-    public func parse(_ input: inout Double?, key: KeyedDecodingContainer.Key) {
+    public func decode(key: KeyedDecodingContainer.Key) throws -> Double {
         do {
-            input = try decode(Double.self, forKey: key)
-        } catch DecodingError.typeMismatch {
+            return try decode(Double.self, forKey: key)
+        } catch DecodingError.typeMismatch(let type, let context) {
             if let value = try? decode(String.self, forKey: key), let n = numberFormatter.number(from: value) {
-                input = n.doubleValue
-            } else {
-                input = nil
+                return n.doubleValue
             }
-        } catch {
-            input = nil
+            throw DecodingError.typeMismatch(type, context)
         }
     }
 
     /// Signed/Unsigned integer.
-    public func parse<T: Codable & SignedInteger>(_ input: inout T?, key: KeyedDecodingContainer.Key) {
+    public func decode<T: Codable & SignedInteger>(key: KeyedDecodingContainer.Key) throws -> T {
         do {
-            input = numericCast(try decode(Int64.self, forKey: key))
-        } catch DecodingError.typeMismatch {
+            return numericCast(try decode(Int64.self, forKey: key))
+        } catch DecodingError.typeMismatch(let type, let context) {
             if let value = try? decode(String.self, forKey: key), let n = numberFormatter.number(from: value) {
-                input = numericCast(n.int64Value)
-            } else {
-                input = nil
+                return numericCast(n.int64Value)
             }
-        } catch {
-            input = nil
+            throw DecodingError.typeMismatch(type, context)
         }
     }
 
-    public func parse<T: Codable & UnsignedInteger>(_ input: inout T?, key: KeyedDecodingContainer.Key) {
+    public func decode<T: Codable & UnsignedInteger>(key: KeyedDecodingContainer.Key) throws -> T {
         do {
-            input = numericCast(try decode(UInt64.self, forKey: key))
-        } catch DecodingError.typeMismatch {
+            return numericCast(try decode(UInt64.self, forKey: key))
+        } catch DecodingError.typeMismatch(let type, let context) {
             if let value = try? decode(String.self, forKey: key), let n = numberFormatter.number(from: value) {
-                input = numericCast(n.uint64Value)
-            } else {
-                input = nil
+                return numericCast(n.uint64Value)
             }
-        } catch {
-            input = nil
+            throw DecodingError.typeMismatch(type, context)
         }
     }
 
     /// Data.
-    public func parse(_ input: inout Data?, key: KeyedDecodingContainer.Key) {
+    public func decode(key: KeyedDecodingContainer.Key) throws -> Data {
         do {
-            input = try decode(Data.self, forKey: key)
-        } catch {
+            return try decode(Data.self, forKey: key)
+        } catch DecodingError.dataCorrupted(let context) {
             if let value = try? decode(String.self, forKey: key) {
                 if value.isHex, let d = value.decodeHexData() {
-                    input = d
+                    return d
                 } else if let d = value.toData() {
-                    input = d
-                } else {
-                    input = nil
+                    return d
                 }
-            } else {
-                input = nil
             }
+            throw DecodingError.dataCorrupted(context)
         }
     }
 
     /// Date.
-    public func parse(_ input: inout Date?, key: KeyedDecodingContainer.Key) {
+    public func decode(key: KeyedDecodingContainer.Key) throws -> Date {
         do {
-            input = try decode(Date.self, forKey: key)
-        } catch DecodingError.typeMismatch {
+            return try decode(Date.self, forKey: key)
+        } catch DecodingError.typeMismatch(let type, let context) {
             if let value = try? decode(TimeInterval.self, forKey: key) {
-                input = Date(timeIntervalSince1970: value)
-            } else {
-                input = nil
+                return Date(timeIntervalSince1970: value)
+
+            } else if let value = try? decode(String.self, forKey: key) {
+                if let date = dateISO8601Formatter.date(from: value) {
+                    return date
+
+                } else if let n = numberFormatter.number(from: value) {
+                    return Date(timeIntervalSince1970: n.doubleValue)
+                }
             }
-        } catch {
-            if let value = try? decode(String.self, forKey: key), let n = numberFormatter.number(from: value) {
-                input = Date(timeIntervalSince1970: n.doubleValue)
-            } else {
-                input = nil
-            }
+            throw DecodingError.typeMismatch(type, context)
         }
     }
 
     /// String.
-    public func parse(_ input: inout String?, key: KeyedDecodingContainer.Key) {
-        do {
-            input = try decode(String.self, forKey: key)
-        } catch {
-            input = nil
-        }
+    public func decode(key: KeyedDecodingContainer.Key) throws -> String {
+        return try decode(String.self, forKey: key)
     }
 
     /// URL.
-    public func parse(_ input: inout URL?, key: KeyedDecodingContainer.Key) {
-        do {
-            input = try decode(URL.self, forKey: key)
-        } catch {
-            input = nil
-        }
+    public func decode(key: KeyedDecodingContainer.Key) throws -> URL {
+        return try decode(URL.self, forKey: key)
     }
 
     /// Other.
-    public func parse<T: Codable>(_ input: inout T?, key: KeyedDecodingContainer.Key) {
-        do {
-            input = try decode(T.self, forKey: key)
-        } catch {
-            input = nil
-        }
+    public func decode<T: Codable>(key: KeyedDecodingContainer.Key) throws -> T {
+        return try decode(T.self, forKey: key)
     }
 }
 
-// MARK: Non optional
+//// MARK: Non optional
+//public extension KeyedDecodingContainer {
+//    /// Bool.
+//    public func parse(_ input: inout Bool, key: KeyedDecodingContainer.Key) {
+//        var value: Bool?
+//        parse(&value, key: key)
+//
+//        input = value ?? false
+//    }
+//
+//    /// Float.
+//    public func parse(_ input: inout Float, key: KeyedDecodingContainer.Key) {
+//        var value: Float?
+//        parse(&value, key: key)
+//
+//        input = value ?? 0.0
+//    }
+//
+//    /// Double.
+//    public func parse(_ input: inout Double, key: KeyedDecodingContainer.Key) {
+//        var value: Double?
+//        parse(&value, key: key)
+//
+//        input = value ?? 0.0
+//    }
+//
+//    /// Signed/Unsigned integer.
+//    public func parse<T: Codable & SignedInteger>(_ input: inout T, key: KeyedDecodingContainer.Key) {
+//        var value: T?
+//        parse(&value, key: key)
+//
+//        input = value ?? 0
+//    }
+//
+//    public func parse<T: Codable & UnsignedInteger>(_ input: inout T, key: KeyedDecodingContainer.Key) {
+//        var value: T?
+//        parse(&value, key: key)
+//
+//        input = value ?? 0
+//    }
+//
+//    /// Data.
+//    public func parse(_ input: inout Data, key: KeyedDecodingContainer.Key) {
+//        var value: Data?
+//        parse(&value, key: key)
+//
+//        if let data = value {
+//            input = data
+//        }
+//    }
+//
+//    /// Date.
+//    public func parse(_ input: inout Date, key: KeyedDecodingContainer.Key) {
+//        var value: Date?
+//        parse(&value, key: key)
+//
+//        if let date = value {
+//            input = date
+//        }
+//    }
+//
+//    /// String.
+//    public func parse(_ input: inout String, key: KeyedDecodingContainer.Key) {
+//        var value: String?
+//        parse(&value, key: key)
+//
+//        if let string = value {
+//            input = string
+//        }
+//    }
+//
+//    /// Other.
+//    public func parse<T: Codable>(_ input: inout T, key: KeyedDecodingContainer.Key) {
+//        var value: T?
+//        parse(&value, key: key)
+//
+//        if let object = value {
+//            input = object
+//        }
+//    }
+//}
 
-public extension KeyedDecodingContainer {
-    /// Bool.
-    public func parse(_ input: inout Bool, key: KeyedDecodingContainer.Key) {
-        var value: Bool?
-        parse(&value, key: key)
-
-        input = value ?? false
-    }
-
-    /// Float.
-    public func parse(_ input: inout Float, key: KeyedDecodingContainer.Key) {
-        var value: Float?
-        parse(&value, key: key)
-
-        input = value ?? 0.0
-    }
-
-    /// Double.
-    public func parse(_ input: inout Double, key: KeyedDecodingContainer.Key) {
-        var value: Double?
-        parse(&value, key: key)
-
-        input = value ?? 0.0
-    }
-
-    /// Signed/Unsigned integer.
-    public func parse<T: Codable & SignedInteger>(_ input: inout T, key: KeyedDecodingContainer.Key) {
-        var value: T?
-        parse(&value, key: key)
-
-        input = value ?? 0
-    }
-
-    public func parse<T: Codable & UnsignedInteger>(_ input: inout T, key: KeyedDecodingContainer.Key) {
-        var value: T?
-        parse(&value, key: key)
-
-        input = value ?? 0
-    }
-
-    /// Data.
-    public func parse(_ input: inout Data, key: KeyedDecodingContainer.Key) {
-        var value: Data?
-        parse(&value, key: key)
-
-        if let data = value {
-            input = data
-        }
-    }
-
-    /// Date.
-    public func parse(_ input: inout Date, key: KeyedDecodingContainer.Key) {
-        var value: Date?
-        parse(&value, key: key)
-
-        if let date = value {
-            input = date
-        }
-    }
-
-    /// String.
-    public func parse(_ input: inout String, key: KeyedDecodingContainer.Key) {
-        var value: String?
-        parse(&value, key: key)
-
-        if let string = value {
-            input = string
-        }
-    }
-
-    /// Other.
-    public func parse<T: Codable>(_ input: inout T, key: KeyedDecodingContainer.Key) {
-        var value: T?
-        parse(&value, key: key)
-
-        if let object = value {
-            input = object
-        }
-    }
-}
+/// Define default date format.
+fileprivate let dateISO8601Formatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
+    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+    return formatter
+}()
 
 /// Define default number format.
 fileprivate let numberFormatter: NumberFormatter = {

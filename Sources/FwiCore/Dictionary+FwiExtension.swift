@@ -41,11 +41,20 @@ public extension Dictionary {
     /// - parameter plistname (required): the plist's name
     /// - parameter plistFormat (optional): the plist's format, default is xml
     /// - parameter bundle (optional): which bundle contains the plist file
-    public static func loadPlist(withPlistname n: String, plistFormat f: PropertyListSerialization.PropertyListFormat = .xml, fromBundle b: Bundle = Bundle.main) -> [String: Any]? {
-        guard let url = Bundle.main.url(forResource: n, withExtension: "plist"), let data = try? Data(contentsOf: url) else {
-            return nil
+    public static func loadPlist(withPlistname n: String, plistFormat f: PropertyListSerialization.PropertyListFormat = .xml, fromBundle b: Bundle = Bundle.main) throws -> [String: Any] {
+        guard let url = Bundle.main.url(forResource: n, withExtension: "plist") else {
+            let info = [NSLocalizedDescriptionKey: "\(n).plist does not exist."]
+            throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: info)
         }
 
-        return (try? PropertyListSerialization.propertyList(from: data, options: .mutableContainers, format: nil)) as? [String: Any]
+        let data = try Data(contentsOf: url)
+        let rawData = try PropertyListSerialization.propertyList(from: data, options: .mutableContainers, format: nil)
+
+        // Cast to dictionary
+        guard let plist = rawData as? [String: Any] else {
+            let info = [NSLocalizedDescriptionKey: "\(n).plist is not in form of key-value."]
+            throw NSError(domain: FwiCore.domain, code: -1, userInfo: info)
+        }
+        return plist
     }
 }

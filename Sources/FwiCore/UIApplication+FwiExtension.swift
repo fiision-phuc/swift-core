@@ -70,8 +70,7 @@
             #if targetEnvironment(simulator)
                 print("Remote notification does not support this device.")
             #else
-                let notificationType = UIUserNotificationType.alert.union(UIUserNotificationType.badge)
-                    .union(UIUserNotificationType.sound)
+                let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
 
                 let settings = UIUserNotificationSettings(types: notificationType, categories: nil)
                 UIApplication.shared.registerUserNotificationSettings(settings)

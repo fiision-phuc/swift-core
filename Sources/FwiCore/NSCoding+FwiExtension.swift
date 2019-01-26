@@ -35,51 +35,58 @@
 
 import Foundation
 
+// MARK: IO to Data
 public extension NSCoding {
-    // MARK: I/O to Data
-
     /// Unarchive from data.
     ///
     /// - parameter data (required): object's data
-    public static func unarchive(fromData d: Data?) -> Self? {
-        guard let data = d else {
-            return nil
+    public static func unarchive(fromData d: Data?) throws -> Self {
+        guard let data = d, data.count > 0 else {
+            let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Input data must not be nil."])
+            throw error
         }
-        return NSKeyedUnarchiver.unarchiveObject(with: data) as? Self
+
+        guard let object = NSKeyedUnarchiver.unarchiveObject(with: data) as? Self else {
+            let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not decode data into \(String(describing: self))."])
+            throw error
+        }
+        return object
     }
 
     /// Archive to data.
     public func archive() -> Data {
         return NSKeyedArchiver.archivedData(withRootObject: self)
     }
+}
 
-    // MARK: I/O to File
-
+// MARK: IO to File
+public extension NSCoding {
     /// Unarchive from file.
     ///
     /// - parameter file (required): destination url
-    public static func unarchive(fromFile url: URL?) -> Self? {
-        return unarchive(fromData: Data.read(fromFile: url))
+    public static func unarchive(fromFile url: URL?) throws -> Self {
+        return try unarchive(fromData: Data.read(fromFile: url))
     }
 
     /// Archive to file.
     ///
     /// - parameter file (required): source url
-    @discardableResult
-    public func archive(toFile url: URL?) -> Error? {
-        return archive().write(toFile: url)
+    public func archive(toFile url: URL?) throws {
+        try archive().write(toFile: url)
     }
+}
 
-    // MARK: I/O to UserDefaults
-
+// MARK: IO to UserDefaults
+public extension NSCoding {
     /// Unarchive from UserDefaults.
     ///
     /// - parameter key (required): object's key inside UserDefaults
-    public static func unarchive(fromUserDefaults key: String) -> Self? {
+    public static func unarchive(fromUserDefaults key: String) throws -> Self {
         guard let data = UserDefaults.standard.value(forKey: key) as? Data, data.count > 0 else {
-            return nil
+            let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Input data must not be nil."])
+            throw error
         }
-        return unarchive(fromData: data)
+        return try unarchive(fromData: data)
     }
 
     /// Archive to UserDefaults.

@@ -68,63 +68,63 @@ class URLFwiExtensionTest: XCTestCase {
         }
     }
     
-    func testOperatorPlusParams() {
-        var url = URL(string: "https://google.com")
-        var params: [String:String]? = nil
-        var url1 = url + params
-        if let path = url1?.absoluteString {
-            XCTAssertEqual(path, "https://google.com", "Expected 'https://google.com' but found '\(path)'.")
-        } else {
-            XCTFail("Invalid url.")
-        }
-        
-        params = ["string1":"value1", "string2":"value2"]
-        url1 = url + params
-        if let path = url1?.absoluteString {
-            XCTAssertEqual(path, "https://google.com?string1=value1&string2=value2", "Expected 'https://google.com?string1=value1&string2=value2' but found '\(path)'.")
-        } else {
-            XCTFail("Invalid url.")
-        }
-        
-        params = ["#string1":"value1", "string2":"value2", "string3":"value3"]
-        url1 = url + params
-        if let path = url1?.absoluteString {
-            XCTAssertEqual(path, "https://google.com#string1=value1?string2=value2&string3=value3", "Expected 'https://google.com#string1=value1?string2=value2&string3=value3' but found '\(path)'.")
-        } else {
-            XCTFail("Invalid url.")
-        }
-        
-        params = ["string1":"value1", "#string2":"value2", "string3":"value3"]
-        url1 = url + params
-        if let path = url1?.absoluteString {
-            XCTAssertEqual(path, "https://google.com#string2=value2?string1=value1&string3=value3", "Expected 'https://google.com#string2=value2?string1=value1&string3=value3' but found '\(path)'.")
-        } else {
-            XCTFail("Invalid url.")
-        }
-        
-        params = ["#string2":"value2", "#string1":"value1", "string3":"value3"]
-        url1 = url + params
-        if let path = url1?.absoluteString {
-            XCTAssertEqual(path, "https://google.com#string1=value1?string3=value3", "Expected 'https://google.com#string1=value1?string3=value3' but found '\(path)'.")
-        } else {
-            XCTFail("Invalid url.")
-        }
-        
-        // Case Empty Query
-        params = ["#string1":"value1"]
-        url1 = url + params
-        if let path = url1?.absoluteString {
-            XCTAssertEqual(path,"https://google.com#string1=value1","Expected 'https://google.com#string1=value1'  but found '\(path)'.")
-        } else {
-            XCTFail("Invalid url.")
-        }
-        
-        params = ["#string1":"value1", "string2":"value2", "string3":"value3"]
-        url += params
-        if let path = url?.absoluteString {
-            XCTAssertEqual(path, "https://google.com#string1=value1?string2=value2&string3=value3", "Expected 'https://google.com#string1=value1?string2=value2&string3=value3' but found '\(path)'.")
-        } else {
-            XCTFail("Invalid url.")
-        }
-    }
+//    func testOperatorPlusParams() {
+//        var url = URL(string: "https://google.com")
+//        var params: [String:String]? = nil
+//        var url1 = url + params
+//        if let path = url1?.absoluteString {
+//            XCTAssertEqual(path, "https://google.com", "Expected 'https://google.com' but found '\(path)'.")
+//        } else {
+//            XCTFail("Invalid url.")
+//        }
+//        
+//        params = ["string1":"value1", "string2":"value2"]
+//        url1 = url + params
+//        if let path = url1?.absoluteString {
+//            XCTAssertEqual(path, "https://google.com?string1=value1&string2=value2", "Expected 'https://google.com?string1=value1&string2=value2' but found '\(path)'.")
+//        } else {
+//            XCTFail("Invalid url.")
+//        }
+//        
+//        params = ["#string1":"value1", "string2":"value2", "string3":"value3"]
+//        url1 = url + params
+//        if let path = url1?.absoluteString {
+//            XCTAssertEqual(path, "https://google.com#string1=value1?string2=value2&string3=value3", "Expected 'https://google.com#string1=value1?string2=value2&string3=value3' but found '\(path)'.")
+//        } else {
+//            XCTFail("Invalid url.")
+//        }
+//        
+//        params = ["string1":"value1", "#string2":"value2", "string3":"value3"]
+//        url1 = url + params
+//        if let path = url1?.absoluteString {
+//            XCTAssertEqual(path, "https://google.com#string2=value2?string1=value1&string3=value3", "Expected 'https://google.com#string2=value2?string1=value1&string3=value3' but found '\(path)'.")
+//        } else {
+//            XCTFail("Invalid url.")
+//        }
+//        
+//        params = ["#string2":"value2", "#string1":"value1", "string3":"value3"]
+//        url1 = url + params
+//        if let path = url1?.absoluteString {
+//            XCTAssertEqual(path, "https://google.com#string1=value1?string3=value3", "Expected 'https://google.com#string1=value1?string3=value3' but found '\(path)'.")
+//        } else {
+//            XCTFail("Invalid url.")
+//        }
+//        
+//        // Case Empty Query
+//        params = ["#string1":"value1"]
+//        url1 = url + params
+//        if let path = url1?.absoluteString {
+//            XCTAssertEqual(path,"https://google.com#string1=value1","Expected 'https://google.com#string1=value1'  but found '\(path)'.")
+//        } else {
+//            XCTFail("Invalid url.")
+//        }
+//        
+//        params = ["#string1":"value1", "string2":"value2", "string3":"value3"]
+//        url += params
+//        if let path = url?.absoluteString {
+//            XCTAssertEqual(path, "https://google.com#string1=value1?string2=value2&string3=value3", "Expected 'https://google.com#string1=value1?string2=value2&string3=value3' but found '\(path)'.")
+//        } else {
+//            XCTFail("Invalid url.")
+//        }
+//    }
 }

@@ -49,21 +49,6 @@ public extension String {
     /// Convert html string compatible to string.
     public func decodeHTML() -> String {
         return removingPercentEncoding ?? ""
-//        // Remove percent encoding
-//        guard let decoded = removingPercentEncoding, let data = decoded.toData() else {
-//            return ""
-//        }
-//
-//        // Remove special char encoding
-//
-//        let options: [NSAttributedString.DocumentReadingOptionKey:Any] = [
-//            .documentType : NSAttributedString.DocumentType.html,
-//            .characterEncoding : String.Encoding.utf8
-//        ]
-//        guard let attributedString = try? NSAttributedString(data: data, options: options, documentAttributes: nil) else {
-//            return decoded
-//        }
-//        return attributedString.string
     }
 
     /// Convert string to html string compatible.
@@ -97,12 +82,11 @@ public extension String {
         do {
             let regex = try NSRegularExpression(pattern: pattern, options: option)
             let matches = regex.numberOfMatches(in: self, options: .anchored, range: NSMakeRange(0, count))
-
             return (matches == 1)
-        } catch _ {
-            FwiLog("Invalid regex pattern.")
+        } catch {
+            FwiLog.debug(error)
+            return false
         }
-        return false
     }
 
     /// Split string into components.
@@ -116,7 +100,7 @@ public extension String {
     public func substring(endIndex index: Int) -> String {
         /* Condition validation: Validate end index */
         if index <= 0 || index >= count {
-            FwiLog("End index should be a positive number but less than string's length.")
+            FwiLog.debug("End index should be a positive number but less than string's length.")
             return ""
         }
         return substring(startIndex: 0, reverseIndex: -(count - index))
@@ -129,19 +113,19 @@ public extension String {
     public func substring(startIndex strIdx: Int, reverseIndex endIdx: Int = 0) -> String {
         /* Condition validation: Validate start index */
         if strIdx < 0 || strIdx > count {
-            FwiLog("Start index should not be a negative number or larger than string's length.")
+            FwiLog.debug("Start index should not be a negative number or larger than string's length.")
             return ""
         }
 
         /* Condition validation: Validate end index */
         if endIdx > 0 || abs(endIdx) > count {
-            FwiLog("Reverse index should be a negative number but absolute value must less than string's length.")
+            FwiLog.debug("Reverse index should be a negative number but absolute value must less than string's length.")
             return ""
         }
 
         /* Condition validation: Validate overlap index */
         if strIdx >= count + endIdx {
-            FwiLog("Start index and reverse index should not overlap each other.")
+            FwiLog.debug("Start index and reverse index should not overlap each other.")
             return ""
         }
 

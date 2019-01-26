@@ -105,28 +105,23 @@ public extension Data {
     ///
     /// - parameter url (required): source url to read from
     /// - parameter readingMode (optional): seealso `Data.ReadingOptions`
-    public static func read(fromFile url: URL?, readingMode mode: Data.ReadingOptions = []) -> Data? {
-        guard let url = url, url.isFileURL else {
-            return nil
+    public static func read(fromFile url: URL?, readingMode mode: Data.ReadingOptions = []) throws -> Data {
+        guard let fileURL = url, fileURL.isFileURL else {
+            let info = [NSLocalizedDescriptionKey: "Could not read data from file at: \(url?.path ?? "")"]
+            throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: info)
         }
-        return try? Data(contentsOf: url, options: mode)
+        return try Data(contentsOf: fileURL, options: mode)
     }
 
     /// Write data to file.
     ///
     /// - parameter url (required): destination url to write to
     /// - parameter readingMode (optional): seealso `Data.ReadingOptions`
-    @discardableResult
-    public func write(toFile url: URL?, options: Data.WritingOptions = []) -> Error? {
-        guard let url = url, url.isFileURL else {
-            return NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: nil)
+    public func write(toFile url: URL?, options: Data.WritingOptions = []) throws {
+        guard let fileURL = url, fileURL.isFileURL else {
+            let info = [NSLocalizedDescriptionKey: "Could not write data to file at: \(url?.path ?? "")"]
+            throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: info)
         }
-
-        do {
-            try self.write(to: url, options: options)
-            return nil
-        } catch let err as NSError {
-            return err
-        }
+        try self.write(to: fileURL, options: options)
     }
 }

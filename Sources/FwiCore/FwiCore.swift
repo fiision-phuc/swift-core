@@ -34,11 +34,64 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
+import UIKit
 
-public func FwiLog(_ message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
-    #if DEBUG
-        if let name = className.split("/").last, name.count > 0 {
-            debugPrint("\(NSDate()) \(name) > [\(methodName) \(line)]: \(message)")
+public enum FwiCore {
+    public static let domain = "com.fiision.lib.FwiCore"
+    public static var debug = false
+
+    /// Custom error handler for tryOmitsThrow function.
+    public static var omitBlock: ((Error) -> Void)?
+
+    /// Perform try and omits throws.
+    ///
+    /// - Parameters:
+    ///   - block: try block
+    ///   - default: default value in case try block failed will be returned
+    public static func tryOmitsThrow<T>(_ block: () throws -> T, default: @autoclosure () -> T, className: String = #file, line: Int = #line) -> T {
+        do {
+            return try block()
+        } catch {
+            FwiLog.debug(error, className: className, line: line)
+            omitBlock?(error)
+
+            return `default`()
         }
-    #endif
+    }
+}
+
+public enum FwiLog {
+    /// Output info to console.
+    ///
+    /// - Parameters:
+    ///   - items: list of items to be output to console
+    public static func debug(_ items: Any..., className: String = #file, line: Int = #line) {
+        /* Condition validation: validate debug mode */
+        guard FwiCore.debug else {
+            return
+        }
+
+        /* Condition validation: validate class's name */
+        let tokens = className.split("/")
+        guard let name = tokens.last, name.count > 0 else {
+            return
+        }
+
+        let message = items.map { String(describing: $0) }.joined(separator: ", ")
+        print(String(format: "[ DEBUG ] <%@ %i>: %@", name, line, message))
+    }
+}
+
+public enum FwiMeasure {
+    /// Calculate execution time.
+    ///
+    /// - Parameter block: execution block
+    @discardableResult
+    public static func time<T>(_ block: () -> T) -> T {
+        let date = Date()
+        defer {
+            print("Time interval: \(abs(date.timeIntervalSinceNow))")
+        }
+        return block()
+    }
 }

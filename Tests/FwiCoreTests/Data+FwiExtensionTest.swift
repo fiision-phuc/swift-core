@@ -43,6 +43,7 @@ class DataFwiExtensionTest: XCTestCase {
     
     // MARK: Test Cases
     func testClearBytes() {
+        FwiCore.debug = true
         var data1 = Data(bytes: [0x40, 0x41, 0x42])
         let data2 = Data(bytes: [0x00, 0x00, 0x00])
 
@@ -67,20 +68,20 @@ class DataFwiExtensionTest: XCTestCase {
     }
 
     func testReadWriteToFile() {
-        guard let data1 = "FwiCore".toData(), let url = URL.documentDirectory()?.appendingPathComponent("sample") else {
+        guard let data1 = "FwiCore".toData(), let url = URL.cacheDirectory()?.appendingPathComponent("sample") else {
             XCTFail("Could not convert string to data.")
             return
         }
 
-        let manager = FileManager.`default`
+        let manager = FileManager.default
         defer {
-            manager.removeFile(atURL: url)
+            try? manager.removeFile(atURL: url)
         }
 
-        data1.write(toFile: url, options: .atomic)
+        try? data1.write(toFile: url, options: .atomic)
         XCTAssertTrue(manager.fileExists(atURL: url), "Expected file existed at: '\(url.absoluteString)'.")
 
-        let data2 = Data.read(fromFile: url)
+        let data2 = try? Data.read(fromFile: url)
         XCTAssertNotNil(data2, "Expected data2 must not be nil.")
         XCTAssertEqual(data2, data1, "Expected data2 must be equal data1.")
     }
