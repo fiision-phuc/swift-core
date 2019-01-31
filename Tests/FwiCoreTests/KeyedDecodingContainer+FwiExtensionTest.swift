@@ -37,165 +37,17 @@
 import XCTest
 @testable import FwiCore
 
-private struct BoolModel: Codable {
-    let a: Bool
-    let b: Bool
-    let c: Bool
+final class KeyedDecodingContainerFwiExtensionTest: XCTestCase {
 
-    var oA: Bool?
-    var oB: Bool?
-    var oC: Bool?
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        a = try container.decode(key: .a)
-        b = try container.decode(key: .b)
-        c = try container.decode(key: .c)
-
-        oA = try? container.decode(key: .oA)
-        oB = try? container.decode(key: .oB)
-        oC = try? container.decode(key: .oC)
-    }
-}
-//private struct BoolModelPerformance: Codable {
-//    let a: Bool
-//    let b: Bool
-//    let c: Bool
-//
-//    var oA: Bool?
-//    var oB: Bool?
-//    var oC: Bool?
-//}
-
-private struct TestFloatDouble: Codable {
-    let a: Float
-    var b: Float?
-    let c: Double
-    var d: Double?
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        a = try container.decode(key: .a)
-        b = try? container.decode(key: .b)
-        c = try container.decode(key: .c)
-        d = try? container.decode(key: .d)
-    }
-}
-
-private struct TestNumericNumber: Codable {
-    let a: Int
-    let b: Int8
-    let c: Int16
-    let d: Int32
-    let e: Int64
-
-    let f: UInt
-    let g: UInt8
-    let h: UInt16
-    let i: UInt32
-    let j: UInt64
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        a = try container.decode(key: .a)
-        b = try container.decode(key: .b)
-        c = try container.decode(key: .c)
-        d = try container.decode(key: .d)
-        e = try container.decode(key: .e)
-
-        f = try container.decode(key: .f)
-        g = try container.decode(key: .g)
-        h = try container.decode(key: .h)
-        i = try container.decode(key: .i)
-        j = try container.decode(key: .j)
-    }
-}
-
-private struct TestData: Codable {
-    let a: Data
-    let b: Data
-    let c: Data
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        a = try container.decode(key: .a)
-        b = try container.decode(key: .b)
-        c = try container.decode(key: .c)
-    }
-}
-
-private struct TestDate: Codable {
-    let a: Date
-    let b: Date
-    let c: Date
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        a = try container.decode(key: .a)
-        b = try container.decode(key: .b)
-        c = try container.decode(key: .c)
-    }
-}
-
-private struct TestURL: Codable {
-    let a: URL
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        a = try container.decode(key: .a)
-    }
-}
-
-fileprivate enum TestEnum: String, Codable {
-    case firstName = "first_name"
-    case lastName = "last_name"
-}
-
-fileprivate struct TestEnum: Codable {
-
-    var name: String?
-    var last: String?
-    var data: Data?
-}
-
-fileprivate struct TestModel2: Codable {
-    var age: UInt?
-    var name: String?
-    var last: String?
-
-    var enumValue: TestEnum?
-    var object: [String:String]?
-
-    var model: TestEnum?
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-//        container.parse(&age, key: .age)
-//        container.parse(&name, key: .name)
-//        container.parse(&last, key: .last)
-//
-//        container.parse(&object, key: .object)
-//        container.parse(&enumValue, key: .enumValue)
-//
-//        container.parse(&model, key: .model)
-    }
-}
-
-
-class CodableFwiExtensionTest: XCTestCase {
-
-
-    fileprivate let json = """
-        {"name":"FwiCore","last":"FwiCore","data":"RndpQ29yZQ=="}
-    """.trim()
-
-    fileprivate let json2 = """
-        {"name":"FwiCore","last":"FwiCore","age":"10","enumValue":"last_name","object":{"name":"Phuc","last":"Tran"}, "model":{"name":"FwiCore","last":"FwiCore","data":"RndpQ29yZQ=="}}
-    """.trim()
-
+    // MARK: Setup
     override func setUp() {
         super.setUp()
         FwiCore.debug = true
+    }
+
+    // MARK: Tear Down
+    override func tearDown() {
+        super.tearDown()
     }
 
     // MARK: Test Cases
@@ -323,36 +175,114 @@ class CodableFwiExtensionTest: XCTestCase {
             XCTFail(error.localizedDescription)
         }
     }
+}
 
-    func testCodable() {
-        let model = try? TestModel2.decodeJSON(json2.toData())
-        XCTAssertEqual(model?.age, 10, "Expected '10' but found: \(String(describing: model?.age)).")
-        XCTAssertEqual(model?.name, "FwiCore", "Expected 'FwiCore' but found: \(String(describing: model?.name)).")
-        XCTAssertEqual(model?.last, "FwiCore", "Expected 'FwiCore' but found: \(String(describing: model?.last)).")
+// MARK: Test models
+private struct BoolModel: Codable {
+    let a: Bool
+    let b: Bool
+    let c: Bool
 
-        XCTAssertEqual(model?.enumValue, TestEnum.lastName, "Expected '\(TestEnum.lastName)' but found: \(String(describing: model?.enumValue)).")
-        XCTAssertEqual(model?.object ?? [:], ["name":"Phuc","last":"Tran"], "Expected '\(["name":"Phuc","last":"Tran"])' but found: \(String(describing: model?.object)).")
+    var oA: Bool?
+    var oB: Bool?
+    var oC: Bool?
 
-        XCTAssertNotNil(model?.model, "Expected not nil but found: \(String(describing: model)).")
-        XCTAssertEqual(model?.model?.name, "FwiCore", "Expected 'FwiCore' but found: \(String(describing: model?.name)).")
-        XCTAssertEqual(model?.model?.data, "FwiCore".toData(), "Expected '\(String(describing: "FwiCore".toData()))' but found: \(String(describing: model?.model?.data)).")
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        a = try container.decode(key: .a)
+        b = try container.decode(key: .b)
+        c = try container.decode(key: .c)
+
+        oA = try? container.decode(key: .oA)
+        oB = try? container.decode(key: .oB)
+        oC = try? container.decode(key: .oC)
     }
+}
+//private struct BoolModelPerformance: Codable {
+//    let a: Bool
+//    let b: Bool
+//    let c: Bool
+//
+//    var oA: Bool?
+//    var oB: Bool?
+//    var oC: Bool?
+//}
 
-    func testEncodeJSON() {
-        var model = TestEnum()
-        model.name = "FwiCore"
-        model.last = "FwiCore"
-        model.data = "FwiCore".toData()
+private struct TestFloatDouble: Codable {
+    let a: Float
+    var b: Float?
+    let c: Double
+    var d: Double?
 
-        let data = try? model.encodeJSON()
-        XCTAssertNotNil(data, "Expected not nil but found: \(String(describing: data)).")
-        XCTAssertEqual(data?.toString(), json, "Expected '\(json)' but found: \(String(describing: data?.toString())).")
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        a = try container.decode(key: .a)
+        b = try? container.decode(key: .b)
+        c = try container.decode(key: .c)
+        d = try? container.decode(key: .d)
     }
+}
 
-    func testDecodeJSON() {
-        let model = try? TestEnum.decodeJSON(json.toData())
-        XCTAssertNotNil(model, "Expected not nil but found: \(String(describing: model)).")
-        XCTAssertEqual(model?.name, "FwiCore", "Expected 'FwiCore' but found: \(String(describing: model?.name)).")
-        XCTAssertEqual(model?.data, "FwiCore".toData(), "Expected '\(String(describing: "FwiCore".toData()))' but found: \(String(describing: model?.data)).")
+private struct TestNumericNumber: Codable {
+    let a: Int
+    let b: Int8
+    let c: Int16
+    let d: Int32
+    let e: Int64
+
+    let f: UInt
+    let g: UInt8
+    let h: UInt16
+    let i: UInt32
+    let j: UInt64
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        a = try container.decode(key: .a)
+        b = try container.decode(key: .b)
+        c = try container.decode(key: .c)
+        d = try container.decode(key: .d)
+        e = try container.decode(key: .e)
+
+        f = try container.decode(key: .f)
+        g = try container.decode(key: .g)
+        h = try container.decode(key: .h)
+        i = try container.decode(key: .i)
+        j = try container.decode(key: .j)
+    }
+}
+
+private struct TestData: Codable {
+    let a: Data
+    let b: Data
+    let c: Data
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        a = try container.decode(key: .a)
+        b = try container.decode(key: .b)
+        c = try container.decode(key: .c)
+    }
+}
+
+private struct TestDate: Codable {
+    let a: Date
+    let b: Date
+    let c: Date
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        a = try container.decode(key: .a)
+        b = try container.decode(key: .b)
+        c = try container.decode(key: .c)
+    }
+}
+
+private struct TestURL: Codable {
+    let a: URL
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        a = try container.decode(key: .a)
     }
 }

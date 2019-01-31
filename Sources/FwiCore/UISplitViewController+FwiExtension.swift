@@ -38,7 +38,6 @@
 
     extension UISplitViewController {
         // MARK: Class's override methods
-
         open override var prefersStatusBarHidden: Bool {
             if UIApplication.isPhone {
                 return viewControllers.first?.prefersStatusBarHidden ?? super.prefersStatusBarHidden

@@ -52,7 +52,6 @@
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Default added FwiCell to UICollection view cell.
     extension UICollectionViewCell: FwiCell {
         public static var nib: UINib {
@@ -83,7 +82,6 @@
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Default added FwiCell to UITableView view cell.
     extension UITableViewCell: FwiCell {
         public static var nib: UINib {

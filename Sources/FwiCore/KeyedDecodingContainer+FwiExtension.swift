@@ -41,8 +41,10 @@ public extension KeyedDecodingContainer {
         do {
             return try decode(Bool.self, forKey: key)
         } catch DecodingError.typeMismatch(let type, let context) {
-            if let value = try? decode(String.self, forKey: key).lowercased() {
-                if let n = numberFormatter.number(from: value) {
+            if let value = try? decode(String.self, forKey: key) {
+                let final = value.trim().lowercased()
+
+                if let n = numberFormatter.number(from: final) {
                     return n.boolValue
                 } else if value == "false" {
                     return false
@@ -155,90 +157,8 @@ public extension KeyedDecodingContainer {
     }
 }
 
-//// MARK: Non optional
-//public extension KeyedDecodingContainer {
-//    /// Bool.
-//    public func parse(_ input: inout Bool, key: KeyedDecodingContainer.Key) {
-//        var value: Bool?
-//        parse(&value, key: key)
-//
-//        input = value ?? false
-//    }
-//
-//    /// Float.
-//    public func parse(_ input: inout Float, key: KeyedDecodingContainer.Key) {
-//        var value: Float?
-//        parse(&value, key: key)
-//
-//        input = value ?? 0.0
-//    }
-//
-//    /// Double.
-//    public func parse(_ input: inout Double, key: KeyedDecodingContainer.Key) {
-//        var value: Double?
-//        parse(&value, key: key)
-//
-//        input = value ?? 0.0
-//    }
-//
-//    /// Signed/Unsigned integer.
-//    public func parse<T: Codable & SignedInteger>(_ input: inout T, key: KeyedDecodingContainer.Key) {
-//        var value: T?
-//        parse(&value, key: key)
-//
-//        input = value ?? 0
-//    }
-//
-//    public func parse<T: Codable & UnsignedInteger>(_ input: inout T, key: KeyedDecodingContainer.Key) {
-//        var value: T?
-//        parse(&value, key: key)
-//
-//        input = value ?? 0
-//    }
-//
-//    /// Data.
-//    public func parse(_ input: inout Data, key: KeyedDecodingContainer.Key) {
-//        var value: Data?
-//        parse(&value, key: key)
-//
-//        if let data = value {
-//            input = data
-//        }
-//    }
-//
-//    /// Date.
-//    public func parse(_ input: inout Date, key: KeyedDecodingContainer.Key) {
-//        var value: Date?
-//        parse(&value, key: key)
-//
-//        if let date = value {
-//            input = date
-//        }
-//    }
-//
-//    /// String.
-//    public func parse(_ input: inout String, key: KeyedDecodingContainer.Key) {
-//        var value: String?
-//        parse(&value, key: key)
-//
-//        if let string = value {
-//            input = string
-//        }
-//    }
-//
-//    /// Other.
-//    public func parse<T: Codable>(_ input: inout T, key: KeyedDecodingContainer.Key) {
-//        var value: T?
-//        parse(&value, key: key)
-//
-//        if let object = value {
-//            input = object
-//        }
-//    }
-//}
-
 /// Define default date format.
-fileprivate let dateISO8601Formatter: DateFormatter = {
+internal let dateISO8601Formatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.timeZone = TimeZone(abbreviation: "UTC")
     formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
@@ -246,7 +166,7 @@ fileprivate let dateISO8601Formatter: DateFormatter = {
 }()
 
 /// Define default number format.
-fileprivate let numberFormatter: NumberFormatter = {
+internal let numberFormatter: NumberFormatter = {
     let formatter = NumberFormatter()
 
     formatter.locale = Locale(identifier: "en_US")

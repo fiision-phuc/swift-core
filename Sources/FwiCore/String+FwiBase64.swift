@@ -37,13 +37,11 @@ import Foundation
 
 public extension String {
     // MARK: Validate base64
-
     public var isBase64: Bool {
         return toData()?.isBase64 ?? false
     }
 
     // MARK: Decode base64
-
     public func decodeBase64Data() -> Data? {
         return toData()?.decodeBase64Data()
     }
@@ -53,7 +51,6 @@ public extension String {
     }
 
     // MARK: Encode base64
-
     public func encodeBase64Data() -> Data? {
         return toData()?.encodeBase64Data()
     }

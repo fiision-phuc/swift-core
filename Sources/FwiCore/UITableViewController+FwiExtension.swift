@@ -38,7 +38,6 @@
 
     extension UITabBarController {
         // MARK: Class's override methods
-
         open override var prefersStatusBarHidden: Bool {
             return selectedViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
         }

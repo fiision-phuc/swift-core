@@ -35,8 +35,9 @@
 
 import Foundation
 import UIKit
+import os.log
 
-public enum FwiCore {
+public struct FwiCore {
     public static let domain = "com.fiision.lib.FwiCore"
     public static var debug = false
 
@@ -60,7 +61,38 @@ public enum FwiCore {
     }
 }
 
-public enum FwiLog {
+public struct FwiLocale {
+    /// Struct's public static properties.
+    public static var currentLocale: String {
+        get {
+            return shared.locale
+        }
+        set(newLocale) {
+            shared.locale = newLocale
+        }
+    }
+
+    /// Localize string for string. The original string will be returned if a localized string could
+    /// not be found.
+    ///
+    /// - Parameter string: an original string
+    public static func localized(forString s: String?) -> String {
+        guard let text = s else {
+            return ""
+        }
+        return shared.localized(forString: text)
+    }
+
+    /// Reset current locale to english.
+    public static func reset() {
+        shared.reset()
+    }
+
+    /// Struct's private static properties.
+    private static var shared = FwiLocalization()
+}
+
+public struct FwiLog {
     /// Output info to console.
     ///
     /// - Parameters:
@@ -77,12 +109,19 @@ public enum FwiLog {
             return
         }
 
-        let message = items.map { String(describing: $0) }.joined(separator: ", ")
-        print(String(format: "[ DEBUG ] <%@ %i>: %@", name, line, message))
+        let parts = items.map { String(describing: $0) }
+        let message = parts.joined(separator: ", ")
+        if #available(iOS 12.0, *) {
+            os_log(.debug, "[ DEBUG ] <%@ %i>: %@", name, line, message)
+        } else if #available(iOS 10.0, *) {
+            os_log("[ DEBUG ] <%@ %i>: %@", name, line, message)
+        } else {
+            print(String(format: "[ DEBUG ] <%@ %i>: %@", name, line, message))
+        }
     }
 }
 
-public enum FwiMeasure {
+public struct FwiMeasure {
     /// Calculate execution time.
     ///
     /// - Parameter block: execution block

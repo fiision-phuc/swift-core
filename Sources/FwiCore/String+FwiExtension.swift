@@ -59,14 +59,18 @@ public extension String {
     /// Compare 2 string regardless case sensitive.
     ///
     /// - parameter otherString (required): other string to compare
-    public func isEqualToStringIgnoreCase(_ otherString: String?) -> Bool {
+    public func isEqualTo(_ otherString: String?, ignoreCase: Bool = true) -> Bool {
         /* Condition validation */
-        if otherString == nil {
+        guard let otherString = otherString else {
             return false
         }
 
-        let (text1, text2) = (self.lowercased().trim(), otherString?.lowercased().trim())
-        return text1 == text2
+        if ignoreCase {
+            let (text1, text2) = (self.lowercased().trim(), otherString.lowercased().trim())
+            return text1 == text2
+        } else {
+            return self.trim() == otherString.trim()
+        }
     }
 
     /// Validate string.
@@ -93,7 +97,7 @@ public extension String {
     ///
     /// - parameter separator (required): string's separator
     public func split(_ separator: String) -> [String] {
-        return components(separatedBy: separator)
+        return components(separatedBy: separator).compactMap { $0.count > 0 ? $0 : nil }
     }
 
     /// Sub string to index.

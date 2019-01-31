@@ -40,7 +40,7 @@ public typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ resp
 public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
 
 public struct FwiNetwork {
-    public static var manager = SessionManager.`default`
+    public static var manager = SessionManager.default
 
     /// Download resource from server.
     ///

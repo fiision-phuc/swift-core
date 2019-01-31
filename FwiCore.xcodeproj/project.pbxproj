@@ -52,6 +52,7 @@
 		BE91D9311F703E2C00EEE620 /* FwiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_FwiCore" /* FwiCore.framework */; };
 		BE9F61FB1F7183C300BE4B0B /* FwiCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9F61FA1F7183C300BE4B0B /* FwiCoreData.swift */; };
 		BEA89C4B1F9A6DB00099413F /* UIImage+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA89C4A1F9A6DAF0099413F /* UIImage+FwiExtension.swift */; };
+		BEB230B221FC0B20008ED2C7 /* Codable+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB230B121FC0B20008ED2C7 /* Codable+FwiExtensionTest.swift */; };
 		BED7E468212B9A91008DE156 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED7E467212B9A91008DE156 /* Alamofire.framework */; };
 		BED7E469212B9AB4008DE156 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED7E467212B9A91008DE156 /* Alamofire.framework */; };
 		BED7E46B212B9AB4008DE156 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED7E46A212B9AB4008DE156 /* RxSwift.framework */; };
@@ -126,6 +127,7 @@
 		BE91D8D61F7027EA00EEE620 /* FwiNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FwiNetwork.swift; path = FwiCore/FwiNetwork.swift; sourceTree = "<group>"; };
 		BE9F61FA1F7183C300BE4B0B /* FwiCoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FwiCoreData.swift; path = FwiCore/FwiCoreData.swift; sourceTree = "<group>"; };
 		BEA89C4A1F9A6DAF0099413F /* UIImage+FwiExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+FwiExtension.swift"; path = "FwiCore/UIImage+FwiExtension.swift"; sourceTree = "<group>"; };
+		BEB230B121FC0B20008ED2C7 /* Codable+FwiExtensionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+FwiExtensionTest.swift"; sourceTree = "<group>"; };
 		BED7E467212B9A91008DE156 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		BED7E46A212B9AB4008DE156 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		BED7E46C212B9AF7008DE156 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
@@ -206,9 +208,49 @@
 			name = Release;
 			sourceTree = "<group>";
 		};
+		BE66A7DF220290A300CBFE3C /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				BE66A7E0220290BC00CBFE3C /* ViewModel */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		BE66A7E0220290BC00CBFE3C /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				BE73152421002ED300C569A6 /* FwiCollectionViewVM.swift */,
+				BE73154421002ED400C569A6 /* FwiGenericCollectionViewVM.swift */,
+				BE73154621002ED400C569A6 /* FwiGenericCollectionViewCellVM.swift */,
+				BE73154321002ED400C569A6 /* FwiTableViewVM.swift */,
+				BE73154221002ED300C569A6 /* FwiGenericTableViewVM.swift */,
+				BE73154521002ED400C569A6 /* FwiGenericTableViewCellVM.swift */,
+			);
+			name = ViewModel;
+			sourceTree = "<group>";
+		};
+		BE66A7E1220290F600CBFE3C /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				BE91D8C21F70277C00EEE620 /* FwiCell.swift */,
+				BE91D8BF1F70277C00EEE620 /* FwiStoryboard.swift */,
+				BE91D8BE1F70277C00EEE620 /* UIButton+FwiExtension.swift */,
+				BEA89C4A1F9A6DAF0099413F /* UIImage+FwiExtension.swift */,
+				BE91D8C01F70277C00EEE620 /* UIView+FwiExtension.swift */,
+				BE91D8C11F70277C00EEE620 /* UIApplication+FwiExtension.swift */,
+				BEDBB4DF1FE9DB7900059325 /* UIAlertController+FwiExtension.swift */,
+				BE91D8C61F70277C00EEE620 /* UINavigationController+FwiExtension.swift */,
+				BE91D8C31F70277C00EEE620 /* UISplitViewController+FwiExtension.swift */,
+				BE91D8C41F70277C00EEE620 /* UITableViewController+FwiExtension.swift */,
+				BE91D8C51F70277C00EEE620 /* UIViewController+FwiExtension.swift */,
+			);
+			name = Extension;
+			sourceTree = "<group>";
+		};
 		BE7A1D6B1FEC12640004B986 /* Json */ = {
 			isa = PBXGroup;
 			children = (
+				BEB230B121FC0B20008ED2C7 /* Codable+FwiExtensionTest.swift */,
 				BE7A1D6C1FEC129F0004B986 /* KeyedDecodingContainer+FwiExtensionTest.swift */,
 			);
 			name = Json;
@@ -245,27 +287,16 @@
 			isa = PBXGroup;
 			children = (
 				BE8BF12F1D832CEF00F710CB /* Foundation */,
-				BE8BF12E1D832CE900F710CB /* UI */,
 			);
 			name = Extension;
 			sourceTree = "<group>";
 		};
-		BE8BF12E1D832CE900F710CB /* UI */ = {
+		BE8BF12E1D832CE900F710CB /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				BE91D8C21F70277C00EEE620 /* FwiCell.swift */,
-				BE91D8BF1F70277C00EEE620 /* FwiStoryboard.swift */,
-				BE91D8BE1F70277C00EEE620 /* UIButton+FwiExtension.swift */,
-				BEA89C4A1F9A6DAF0099413F /* UIImage+FwiExtension.swift */,
-				BE91D8C01F70277C00EEE620 /* UIView+FwiExtension.swift */,
-				BE91D8C11F70277C00EEE620 /* UIApplication+FwiExtension.swift */,
-				BEDBB4DF1FE9DB7900059325 /* UIAlertController+FwiExtension.swift */,
-				BE91D8C61F70277C00EEE620 /* UINavigationController+FwiExtension.swift */,
-				BE91D8C31F70277C00EEE620 /* UISplitViewController+FwiExtension.swift */,
-				BE91D8C41F70277C00EEE620 /* UITableViewController+FwiExtension.swift */,
-				BE91D8C51F70277C00EEE620 /* UIViewController+FwiExtension.swift */,
+				BE66A7E1220290F600CBFE3C /* Extension */,
 			);
-			name = UI;
+			name = iOS;
 			sourceTree = "<group>";
 		};
 		BE8BF12F1D832CEF00F710CB /* Foundation */ = {
@@ -336,6 +367,7 @@
 				BE19C3191F77F920003DF3D8 /* CoreData */,
 				BEF3EBBC1F77FDB100EE8F44 /* Network */,
 				BEA89C491F9A6C610099413F /* ViewModel */,
+				BE66A7DF220290A300CBFE3C /* iOS */,
 			);
 			name = FwiCoreRX;
 			path = Sources/FwiCoreRX;
@@ -345,12 +377,6 @@
 			isa = PBXGroup;
 			children = (
 				BE19C30A1F77F8DE003DF3D8 /* FwiViewModel.swift */,
-				BE73152421002ED300C569A6 /* FwiCollectionViewVM.swift */,
-				BE73154421002ED400C569A6 /* FwiGenericCollectionViewVM.swift */,
-				BE73154621002ED400C569A6 /* FwiGenericCollectionViewCellVM.swift */,
-				BE73154321002ED400C569A6 /* FwiTableViewVM.swift */,
-				BE73154221002ED300C569A6 /* FwiGenericTableViewVM.swift */,
-				BE73154521002ED400C569A6 /* FwiGenericTableViewCellVM.swift */,
 			);
 			name = ViewModel;
 			sourceTree = "<group>";
@@ -438,6 +464,7 @@
 				BE2E7FA11FA0FAE3008E521F /* Json */,
 				BE8BF1301D832D8700F710CB /* i18n */,
 				BE8BF1331D832ED000F710CB /* Network */,
+				BE8BF12E1D832CE900F710CB /* iOS */,
 			);
 			name = FwiCore;
 			path = Sources;
@@ -668,6 +695,7 @@
 				BE7EA4771FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift in Sources */,
 				BE8BF1501D84661C00F710CB /* Data+FwiExtensionTest.swift in Sources */,
 				BE8BF1471D8465BC00F710CB /* Data+FwiBase64Test.swift in Sources */,
+				BEB230B221FC0B20008ED2C7 /* Codable+FwiExtensionTest.swift in Sources */,
 				BE8BF1541D84661C00F710CB /* URL+FwiExtensionTest.swift in Sources */,
 				BE8BF1531D84661C00F710CB /* String+FwiExtensionTest.swift in Sources */,
 			);
