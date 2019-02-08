@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/22/14
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -49,21 +49,6 @@ public extension String {
     /// Convert html string compatible to string.
     public func decodeHTML() -> String {
         return removingPercentEncoding ?? ""
-//        // Remove percent encoding
-//        guard let decoded = removingPercentEncoding, let data = decoded.toData() else {
-//            return ""
-//        }
-//
-//        // Remove special char encoding
-//
-//        let options: [NSAttributedString.DocumentReadingOptionKey:Any] = [
-//            .documentType : NSAttributedString.DocumentType.html,
-//            .characterEncoding : String.Encoding.utf8
-//        ]
-//        guard let attributedString = try? NSAttributedString(data: data, options: options, documentAttributes: nil) else {
-//            return decoded
-//        }
-//        return attributedString.string
     }
 
     /// Convert string to html string compatible.
@@ -74,14 +59,18 @@ public extension String {
     /// Compare 2 string regardless case sensitive.
     ///
     /// - parameter otherString (required): other string to compare
-    public func isEqualToStringIgnoreCase(_ otherString: String?) -> Bool {
+    public func isEqualTo(_ otherString: String?, ignoreCase: Bool = true) -> Bool {
         /* Condition validation */
-        if otherString == nil {
+        guard let otherString = otherString else {
             return false
         }
 
-        let (text1, text2) = (self.lowercased().trim(), otherString?.lowercased().trim())
-        return text1 == text2
+        if ignoreCase {
+            let (text1, text2) = (self.lowercased().trim(), otherString.lowercased().trim())
+            return text1 == text2
+        } else {
+            return self.trim() == otherString.trim()
+        }
     }
 
     /// Validate string.
@@ -94,59 +83,67 @@ public extension String {
             return false
         }
 
-        do {
+        return FwiCore.tryOmitsThrow({
             let regex = try NSRegularExpression(pattern: pattern, options: option)
             let matches = regex.numberOfMatches(in: self, options: .anchored, range: NSMakeRange(0, count))
-
             return (matches == 1)
-        } catch _ {
-            FwiLog("Invalid regex pattern.")
-        }
-        return false
+        }, default: false)
     }
 
     /// Split string into components.
     ///
     /// - parameter separator (required): string's separator
     public func split(_ separator: String) -> [String] {
-        return components(separatedBy: separator)
+        return components(separatedBy: separator).compactMap { $0.count > 0 ? $0 : nil }
     }
 
     /// Sub string to index.
-    public func substring(endIndex index: Int) -> String {
+    public func substring(fromIndex idx: UInt) -> Substring {
         /* Condition validation: Validate end index */
-        if index <= 0 || index >= count {
-            FwiLog("End index should be a positive number but less than string's length.")
+        if idx >= count {
+            FwiLog.debug("Start index must be less than string's length.")
             return ""
         }
-        return substring(startIndex: 0, reverseIndex: -(count - index))
+
+        let i = index(startIndex, offsetBy: Int(idx))
+        return self[i...]
+    }
+
+    /// Sub string to index.
+    public func substring(toIndex idx: UInt) -> Substring {
+        /* Condition validation: Validate end index */
+        if idx >= count {
+            FwiLog.debug("End index should be a positive number but less than string's length.")
+            return ""
+        }
+
+        let i = index(startIndex, offsetBy: Int(idx))
+        return self[..<i]
     }
 
     /// Sub string from index to reverse index.
     ///
-    /// - parameter startIndex (required): beginning index
+    /// - Parameters:
+    ///   - startIndex: beginning index
     /// - parameter reverseIndex (optional): ending index
-    public func substring(startIndex strIdx: Int, reverseIndex endIdx: Int = 0) -> String {
-        /* Condition validation: Validate start index */
-        if strIdx < 0 || strIdx > count {
-            FwiLog("Start index should not be a negative number or larger than string's length.")
-            return ""
-        }
-
+    public func substring(fromIndex idx: UInt, length l: UInt) -> Substring {
         /* Condition validation: Validate end index */
-        if endIdx > 0 || abs(endIdx) > count {
-            FwiLog("Reverse index should be a negative number but absolute value must less than string's length.")
+        if idx >= count {
+            FwiLog.debug("Start index must be less than string's length.")
             return ""
         }
 
-        /* Condition validation: Validate overlap index */
-        if strIdx >= count + endIdx {
-            FwiLog("Start index and reverse index should not overlap each other.")
+        /* Condition validation: Validate length */
+        if (idx + l) < count {
+            FwiLog.debug("Sub string length must less than string's length.")
             return ""
         }
 
-        let range = index(startIndex, offsetBy: strIdx)..<index(endIndex, offsetBy: endIdx)
-        return String(self[range])
+        let start = index(startIndex, offsetBy: Int(idx))
+        let end = index(start, offsetBy: Int(l))
+        
+        let range = start..<end
+        return self[range]
     }
 
     /// Trim all spaces before and after a string.
@@ -157,15 +154,5 @@ public extension String {
     /// Convert string to data.
     public func toData(dataEncoding encoding: String.Encoding = .utf8) -> Data? {
         return data(using: encoding, allowLossyConversion: false)
-    }
-}
-
-extension String {
-    /// Subscript get character at index.
-    public subscript(idx: Int) -> Character? {
-        guard !(idx < 0 || idx >= count) else {
-            return nil
-        }
-        return self[index(startIndex, offsetBy: idx)]
     }
 }

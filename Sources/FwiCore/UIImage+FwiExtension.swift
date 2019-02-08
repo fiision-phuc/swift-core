@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/22/14
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -39,8 +39,8 @@
     public extension UIImage {
         /// Create circular image from original image with specific size.
         ///
-        /// @param
-        /// - size {CGFloat} (the circular image's diameter)
+        /// - Parameters:
+        ///   - size {CGFloat} (the circular image's diameter)
         public func circularImage(withSize size: CGFloat) -> UIImage? {
             UIGraphicsBeginImageContextWithOptions(CGSize(width: size, height: size), false, UIScreen.main.scale)
             let rect = CGRect(x: 0, y: 0, width: size, height: size)
@@ -56,8 +56,8 @@
 
         /// Create circular image from original image with specific size and badge.
         ///
-        /// @param
-        /// - size {CGFloat} (the circular image's diameter)
+        /// - Parameters:
+        ///   - size {CGFloat} (the circular image's diameter)
         public func circularImage(withSize size: CGFloat, point p: CGPoint, radius r: CGFloat = 2) -> UIImage? {
             UIGraphicsBeginImageContextWithOptions(CGSize(width: size, height: size), false, UIScreen.main.scale)
             let rect = CGRect(x: 0, y: 0, width: size, height: size)

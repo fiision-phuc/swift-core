@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/22/14
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -36,6 +36,93 @@
 #if canImport(UIKit)
     import UIKit
 
+    @IBDesignable
+    public extension UIView {
+        @IBInspectable
+        public var borderColor: UIColor? {
+            get {
+                if let color = layer.borderColor {
+                    return UIColor(cgColor: color)
+                }
+                return nil
+            }
+            set(color) {
+                if let color = color {
+                    layer.borderColor = color.cgColor
+                }
+                layer.borderColor = nil
+            }
+        }
+
+        @IBInspectable
+        public var borderWidth: CGFloat {
+            get {
+                return layer.borderWidth
+            }
+            set(borderWidth) {
+                layer.borderWidth = borderWidth
+            }
+        }
+
+        @IBInspectable
+        public var cornerRadius: CGFloat {
+            get {
+                return layer.cornerRadius
+            }
+            set(radius) {
+                let bgLayer = self.layer
+                bgLayer.cornerRadius = radius
+                bgLayer.masksToBounds = (radius > 0)
+            }
+        }
+
+        @IBInspectable
+        var shadowColor: UIColor? {
+            get {
+                if let color = layer.shadowColor {
+                    return UIColor(cgColor: color)
+                }
+                return nil
+            }
+            set(color) {
+                if let color = color {
+                    layer.shadowColor = color.cgColor
+                }
+                layer.shadowColor = nil
+            }
+        }
+
+        @IBInspectable
+        var shadowOffset: CGSize {
+            get {
+                return layer.shadowOffset
+            }
+            set(shadowOffset) {
+                layer.shadowOffset = shadowOffset
+            }
+        }
+
+        @IBInspectable
+        var shadowOpacity: Float {
+            get {
+                return layer.shadowOpacity
+            }
+            set(shadowOpacity) {
+                layer.shadowOpacity = shadowOpacity
+            }
+        }
+
+        @IBInspectable
+        var shadowRadius: CGFloat {
+            get {
+                return layer.shadowRadius
+            }
+            set(shadowRadius) {
+                layer.shadowRadius = shadowRadius
+            }
+        }
+    }
+
     public extension UIView {
         /// Create image from current view.
         public func createImage(_ scaleFactor: CGFloat = UIScreen.main.scale) -> UIImage? {
@@ -49,7 +136,7 @@
                 let contentOffset = tableView.contentOffset
                 context.translateBy(x: contentOffset.x, y: -contentOffset.y)
             }
-            self.layer.render(in: context)
+            layer.render(in: context)
 
             // Create image
             let image = UIGraphicsGetImageFromCurrentImageContext()
@@ -70,7 +157,7 @@
             }
 
             context.translateBy(x: -roiRect.origin.x, y: -roiRect.origin.y)
-            self.layer.render(in: context)
+            layer.render(in: context)
 
             let image = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
@@ -104,6 +191,7 @@
         }
 
         /// Round corner of an UIView with specific radius.
+        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
         public func roundCorner(_ radius: CGFloat) {
             let bgLayer = self.layer
             bgLayer.masksToBounds = true

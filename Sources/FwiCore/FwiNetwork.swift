@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 4/13/14
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -40,7 +40,7 @@ public typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ resp
 public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
 
 public struct FwiNetwork {
-    public static var manager = SessionManager.`default`
+    public static var manager = SessionManager.default
 
     /// Download resource from server.
     ///
@@ -60,28 +60,38 @@ public struct FwiNetwork {
                                 headers h: [String: String]? = nil,
                                 destination d: URLConvertible? = nil,
                                 completion c: @escaping DownloadCompletion) -> DownloadRequest? {
-        /* Condition validation: validate endpoint */
-        guard let url = r else {
-            return nil
-        }
+        return FwiCore.tryOmitsThrow({
+            guard let url = r else {
+                let info = [NSLocalizedDescriptionKey: "Request url cannot be nil."]
+                throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: info)
+            }
 
-        if let d = d, let destinationURL = try? d.asURL() {
-            let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h) { (tempURL, response) -> (URL, DownloadRequest.DownloadOptions) in
-                return (destinationURL, [DownloadRequest.DownloadOptions.createIntermediateDirectories, DownloadRequest.DownloadOptions.removePreviousFile])
+            if let d = d, let destinationURL = try? d.asURL() {
+                let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h) { (tempURL, response) -> (URL, DownloadRequest.DownloadOptions) in
+                    (destinationURL, [DownloadRequest.DownloadOptions.createIntermediateDirectories, DownloadRequest.DownloadOptions.removePreviousFile])
+                }
+                task.validate(statusCode: 200..<300)
+                task.response { r in
+                    c(destinationURL, r.error, r.response)
+                }
+                return task
+            } else {
+                let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h, to: nil)
+                task.validate(statusCode: 200..<300)
+                task.response { r in
+                    if FwiCore.debug,
+                        let request = r.request,
+                        let url = request.url?.absoluteString,
+                        let headers = request.allHTTPHeaderFields {
+                        FwiLog.debug(url)
+                        FwiLog.debug(headers)
+                    }
+
+                    c(r.temporaryURL, r.error, r.response)
+                }
+                return task
             }
-            task.validate(statusCode: 200..<300)
-            task.response { r in
-                c(destinationURL, r.error, r.response)
-            }
-            return task
-        } else {
-            let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h, to: nil)
-            task.validate(statusCode: 200..<300)
-            task.response { r in
-                c(r.temporaryURL, r.error, r.response)
-            }
-            return task
-        }
+        }, default: nil)
     }
 
     /// Send request to server.
@@ -101,17 +111,27 @@ public struct FwiNetwork {
                             encoding e: ParameterEncoding = URLEncoding.default,
                             headers h: [String: String]? = nil,
                             completion c: @escaping RequestCompletion) -> DataRequest? {
-        /* Condition validation: validate endpoint */
-        guard let url = r else {
-            return nil
-        }
+        return FwiCore.tryOmitsThrow({
+            guard let url = r else {
+                let info = [NSLocalizedDescriptionKey: "Request url cannot be nil."]
+                throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: info)
+            }
 
-        let task = manager.request(url, method: m, parameters: p, encoding: e, headers: h)
-        task.validate(statusCode: 200..<300)
-        task.response { r in
-            c(r.data, r.error, r.response)
-        }
-        return task
+            let task = manager.request(url, method: m, parameters: p, encoding: e, headers: h)
+            task.validate(statusCode: 200..<300)
+            task.response { r in
+                if FwiCore.debug,
+                    let request = r.request,
+                    let url = request.url?.absoluteString,
+                    let headers = request.allHTTPHeaderFields {
+                    FwiLog.debug(url)
+                    FwiLog.debug(headers)
+                }
+
+                c(r.data, r.error, r.response)
+            }
+            return task
+        }, default: nil)
     }
 
     /// Cancel all running Tasks.

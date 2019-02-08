@@ -3,7 +3,7 @@
 //  Author      : Phuc Tran
 //  Created date: 4/13/15
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -35,72 +35,46 @@
 
 import Foundation
 
-public var FwiCurrentLocale: String {
-    get {
-        return sharedInstance.locale
-    }
-    set {
-        sharedInstance.locale = newValue
-    }
-}
-
-/// Localize string for string. The original string will be returned if a localized string could not
-/// be found.
-///
-/// @params:
-/// - string {String} (an original string)
-public func FwiLocalized(forString s: String?) -> String {
-    guard let text = s else {
-        return ""
-    }
-    return sharedInstance.localized(forString: text)
-}
-
-/// Reset current locale to english.
-public func FwiResetLocale() {
-    sharedInstance.reset()
-}
-
-fileprivate var sharedInstance = FwiLocalization()
-fileprivate struct FwiLocalization {
-    // MARK: Class's constructors
-
-    fileprivate init() {
-        reset()
-    }
-
-    // MARK: Class's properties
-
-    fileprivate var locale: String = "en" {
+struct FwiLocalization {
+    /// Struct's public properties.
+    var locale: String = "en" {
         didSet {
-            guard let path = Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: locale) else {
+            guard let url = Bundle.main.url(forResource: "Localizable", withExtension: "strings", subdirectory: nil, localization: locale) else {
                 if locale != "en" {
                     reset()
                 }
                 return
             }
+//            guard let path = Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: locale) else {
+//                if locale != "en" {
+//                    reset()
+//                }
+//                return
+//            }
             let userDefaults = UserDefaults.standard
 
             userDefaults.set([locale], forKey: "AppleLanguages")
             userDefaults.synchronize()
 
-            bundle = Bundle(path: (path as NSString).deletingLastPathComponent)
+            let path = url.deletingLastPathComponent().path
+            bundle = Bundle(path: path)
         }
     }
 
-    fileprivate var bundle: Bundle?
+    // MARK: Struct's public methods
 
-    // MARK: Class's public methods
-
-    fileprivate func localized(forString s: String) -> String {
+    func localized(forString s: String) -> String {
         if let localized = bundle?.localizedString(forKey: s, value: s, table: nil) {
             return localized
         }
         return s
     }
 
-    fileprivate mutating func reset() {
+    mutating func reset() {
         let languages = Bundle.main.preferredLocalizations
         locale = languages.count > 0 ? languages[0] : "en"
     }
+
+    /// Struct's private properties.
+    private var bundle: Bundle?
 }

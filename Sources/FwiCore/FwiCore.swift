@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/20/14
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -34,11 +34,80 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
+import UIKit
 
-public func FwiLog(_ message: String = "", className: String = #file, methodName: String = #function, line: Int = #line) {
-    #if DEBUG
-        if let name = className.split("/").last, name.count > 0 {
-            debugPrint("\(NSDate()) \(name) > [\(methodName) \(line)]: \(message)")
+public struct FwiCore {
+    public static let domain = "com.fiision.lib.FwiCore"
+    public static var debug = false {
+        didSet(enableDebug) {
+            guard enableDebug else {
+                return
+            }
+            FwiLog.consoleLog()
         }
-    #endif
+    }
+
+    /// Custom error handler for tryOmitsThrow function.
+    public static var omitBlock: ((Error) -> Void)?
+
+    /// Perform try and omits throws.
+    ///
+    /// - Parameters:
+    ///   - block: try block
+    ///   - default: default value in case try block failed will be returned
+    public static func tryOmitsThrow<T>(_ block: () throws -> T, default: @autoclosure () -> T, className: String = #file, line: Int = #line) -> T {
+        do {
+            return try block()
+        } catch {
+            FwiLog.error(error, className: className, line: line)
+            omitBlock?(error)
+
+            return `default`()
+        }
+    }
+}
+
+public struct FwiLocale {
+    /// Struct's public static properties.
+    public static var currentLocale: String {
+        get {
+            return shared.locale
+        }
+        set(newLocale) {
+            shared.locale = newLocale
+        }
+    }
+
+    /// Localize string for string. The original string will be returned if a localized string could
+    /// not be found.
+    ///
+    /// - Parameter string: an original string
+    public static func localized(forString s: String?) -> String {
+        guard let text = s else {
+            return ""
+        }
+        return shared.localized(forString: text)
+    }
+
+    /// Reset current locale to english.
+    public static func reset() {
+        shared.reset()
+    }
+
+    /// Struct's private static properties.
+    private static var shared = FwiLocalization()
+}
+
+public struct FwiMeasure {
+    /// Calculate execution time.
+    ///
+    /// - Parameter block: execution block
+    @discardableResult
+    public static func time<T>(_ block: () -> T) -> T {
+        let date = Date()
+        defer {
+            print("Time interval: \(abs(date.timeIntervalSinceNow))")
+        }
+        return block()
+    }
 }

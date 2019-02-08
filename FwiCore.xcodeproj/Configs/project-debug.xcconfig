@@ -3,7 +3,7 @@ ARCHS = $(ARCHS_STANDARD)
 SDKROOT = iphoneos
 ONLY_ACTIVE_ARCH = YES
 SUPPORTED_PLATFORMS = iphonesimulator iphoneos
-VALID_ARCHS = $(ARCHS_STANDARD) armv7s
+VALID_ARCHS = $(ARCHS_STANDARD)
 
 // Build Options
 ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO
@@ -107,7 +107,7 @@ SWIFT_OPTIMIZATION_LEVEL = -Onone
 
 // Swift Compiler - Custom Flags
 SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
-OTHER_SWIFT_FLAGS = -DXcode -DDEBUG -DTRACE_RESOURCES
+OTHER_SWIFT_FLAGS = -DXcode -DDEBUG -DTRACE_RESOURCES -Xfrontend -warn-long-function-bodies=100 -Xfrontend -warn-long-expression-type-checking=100
 
 // Swift Compiler - Version
 SWIFT_VERSION = 4.2

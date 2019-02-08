@@ -4,7 +4,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 12/20/17
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -54,7 +54,6 @@ final class TestNSCoding: NSObject, NSCoding {
     }
 }
 
-
 class NSCodingFwiExtensionTest: XCTestCase {
     
     // MARK: Test Cases
@@ -71,29 +70,29 @@ class NSCodingFwiExtensionTest: XCTestCase {
         let data1 = manager.object(forKey: "sample") as? Data
         XCTAssertNotNil(data1, "Expected data existed but found: '\(String(describing: data1))'.")
 
-        let model2 = TestNSCoding.unarchive(fromUserDefaults: "sample")
+        let model2 = try? TestNSCoding.unarchive(fromUserDefaults: "sample")
         XCTAssertNotNil(model2, "Expected model2 must not be nil.")
         XCTAssertEqual(model2?.text ?? "", "FwiCore", "Expected 'FwiCore' but found: \(String(describing: model2?.text)).")
     }
 
     func testReadWriteToFile() {
-        guard let url = URL.documentDirectory()?.appendingPathComponent("sample") else {
+        guard let url = URL.cacheDirectory()?.appendingPathComponent("sample") else {
             XCTFail("Could not create url.")
             return
         }
 
         let manager = FileManager.`default`
         defer {
-            manager.removeFile(atURL: url)
+            try? manager.removeFile(atURL: url)
         }
 
         let model1 = TestNSCoding()
         model1.text = "FwiCore"
 
-        model1.archive(toFile: url)
+        try? model1.archive(toFile: url)
         XCTAssertTrue(manager.fileExists(atURL: url), "Expected file existed at: '\(url.absoluteString)'.")
 
-        let model2 = TestNSCoding.unarchive(fromFile: url)
+        let model2 = try? TestNSCoding.unarchive(fromFile: url)
         XCTAssertNotNil(model2, "Expected model2 must not be nil.")
         XCTAssertEqual(model2?.text ?? "", "FwiCore", "Expected 'FwiCore' but found: \(String(describing: model2?.text)).")
     }

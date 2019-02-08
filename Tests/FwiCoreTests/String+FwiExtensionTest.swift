@@ -5,7 +5,7 @@
 //  Created date: 11/27/14
 //  Version     : 2.0.0
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -38,7 +38,6 @@
 import XCTest
 @testable import FwiCore
 
-
 class StringFwiExtensionTest: XCTestCase {
 
     // MARK: Test Cases
@@ -59,7 +58,7 @@ class StringFwiExtensionTest: XCTestCase {
     func testIsEqualToStringIgnoreCase() {
         let text1 = "FWICORE"
         let text2 = "fwicore"
-        XCTAssertTrue(text1.isEqualToStringIgnoreCase(text2), "FWICORE compares with fwicore should return true.")
+        XCTAssertTrue(text1.isEqualTo(text2, ignoreCase: true), "FWICORE compares with fwicore should return true.")
     }
     func testMatchPattern() {
         let text1 = " 12345 "
@@ -70,17 +69,22 @@ class StringFwiExtensionTest: XCTestCase {
     func testSplit() {
         let text = "FwiCore/FWICORE"
         XCTAssertEqual(text.split("/"), ["FwiCore", "FWICORE"], "\(text) should become array after split.")
+
+        let text2 = "FwiCore//FWICORE"
+        XCTAssertEqual(text2.split("/"), ["FwiCore", "FWICORE"], "\(text) should become array after split.")
     }
-    
+
+    func testSubstringFromIndex() {
+        let text = "FwiCore"
+        XCTAssertEqual(text.substring(fromIndex: 1), "wiCore", "\(text) should become 'wiCore' after sub string.")
+    }
     func testSubstringToIndex() {
         let text = "FwiCore"
-        XCTAssertEqual(text.substring(endIndex: 5), "FwiCo", "\(text) should become 'FwiCo' after sub string.")
+        XCTAssertEqual(text.substring(toIndex: 5), "FwiCo", "\(text) should become 'FwiCo' after sub string.")
     }
     func testSubstring() {
         let text = "FwiCore"
-        XCTAssertEqual(text.substring(startIndex: 0, reverseIndex: 1), "", "\(text) should become '' after sub string.")
-        XCTAssertEqual(text.substring(startIndex: 0, reverseIndex: -1), "FwiCor", "\(text) should become 'FwiCor' after sub string.")
-        XCTAssertEqual(text.substring(startIndex: 5, reverseIndex: -5), "", "\(text) should become '' after sub string.")
+        XCTAssertEqual(text.substring(fromIndex: 1, length: 3), "", "\(text) should become '' after sub string.")
     }
     func testTrim() {
         let text = " FwiCore "

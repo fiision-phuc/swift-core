@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 6/13/16
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -70,8 +70,7 @@
             #if targetEnvironment(simulator)
                 print("Remote notification does not support this device.")
             #else
-                let notificationType = UIUserNotificationType.alert.union(UIUserNotificationType.badge)
-                    .union(UIUserNotificationType.sound)
+                let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
 
                 let settings = UIUserNotificationSettings(types: notificationType, categories: nil)
                 UIApplication.shared.registerUserNotificationSettings(settings)

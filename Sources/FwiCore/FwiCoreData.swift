@@ -3,7 +3,7 @@
 //  Author      : Dung Vu
 //  Created date: 6/22/16
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -73,7 +73,7 @@ public extension FwiCoreData where Self: NSManagedObject {
 
         var entities: [Self]?
         c.performAndWait {
-            entities = try? c.fetch(request)
+            entities = FwiCore.tryOmitsThrow({ try c.fetch(request) }, default: nil)
         }
         return entities ?? []
     }
@@ -94,7 +94,7 @@ public extension FwiCoreData where Self: NSManagedObject {
         let entities = allEntities(fromContext: c, predicate: p, limit: 1)
         var entity = entities.first
 
-        if entity == nil && create {
+        if entity == nil, create {
             entity = newEntity(withContext: c)
         }
         return entity
@@ -118,7 +118,7 @@ public extension FwiCoreData where Self: NSManagedObject {
 
         var counter = 0
         c.performAndWait {
-            counter = (try? c.count(for: request)) ?? 0
+            counter = FwiCore.tryOmitsThrow({ try c.count(for: request) }, default: 0)
         }
         return counter
     }
@@ -145,6 +145,6 @@ public extension FwiCoreData where Self: NSManagedObject {
         entities.forEach {
             context?.delete($0)
         }
-        try? context?.save()
+        FwiCore.tryOmitsThrow({ try context?.save() }, default: ())
     }
 }

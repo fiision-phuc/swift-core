@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 9/13/17
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -37,53 +37,31 @@ import Foundation
 
 public extension Encodable {
     /// Convert a model to JSON.
-    public func encodeJSON(format f: JSONEncoder.OutputFormatting? = nil, dataDecoding d: JSONEncoder.DataEncodingStrategy = .base64, dateDecoding dt: JSONEncoder.DateEncodingStrategy? = nil) -> Data? {
+    public func encodeJSON(format f: JSONEncoder.OutputFormatting? = nil, dateDecoding dt: JSONEncoder.DateEncodingStrategy? = nil, dataDecoding d: JSONEncoder.DataEncodingStrategy = .base64) throws -> Data {
         let encoder = JSONEncoder()
         encoder.dataEncodingStrategy = d
+        encoder.dateEncodingStrategy = dt ?? .secondsSince1970
 
         // Output format
         if let format = f {
             encoder.outputFormatting = format
         }
-
-        // Encode datetime
-        if #available(OSX 10.12, iOS 10.0, *) {
-            encoder.dateEncodingStrategy = dt ?? .iso8601
-        } else {
-            encoder.dateEncodingStrategy = dt ?? .secondsSince1970
-        }
-
-        do {
-            return try encoder.encode(self)
-        } catch let err as NSError {
-            FwiLog("There was an error during JSON encoding! (\(err.localizedDescription))")
-            return nil
-        }
+        return try encoder.encode(self)
     }
 }
 
 public extension Decodable {
     /// Map JSON to model.
-    public static func decodeJSON(_ json: Data?, dataDecoding d: JSONDecoder.DataDecodingStrategy = .base64, dateDecoding dt: JSONDecoder.DateDecodingStrategy? = nil) -> Self? {
+    public static func decodeJSON(_ json: Data?, dateDecoding dt: JSONDecoder.DateDecodingStrategy? = nil, dataDecoding d: JSONDecoder.DataDecodingStrategy = .base64) throws -> Self {
         guard let json = json else {
-            return nil
+            let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Input data must not be nil."])
+            throw error
         }
 
         let decoder = JSONDecoder()
         decoder.dataDecodingStrategy = d
+        decoder.dateDecodingStrategy = dt ?? .secondsSince1970
 
-        // Decode datetime
-        if #available(OSX 10.12, iOS 10.0, *) {
-            decoder.dateDecodingStrategy = dt ?? .iso8601
-        } else {
-            decoder.dateDecodingStrategy = dt ?? .secondsSince1970
-        }
-
-        do {
-            return try decoder.decode(self, from: json)
-        } catch let err as NSError {
-            FwiLog("There was an error during JSON decoding! (\(err.localizedDescription))")
-            return nil
-        }
+        return try decoder.decode(self, from: json)
     }
 }

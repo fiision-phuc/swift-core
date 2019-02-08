@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/20/14
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -88,17 +88,17 @@ public extension Data {
             var b1 = self[i]
             var b2 = self[i + 1]
 
-            if 48 <= b1 && b1 <= 57 { // '0-9'
+            if 48 <= b1, b1 <= 57 { // '0-9'
                 b1 -= 48
-            } else if 65 <= b1 && b1 <= 70 { // 'A-F'
+            } else if 65 <= b1, b1 <= 70 { // 'A-F'
                 b1 -= 55 // A = 10, 'A' = 65 -> b = 65 - 55
             } else { // 'a-f'
                 b1 -= 87 // a = 10, 'a' = 97 -> b = 97 - 87
             }
 
-            if 48 <= b2 && b2 <= 57 { // '0-9'
+            if 48 <= b2, b2 <= 57 { // '0-9'
                 b2 -= 48
-            } else if 65 <= b2 && b2 <= 70 { // 'A-F'
+            } else if 65 <= b2, b2 <= 70 { // 'A-F'
                 b2 -= 55 // A = 10, 'A' = 65 -> b = 65 - 55
             } else { // 'a-f'
                 b2 -= 87 // a = 10, 'a' = 97 -> b = 97 - 87
@@ -132,13 +132,13 @@ public extension Data {
             var v1 = (b & 0xf0) >> 4
             var v2 = b & 0x0f
 
-            if 0 <= v1 && v1 <= 9 { // '0-9'
+            if 0 <= v1, v1 <= 9 { // '0-9'
                 v1 += 48
             } else { // 'a-f'
                 v1 += 87 // a = 10, 'a' = 97 -> b = 10 + 87
             }
 
-            if 0 <= v2 && v2 <= 9 { // '0-9'
+            if 0 <= v2, v2 <= 9 { // '0-9'
                 v2 += 48
             } else { // 'a-f'
                 v2 += 87 // a = 10, 'a' = 97 -> b = 10 + 87

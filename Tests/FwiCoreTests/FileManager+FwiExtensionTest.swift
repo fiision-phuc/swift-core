@@ -4,7 +4,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 8/27/16
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -50,16 +50,16 @@ class FileManagerFwiExtensionTest: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        directoryURL1 = URL.cacheDirectory() + "/sample/testDirectory1"
-        directoryURL2 = URL.cacheDirectory() + "/sample/testDirectory2"
-        fileURL = URL.cacheDirectory() + "/sample/file"
+        directoryURL1 = URL.cacheDirectory()?.appendingPathComponent("sample/testDirectory1")
+        directoryURL2 = URL.cacheDirectory()?.appendingPathComponent("sample/testDirectory2")
+        fileURL = URL.cacheDirectory()?.appendingPathComponent("sample/file")
         
-        FileManager.default.createDirectory(atURL: URL.cacheDirectory() + "/sample")
+        try? FileManager.default.createDirectory(atURL: URL.cacheDirectory()?.appendingPathComponent("sample"))
         if let url = fileURL {
             do {
                 try "FwiCore".toData()?.write(to: url)
             } catch let err as NSError {
-                FwiLog("Could not create file '\(err.localizedDescription)'.")
+                FwiLog.debug("Could not create file '\(err.localizedDescription)'.")
             }
         }
     }
@@ -68,7 +68,7 @@ class FileManagerFwiExtensionTest: XCTestCase {
     override func tearDown() {
         super.tearDown()
         
-        if let url = URL.cacheDirectory() + "/sample" {
+        if let url = URL.cacheDirectory()?.appendingPathComponent("sample") {
             do {
                 try FileManager.default.removeItem(at: url)
             } catch _ {}
@@ -78,40 +78,55 @@ class FileManagerFwiExtensionTest: XCTestCase {
     
     // MARK: Test Cases
     func testCreateDirectory() {
-        var err = FileManager.default.createDirectory(atURL: nil)
-        XCTAssertNotNil(err, "FileManager should not allow to create nil directory '\(String(describing: err))'.")
-        
-        err = FileManager.default.createDirectory(atURL: URL.cacheDirectory())
-        XCTAssertNotNil(err, "FileManager should not allow to create root cache directory '\(String(describing: err))'.")
-        
-        err = FileManager.default.createDirectory(atURL: directoryURL1)
-        XCTAssertNil(err, "FileManager should be able to create directory for a given path but found '\(String(describing: err))'.")
+        do {
+            try FileManager.default.createDirectory(atURL: nil)
+        } catch {
+            XCTAssertNotNil(error, "FileManager should not allow to create nil directory '\(String(describing: error))'.")
+        }
+
+        do {
+            try FileManager.default.createDirectory(atURL: URL.cacheDirectory())
+        } catch {
+            XCTAssertNotNil(error, "FileManager should not allow to create root cache directory '\(String(describing: error))'.")
+        }
+
+        do {
+            try FileManager.default.createDirectory(atURL: directoryURL1)
+        } catch {
+            XCTAssertNil(error, "FileManager should be able to create directory for a given path but found '\(String(describing: error))'.")
+        }
     }
     
     func testDirectoryExists() {
         XCTAssertFalse(FileManager.default.directoryExists(atURL: directoryURL1), "FileManager should return false when directory is not available.")
         XCTAssertFalse(FileManager.default.directoryExists(atURL: fileURL), "FileManager should return false when given a file URL.")
         
-        FileManager.default.createDirectory(atURL: directoryURL1)
+        try? FileManager.default.createDirectory(atURL: directoryURL1)
         XCTAssertTrue(FileManager.default.directoryExists(atURL: directoryURL1), "FileManager should return true when directory is available.")
     }
     
     func testMoveDirectory() {
-        FileManager.default.createDirectory(atURL: directoryURL1)
+        try? FileManager.default.createDirectory(atURL: directoryURL1)
         XCTAssertTrue(FileManager.default.directoryExists(atURL: directoryURL1), "FileManager should return true when directory is available.")
         XCTAssertFalse(FileManager.default.directoryExists(atURL: directoryURL2), "FileManager should return false when directory is not available.")
-        
-        let err = FileManager.default.moveDirectory(from: directoryURL1, to: directoryURL2)
-        XCTAssertNil(err, "FileManager should be able to move directory but found '\(String(describing: err))'.")
+
+        do {
+            try FileManager.default.moveDirectory(from: directoryURL1, to: directoryURL2)
+        } catch {
+            XCTAssertNil(error, "FileManager should be able to move directory but found '\(String(describing: error))'.")
+        }
+
         XCTAssertFalse(FileManager.default.directoryExists(atURL: directoryURL1), "FileManager should return false when directory is not available.")
         XCTAssertTrue(FileManager.default.directoryExists(atURL: directoryURL2), "FileManager should return true when directory is available.")
     }
     
     func testRemoveDirectory() {
-        FileManager.default.createDirectory(atURL: directoryURL1)
-        let err = FileManager.default.removeDirectory(atURL: directoryURL1)
-        
-        XCTAssertNil(err, "FileManager should be able to remove directory but found '\(String(describing: err))'.")
+        try? FileManager.default.createDirectory(atURL: directoryURL1)
+        do {
+            try FileManager.default.removeDirectory(atURL: directoryURL1)
+        } catch {
+            XCTAssertNil(error, "FileManager should be able to remove directory but found '\(String(describing: error))'.")
+        }
         XCTAssertFalse(FileManager.default.directoryExists(atURL: directoryURL1), "FileManager should return false when directory is not available.")
     }
     
