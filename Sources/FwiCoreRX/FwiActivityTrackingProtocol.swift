@@ -1,7 +1,7 @@
-//  File name   : UIApplication+FwiExtension.swift
+//  File name   : FwiActivityTrackingProtocol.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 6/13/16
+//  Author      : Dung Vu
+//  Created date: 2/7/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,49 +33,29 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
-    import UIKit
+import Foundation
 
-    public extension UIApplication {
-        /// Define whether the device is iPad or not.
-        public class var isPad: Bool {
-            return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad
-        }
+public protocol FwiActivityTrackingProtocol: AnyObject {
+    var indicator: FwiActivityIndicator! { get set }
+}
 
-        /// Define whether the device is iPhone or not.
-        public class var isPhone: Bool {
-            return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone
-        }
-
-        /// Return iOS major version.
-        public class var osMajor: Int {
-            let token = UIDevice.current.systemVersion.split(".")
-            if let major = Int(token[0]) {
-                return major
+public extension FwiActivityTrackingProtocol {
+    var indicator: FwiActivityIndicator! {
+        get {
+            guard let r = objc_getAssociatedObject(self, &Loading.name) as? FwiActivityIndicator else {
+                let new = FwiActivityIndicator()
+                // set for next
+                objc_setAssociatedObject(self, &Loading.name, new, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                return new
             }
-            return 0
+            return r
         }
-
-        /// Return iOS minor version.
-        public class var osMinor: Int {
-            let token = UIDevice.current.systemVersion.split(".")
-            if let minor = Int(token[1]), token.count >= 2 {
-                return minor
-            }
-            return 0
-        }
-
-        /// Enable remote notification.
-        public class func enableRemoteNotification() {
-            #if targetEnvironment(simulator)
-                print("Remote notification does not support this device.")
-            #else
-                let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
-
-                let settings = UIUserNotificationSettings(types: notificationType, categories: nil)
-                UIApplication.shared.registerUserNotificationSettings(settings)
-                UIApplication.shared.registerForRemoteNotifications()
-            #endif
+        set {
+            objc_setAssociatedObject(self, &Loading.name, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-#endif
+}
+
+private struct Loading {
+    static var name = "indicator"
+}

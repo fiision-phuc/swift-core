@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/20/14
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -35,11 +35,17 @@
 
 import Foundation
 import UIKit
-import os.log
 
 public struct FwiCore {
     public static let domain = "com.fiision.lib.FwiCore"
-    public static var debug = false
+    public static var debug = false {
+        didSet(enableDebug) {
+            guard enableDebug else {
+                return
+            }
+            FwiLog.consoleLog()
+        }
+    }
 
     /// Custom error handler for tryOmitsThrow function.
     public static var omitBlock: ((Error) -> Void)?
@@ -53,7 +59,7 @@ public struct FwiCore {
         do {
             return try block()
         } catch {
-            FwiLog.debug(error, className: className, line: line)
+            FwiLog.error(error, className: className, line: line)
             omitBlock?(error)
 
             return `default`()
@@ -90,35 +96,6 @@ public struct FwiLocale {
 
     /// Struct's private static properties.
     private static var shared = FwiLocalization()
-}
-
-public struct FwiLog {
-    /// Output info to console.
-    ///
-    /// - Parameters:
-    ///   - items: list of items to be output to console
-    public static func debug(_ items: Any..., className: String = #file, line: Int = #line) {
-        /* Condition validation: validate debug mode */
-        guard FwiCore.debug else {
-            return
-        }
-
-        /* Condition validation: validate class's name */
-        let tokens = className.split("/")
-        guard let name = tokens.last, name.count > 0 else {
-            return
-        }
-
-        let parts = items.map { String(describing: $0) }
-        let message = parts.joined(separator: ", ")
-        if #available(iOS 12.0, *) {
-            os_log(.debug, "[ DEBUG ] <%@ %i>: %@", name, line, message)
-        } else if #available(iOS 10.0, *) {
-            os_log("[ DEBUG ] <%@ %i>: %@", name, line, message)
-        } else {
-            print(String(format: "[ DEBUG ] <%@ %i>: %@", name, line, message))
-        }
-    }
 }
 
 public struct FwiMeasure {

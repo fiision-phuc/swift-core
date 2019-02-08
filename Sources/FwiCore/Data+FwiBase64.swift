@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/20/14
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -37,6 +37,7 @@ import Foundation
 
 public extension Data {
     // MARK: Validate base64
+
     public var isBase64: Bool {
         /* Condition validation */
         if count <= 0 || (count % 4) != 0 {
@@ -89,6 +90,7 @@ public extension Data {
     }
 
     // MARK: Decode base64
+
     public func decodeBase64Data() -> Data? {
         return isBase64 ? Data(base64Encoded: self, options: .ignoreUnknownCharacters) : nil
     }
@@ -98,6 +100,7 @@ public extension Data {
     }
 
     // MARK: Encode base64
+
     public func encodeBase64Data() -> Data? {
         return count > 0 ? base64EncodedData(options: .endLineWithCarriageReturn) : nil
     }

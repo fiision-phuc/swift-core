@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 9/3/16
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -36,6 +36,7 @@
 import Foundation
 
 // MARK: IO to Data
+
 public extension NSCoding {
     /// Unarchive from data.
     ///
@@ -60,6 +61,7 @@ public extension NSCoding {
 }
 
 // MARK: IO to File
+
 public extension NSCoding {
     /// Unarchive from file.
     ///
@@ -77,6 +79,7 @@ public extension NSCoding {
 }
 
 // MARK: IO to UserDefaults
+
 public extension NSCoding {
     /// Unarchive from UserDefaults.
     ///

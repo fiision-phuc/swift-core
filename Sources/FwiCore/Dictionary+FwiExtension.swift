@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 9/26/16
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -38,11 +38,11 @@ import Foundation
 public extension Dictionary {
     /// Load dictionary from plist.
     ///
-    /// - parameter plistname (required): the plist's name
-    /// - parameter plistFormat (optional): the plist's format, default is xml
-    /// - parameter bundle (optional): which bundle contains the plist file
-    public static func loadPlist(withPlistname n: String, plistFormat f: PropertyListSerialization.PropertyListFormat = .xml, fromBundle b: Bundle = Bundle.main) throws -> [String: Any] {
-        guard let url = Bundle.main.url(forResource: n, withExtension: "plist") else {
+    /// - Parameters:
+    ///   - plistname: the plist's name
+    ///   - bundle: which bundle contains the plist file
+    public static func loadPlist(withPlistname n: String, fromBundle b: Bundle = Bundle.main) throws -> [String: Any] {
+        guard let url = b.url(forResource: n, withExtension: "plist") else {
             let info = [NSLocalizedDescriptionKey: "\(n).plist does not exist."]
             throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: info)
         }
@@ -56,5 +56,22 @@ public extension Dictionary {
             throw NSError(domain: FwiCore.domain, code: -1, userInfo: info)
         }
         return plist
+    }
+
+    /// Lookup value for specific key. If value is not available, default value will be returned.
+    ///
+    /// - Parameters:
+    ///   - key: a key to lookup
+    ///   - defaultValue: default value to be returned
+    func value<E>(for key: Key, defaultValue: @autoclosure () -> E) -> E {
+        guard let result = self[key] as? E else {
+            return defaultValue()
+        }
+        return result
+    }
+
+    /// Convert dictionary to data.
+    func toData() throws -> Data {
+        return try JSONSerialization.data(withJSONObject: self, options: [])
     }
 }

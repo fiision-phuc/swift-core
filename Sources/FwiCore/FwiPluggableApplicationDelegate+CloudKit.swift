@@ -1,7 +1,7 @@
-//  File name   : UIApplication+FwiExtension.swift
+//  File name   : FwiPluggableApplicationDelegate.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 6/13/16
+//  Created date: 2/4/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -32,50 +32,26 @@
 //  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
+//
+//  This code is not original. Fiision Studio forks the project and modified base
+//  on Fiision Studio's needed.
+//
+//  If you are looking for original, please:
+//  - seealso:
+//    [The PluggableAppDelegate Library Reference]
+//    (https://github.com/pchelnikov/PluggableAppDelegate.git)
+//
+//    [The Medium]
+//    (https://medium.com/ios-os-x-development/pluggableapplicationdelegate-e50b2c5d97dd)
 
-#if canImport(UIKit)
+#if canImport(UIKit) && canImport(CloudKit)
+    import CloudKit
     import UIKit
 
-    public extension UIApplication {
-        /// Define whether the device is iPad or not.
-        public class var isPad: Bool {
-            return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad
-        }
-
-        /// Define whether the device is iPhone or not.
-        public class var isPhone: Bool {
-            return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone
-        }
-
-        /// Return iOS major version.
-        public class var osMajor: Int {
-            let token = UIDevice.current.systemVersion.split(".")
-            if let major = Int(token[0]) {
-                return major
-            }
-            return 0
-        }
-
-        /// Return iOS minor version.
-        public class var osMinor: Int {
-            let token = UIDevice.current.systemVersion.split(".")
-            if let minor = Int(token[1]), token.count >= 2 {
-                return minor
-            }
-            return 0
-        }
-
-        /// Enable remote notification.
-        public class func enableRemoteNotification() {
-            #if targetEnvironment(simulator)
-                print("Remote notification does not support this device.")
-            #else
-                let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
-
-                let settings = UIUserNotificationSettings(types: notificationType, categories: nil)
-                UIApplication.shared.registerUserNotificationSettings(settings)
-                UIApplication.shared.registerForRemoteNotifications()
-            #endif
+    @available(iOS 10.0, *)
+    public extension FwiPluggableApplicationDelegate {
+        public func application(_ application: UIApplication, userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata) {
+            services_.forEach { $0.application?(application, userDidAcceptCloudKitShareWith: cloudKitShareMetadata) }
         }
     }
 #endif

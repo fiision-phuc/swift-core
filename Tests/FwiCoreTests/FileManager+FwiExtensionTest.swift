@@ -4,7 +4,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 8/27/16
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -50,11 +50,11 @@ class FileManagerFwiExtensionTest: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        directoryURL1 = URL.cacheDirectory() + "/sample/testDirectory1"
-        directoryURL2 = URL.cacheDirectory() + "/sample/testDirectory2"
-        fileURL = URL.cacheDirectory() + "/sample/file"
+        directoryURL1 = URL.cacheDirectory()?.appendingPathComponent("sample/testDirectory1")
+        directoryURL2 = URL.cacheDirectory()?.appendingPathComponent("sample/testDirectory2")
+        fileURL = URL.cacheDirectory()?.appendingPathComponent("sample/file")
         
-        try? FileManager.default.createDirectory(atURL: URL.cacheDirectory() + "/sample")
+        try? FileManager.default.createDirectory(atURL: URL.cacheDirectory()?.appendingPathComponent("sample"))
         if let url = fileURL {
             do {
                 try "FwiCore".toData()?.write(to: url)
@@ -68,7 +68,7 @@ class FileManagerFwiExtensionTest: XCTestCase {
     override func tearDown() {
         super.tearDown()
         
-        if let url = URL.cacheDirectory() + "/sample" {
+        if let url = URL.cacheDirectory()?.appendingPathComponent("sample") {
             do {
                 try FileManager.default.removeItem(at: url)
             } catch _ {}

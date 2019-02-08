@@ -3,7 +3,7 @@
 //  Author      : Dung Vu
 //  Created date: 6/8/16
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -43,7 +43,7 @@ public extension FileManager {
     /// - parameter url (required): destination url to create directory
     /// - parameter intermediateDirectories (optional): should create intermediate directories as well
     public func createDirectory(atURL url: URL?, withIntermediateDirectories intermediate: Bool = true, attributes: [FileAttributeKey: Any]? = nil) throws {
-        guard let url = url, url.isFileURL && url != URL.documentDirectory() && url != URL.cacheDirectory() else {
+        guard let url = url, url.isFileURL, url != URL.documentDirectory(), url != URL.cacheDirectory() else {
             let info = [NSLocalizedDescriptionKey: "Invalid directory's URL."]
             throw NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: info)
         }

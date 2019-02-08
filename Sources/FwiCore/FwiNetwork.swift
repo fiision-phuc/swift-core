@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 4/13/14
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -68,7 +68,7 @@ public struct FwiNetwork {
 
             if let d = d, let destinationURL = try? d.asURL() {
                 let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h) { (tempURL, response) -> (URL, DownloadRequest.DownloadOptions) in
-                    return (destinationURL, [DownloadRequest.DownloadOptions.createIntermediateDirectories, DownloadRequest.DownloadOptions.removePreviousFile])
+                    (destinationURL, [DownloadRequest.DownloadOptions.createIntermediateDirectories, DownloadRequest.DownloadOptions.removePreviousFile])
                 }
                 task.validate(statusCode: 200..<300)
                 task.response { r in
@@ -79,6 +79,14 @@ public struct FwiNetwork {
                 let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h, to: nil)
                 task.validate(statusCode: 200..<300)
                 task.response { r in
+                    if FwiCore.debug,
+                        let request = r.request,
+                        let url = request.url?.absoluteString,
+                        let headers = request.allHTTPHeaderFields {
+                        FwiLog.debug(url)
+                        FwiLog.debug(headers)
+                    }
+
                     c(r.temporaryURL, r.error, r.response)
                 }
                 return task
@@ -112,6 +120,14 @@ public struct FwiNetwork {
             let task = manager.request(url, method: m, parameters: p, encoding: e, headers: h)
             task.validate(statusCode: 200..<300)
             task.response { r in
+                if FwiCore.debug,
+                    let request = r.request,
+                    let url = request.url?.absoluteString,
+                    let headers = request.allHTTPHeaderFields {
+                    FwiLog.debug(url)
+                    FwiLog.debug(headers)
+                }
+
                 c(r.data, r.error, r.response)
             }
             return task

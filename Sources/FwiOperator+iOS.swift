@@ -1,7 +1,7 @@
-//  File name   : UIApplication+FwiExtension.swift
+//  File name   : FwiOperator+iOS.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 6/13/16
+//  Author      : Dung Vu
+//  Created date: 2/4/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -36,46 +36,13 @@
 #if canImport(UIKit)
     import UIKit
 
-    public extension UIApplication {
-        /// Define whether the device is iPad or not.
-        public class var isPad: Bool {
-            return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad
-        }
+    public func >>> <E, F>(lhs: E, rhs: F) -> E where E: UIView, F: UIView {
+        rhs.addSubview(lhs)
+        return lhs
+    }
 
-        /// Define whether the device is iPhone or not.
-        public class var isPhone: Bool {
-            return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone
-        }
-
-        /// Return iOS major version.
-        public class var osMajor: Int {
-            let token = UIDevice.current.systemVersion.split(".")
-            if let major = Int(token[0]) {
-                return major
-            }
-            return 0
-        }
-
-        /// Return iOS minor version.
-        public class var osMinor: Int {
-            let token = UIDevice.current.systemVersion.split(".")
-            if let minor = Int(token[1]), token.count >= 2 {
-                return minor
-            }
-            return 0
-        }
-
-        /// Enable remote notification.
-        public class func enableRemoteNotification() {
-            #if targetEnvironment(simulator)
-                print("Remote notification does not support this device.")
-            #else
-                let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
-
-                let settings = UIUserNotificationSettings(types: notificationType, categories: nil)
-                UIApplication.shared.registerUserNotificationSettings(settings)
-                UIApplication.shared.registerForRemoteNotifications()
-            #endif
-        }
+    public func >>> <E, F>(lhs: E, rhs: F?) -> E where E: UIView, F: UIView {
+        rhs?.addSubview(lhs)
+        return lhs
     }
 #endif

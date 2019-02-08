@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 10/24/17
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -46,9 +46,9 @@ public extension KeyedDecodingContainer {
 
                 if let n = numberFormatter.number(from: final) {
                     return n.boolValue
-                } else if value == "false" {
+                } else if final == "false" {
                     return false
-                } else if value == "true" {
+                } else if final == "true" {
                     return true
                 }
             } else if let value = try? decode(Int.self, forKey: key) {

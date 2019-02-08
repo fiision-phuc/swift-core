@@ -1,7 +1,8 @@
-//  File name   : UIApplication+FwiExtension.swift
+import RxSwift
+//  File name   : FwiCancelableProtocol.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 6/13/16
+//  Author      : Dung Vu
+//  Created date: 2/7/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -36,46 +37,23 @@
 #if canImport(UIKit)
     import UIKit
 
-    public extension UIApplication {
-        /// Define whether the device is iPad or not.
-        public class var isPad: Bool {
-            return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad
-        }
+    public protocol FwiCancelableProtocol: AnyObject, FwiDisposableProtocol, FwiDismissProtocol {
+        var cancelButton: UIButton? { get }
+    }
 
-        /// Define whether the device is iPhone or not.
-        public class var isPhone: Bool {
-            return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone
-        }
+    public extension FwiCancelableProtocol {
+        public func setupCancelButton(append other: Observable<Void>? = nil) {
+            let e1 = other
+            let e2 = cancelButton?.rx.tap.asObservable()
 
-        /// Return iOS major version.
-        public class var osMajor: Int {
-            let token = UIDevice.current.systemVersion.split(".")
-            if let major = Int(token[0]) {
-                return major
-            }
-            return 0
-        }
+            let events = [e1, e2].compactMap { $0 }
 
-        /// Return iOS minor version.
-        public class var osMinor: Int {
-            let token = UIDevice.current.systemVersion.split(".")
-            if let minor = Int(token[1]), token.count >= 2 {
-                return minor
-            }
-            return 0
-        }
-
-        /// Enable remote notification.
-        public class func enableRemoteNotification() {
-            #if targetEnvironment(simulator)
-                print("Remote notification does not support this device.")
-            #else
-                let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
-
-                let settings = UIUserNotificationSettings(types: notificationType, categories: nil)
-                UIApplication.shared.registerUserNotificationSettings(settings)
-                UIApplication.shared.registerForRemoteNotifications()
-            #endif
+            Observable.merge(events)
+                .observeOn(MainScheduler.asyncInstance)
+                .bind { [weak self] in
+                    self?.dismiss()
+                }
+                .disposed(by: disposeBag)
         }
     }
 #endif

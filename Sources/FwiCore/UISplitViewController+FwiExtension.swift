@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 8/4/16
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -38,6 +38,7 @@
 
     extension UISplitViewController {
         // MARK: Class's override methods
+
         open override var prefersStatusBarHidden: Bool {
             if UIApplication.isPhone {
                 return viewControllers.first?.prefersStatusBarHidden ?? super.prefersStatusBarHidden

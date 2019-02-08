@@ -3,7 +3,7 @@
 //  Author      : Phuc, Tran Huu
 //  Created date: 11/22/14
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -83,14 +83,11 @@ public extension String {
             return false
         }
 
-        do {
+        return FwiCore.tryOmitsThrow({
             let regex = try NSRegularExpression(pattern: pattern, options: option)
             let matches = regex.numberOfMatches(in: self, options: .anchored, range: NSMakeRange(0, count))
             return (matches == 1)
-        } catch {
-            FwiLog.debug(error)
-            return false
-        }
+        }, default: false)
     }
 
     /// Split string into components.
@@ -101,40 +98,52 @@ public extension String {
     }
 
     /// Sub string to index.
-    public func substring(endIndex index: Int) -> String {
+    public func substring(fromIndex idx: UInt) -> Substring {
         /* Condition validation: Validate end index */
-        if index <= 0 || index >= count {
+        if idx >= count {
+            FwiLog.debug("Start index must be less than string's length.")
+            return ""
+        }
+
+        let i = index(startIndex, offsetBy: Int(idx))
+        return self[i...]
+    }
+
+    /// Sub string to index.
+    public func substring(toIndex idx: UInt) -> Substring {
+        /* Condition validation: Validate end index */
+        if idx >= count {
             FwiLog.debug("End index should be a positive number but less than string's length.")
             return ""
         }
-        return substring(startIndex: 0, reverseIndex: -(count - index))
+
+        let i = index(startIndex, offsetBy: Int(idx))
+        return self[..<i]
     }
 
     /// Sub string from index to reverse index.
     ///
-    /// - parameter startIndex (required): beginning index
+    /// - Parameters:
+    ///   - startIndex: beginning index
     /// - parameter reverseIndex (optional): ending index
-    public func substring(startIndex strIdx: Int, reverseIndex endIdx: Int = 0) -> String {
-        /* Condition validation: Validate start index */
-        if strIdx < 0 || strIdx > count {
-            FwiLog.debug("Start index should not be a negative number or larger than string's length.")
-            return ""
-        }
-
+    public func substring(fromIndex idx: UInt, length l: UInt) -> Substring {
         /* Condition validation: Validate end index */
-        if endIdx > 0 || abs(endIdx) > count {
-            FwiLog.debug("Reverse index should be a negative number but absolute value must less than string's length.")
+        if idx >= count {
+            FwiLog.debug("Start index must be less than string's length.")
             return ""
         }
 
-        /* Condition validation: Validate overlap index */
-        if strIdx >= count + endIdx {
-            FwiLog.debug("Start index and reverse index should not overlap each other.")
+        /* Condition validation: Validate length */
+        if (idx + l) < count {
+            FwiLog.debug("Sub string length must less than string's length.")
             return ""
         }
 
-        let range = index(startIndex, offsetBy: strIdx)..<index(endIndex, offsetBy: endIdx)
-        return String(self[range])
+        let start = index(startIndex, offsetBy: Int(idx))
+        let end = index(start, offsetBy: Int(l))
+        
+        let range = start..<end
+        return self[range]
     }
 
     /// Trim all spaces before and after a string.
@@ -145,15 +154,5 @@ public extension String {
     /// Convert string to data.
     public func toData(dataEncoding encoding: String.Encoding = .utf8) -> Data? {
         return data(using: encoding, allowLossyConversion: false)
-    }
-}
-
-extension String {
-    /// Subscript get character at index.
-    public subscript(idx: Int) -> Character? {
-        guard !(idx < 0 || idx >= count) else {
-            return nil
-        }
-        return self[index(startIndex, offsetBy: idx)]
     }
 }

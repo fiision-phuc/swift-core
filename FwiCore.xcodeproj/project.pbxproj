@@ -7,6 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5ECD67C1220BCF4B00C318C5 /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ECD67BF220BCF4B00C318C5 /* CocoaLumberjack.framework */; };
+		5ECD67C2220BCF4B00C318C5 /* CocoaLumberjackSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ECD67C0220BCF4B00C318C5 /* CocoaLumberjackSwift.framework */; };
+		5ECD67C3220BCF6E00C318C5 /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ECD67BF220BCF4B00C318C5 /* CocoaLumberjack.framework */; };
+		5ECD67C4220BCF6E00C318C5 /* CocoaLumberjackSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ECD67C0220BCF4B00C318C5 /* CocoaLumberjackSwift.framework */; };
+		5ECD67C5220BCFCA00C318C5 /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ECD67BF220BCF4B00C318C5 /* CocoaLumberjack.framework */; };
+		5ECD67C6220BCFCA00C318C5 /* CocoaLumberjackSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ECD67C0220BCF4B00C318C5 /* CocoaLumberjackSwift.framework */; };
+		5ECD67C8220BF87400C318C5 /* FwiLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67C7220BF87400C318C5 /* FwiLog.swift */; };
+		5ECD67CB220BFB2E00C318C5 /* FwiPlistProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67CA220BFB2E00C318C5 /* FwiPlistProtocol.swift */; };
+		5ECD67CE220BFF9200C318C5 /* FwiDisposableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67CD220BFF9200C318C5 /* FwiDisposableProtocol.swift */; };
+		5ECD67D1220C010B00C318C5 /* FwiContainerViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67D0220C010B00C318C5 /* FwiContainerViewProtocol.swift */; };
+		5ECD67D3220C018D00C318C5 /* FwiDismissProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67D2220C018D00C318C5 /* FwiDismissProtocol.swift */; };
+		5ECD67D6220C02D100C318C5 /* FwiKeyboardAnimationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67D5220C02D100C318C5 /* FwiKeyboardAnimationProtocol.swift */; };
+		5ECD67D9220C046B00C318C5 /* FwiKeyboardInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67D8220C046B00C318C5 /* FwiKeyboardInfo.swift */; };
+		5ECD67DB220C12BA00C318C5 /* FwiDraggableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67DA220C12BA00C318C5 /* FwiDraggableViewProtocol.swift */; };
+		5ECD67DD220C16C100C318C5 /* FwiCancelableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67DC220C16C100C318C5 /* FwiCancelableProtocol.swift */; };
+		5ECD67DF220C191000C318C5 /* FwiOptionalTypeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67DE220C191000C318C5 /* FwiOptionalTypeProtocol.swift */; };
+		5ECD67E2220C1A8600C318C5 /* ObservableType+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67E1220C1A8600C318C5 /* ObservableType+FwiExtension.swift */; };
+		5ECD67E4220C1B1900C318C5 /* Optional+FwiExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67E3220C1B1900C318C5 /* Optional+FwiExtension.swift */; };
+		5ECD67E6220C20AE00C318C5 /* FwiActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67E5220C20AE00C318C5 /* FwiActivityIndicator.swift */; };
+		5ECD67E8220C238600C318C5 /* FwiActivityTrackingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67E7220C238600C318C5 /* FwiActivityTrackingProtocol.swift */; };
+		5ED8D0192207DB5E00E8BE60 /* FwiOperator+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED8D0182207DB5E00E8BE60 /* FwiOperator+iOS.swift */; };
+		5ED8D01D2207DD2200E8BE60 /* FwiPluggableApplicationDelegate+CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED8D01B2207DD2200E8BE60 /* FwiPluggableApplicationDelegate+CloudKit.swift */; };
+		5ED8D01E2207DD2200E8BE60 /* FwiPluggableApplicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED8D01C2207DD2200E8BE60 /* FwiPluggableApplicationDelegate.swift */; };
+		5ED8D0212207DDD000E8BE60 /* FwiPluggableApplicationDelegateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED8D0202207DDCF00E8BE60 /* FwiPluggableApplicationDelegateService.swift */; };
+		5ED8D0232207E09B00E8BE60 /* FwiPluggableServiceProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED8D0222207E09B00E8BE60 /* FwiPluggableServiceProviderProtocol.swift */; };
+		BE1579DF220447C9001F57D9 /* FwiOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1579DE220447C9001F57D9 /* FwiOperator.swift */; };
 		BE19C3141F77F8F1003DF3D8 /* FwiCoreData+RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30B1F77F8DF003DF3D8 /* FwiCoreData+RX.swift */; };
 		BE19C3171F77F8F1003DF3D8 /* FwiNetwork+RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30C1F77F8DF003DF3D8 /* FwiNetwork+RX.swift */; };
 		BE19C3181F77F8F1003DF3D8 /* FwiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30A1F77F8DE003DF3D8 /* FwiViewModel.swift */; };
@@ -25,7 +51,6 @@
 		BE8BF1511D84661C00F710CB /* FileManager+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF14B1D84661C00F710CB /* FileManager+FwiExtensionTest.swift */; };
 		BE8BF1521D84661C00F710CB /* NSNumber+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF14C1D84661C00F710CB /* NSNumber+FwiExtensionTest.swift */; };
 		BE8BF1531D84661C00F710CB /* String+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF14D1D84661C00F710CB /* String+FwiExtensionTest.swift */; };
-		BE8BF1541D84661C00F710CB /* URL+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF14E1D84661C00F710CB /* URL+FwiExtensionTest.swift */; };
 		BE91D84B1F7019C300EEE620 /* FwiCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE91D84A1F7019C300EEE620 /* FwiCore.swift */; };
 		BE91D87F1F701B7900EEE620 /* Data+FwiBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE91D87D1F701B7900EEE620 /* Data+FwiBase64.swift */; };
 		BE91D8801F701B7900EEE620 /* String+FwiBase64.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE91D87E1F701B7900EEE620 /* String+FwiBase64.swift */; };
@@ -76,6 +101,28 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5ECD67BF220BCF4B00C318C5 /* CocoaLumberjack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaLumberjack.framework; path = ../../../../../Carthage/Build/iOS/CocoaLumberjack.framework; sourceTree = "<group>"; };
+		5ECD67C0220BCF4B00C318C5 /* CocoaLumberjackSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaLumberjackSwift.framework; path = ../../../../../Carthage/Build/iOS/CocoaLumberjackSwift.framework; sourceTree = "<group>"; };
+		5ECD67C7220BF87400C318C5 /* FwiLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FwiLog.swift; path = FwiCore/FwiLog.swift; sourceTree = "<group>"; };
+		5ECD67CA220BFB2E00C318C5 /* FwiPlistProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FwiPlistProtocol.swift; path = FwiCore/FwiPlistProtocol.swift; sourceTree = "<group>"; };
+		5ECD67CD220BFF9200C318C5 /* FwiDisposableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FwiDisposableProtocol.swift; sourceTree = "<group>"; };
+		5ECD67D0220C010B00C318C5 /* FwiContainerViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FwiContainerViewProtocol.swift; sourceTree = "<group>"; };
+		5ECD67D2220C018D00C318C5 /* FwiDismissProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FwiDismissProtocol.swift; sourceTree = "<group>"; };
+		5ECD67D5220C02D100C318C5 /* FwiKeyboardAnimationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FwiKeyboardAnimationProtocol.swift; sourceTree = "<group>"; };
+		5ECD67D8220C046B00C318C5 /* FwiKeyboardInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FwiKeyboardInfo.swift; sourceTree = "<group>"; };
+		5ECD67DA220C12BA00C318C5 /* FwiDraggableViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FwiDraggableViewProtocol.swift; sourceTree = "<group>"; };
+		5ECD67DC220C16C100C318C5 /* FwiCancelableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FwiCancelableProtocol.swift; sourceTree = "<group>"; };
+		5ECD67DE220C191000C318C5 /* FwiOptionalTypeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FwiOptionalTypeProtocol.swift; sourceTree = "<group>"; };
+		5ECD67E1220C1A8600C318C5 /* ObservableType+FwiExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ObservableType+FwiExtension.swift"; sourceTree = "<group>"; };
+		5ECD67E3220C1B1900C318C5 /* Optional+FwiExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+FwiExtension.swift"; sourceTree = "<group>"; };
+		5ECD67E5220C20AE00C318C5 /* FwiActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FwiActivityIndicator.swift; sourceTree = "<group>"; };
+		5ECD67E7220C238600C318C5 /* FwiActivityTrackingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FwiActivityTrackingProtocol.swift; sourceTree = "<group>"; };
+		5ED8D0182207DB5E00E8BE60 /* FwiOperator+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FwiOperator+iOS.swift"; sourceTree = "<group>"; };
+		5ED8D01B2207DD2200E8BE60 /* FwiPluggableApplicationDelegate+CloudKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FwiPluggableApplicationDelegate+CloudKit.swift"; path = "FwiCore/FwiPluggableApplicationDelegate+CloudKit.swift"; sourceTree = "<group>"; };
+		5ED8D01C2207DD2200E8BE60 /* FwiPluggableApplicationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FwiPluggableApplicationDelegate.swift; path = FwiCore/FwiPluggableApplicationDelegate.swift; sourceTree = "<group>"; };
+		5ED8D0202207DDCF00E8BE60 /* FwiPluggableApplicationDelegateService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FwiPluggableApplicationDelegateService.swift; path = FwiCore/FwiPluggableApplicationDelegateService.swift; sourceTree = "<group>"; };
+		5ED8D0222207E09B00E8BE60 /* FwiPluggableServiceProviderProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FwiPluggableServiceProviderProtocol.swift; path = FwiCore/FwiPluggableServiceProviderProtocol.swift; sourceTree = "<group>"; };
+		BE1579DE220447C9001F57D9 /* FwiOperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FwiOperator.swift; sourceTree = "<group>"; };
 		BE1735B61D89C13B00738B1F /* lib-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "lib-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/lib-debug.xcconfig"; sourceTree = "<group>"; };
 		BE1735B71D89C13B00738B1F /* lib-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "lib-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/lib-release.xcconfig"; sourceTree = "<group>"; };
 		BE1735B81D89C13B00738B1F /* project-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "project-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/project-debug.xcconfig"; sourceTree = "<group>"; };
@@ -99,7 +146,6 @@
 		BE8BF14B1D84661C00F710CB /* FileManager+FwiExtensionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+FwiExtensionTest.swift"; sourceTree = "<group>"; };
 		BE8BF14C1D84661C00F710CB /* NSNumber+FwiExtensionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSNumber+FwiExtensionTest.swift"; sourceTree = "<group>"; };
 		BE8BF14D1D84661C00F710CB /* String+FwiExtensionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+FwiExtensionTest.swift"; sourceTree = "<group>"; };
-		BE8BF14E1D84661C00F710CB /* URL+FwiExtensionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+FwiExtensionTest.swift"; sourceTree = "<group>"; };
 		BE91D84A1F7019C300EEE620 /* FwiCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FwiCore.swift; path = FwiCore/FwiCore.swift; sourceTree = "<group>"; };
 		BE91D84C1F701AF600EEE620 /* FwiLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FwiLocalization.swift; path = FwiCore/FwiLocalization.swift; sourceTree = "<group>"; };
 		BE91D87D1F701B7900EEE620 /* Data+FwiBase64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Data+FwiBase64.swift"; path = "FwiCore/Data+FwiBase64.swift"; sourceTree = "<group>"; };
@@ -148,6 +194,8 @@
 				BED7E46D212B9AF7008DE156 /* RxCocoa.framework in Frameworks */,
 				BED7E46B212B9AB4008DE156 /* RxSwift.framework in Frameworks */,
 				BE91D9311F703E2C00EEE620 /* FwiCore.framework in Frameworks */,
+				5ECD67C3220BCF6E00C318C5 /* CocoaLumberjack.framework in Frameworks */,
+				5ECD67C4220BCF6E00C318C5 /* CocoaLumberjackSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,6 +204,8 @@
 			buildActionMask = 0;
 			files = (
 				BED7E468212B9A91008DE156 /* Alamofire.framework in Frameworks */,
+				5ECD67C1220BCF4B00C318C5 /* CocoaLumberjack.framework in Frameworks */,
+				5ECD67C2220BCF4B00C318C5 /* CocoaLumberjackSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,12 +215,87 @@
 			files = (
 				BEDF614221591C38006BC59B /* Alamofire.framework in Frameworks */,
 				_LinkFileRef_FwiCore_via_FwiCoreTests /* FwiCore.framework in Frameworks */,
+				5ECD67C5220BCFCA00C318C5 /* CocoaLumberjack.framework in Frameworks */,
+				5ECD67C6220BCFCA00C318C5 /* CocoaLumberjackSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5ECD67C9220BFAF400C318C5 /* Plist */ = {
+			isa = PBXGroup;
+			children = (
+				5ECD67CA220BFB2E00C318C5 /* FwiPlistProtocol.swift */,
+			);
+			name = Plist;
+			sourceTree = "<group>";
+		};
+		5ECD67CC220BFF7B00C318C5 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				5ECD67E7220C238600C318C5 /* FwiActivityTrackingProtocol.swift */,
+				5ECD67D2220C018D00C318C5 /* FwiDismissProtocol.swift */,
+				5ECD67CD220BFF9200C318C5 /* FwiDisposableProtocol.swift */,
+				5ECD67DE220C191000C318C5 /* FwiOptionalTypeProtocol.swift */,
+			);
+			name = Protocol;
+			sourceTree = "<group>";
+		};
+		5ECD67CF220C00EA00C318C5 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				5ECD67DC220C16C100C318C5 /* FwiCancelableProtocol.swift */,
+				5ECD67D0220C010B00C318C5 /* FwiContainerViewProtocol.swift */,
+			);
+			name = Protocol;
+			sourceTree = "<group>";
+		};
+		5ECD67D4220C02A200C318C5 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				5ECD67DA220C12BA00C318C5 /* FwiDraggableViewProtocol.swift */,
+				5ECD67D5220C02D100C318C5 /* FwiKeyboardAnimationProtocol.swift */,
+			);
+			name = Animation;
+			sourceTree = "<group>";
+		};
+		5ECD67D7220C045300C318C5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5ECD67D8220C046B00C318C5 /* FwiKeyboardInfo.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		5ECD67E0220C1A5B00C318C5 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				5ECD67E1220C1A8600C318C5 /* ObservableType+FwiExtension.swift */,
+				5ECD67E3220C1B1900C318C5 /* Optional+FwiExtension.swift */,
+			);
+			name = Extension;
+			sourceTree = "<group>";
+		};
+		5ED8D01A2207DD0300E8BE60 /* ApplicationDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				5ED8D01F2207DDBA00E8BE60 /* Service */,
+				5ED8D01C2207DD2200E8BE60 /* FwiPluggableApplicationDelegate.swift */,
+				5ED8D01B2207DD2200E8BE60 /* FwiPluggableApplicationDelegate+CloudKit.swift */,
+			);
+			name = ApplicationDelegate;
+			sourceTree = "<group>";
+		};
+		5ED8D01F2207DDBA00E8BE60 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				5ED8D0222207E09B00E8BE60 /* FwiPluggableServiceProviderProtocol.swift */,
+				5ED8D0202207DDCF00E8BE60 /* FwiPluggableApplicationDelegateService.swift */,
+			);
+			name = Service;
+			sourceTree = "<group>";
+		};
 		BE19C3191F77F920003DF3D8 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -211,6 +336,9 @@
 		BE66A7DF220290A300CBFE3C /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				5ECD67CF220C00EA00C318C5 /* Protocol */,
+				5ECD67D4220C02A200C318C5 /* Animation */,
+				5ECD67D7220C045300C318C5 /* Model */,
 				BE66A7E0220290BC00CBFE3C /* ViewModel */,
 			);
 			name = iOS;
@@ -294,7 +422,9 @@
 		BE8BF12E1D832CE900F710CB /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				5ED8D0182207DB5E00E8BE60 /* FwiOperator+iOS.swift */,
 				BE66A7E1220290F600CBFE3C /* Extension */,
+				5ED8D01A2207DD0300E8BE60 /* ApplicationDelegate */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -356,7 +486,6 @@
 				BE7EA4761FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift */,
 				BE8BF14C1D84661C00F710CB /* NSNumber+FwiExtensionTest.swift */,
 				BE8BF14D1D84661C00F710CB /* String+FwiExtensionTest.swift */,
-				BE8BF14E1D84661C00F710CB /* URL+FwiExtensionTest.swift */,
 			);
 			name = foundation;
 			sourceTree = "<group>";
@@ -364,6 +493,8 @@
 		BE91D8D91F70291600EEE620 /* FwiCoreRX */ = {
 			isa = PBXGroup;
 			children = (
+				5ECD67CC220BFF7B00C318C5 /* Protocol */,
+				5ECD67E0220C1A5B00C318C5 /* Extension */,
 				BE19C3191F77F920003DF3D8 /* CoreData */,
 				BEF3EBBC1F77FDB100EE8F44 /* Network */,
 				BEA89C491F9A6C610099413F /* ViewModel */,
@@ -387,6 +518,8 @@
 				BED7E467212B9A91008DE156 /* Alamofire.framework */,
 				BED7E46C212B9AF7008DE156 /* RxCocoa.framework */,
 				BED7E46A212B9AB4008DE156 /* RxSwift.framework */,
+				5ECD67BF220BCF4B00C318C5 /* CocoaLumberjack.framework */,
+				5ECD67C0220BCF4B00C318C5 /* CocoaLumberjackSwift.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -402,6 +535,7 @@
 		BEF3EBBC1F77FDB100EE8F44 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				5ECD67E5220C20AE00C318C5 /* FwiActivityIndicator.swift */,
 				BE19C30C1F77F8DF003DF3D8 /* FwiNetwork+RX.swift */,
 			);
 			name = Network;
@@ -458,10 +592,13 @@
 			isa = PBXGroup;
 			children = (
 				BE91D84A1F7019C300EEE620 /* FwiCore.swift */,
+				5ECD67C7220BF87400C318C5 /* FwiLog.swift */,
+				BE1579DE220447C9001F57D9 /* FwiOperator.swift */,
 				BE8BF12D1D832CC900F710CB /* Extension */,
 				BE8BF12A1D832C4200F710CB /* Codec */,
 				BEF01E7B1F71219B00F25389 /* CoreData */,
 				BE2E7FA11FA0FAE3008E521F /* Json */,
+				5ECD67C9220BFAF400C318C5 /* Plist */,
 				BE8BF1301D832D8700F710CB /* i18n */,
 				BE8BF1331D832ED000F710CB /* Network */,
 				BE8BF12E1D832CE900F710CB /* iOS */,
@@ -619,10 +756,14 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjack.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjackSwift.framework",
 			);
 			name = Carthage;
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaLumberjack.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaLumberjackSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -635,14 +776,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5ECD67D1220C010B00C318C5 /* FwiContainerViewProtocol.swift in Sources */,
+				5ECD67E2220C1A8600C318C5 /* ObservableType+FwiExtension.swift in Sources */,
 				BE73154921002ED400C569A6 /* FwiTableViewVM.swift in Sources */,
 				BE73154A21002ED400C569A6 /* FwiGenericCollectionViewVM.swift in Sources */,
 				BE73154C21002ED400C569A6 /* FwiGenericCollectionViewCellVM.swift in Sources */,
 				BE73154B21002ED400C569A6 /* FwiGenericTableViewCellVM.swift in Sources */,
 				BE19C3141F77F8F1003DF3D8 /* FwiCoreData+RX.swift in Sources */,
+				5ECD67D6220C02D100C318C5 /* FwiKeyboardAnimationProtocol.swift in Sources */,
+				5ECD67D9220C046B00C318C5 /* FwiKeyboardInfo.swift in Sources */,
+				5ECD67E6220C20AE00C318C5 /* FwiActivityIndicator.swift in Sources */,
+				5ECD67DD220C16C100C318C5 /* FwiCancelableProtocol.swift in Sources */,
 				BE73154821002ED400C569A6 /* FwiGenericTableViewVM.swift in Sources */,
+				5ECD67E8220C238600C318C5 /* FwiActivityTrackingProtocol.swift in Sources */,
+				5ECD67DB220C12BA00C318C5 /* FwiDraggableViewProtocol.swift in Sources */,
+				5ECD67D3220C018D00C318C5 /* FwiDismissProtocol.swift in Sources */,
+				5ECD67E4220C1B1900C318C5 /* Optional+FwiExtension.swift in Sources */,
 				BE19C3181F77F8F1003DF3D8 /* FwiViewModel.swift in Sources */,
 				BE19C3171F77F8F1003DF3D8 /* FwiNetwork+RX.swift in Sources */,
+				5ECD67CE220BFF9200C318C5 /* FwiDisposableProtocol.swift in Sources */,
+				5ECD67DF220C191000C318C5 /* FwiOptionalTypeProtocol.swift in Sources */,
 				BE73154721002ED400C569A6 /* FwiCollectionViewVM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -654,14 +807,18 @@
 				BEA89C4B1F9A6DB00099413F /* UIImage+FwiExtension.swift in Sources */,
 				BE91D8CD1F70277C00EEE620 /* UISplitViewController+FwiExtension.swift in Sources */,
 				BE91D8CB1F70277C00EEE620 /* UIApplication+FwiExtension.swift in Sources */,
+				5ED8D01E2207DD2200E8BE60 /* FwiPluggableApplicationDelegate.swift in Sources */,
 				BE91D8BB1F70273700EEE620 /* FileManager+FwiExtension.swift in Sources */,
 				BE91D8BC1F70273700EEE620 /* String+FwiExtension.swift in Sources */,
 				BE91D8CE1F70277C00EEE620 /* UITableViewController+FwiExtension.swift in Sources */,
 				BEDBB4DC1FE9D57B00059325 /* KeyedDecodingContainer+FwiExtension.swift in Sources */,
 				BE91D87F1F701B7900EEE620 /* Data+FwiBase64.swift in Sources */,
+				5ECD67CB220BFB2E00C318C5 /* FwiPlistProtocol.swift in Sources */,
+				5ECD67C8220BF87400C318C5 /* FwiLog.swift in Sources */,
 				BE91D8CF1F70277C00EEE620 /* UIViewController+FwiExtension.swift in Sources */,
 				BE91D84B1F7019C300EEE620 /* FwiCore.swift in Sources */,
 				BE91D8D81F7027EA00EEE620 /* FwiNetwork.swift in Sources */,
+				5ED8D0212207DDD000E8BE60 /* FwiPluggableApplicationDelegateService.swift in Sources */,
 				BE91D8BA1F70273700EEE620 /* Dictionary+FwiExtension.swift in Sources */,
 				BE91D8C81F70277C00EEE620 /* UIButton+FwiExtension.swift in Sources */,
 				BE91D8D31F7027C300EEE620 /* Data+FwiHex.swift in Sources */,
@@ -671,16 +828,20 @@
 				BE91D8CA1F70277C00EEE620 /* UIView+FwiExtension.swift in Sources */,
 				BE91D8B61F70273700EEE620 /* NSCoding+FwiExtension.swift in Sources */,
 				BE91D8D01F70277C00EEE620 /* UINavigationController+FwiExtension.swift in Sources */,
+				5ED8D0232207E09B00E8BE60 /* FwiPluggableServiceProviderProtocol.swift in Sources */,
 				BEDBB4E01FE9DB7900059325 /* UIAlertController+FwiExtension.swift in Sources */,
 				BE91D8B91F70273700EEE620 /* Codable+FwiExtension.swift in Sources */,
 				BE91D8B81F70273700EEE620 /* NSNumber+FwiExtension.swift in Sources */,
 				BEDBB4DA1FE9D48C00059325 /* Array+FwiExtension.swift in Sources */,
+				5ED8D0192207DB5E00E8BE60 /* FwiOperator+iOS.swift in Sources */,
 				BE91D8B71F70273700EEE620 /* Data+FwiExtension.swift in Sources */,
 				BE91D8C91F70277C00EEE620 /* FwiStoryboard.swift in Sources */,
+				BE1579DF220447C9001F57D9 /* FwiOperator.swift in Sources */,
 				BE91D8D41F7027C300EEE620 /* String+FwiHex.swift in Sources */,
 				BEF01E7A1F71214800F25389 /* NSManagedObject+FwiExtension.swift in Sources */,
 				BE91D8CC1F70277C00EEE620 /* FwiCell.swift in Sources */,
 				BE6B962D1FF2A8E900BCDEFC /* FwiLocalization.swift in Sources */,
+				5ED8D01D2207DD2200E8BE60 /* FwiPluggableApplicationDelegate+CloudKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -696,7 +857,6 @@
 				BE8BF1501D84661C00F710CB /* Data+FwiExtensionTest.swift in Sources */,
 				BE8BF1471D8465BC00F710CB /* Data+FwiBase64Test.swift in Sources */,
 				BEB230B221FC0B20008ED2C7 /* Codable+FwiExtensionTest.swift in Sources */,
-				BE8BF1541D84661C00F710CB /* URL+FwiExtensionTest.swift in Sources */,
 				BE8BF1531D84661C00F710CB /* String+FwiExtensionTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -732,6 +892,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B71D89C13B00738B1F /* lib-release.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 			};
@@ -753,6 +917,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE1735B61D89C13B00738B1F /* lib-debug.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 			};

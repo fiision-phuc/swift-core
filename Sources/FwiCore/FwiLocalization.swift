@@ -3,7 +3,7 @@
 //  Author      : Phuc Tran
 //  Created date: 4/13/15
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -62,6 +62,7 @@ struct FwiLocalization {
     }
 
     // MARK: Struct's public methods
+
     func localized(forString s: String) -> String {
         if let localized = bundle?.localizedString(forKey: s, value: s, table: nil) {
             return localized

@@ -3,7 +3,7 @@
 //  Author      : Dung Vu
 //  Created date: 6/22/16
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -94,7 +94,7 @@ public extension FwiCoreData where Self: NSManagedObject {
         let entities = allEntities(fromContext: c, predicate: p, limit: 1)
         var entity = entities.first
 
-        if entity == nil && create {
+        if entity == nil, create {
             entity = newEntity(withContext: c)
         }
         return entity

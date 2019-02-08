@@ -3,7 +3,7 @@
 //  Author      : Phuc Tran
 //  Created date: 7/14/18
 //  --------------------------------------------------------------
-//  Copyright © 2012, 2018 Fiision Studio. All Rights Reserved.
+//  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
 //
 //  Permission is hereby granted, free of charge, to any person obtaining  a  copy
@@ -133,7 +133,7 @@
             }
 
             let count = self.collectionView(collectionView, numberOfItemsInSection: indexPath.section)
-            guard 0 <= indexPath.item && indexPath.item < count else {
+            guard 0 <= indexPath.item, indexPath.item < count else {
                 return
             }
 

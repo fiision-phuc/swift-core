@@ -1,7 +1,7 @@
-//  File name   : UIApplication+FwiExtension.swift
+//  File name   : FwiKeyboardInfo.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 6/13/16
+//  Author      : Dung Vu
+//  Created date: 2/7/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -36,46 +36,36 @@
 #if canImport(UIKit)
     import UIKit
 
-    public extension UIApplication {
-        /// Define whether the device is iPad or not.
-        public class var isPad: Bool {
-            return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad
-        }
+    public struct FwiKeyboardInfo {
+        /// Struct's public properties.
+        public let duration: TimeInterval
+        public let height: CGFloat
+        public let hidden: Bool
 
-        /// Define whether the device is iPhone or not.
-        public class var isPhone: Bool {
-            return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone
-        }
-
-        /// Return iOS major version.
-        public class var osMajor: Int {
-            let token = UIDevice.current.systemVersion.split(".")
-            if let major = Int(token[0]) {
-                return major
+        /// Struct's constructors.
+        public init?(_ notification: Notification) {
+            guard let userInfo = notification.userInfo else {
+                return nil
             }
-            return 0
+
+            duration = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval) ?? 0
+            hidden = (notification.name == UIResponder.keyboardWillHideNotification)
+            height = hidden ? 0 : ((userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height ?? 0)
         }
 
-        /// Return iOS minor version.
-        public class var osMinor: Int {
-            let token = UIDevice.current.systemVersion.split(".")
-            if let minor = Int(token[1]), token.count >= 2 {
-                return minor
+        // MARK: Struct's public methods
+
+        public func animate(view: UIView?) {
+            let transfrom = CGAffineTransform(translationX: 0, y: -height)
+
+            UIView.animate(withDuration: duration) {
+            /* Condition validation: check if it is scrollview, then we only need to change inset, otherwise we apply transform */
+                guard let scrollView = view as? UIScrollView else {
+                    view?.transform = transfrom
+                    return
+                }
+                scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: self.height, right: 0)
             }
-            return 0
-        }
-
-        /// Enable remote notification.
-        public class func enableRemoteNotification() {
-            #if targetEnvironment(simulator)
-                print("Remote notification does not support this device.")
-            #else
-                let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
-
-                let settings = UIUserNotificationSettings(types: notificationType, categories: nil)
-                UIApplication.shared.registerUserNotificationSettings(settings)
-                UIApplication.shared.registerForRemoteNotifications()
-            #endif
         }
     }
 #endif
