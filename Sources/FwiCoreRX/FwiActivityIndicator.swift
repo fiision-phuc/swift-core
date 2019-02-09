@@ -16,8 +16,8 @@
 //    [The RxSwift Library Reference]
 //    (https://github.com/ReactiveX/RxSwift/blob/master/RxExample/RxExample/Services/ActivityIndicator.swift)
 
-import RxSwift
 import RxCocoa
+import RxSwift
 
 public class FwiActivityIndicator: SharedSequenceConvertibleType {
     public typealias SharingStrategy = DriverSharingStrategy
@@ -41,7 +41,7 @@ public class FwiActivityIndicator: SharedSequenceConvertibleType {
             self.increment()
             return ActivityToken(source: source.asObservable(), disposeAction: self.decrement)
         }) { t in
-            return t.asObservable()
+            t.asObservable()
         }
     }
 
@@ -64,8 +64,7 @@ public class FwiActivityIndicator: SharedSequenceConvertibleType {
     private let _loading: SharedSequence<SharingStrategy, Bool>
 }
 
-
-private struct ActivityToken<E> : ObservableConvertibleType, Disposable {
+private struct ActivityToken<E>: ObservableConvertibleType, Disposable {
     private let _source: Observable<E>
     private let _dispose: Cancelable
 

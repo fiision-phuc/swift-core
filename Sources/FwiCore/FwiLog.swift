@@ -50,14 +50,13 @@ public struct FwiLog {
     public static func fileLog(withLevel level: DDLogLevel = .info, rollingFrequency: TimeInterval = 60 * 60 * 24, numberOfLogFiles: UInt = 5) {
         consoleLog(withLevel: level)
 
-        guard
-            let logsDirectory = URL.documentDirectory()?.appendingPathComponent("Logs").path,
-            let logFileManager = DDLogFileManagerDefault(logsDirectory: logsDirectory),
-            let fileLogger = DDFileLogger(logFileManager: logFileManager)
-        else {
+        guard let logsDirectory = URL.documentDirectory()?.appendingPathComponent("Logs").path else {
             return
         }
 
+        let logFileManager = DDLogFileManagerDefault(logsDirectory: logsDirectory)
+        let fileLogger = DDFileLogger(logFileManager: logFileManager)
+        
         fileLogger.logFileManager.maximumNumberOfLogFiles = numberOfLogFiles
         fileLogger.rollingFrequency = rollingFrequency
         DDLog.add(fileLogger)
