@@ -141,7 +141,7 @@ public extension String {
 
         let start = index(startIndex, offsetBy: Int(idx))
         let end = index(start, offsetBy: Int(l))
-        
+
         let range = start..<end
         return self[range]
     }

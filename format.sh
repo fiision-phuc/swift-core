@@ -20,8 +20,7 @@ OUTPUT=$(swiftformat 								\
 													\
 	--ranges nospace 								\
 	--trimwhitespace always 						\
-	--disable linebreakAtEndOfFile,hoistPatternLet,strongOutlets,unusedArguments,redundantBackticks,redundantSelf \
-	--exclude tooling,Pods,tutorials/tutorial1/Pods,tutorials/tutorial2/Pods,tutorials/tutorial3/Pods,tutorials/tutorial3-rib-di-and-communication-finished/Pods,tutorials/tutorial4/Pods \
+	--disable blankLinesAroundMark,linebreakAtEndOfFile,hoistPatternLet,strongOutlets,unusedArguments,redundantBackticks,redundantSelf \
 ./Sources/)
 
 if [ "$OUTPUT" ]; then
