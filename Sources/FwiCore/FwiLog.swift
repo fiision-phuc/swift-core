@@ -39,10 +39,7 @@ import Foundation
 public struct FwiLog {
     /// Enable console log.
     public static func consoleLog(withLevel level: DDLogLevel = .debug) {
-        defer {
-            isInitialized = true
-            logLevel = level
-        }
+        defer { logLevel = level }
         DDLog.add(DDASLLogger.sharedInstance)
     }
 
@@ -50,13 +47,16 @@ public struct FwiLog {
     public static func fileLog(withLevel level: DDLogLevel = .info, rollingFrequency: TimeInterval = 60 * 60 * 24, numberOfLogFiles: UInt = 5) {
         consoleLog(withLevel: level)
 
+        /* Condition validation: validate if logs folder can be created or not */
         guard let logsDirectory = URL.documentDirectory()?.appendingPathComponent("Logs").path else {
             return
         }
-
         let logFileManager = DDLogFileManagerDefault(logsDirectory: logsDirectory)
-        let fileLogger = DDFileLogger(logFileManager: logFileManager)
-        
+
+        /* Condition validation: validate if file logger can be created or not */
+        guard let fileLogger = DDFileLogger(logFileManager: logFileManager) else {
+            return
+        }
         fileLogger.logFileManager.maximumNumberOfLogFiles = numberOfLogFiles
         fileLogger.rollingFrequency = rollingFrequency
         DDLog.add(fileLogger)
@@ -166,6 +166,5 @@ public struct FwiLog {
     }
 
     /// Struct's private properties.
-    private static var isInitialized = false
     private static var logLevel: DDLogLevel = .debug
 }

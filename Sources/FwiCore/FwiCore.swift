@@ -39,8 +39,8 @@ import UIKit
 public struct FwiCore {
     public static let domain = "com.fiision.lib.FwiCore"
     public static var debug = false {
-        didSet(enableDebug) {
-            guard enableDebug else {
+        didSet {
+            guard debug else {
                 return
             }
             FwiLog.consoleLog()

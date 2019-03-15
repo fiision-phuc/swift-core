@@ -189,13 +189,5 @@
         public func findAndResignFirstResponder() {
             self.findFirstResponder()?.resignFirstResponder()
         }
-
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        public func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
-        }
     }
 #endif
