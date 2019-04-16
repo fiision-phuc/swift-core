@@ -282,8 +282,8 @@ private struct TestDate: Codable {
 private struct TestURL: Codable {
     let a: URL
 
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        a = try container.decode(key: .a)
-    }
+//    init(from decoder: Decoder) throws {
+//        let container = try decoder.container(keyedBy: CodingKeys.self)
+////        a = try container.decode(key: .a)
+//    }
 }

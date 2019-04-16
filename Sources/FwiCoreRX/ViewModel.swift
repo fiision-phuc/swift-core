@@ -1,7 +1,7 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : ViewModel.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Created date: 11/12/16
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +33,26 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
-    import UIKit
+import Foundation
+import RxSwift
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
-        }
+open class ViewModel: NSObject {
+    /// Class's public properties.
+    public private(set) var disposeBag: DisposeBag! = DisposeBag()
+
+    /// Class's constructors.
+    public override init() {
+        super.init()
     }
-#endif
 
+    /// Class's destructor.
+    deinit {
+        disposeBag = nil
+    }
+
+    // MARK: Class's public methods
+
+    open func setupRX() {
+        fatalError("\(#function) should be overrided by sub class!")
+    }
+}

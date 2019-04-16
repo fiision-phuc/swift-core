@@ -47,7 +47,7 @@ public extension FwiCoreData where Self: NSManagedObject {
     /// - sortDescriptor {[NSSortDescriptor]} (to sort entity list)
     /// - groupBy {[Any]} (to group entity list into smaller list)
     /// - limit {Int} (to limit the number of entities within the list)
-    public static func allEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [Any]? = nil, limit l: Int = 0) -> [Self] {
+    static func allEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, sortDescriptor s: [NSSortDescriptor]? = nil, groupBy g: [Any]? = nil, limit l: Int = 0) -> [Self] {
         /* Condition validation */
         guard let c = context, let entityName = NSStringFromClass(self).split(".").last else {
             return []
@@ -84,7 +84,7 @@ public extension FwiCoreData where Self: NSManagedObject {
     /// - context {NSManagedObjectContext} (a managed object context to search)
     /// - predicate {NSPredicate} (to filter entity list)
     /// - shouldCreate {Bool} (create new entity if necessary)
-    public static func entity(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, shouldCreate create: Bool = false) -> Self? {
+    static func entity(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil, shouldCreate create: Bool = false) -> Self? {
         /* Condition validation */
         guard let c = context else {
             return nil
@@ -105,7 +105,7 @@ public extension FwiCoreData where Self: NSManagedObject {
     /// @params
     /// - context {NSManagedObjectContext} (a managed object context to search)
     /// - predicate {NSPredicate} (to filter entity list)
-    public static func count(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) -> Int {
+    static func count(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) -> Int {
         /* Condition validation */
         guard let c = context else {
             return 0
@@ -127,7 +127,7 @@ public extension FwiCoreData where Self: NSManagedObject {
     ///
     /// @params
     /// - context {NSManagedObjectContext} (a managed object context to search)
-    public static func newEntity(withContext context: NSManagedObjectContext?) -> Self? {
+    static func newEntity(withContext context: NSManagedObjectContext?) -> Self? {
         /* Condition validation */
         guard let c = context else {
             return nil
@@ -140,7 +140,7 @@ public extension FwiCoreData where Self: NSManagedObject {
     /// @params
     /// - context {NSManagedObjectContext} (a managed object context to search)
     /// - predicate {NSPredicate} (to filter entity list)
-    public static func deleteAllEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) {
+    static func deleteAllEntities(fromContext context: NSManagedObjectContext?, predicate p: NSPredicate? = nil) {
         let entities = allEntities(fromContext: context, predicate: p)
         entities.forEach {
             context?.delete($0)

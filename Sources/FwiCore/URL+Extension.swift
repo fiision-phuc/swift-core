@@ -1,7 +1,8 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : URL+Extension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Editor      : Dung Vu
+//  Created date: 11/22/14
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +34,29 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
-    import UIKit
+import Foundation
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
-        }
+public extension URL {
+    /// URL to main cache folder.
+    static func cacheDirectory() -> URL? {
+        let array = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        return array.first
     }
-#endif
 
+    /// URL to main document folder.
+    static func documentDirectory() -> URL? {
+        let array = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return array.first
+    }
+}
+
+extension URL: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        guard let new = URL(string: value) else {
+            fatalError("Check URL")
+        }
+        self = new
+    }
+    
+    
+}

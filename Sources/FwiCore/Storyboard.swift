@@ -1,7 +1,7 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : Storyboard.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Author      : Dung Vu
+//  Created date: 8/10/16
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +33,38 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
+#if canImport(UIKit) && (os(iOS) || os(tvOS))
     import UIKit
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
+    /// Storyboard defines instruction on how to load a storyboard.
+    public protocol Storyboard {
+        /// Storyboard's name
+        static var name: String { get }
+
+        /// Which bundle that a storyboard comes from. If nil, default bundle will be used.
+        static var bundle: Bundle? { get }
+    }
+
+    /// Default implementation for Storyboard.
+    public extension Storyboard {
+        static var bundle: Bundle? {
+            return nil
+        }
+    }
+
+    /// Storyboard has addon function only when self is UIViewController.
+    public extension Storyboard where Self: UIViewController {
+        /// Create view controller from storyboard.
+        static func instantiate() -> Self? {
+            let storyboard = UIStoryboard(name: name, bundle: bundle)
+            return instantiate(from: storyboard)
+        }
+
+        /// Create view controller from defined storyboard.
+        ///
+        /// - parameter storyboard (required): storyboard's instance
+        static func instantiate(from storyboard: UIStoryboard) -> Self? {
+            return storyboard.instantiateViewController(withIdentifier: identifier) as? Self
         }
     }
 #endif
-

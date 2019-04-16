@@ -1,7 +1,8 @@
-//  File name   : FwiCore+Deprecated.swift
+import RxSwift
+//  File name   : KeyboardAnimationProtocol.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Author      : Dung Vu
+//  Created date: 2/7/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +34,21 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
+#if canImport(UIKit) && os(iOS)
     import UIKit
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
+    public protocol KeyboardAnimationProtocol: AnyObject, DisposableProtocol, ContainerViewProtocol {}
+
+    public extension KeyboardAnimationProtocol {
+        /// Setup animation for container view base on keyboard's present/dismiss events.
+        func setupKeyboardAnimation() {
+            let showEvent = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification).map { KeyboardInfo($0) }
+            let hideEvent = NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification).map { KeyboardInfo($0) }
+
+            Observable.merge([showEvent, hideEvent]).bind { [weak self] in
+                $0?.animate(view: self?.containerView)
+            }
+            .disposed(by: disposeBag)
         }
     }
 #endif
-

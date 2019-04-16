@@ -1,7 +1,7 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : PluggableApplicationDelegateService.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Created date: 2/4/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -32,18 +32,20 @@
 //  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
+//
+//  This code is not original. Fiision Studio forks the project and modified base
+//  on Fiision Studio's needed.
+//
+//  If you are looking for original, please:
+//  - seealso:
+//    [The PluggableAppDelegate Library Reference]
+//    (https://github.com/pchelnikov/PluggableAppDelegate.git)
+//
+//    [The Medium]
+//    (https://medium.com/ios-os-x-development/pluggableapplicationdelegate-e50b2c5d97dd)
 
-#if canImport(UIKit)
+#if canImport(UIKit) && (os(iOS) || os(tvOS))
     import UIKit
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
-        }
-    }
+    public protocol PluggableApplicationDelegateService: UIApplicationDelegate {}
 #endif
-

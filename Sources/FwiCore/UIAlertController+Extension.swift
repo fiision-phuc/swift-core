@@ -1,7 +1,8 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : UIAlertController+Extension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Created date: 12/20/17
+//  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +34,12 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
+#if canImport(UIKit) && os(iOS)
     import UIKit
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
+    extension UIAlertController {
+        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+            return .all
         }
     }
 #endif
-

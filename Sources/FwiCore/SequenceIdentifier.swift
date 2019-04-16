@@ -1,7 +1,7 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : SequenceIdentifier.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Created date: 11/5/17
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +33,27 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
-    import UIKit
+import Foundation
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
+var list: [Int] = []
+
+public protocol SequenceIdentifier {
+    var id: Int { get }
+}
+
+public extension Array where Element: SequenceIdentifier {
+    mutating func quickSort() {
+        func condition(by element: Element) -> Bool {
+            return list.contains(element.id)
         }
-    }
-#endif
 
+        var f = [Element]()
+        var s = [Element]()
+
+        self.forEach {
+            condition(by: $0) ? f.append($0) : s.append($0)
+        }
+
+        self = (f + s)
+    }
+}

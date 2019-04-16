@@ -1,7 +1,8 @@
-//  File name   : FwiCore+Deprecated.swift
+import RxSwift
+//  File name   : CancelableProtocol.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Author      : Dung Vu
+//  Created date: 2/7/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +34,26 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
+#if canImport(UIKit) && os(iOS)
     import UIKit
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
+    public protocol CancelableProtocol: AnyObject, DisposableProtocol, DismissProtocol {
+        var cancelButton: UIButton? { get }
+    }
+
+    public extension CancelableProtocol {
+        func setupCancelButton(append other: Observable<Void>? = nil) {
+            let e1 = other
+            let e2 = cancelButton?.rx.tap.asObservable()
+
+            let events = [e1, e2].compactMap { $0 }
+
+            Observable.merge(events)
+                .observeOn(MainScheduler.asyncInstance)
+                .bind { [weak self] in
+                    self?.dismiss()
+                }
+                .disposed(by: disposeBag)
         }
     }
 #endif
-

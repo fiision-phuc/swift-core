@@ -1,7 +1,7 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : ObservableType+Extension.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Author      : Dung Vu
+//  Created date: 2/7/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +33,35 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
-    import UIKit
+import RxSwift
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
+public extension ObservableConvertibleType {
+    /// Disclaimer
+    /// __________
+    /// This code is not original. Fiision Studio only copied and pasted base on
+    /// Fiision Studio's project management structure.
+    ///
+    /// If you are looking for original, please:
+    /// - seealso:
+    ///   [The RxSwift Library Reference]
+    ///   (https://github.com/ReactiveX/RxSwift/blob/master/RxExample/RxExample/Services/ActivityIndicator.swift)
+    func trackActivity(_ activityIndicator: ActivityIndicator) -> Observable<E> {
+        return activityIndicator.trackActivityOfObservable(self)
+    }
+}
+
+#if canImport(FwiCore)
+    import FwiCore
+
+    extension ObservableType where E: OptionalProtocol {
+        /// Filter nil value.
+        func filterNil() -> Observable<E.Wrapped> {
+            return flatMap { element -> Observable<E.Wrapped> in
+                guard let value = element.optionalValue else {
+                    return Observable<E.Wrapped>.empty()
+                }
+                return Observable<E.Wrapped>.just(value)
+            }
         }
     }
 #endif
-

@@ -1,7 +1,7 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : GenericCollectionViewCellVM.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Author      : Phuc Tran
+//  Created date: 7/19/18
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -36,14 +36,24 @@
 #if canImport(UIKit)
     import UIKit
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
+    open class GenericCollectionViewCellVM<C: UICollectionViewCell, M: Equatable>: GenericCollectionViewVM<M> {
+        // MARK: Class's public methods
+
+        /// Initialize cell at index.
+        ///
+        /// - Parameters:
+        ///   - cell: a UITableView's cell according to index
+        ///   - item: an item at index
+        open func configure(forCell cell: C, with item: M) {
+            fatalError("Child class should override func \(#function)")
+        }
+
+        open override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            let cell = C.dequeueCell(collectionView: collectionView, indexPath: indexPath)
+            if let item = self[indexPath] {
+                configure(forCell: cell, with: item)
+            }
+            return cell
         }
     }
 #endif
-

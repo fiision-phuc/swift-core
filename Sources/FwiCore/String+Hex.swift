@@ -1,7 +1,8 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : String+Hex.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Editor      : Dung Vu
+//  Created date: 11/26/14
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +34,32 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
-    import UIKit
+import Foundation
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
-        }
+public extension String {
+    // MARK: Validate Hex
+
+    var isHex: Bool {
+        return execution { data?.isHex }.orNil(default: false)
     }
-#endif
 
+    // MARK: Decode Hex
+
+    func decodeHexData() -> Data? {
+        return execution { data?.decodeHexData() }
+    }
+
+    func decodeHexString() -> String? {
+        return execution { data?.decodeHexString() }
+    }
+
+    // MARK: Encode Hex
+
+    func encodeHexData() -> Data? {
+        return execution { data?.encodeHexData() }
+    }
+
+    func encodeHexString() -> String? {
+        return execution { data?.encodeHexString() }
+    }
+}

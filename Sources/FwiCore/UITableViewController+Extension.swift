@@ -1,7 +1,7 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : UITabBarController+Extension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Created date: 8/4/16
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +33,34 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
+#if canImport(UIKit) && (os(iOS) || os(tvOS))
     import UIKit
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
+    extension UITabBarController {
+        // MARK: Class's override methods
+
+        #if !os(tvOS)
+        open override var prefersStatusBarHidden: Bool {
+            return selectedViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
         }
+        #endif
+
+        #if !os(tvOS)
+        open override var preferredStatusBarStyle: UIStatusBarStyle {
+            return selectedViewController?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
+        }
+        #endif
+
+        #if !os(tvOS)
+        open override var shouldAutorotate: Bool {
+            return selectedViewController?.shouldAutorotate ?? super.shouldAutorotate
+        }
+        #endif
+
+        #if !os(tvOS)
+        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+            return selectedViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
+        }
+        #endif
     }
 #endif
-

@@ -1,7 +1,7 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : Operator+iOS.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Author      : Dung Vu
+//  Created date: 2/4/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +33,16 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
+#if canImport(UIKit) && (os(iOS) || os(tvOS))
     import UIKit
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
-        }
+    public func >>> <E, F>(lhs: E, rhs: F) -> E where E: UIView, F: UIView {
+        rhs.addSubview(lhs)
+        return lhs
+    }
+
+    public func >>> <E, F>(lhs: E, rhs: F?) -> E where E: UIView, F: UIView {
+        rhs?.addSubview(lhs)
+        return lhs
     }
 #endif
-

@@ -1,7 +1,8 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : Dictionary+Extension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Editor      : Dung Vu
+//  Created date: 9/26/16
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +34,20 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
-    import UIKit
+import Foundation
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
-        }
+public extension Dictionary {
+    /// Lookup value for specific key. If value is not available, default value will be returned.
+    ///
+    /// - Parameters:
+    ///   - key: a key to lookup
+    ///   - defaultValue: default value to be returned
+    func value<E>(for key: Key, defaultValue: @autoclosure () -> E) -> E {
+        return (self[key] as? E).orNil(default: defaultValue())
     }
-#endif
 
+    /// Convert dictionary to data.
+    func toData() throws -> Data {
+        return try JSONSerialization.data(withJSONObject: self, options: [])
+    }
+}

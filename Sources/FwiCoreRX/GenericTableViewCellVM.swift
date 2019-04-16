@@ -1,7 +1,8 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : GenericTableViewCellVM.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Author      : Phuc Tran
+//  Created date: 7/16/18
+//  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -36,14 +37,24 @@
 #if canImport(UIKit)
     import UIKit
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
+    open class GenericTableViewCellVM<C: UITableViewCell, M: Equatable>: GenericTableViewVM<M> {
+        /// Initialize cell at index.
+        ///
+        /// - Parameters:
+        ///   - cell: a UITableView's cell according to index
+        ///   - item: an item at index
+        open func configure(forCell cell: C, with item: M) {
+            fatalError("Child class should override func \(#function)")
+        }
+
+        // MARK: UITableViewDataSource's members
+
+        open override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = C.dequeueCell(tableView: tableView)
+            if let item = self[indexPath] {
+                configure(forCell: cell, with: item)
+            }
+            return cell
         }
     }
 #endif
-

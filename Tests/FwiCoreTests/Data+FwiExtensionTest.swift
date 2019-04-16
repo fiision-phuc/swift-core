@@ -44,17 +44,21 @@ class DataFwiExtensionTest: XCTestCase {
     // MARK: Test Cases
     func testClearBytes() {
         FwiCore.debug = true
-        var data1 = Data(bytes: [0x40, 0x41, 0x42])
-        let data2 = Data(bytes: [0x00, 0x00, 0x00])
+        var data1 = Data([0x40, 0x41, 0x42])
+        let data2 = Data([0x00, 0x00, 0x00])
 
         data1.clearBytes()
         XCTAssertEqual(data1, data2, "Data1 should contain all zero.")
     }
 
     func testReverseBytes() {
-        var data1: Data = Data(bytes: [0x40, 0x41, 0x42])
-        let data2: Data = Data(bytes: [0x42, 0x41, 0x40])
+        var data1 = Data([0x40, 0x41, 0x42])
+        var data2 = Data([0x42, 0x41, 0x40])
+        data1.reverseBytes()
+        XCTAssertEqual(data1, data2, "Data1 should be reversed.")
 
+        data1 = Data([0x40, 0x41, 0x42, 0x43])
+        data2 = Data([0x43, 0x42, 0x41, 0x40])
         data1.reverseBytes()
         XCTAssertEqual(data1, data2, "Data1 should be reversed.")
     }

@@ -1,7 +1,8 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : Codable+Extension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Editor      : Dung Vu
+//  Created date: 9/13/17
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +34,35 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
-    import UIKit
+import Foundation
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
+public extension Encodable {
+    /// Convert a model to JSON.
+    func encodeJSON(format f: JSONEncoder.OutputFormatting? = nil, dateDecoding dt: JSONEncoder.DateEncodingStrategy? = nil, dataDecoding d: JSONEncoder.DataEncodingStrategy = .base64) throws -> Data {
+        let encoder = JSONEncoder()
+        encoder.dataEncodingStrategy = d
+        encoder.dateEncodingStrategy = dt ?? .secondsSince1970
+
+        // Output format
+        if let format = f {
+            encoder.outputFormatting = format
         }
+        return try encoder.encode(self)
     }
-#endif
+}
 
+public extension Decodable {
+    /// Map JSON to model.
+    static func decodeJSON(_ json: Data?, dateDecoding dt: JSONDecoder.DateDecodingStrategy? = nil, dataDecoding d: JSONDecoder.DataDecodingStrategy = .base64) throws -> Self {
+        guard let json = json else {
+            let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Input data must not be nil."])
+            throw error
+        }
+
+        let decoder = JSONDecoder()
+        decoder.dataDecodingStrategy = d
+        decoder.dateDecodingStrategy = dt ?? .secondsSince1970
+
+        return try decoder.decode(self, from: json)
+    }
+}

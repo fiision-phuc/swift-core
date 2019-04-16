@@ -38,12 +38,12 @@ import Foundation
 
 public extension NSManagedObject {
     /// Return entity's name.
-    public static var entityName: String {
+    static var entityName: String {
         return "\(self)"
     }
 
     /// Remove self from database.
-    public func remove() {
+    func remove() {
         managedObjectContext?.performAndWait({ [weak self] in
             guard let wSelf = self, let context = wSelf.managedObjectContext else {
                 return

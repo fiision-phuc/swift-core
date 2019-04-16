@@ -1,7 +1,8 @@
-//  File name   : FwiCore+Deprecated.swift
+//  File name   : Localization.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 2/11/19
+//  Author      : Phuc Tran
+//  Editor      : Dung Vu
+//  Created date: 4/13/15
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,17 +34,40 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
-    import UIKit
+import Foundation
 
-    public extension UIView {
-        /// Round corner of an UIView with specific radius.
-        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
-        func roundCorner(_ radius: CGFloat) {
-            let bgLayer = self.layer
-            bgLayer.masksToBounds = true
-            bgLayer.cornerRadius = radius
+final class Localization {
+    /// Struct's public properties.
+    var locale: String? {
+        didSet {
+            let userDefaults = UserDefaults.standard
+            userDefaults.set([locale.orNil(default: "en")], forKey: "AppleLanguages")
+            userDefaults.synchronize()
         }
     }
-#endif
+    
+    init(from bundle: Bundle = Bundle.main, locale: String = "en") {
+        self.bundle = bundle
+        self.locale = locale
+    }
+    
+    // MARK: Struct's public methods
 
+    func localized(forString s: String) -> String {
+        return bundle.localizedString(forKey: s, value: s, table: nil)
+    }
+
+    func reset() {
+        let languages = bundle.preferredLocalizations
+        let next = languages.first.orNil(default: "en")
+
+        FwiLog.info("Current Language: \(next).")
+        guard locale != next else {
+            return
+        }
+        locale = next
+    }
+
+    /// Struct's private properties.
+    private var bundle: Bundle
+}
