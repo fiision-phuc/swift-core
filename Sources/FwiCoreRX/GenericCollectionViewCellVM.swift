@@ -1,7 +1,7 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : GenericCollectionViewCellVM.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Author      : Phuc Tran
+//  Created date: 7/19/18
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +33,27 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
-import Foundation
+#if canImport(UIKit)
+    import UIKit
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
-    }
+    open class GenericCollectionViewCellVM<C: UICollectionViewCell, M: Equatable>: GenericCollectionViewVM<M> {
+        // MARK: Class's public methods
 
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
+        /// Initialize cell at index.
+        ///
+        /// - Parameters:
+        ///   - cell: a UITableView's cell according to index
+        ///   - item: an item at index
+        open func configure(forCell cell: C, with item: M) {
+            fatalError("Child class should override func \(#function)")
+        }
+
+        open override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            let cell = C.dequeueCell(collectionView: collectionView, indexPath: indexPath)
+            if let item = self[indexPath] {
+                configure(forCell: cell, with: item)
             }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
+            return cell
+        }
     }
-}
+#endif

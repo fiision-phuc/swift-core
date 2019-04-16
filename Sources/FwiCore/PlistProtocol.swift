@@ -1,7 +1,7 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : PlistProtocol.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Author      : Dung Vu
+//  Created date: 2/7/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +33,26 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
 import Foundation
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
-    }
+public protocol PlistProtocol {}
 
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
-            }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
+public extension PlistProtocol where Self: Decodable {
+    /// Load model from plist.
+    ///
+    /// - Parameters:
+    ///   - plistname: the plist's name
+    ///   - bundle: which bundle contains the plist file
+    static func loadPlist(withPlistname n: String, fromBundle b: Bundle = Bundle.main) throws -> Self {
+        guard let url = b.url(forResource: n, withExtension: "plist") else {
+            let info = [NSLocalizedDescriptionKey: "\(n).plist does not exist."]
+            throw NSError(domain: NSURLErrorDomain, code: NSURLErrorFileDoesNotExist, userInfo: info)
+        }
+
+        let data = try Data(contentsOf: url)
+        let decoder = PropertyListDecoder()
+
+        let result = try decoder.decode(self, from: data)
+        return result
     }
 }

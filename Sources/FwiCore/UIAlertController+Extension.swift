@@ -1,7 +1,8 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : UIAlertController+Extension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Created date: 12/20/17
+//  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +34,12 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
-import Foundation
+#if canImport(UIKit) && os(iOS)
+    import UIKit
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
+    extension UIAlertController {
+        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+            return .all
+        }
     }
-
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
-            }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
-    }
-}
+#endif

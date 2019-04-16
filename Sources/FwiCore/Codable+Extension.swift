@@ -1,7 +1,8 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : Codable+Extension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Editor      : Dung Vu
+//  Created date: 9/13/17
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +34,35 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
 import Foundation
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
-    }
+public extension Encodable {
+    /// Convert a model to JSON.
+    func encodeJSON(format f: JSONEncoder.OutputFormatting? = nil, dateDecoding dt: JSONEncoder.DateEncodingStrategy? = nil, dataDecoding d: JSONEncoder.DataEncodingStrategy = .base64) throws -> Data {
+        let encoder = JSONEncoder()
+        encoder.dataEncodingStrategy = d
+        encoder.dateEncodingStrategy = dt ?? .secondsSince1970
 
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
-            }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
+        // Output format
+        if let format = f {
+            encoder.outputFormatting = format
+        }
+        return try encoder.encode(self)
+    }
+}
+
+public extension Decodable {
+    /// Map JSON to model.
+    static func decodeJSON(_ json: Data?, dateDecoding dt: JSONDecoder.DateDecodingStrategy? = nil, dataDecoding d: JSONDecoder.DataDecodingStrategy = .base64) throws -> Self {
+        guard let json = json else {
+            let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Input data must not be nil."])
+            throw error
+        }
+
+        let decoder = JSONDecoder()
+        decoder.dataDecodingStrategy = d
+        decoder.dateDecodingStrategy = dt ?? .secondsSince1970
+
+        return try decoder.decode(self, from: json)
     }
 }

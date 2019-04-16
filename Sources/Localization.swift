@@ -1,7 +1,8 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : Localization.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Author      : Phuc Tran
+//  Editor      : Dung Vu
+//  Created date: 4/13/15
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +34,40 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
 import Foundation
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
+final class Localization {
+    /// Struct's public properties.
+    var locale: String? {
+        didSet {
+            let userDefaults = UserDefaults.standard
+            userDefaults.set([locale.orNil(default: "en")], forKey: "AppleLanguages")
+            userDefaults.synchronize()
+        }
+    }
+    
+    init(from bundle: Bundle = Bundle.main, locale: String = "en") {
+        self.bundle = bundle
+        self.locale = locale
+    }
+    
+    // MARK: Struct's public methods
+
+    func localized(forString s: String) -> String {
+        return bundle.localizedString(forKey: s, value: s, table: nil)
     }
 
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
-            }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
+    func reset() {
+        let languages = bundle.preferredLocalizations
+        let next = languages.first.orNil(default: "en")
+
+        FwiLog.info("Current Language: \(next).")
+        guard locale != next else {
+            return
+        }
+        locale = next
     }
+
+    /// Struct's private properties.
+    private var bundle: Bundle
 }

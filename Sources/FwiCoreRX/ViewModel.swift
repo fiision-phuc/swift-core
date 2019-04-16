@@ -1,7 +1,7 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : ViewModel.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Created date: 11/12/16
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +33,26 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
 import Foundation
+import RxSwift
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
+open class ViewModel: NSObject {
+    /// Class's public properties.
+    public private(set) var disposeBag: DisposeBag! = DisposeBag()
+
+    /// Class's constructors.
+    public override init() {
+        super.init()
     }
 
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
-            }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
+    /// Class's destructor.
+    deinit {
+        disposeBag = nil
+    }
+
+    // MARK: Class's public methods
+
+    open func setupRX() {
+        fatalError("\(#function) should be overrided by sub class!")
     }
 }

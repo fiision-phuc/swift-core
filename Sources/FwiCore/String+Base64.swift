@@ -1,7 +1,8 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : String+Base64.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Editor      : Dung Vu
+//  Created date: 11/20/14
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +34,39 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
 import Foundation
+func execution<T>(_ block: () throws -> T) rethrows -> T {
+    return try block()
+}
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
+public extension String {
+    // MARK: Validate base64
+    var data: Data? {
+        let new = self.toData()
+        return new
     }
 
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
-            }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
+    var isBase64: Bool {
+        return execution { data?.isBase64 }.orNil(default: false)
+    }
+
+    // MARK: Decode base64
+
+    func decodeBase64Data() -> Data? {
+        return execution { data?.decodeBase64Data() }
+    }
+
+    func decodeBase64String() -> String? {
+        return execution { data?.decodeBase64String() }
+    }
+
+    // MARK: Encode base64
+
+    func encodeBase64Data() -> Data? {
+        return execution { data?.encodeBase64Data() }
+    }
+
+    func encodeBase64String() -> String? {
+        return execution { data?.encodeBase64String() }
     }
 }

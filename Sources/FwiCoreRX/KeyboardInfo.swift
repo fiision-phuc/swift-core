@@ -1,7 +1,7 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : KeyboardInfo.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Author      : Dung Vu
+//  Created date: 2/7/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +33,39 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
-import Foundation
+#if canImport(UIKit) && os(iOS)
+    import UIKit
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
-    }
+    public struct KeyboardInfo {
+        /// Struct's public properties.
+        public let duration: TimeInterval
+        public let height: CGFloat
+        public let hidden: Bool
 
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
+        /// Struct's constructors.
+        public init?(_ notification: Notification) {
+            guard let userInfo = notification.userInfo else {
+                return nil
             }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
+
+            duration = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval) ?? 0
+            hidden = (notification.name == UIResponder.keyboardWillHideNotification)
+            height = hidden ? 0 : ((userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height ?? 0)
+        }
+
+        // MARK: Struct's public methods
+
+        public func animate(view: UIView?) {
+            let transfrom = CGAffineTransform(translationX: 0, y: -height)
+
+            UIView.animate(withDuration: duration) {
+            /* Condition validation: check if it is scrollview, then we only need to change inset, otherwise we apply transform */
+                guard let scrollView = view as? UIScrollView else {
+                    view?.transform = transfrom
+                    return
+                }
+                scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: self.height, right: 0)
+            }
+        }
     }
-}
+#endif

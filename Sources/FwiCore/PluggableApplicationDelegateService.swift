@@ -1,7 +1,7 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : PluggableApplicationDelegateService.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Created date: 2/4/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -32,24 +32,20 @@
 //  testing. Fiision Studio disclaim  all  liability  and  responsibility  to  any
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
+//
+//  This code is not original. Fiision Studio forks the project and modified base
+//  on Fiision Studio's needed.
+//
+//  If you are looking for original, please:
+//  - seealso:
+//    [The PluggableAppDelegate Library Reference]
+//    (https://github.com/pchelnikov/PluggableAppDelegate.git)
+//
+//    [The Medium]
+//    (https://medium.com/ios-os-x-development/pluggableapplicationdelegate-e50b2c5d97dd)
 
-import CoreData
-import Foundation
+#if canImport(UIKit) && (os(iOS) || os(tvOS))
+    import UIKit
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
-    }
-
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
-            }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
-    }
-}
+    public protocol PluggableApplicationDelegateService: UIApplicationDelegate {}
+#endif

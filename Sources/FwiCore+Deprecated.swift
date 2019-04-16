@@ -1,7 +1,7 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : FwiCore+Deprecated.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Created date: 2/11/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +33,17 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
-import Foundation
+#if canImport(UIKit)
+    import UIKit
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
+    public extension UIView {
+        /// Round corner of an UIView with specific radius.
+        @available(*, deprecated, message: "Please use cornerRadius to round view's corner.", renamed: "cornerRadius")
+        func roundCorner(_ radius: CGFloat) {
+            let bgLayer = self.layer
+            bgLayer.masksToBounds = true
+            bgLayer.cornerRadius = radius
+        }
     }
+#endif
 
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
-            }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
-    }
-}

@@ -1,7 +1,7 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : Optional+Extension.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Author      : Dung Vu
+//  Created date: 3/21/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +33,27 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
 import Foundation
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
-    }
+public protocol OptionalProtocol {
+    associatedtype Wrapped
+    var optionalValue: Wrapped? { get }
+}
 
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
-            }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
+extension Swift.Optional: OptionalProtocol {
+    public var optionalValue: Wrapped? {
+        return self
     }
+    
+    /// Cast instead of `??` operator, make the code cleaner.
+    ///
+    /// - Parameter default: value default if nil
+    /// - Returns: value not optional
+    public func orNil(default: @autoclosure () -> Wrapped) -> Wrapped {
+        if case .some(let value) = self {
+            return value
+        }
+        return `default`()
+    }
+    
 }

@@ -1,7 +1,8 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+import RxSwift
+//  File name   : KeyboardAnimationProtocol.swift
 //
-//  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Author      : Dung Vu
+//  Created date: 2/7/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +34,21 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
-import Foundation
+#if canImport(UIKit) && os(iOS)
+    import UIKit
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
-    }
+    public protocol KeyboardAnimationProtocol: AnyObject, DisposableProtocol, ContainerViewProtocol {}
 
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
+    public extension KeyboardAnimationProtocol {
+        /// Setup animation for container view base on keyboard's present/dismiss events.
+        func setupKeyboardAnimation() {
+            let showEvent = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification).map { KeyboardInfo($0) }
+            let hideEvent = NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification).map { KeyboardInfo($0) }
+
+            Observable.merge([showEvent, hideEvent]).bind { [weak self] in
+                $0?.animate(view: self?.containerView)
             }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
+            .disposed(by: disposeBag)
+        }
     }
-}
+#endif

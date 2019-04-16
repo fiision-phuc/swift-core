@@ -1,7 +1,8 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : URL+Extension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Editor      : Dung Vu
+//  Created date: 11/22/14
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +34,29 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
 import Foundation
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
+public extension URL {
+    /// URL to main cache folder.
+    static func cacheDirectory() -> URL? {
+        let array = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        return array.first
     }
 
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
-            }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
+    /// URL to main document folder.
+    static func documentDirectory() -> URL? {
+        let array = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return array.first
     }
+}
+
+extension URL: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        guard let new = URL(string: value) else {
+            fatalError("Check URL")
+        }
+        self = new
+    }
+    
+    
 }

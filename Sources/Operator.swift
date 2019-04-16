@@ -1,7 +1,8 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : Operator.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Created date: 2/1/19
+//  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +34,23 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
 import Foundation
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
-    }
+infix operator >>>: Display
+precedencegroup Display {
+    associativity: left
+    higherThan: AssignmentPrecedence
+    lowerThan: AdditionPrecedence
+}
 
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
-            }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
-    }
+@discardableResult
+public func >>> <E: AnyObject>(lhs: E, block: (E) -> Void) -> E {
+    block(lhs)
+    return lhs
+}
+
+@discardableResult
+public func >>> <E: AnyObject>(lhs: E?, block: (E?) -> Void) -> E? {
+    block(lhs)
+    return lhs
 }

@@ -42,6 +42,7 @@ final class KeyedDecodingContainerFwiExtensionTest: XCTestCase {
     // MARK: Setup
     override func setUp() {
         super.setUp()
+        FwiCore.debug = true
         FwiLog.consoleLog()
     }
 
@@ -281,8 +282,8 @@ private struct TestDate: Codable {
 private struct TestURL: Codable {
     let a: URL
 
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        a = try container.decode(key: .a)
-    }
+//    init(from decoder: Decoder) throws {
+//        let container = try decoder.container(keyedBy: CodingKeys.self)
+////        a = try container.decode(key: .a)
+//    }
 }

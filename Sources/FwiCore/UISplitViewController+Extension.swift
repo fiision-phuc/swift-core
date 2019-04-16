@@ -1,7 +1,7 @@
-//  File name   : NSManagedObject+FwiExtension.swift
+//  File name   : UISplitViewController+Extension.swift
 //
 //  Author      : Phuc, Tran Huu
-//  Created date: 8/18/16
+//  Created date: 8/4/16
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,23 +33,46 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import CoreData
-import Foundation
+#if canImport(UIKit) && (os(iOS) || os(tvOS))
+    import UIKit
 
-public extension NSManagedObject {
-    /// Return entity's name.
-    static var entityName: String {
-        return "\(self)"
-    }
+    extension UISplitViewController {
+        // MARK: Class's override methods
 
-    /// Remove self from database.
-    func remove() {
-        managedObjectContext?.performAndWait({ [weak self] in
-            guard let wSelf = self, let context = wSelf.managedObjectContext else {
-                return
+        #if !os(tvOS)
+        open override var prefersStatusBarHidden: Bool {
+            if UIApplication.iPhone {
+                return viewControllers.first?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
             }
-            context.delete(wSelf)
-            FwiCore.tryOmitsThrow({ try context.save() }, default: ())
-        })
+            return super.prefersStatusBarHidden
+        }
+        #endif
+
+        #if !os(tvOS)
+        open override var preferredStatusBarStyle: UIStatusBarStyle {
+            if UIApplication.iPhone {
+                return viewControllers.first?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
+            }
+            return super.preferredStatusBarStyle
+        }
+        #endif
+
+        #if !os(tvOS)
+        open override var shouldAutorotate: Bool {
+            if UIApplication.iPhone {
+                return viewControllers.first?.shouldAutorotate ?? super.shouldAutorotate
+            }
+            return super.shouldAutorotate
+        }
+        #endif
+
+        #if !os(tvOS)
+        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+            if UIApplication.iPhone {
+                return viewControllers.first?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
+            }
+            return super.supportedInterfaceOrientations
+        }
+        #endif
     }
-}
+#endif
