@@ -59,7 +59,7 @@
             let transfrom = CGAffineTransform(translationX: 0, y: -height)
 
             UIView.animate(withDuration: duration) {
-            /* Condition validation: check if it is scrollview, then we only need to change inset, otherwise we apply transform */
+                /* Condition validation: check if it is scrollview, then we only need to change inset, otherwise we apply transform */
                 guard let scrollView = view as? UIScrollView else {
                     view?.transform = transfrom
                     return

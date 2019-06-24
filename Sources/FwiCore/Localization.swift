@@ -1,7 +1,8 @@
-//  File name   : Optional+Extension.swift
+//  File name   : Localization.swift
 //
-//  Author      : Dung Vu
-//  Created date: 3/21/19
+//  Author      : Phuc Tran
+//  Editor      : Dung Vu
+//  Created date: 4/13/15
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -35,25 +36,39 @@
 
 import Foundation
 
-public protocol OptionalProtocol {
-    associatedtype Wrapped
-    var optionalValue: Wrapped? { get }
-}
-
-extension Swift.Optional: OptionalProtocol {
-    public var optionalValue: Wrapped? {
-        return self
-    }
-    
-    /// Cast instead of `??` operator, make the code cleaner.
-    ///
-    /// - Parameter default: value default if nil
-    /// - Returns: value not optional
-    public func orNil(default: @autoclosure () -> Wrapped) -> Wrapped {
-        if case .some(let value) = self {
-            return value
+public final class Localization {
+    /// Class's public properties.
+    var locale: String? {
+        didSet {
+            let userDefaults = UserDefaults.standard
+            userDefaults.set([locale.orNil("en")], forKey: "AppleLanguages")
+            userDefaults.synchronize()
         }
-        return `default`()
     }
-    
+
+    /// Class's constructors.
+    init(_ fromBundle: Bundle = Bundle.main, locale: String = "en") {
+        self.bundle = fromBundle
+        self.locale = locale
+    }
+
+    // MARK: Struct's public methods
+    func localized(_ text: String) -> String {
+        return bundle.localizedString(forKey: text, value: text, table: nil)
+    }
+
+    /// Reset locale to most prefer localization.
+    func reset() {
+        let languages = bundle.preferredLocalizations
+        let next = languages.first.orNil("en")
+
+        Log.info("Current Language: \(next).")
+        guard locale != next else {
+            return
+        }
+        locale = next
+    }
+
+    /// Struct's private properties.
+    private var bundle: Bundle
 }

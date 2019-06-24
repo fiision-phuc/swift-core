@@ -59,7 +59,7 @@ class FileManagerFwiExtensionTest: XCTestCase {
             do {
                 try "FwiCore".toData()?.write(to: url)
             } catch let err as NSError {
-                FwiLog.debug("Could not create file '\(err.localizedDescription)'.")
+                Log.debug("Could not create file '\(err.localizedDescription)'.")
             }
         }
     }

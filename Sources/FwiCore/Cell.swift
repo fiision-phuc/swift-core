@@ -64,8 +64,8 @@
         /// Load nib from bundle.
         ///
         /// - Parameter bundle: a bundle which contains cell's xib.
-        static func loadNib(from bundle: Bundle? = nil) -> UINib {
-            let b = bundle ?? Bundle.main
+        static func loadNib(_ fromBundle: Bundle? = nil) -> UINib {
+            let b = fromBundle ?? Bundle.main
 
             guard b.path(forResource: identifier, ofType: "nib") != nil else {
                 fatalError("Could not load nib: \(identifier) from bundle: \(b.bundleURL.lastPathComponent).")
@@ -77,8 +77,8 @@
         ///
         /// - parameter collectionView (required): collectionView instance
         /// - parameter indexPath (required): indexPath
-        static func dequeueCell(collectionView c: UICollectionView, indexPath i: IndexPath) -> Self {
-            return c.dequeueReusableCell(withReuseIdentifier: identifier, for: i) as! Self
+        static func dequeueCell(_ collectionView: UICollectionView, indexPath: IndexPath) -> Self {
+            return collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! Self
         }
     }
 
@@ -94,8 +94,8 @@
         /// Load nib from bundle.
         ///
         /// - Parameter bundle: a bundle which contains cell's xib.
-        static func loadNib(from bundle: Bundle? = nil) -> UINib {
-            let b = bundle ?? Bundle.main
+        static func loadNib(_ fromBundle: Bundle? = nil) -> UINib {
+            let b = fromBundle ?? Bundle.main
 
             guard b.path(forResource: identifier, ofType: "nib") != nil else {
                 fatalError("Could not load nib: \(identifier) from bundle: \(b.bundleURL.lastPathComponent).")
@@ -106,8 +106,8 @@
         /// Dequeue and cast to self.
         ///
         /// - parameter tableView (required): tableView instance
-        static func dequeueCell(tableView t: UITableView) -> Self {
-            return t.dequeueReusableCell(withIdentifier: identifier) as! Self
+        static func dequeueCell(_ tableView: UITableView) -> Self {
+            return tableView.dequeueReusableCell(withIdentifier: identifier) as! Self
         }
     }
 #endif

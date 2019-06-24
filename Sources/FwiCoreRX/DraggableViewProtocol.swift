@@ -1,4 +1,3 @@
-import RxSwift
 //  File name   : DraggableViewProtocol.swift
 //
 //  Author      : Dung Vu
@@ -34,7 +33,8 @@ import RxSwift
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(watchOS)
+    import RxSwift
     import UIKit
 
     public enum DraggableDirection {
@@ -68,8 +68,10 @@ import RxSwift
             })
                 .disposed(by: disposeBag)
         }
+    }
 
-        private func down(from gesture: UIPanGestureRecognizer, in container: UIView) {
+    private extension DraggableViewProtocol {
+        func down(from gesture: UIPanGestureRecognizer, in container: UIView) {
             let state = gesture.state
             switch state {
             case .changed:
@@ -95,7 +97,7 @@ import RxSwift
             }
         }
 
-        private func left(from gesture: UIPanGestureRecognizer, in container: UIView) {
+        func left(from gesture: UIPanGestureRecognizer, in container: UIView) {
             let state = gesture.state
             switch state {
             case .changed:

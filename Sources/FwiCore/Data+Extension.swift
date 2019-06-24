@@ -45,7 +45,7 @@ public extension Data {
         }
 
         let step = count
-        withUnsafeMutableBytes { (p) in
+        withUnsafeMutableBytes { p in
             guard var pointer = p.bindMemory(to: UInt8.self).baseAddress else {
                 return
             }
@@ -66,7 +66,7 @@ public extension Data {
 
         let end = count - 1
         let step = count / 2
-        withUnsafeMutableBytes { (p) in
+        withUnsafeMutableBytes { p in
             guard var p1 = p.bindMemory(to: UInt8.self).baseAddress else {
                 return
             }
@@ -82,8 +82,8 @@ public extension Data {
 
     /// Convert data to string base on string encoding type.
     ///
-    /// - parameter stringEncoding (optional): string encoding, default is UTF-8
-    func toString(stringEncoding encoding: String.Encoding = .utf8) -> String? {
+    /// - parameter encoding: string encoding, default is UTF-8
+    func toString(_ encoding: String.Encoding = .utf8) -> String? {
         /* Condition validation */
         if count <= 0 {
             return nil
@@ -91,29 +91,39 @@ public extension Data {
         return String(data: self, encoding: encoding)
     }
 
-    // MARK: File I/O
-
     /// Read data from file.
     ///
     /// - parameter url (required): source url to read from
     /// - parameter readingMode (optional): seealso `Data.ReadingOptions`
-    static func read(fromFile url: URL?, readingMode mode: Data.ReadingOptions = []) throws -> Data {
-        guard let fileURL = url, fileURL.isFileURL else {
-            let info = [NSLocalizedDescriptionKey: "Could not read data from file at: \(url?.path ?? "")"]
+
+    /// Read data from file.
+    ///
+    /// - Parameters:
+    ///   - fromFile: file's url to read data from
+    ///   - readingMode: reading mode when open a file, default is none
+    static func read(_ fromFile: URL?, readingMode: Data.ReadingOptions = []) throws -> Data {
+        guard let fileURL = fromFile, fileURL.isFileURL else {
+            let info = [NSLocalizedDescriptionKey: "Could not read data from file at: \(fromFile?.path ?? "")"]
             throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: info)
         }
-        return try Data(contentsOf: fileURL, options: mode)
+        return try Data(contentsOf: fileURL, options: readingMode)
     }
 
     /// Write data to file.
     ///
     /// - parameter url (required): destination url to write to
     /// - parameter readingMode (optional): seealso `Data.ReadingOptions`
-    func write(toFile url: URL?, options: Data.WritingOptions = []) throws {
-        guard let fileURL = url, fileURL.isFileURL else {
-            let info = [NSLocalizedDescriptionKey: "Could not write data to file at: \(url?.path ?? "")"]
+
+    /// Write data to file.
+    ///
+    /// - Parameters:
+    ///   - toFile: file's url to write data to
+    ///   - writingMode: writing mode when open a file, default is none
+    func write(_ toFile: URL?, writingMode: Data.WritingOptions = []) throws {
+        guard let fileURL = toFile, fileURL.isFileURL else {
+            let info = [NSLocalizedDescriptionKey: "Could not write data to file at: \(toFile?.path ?? "")"]
             throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: info)
         }
-        try self.write(to: fileURL, options: options)
+        try write(to: fileURL, options: writingMode)
     }
 }

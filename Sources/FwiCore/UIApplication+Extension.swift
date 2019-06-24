@@ -69,18 +69,5 @@
             }
             return 0
         }
-
-        /// Enable remote notification.
-        class func enableRemoteNotification() {
-            #if targetEnvironment(simulator)
-                print("Remote notification does not support this device.")
-            #else
-                let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
-
-                let settings = UIUserNotificationSettings(types: notificationType, categories: nil)
-                UIApplication.shared.registerUserNotificationSettings(settings)
-                UIApplication.shared.registerForRemoteNotifications()
-            #endif
-        }
     }
 #endif

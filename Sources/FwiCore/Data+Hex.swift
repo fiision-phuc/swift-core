@@ -47,29 +47,30 @@ public extension Data {
 
         var isHex = true
         let step = count / 2
-        withUnsafeBytes { (p) in
-            guard let pointer = p.bindMemory(to: UInt8.self).baseAddress else {
+        withUnsafeBytes { p in
+            let memory = p.bindMemory(to: UInt8.self)
+            guard let pointer = memory.baseAddress else {
                 isHex = false
                 return
             }
 
             var flag = true
             var p1 = pointer
-            var p2 = pointer.advanced(by: (count - 1))
+            var p2 = pointer.advanced(by: count - 1)
 
             for _ in 0...step {
                 let v1 = p1.pointee
                 let v2 = p2.pointee
 
                 // Check v1
-                flag = flag && ((48 <= v1 && v1 <= 57) || // '0-9'
-                    (65 <= v1 && v1 <= 70) || // 'A-F'
-                    (97 <= v1 && v1 <= 102)) // 'a-f'
+                flag = flag && ((v1 >= 48 && v1 <= 57) || // '0-9'
+                    (v1 >= 65 && v1 <= 70) || // 'A-F'
+                    (v1 >= 97 && v1 <= 102)) // 'a-f'
 
                 // Check v2
-                flag = flag && ((48 <= v2 && v2 <= 57) || // '0-9'
-                    (65 <= v2 && v2 <= 70) || // 'A-F'
-                    (97 <= v2 && v2 <= 102)) // 'a-f'
+                flag = flag && ((v2 >= 48 && v2 <= 57) || // '0-9'
+                    (v2 >= 65 && v2 <= 70) || // 'A-F'
+                    (v2 >= 97 && v2 <= 102)) // 'a-f'
 
                 if flag {
                     p1 = p1.advanced(by: 1)
@@ -92,9 +93,9 @@ public extension Data {
             return nil
         }
 
-        var output = [UInt8](repeating: 0, count: (count / 2))
+        var output = [UInt8](repeating: 0, count: count / 2)
         let step = count
-        withUnsafeBytes { (p) in
+        withUnsafeBytes { p in
             guard let pointer = p.bindMemory(to: UInt8.self).baseAddress else {
                 return
             }
@@ -105,17 +106,17 @@ public extension Data {
                 var b1 = self[i]
                 var b2 = self[i + 1]
 
-                if 48 <= b1, b1 <= 57 { // '0-9'
+                if b1 >= 48, b1 <= 57 { // '0-9'
                     b1 -= 48
-                } else if 65 <= b1, b1 <= 70 { // 'A-F'
+                } else if b1 >= 65, b1 <= 70 { // 'A-F'
                     b1 -= 55 // A = 10, 'A' = 65 -> b = 65 - 55
                 } else { // 'a-f'
                     b1 -= 87 // a = 10, 'a' = 97 -> b = 97 - 87
                 }
 
-                if 48 <= b2, b2 <= 57 { // '0-9'
+                if b2 >= 48, b2 <= 57 { // '0-9'
                     b2 -= 48
-                } else if 65 <= b2, b2 <= 70 { // 'A-F'
+                } else if b2 >= 65, b2 <= 70 { // 'A-F'
                     b2 -= 55 // A = 10, 'A' = 65 -> b = 65 - 55
                 } else { // 'a-f'
                     b2 -= 87 // a = 10, 'a' = 97 -> b = 97 - 87
@@ -144,7 +145,7 @@ public extension Data {
         let l = count * 2
         var output = [UInt8](repeatElement(0, count: l))
 
-        withUnsafeBytes { (p) in
+        withUnsafeBytes { p in
             guard var pointer = p.bindMemory(to: UInt8.self).baseAddress else {
                 return
             }
@@ -154,13 +155,13 @@ public extension Data {
                 var v1 = (b & 0xf0) >> 4
                 var v2 = b & 0x0f
 
-                if 0 <= v1, v1 <= 9 { // '0-9'
+                if v1 >= 0, v1 <= 9 { // '0-9'
                     v1 += 48
                 } else { // 'a-f'
                     v1 += 87 // a = 10, 'a' = 97 -> b = 10 + 87
                 }
 
-                if 0 <= v2, v2 <= 9 { // '0-9'
+                if v2 >= 0, v2 <= 9 { // '0-9'
                     v2 += 48
                 } else { // 'a-f'
                     v2 += 87 // a = 10, 'a' = 97 -> b = 10 + 87

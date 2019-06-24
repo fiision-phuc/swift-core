@@ -42,7 +42,7 @@ public struct FwiCore {
             guard debug else {
                 return
             }
-            FwiLog.consoleLog()
+            Log.consoleLog()
         }
     }
 
@@ -58,7 +58,7 @@ public struct FwiCore {
         do {
             return try block()
         } catch {
-            FwiLog.error(error, className: className, line: line)
+            Log.error(error, className: className, line: line)
             omitBlock?(error)
             return `default`()
         }
@@ -69,7 +69,7 @@ public struct FwiLocale {
     /// Struct's public static properties.
     public static var currentLocale: String {
         get {
-            return shared.locale.orNil(default: "")
+            return shared.locale.orNil("")
         }
         set(newLocale) {
             shared.locale = newLocale
@@ -80,12 +80,12 @@ public struct FwiLocale {
     /// not be found.
     ///
     /// - Parameter string: an original string
-    public static func localized(forString s: String?) -> String {
-        guard let text = s, text.count > 0 else { return "" }
-        return shared.localized(forString: text)
+    public static func localized(_ text: String?) -> String {
+        guard let text = text, text.count > 0 else { return "" }
+        return shared.localized(text)
     }
 
-    /// Reset current locale to english.
+    /// Reset locale to most prefer localization.
     public static func reset() {
         shared.reset()
     }
@@ -106,4 +106,8 @@ public struct FwiMeasure {
         }
         return block()
     }
+}
+
+public func execution<T>(_ block: () throws -> T) rethrows -> T {
+    return try block()
 }

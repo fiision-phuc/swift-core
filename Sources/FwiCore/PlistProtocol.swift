@@ -43,9 +43,9 @@ public extension PlistProtocol where Self: Decodable {
     /// - Parameters:
     ///   - plistname: the plist's name
     ///   - bundle: which bundle contains the plist file
-    static func loadPlist(withPlistname n: String, fromBundle b: Bundle = Bundle.main) throws -> Self {
-        guard let url = b.url(forResource: n, withExtension: "plist") else {
-            let info = [NSLocalizedDescriptionKey: "\(n).plist does not exist."]
+    static func load(_ plistName: String, fromBundle: Bundle = Bundle.main) throws -> Self {
+        guard let url = fromBundle.url(forResource: plistName, withExtension: "plist") else {
+            let info = [NSLocalizedDescriptionKey: "\(plistName).plist does not exist."]
             throw NSError(domain: NSURLErrorDomain, code: NSURLErrorFileDoesNotExist, userInfo: info)
         }
 

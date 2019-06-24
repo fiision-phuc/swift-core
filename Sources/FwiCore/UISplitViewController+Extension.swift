@@ -33,46 +33,36 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit) && (os(iOS) || os(tvOS))
+#if canImport(UIKit) && os(iOS)
     import UIKit
 
     extension UISplitViewController {
-        // MARK: Class's override methods
-
-        #if !os(tvOS)
         open override var prefersStatusBarHidden: Bool {
             if UIApplication.iPhone {
                 return viewControllers.first?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
             }
             return super.prefersStatusBarHidden
         }
-        #endif
 
-        #if !os(tvOS)
         open override var preferredStatusBarStyle: UIStatusBarStyle {
             if UIApplication.iPhone {
                 return viewControllers.first?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
             }
             return super.preferredStatusBarStyle
         }
-        #endif
 
-        #if !os(tvOS)
         open override var shouldAutorotate: Bool {
             if UIApplication.iPhone {
                 return viewControllers.first?.shouldAutorotate ?? super.shouldAutorotate
             }
             return super.shouldAutorotate
         }
-        #endif
 
-        #if !os(tvOS)
         open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
             if UIApplication.iPhone {
                 return viewControllers.first?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
             }
             return super.supportedInterfaceOrientations
         }
-        #endif
     }
 #endif

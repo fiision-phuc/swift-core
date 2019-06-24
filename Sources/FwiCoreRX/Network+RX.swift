@@ -44,13 +44,13 @@ public extension Network {
     /// [The FwiCore Library Reference]
     /// (https://github.com/phuc0302/swift-core/blob/master/Sources/Network.swift)
     static func downloadResource(_ r: URLConvertible,
-                                        method m: HTTPMethod = .get,
-                                        params p: [String: Any]? = nil,
-                                        encoding e: ParameterEncoding = URLEncoding.default,
-                                        headers h: [String: String]? = nil,
-                                        destination d: URLConvertible? = nil) -> Observable<(HTTPURLResponse, URL)> {
+                                 method m: HTTPMethod = .get,
+                                 params p: [String: Any]? = nil,
+                                 encoding e: ParameterEncoding = URLEncoding.default,
+                                 headers h: [String: String]? = nil,
+                                 destination d: URLConvertible? = nil) -> Observable<(HTTPURLResponse, URL)> {
         return Observable.create { observer in
-            let t = Network.download(resource: r, method: m, params: p, encoding: e, headers: h, destination: d, completion: { url, err, res in
+            let t = Network.download(r, method: m, params: p, paramEncoding: e, headers: h, destinationURL: d, completion: { url, err, res in
                 /* Condition validation: validate network's status */
                 guard let response = res, let location = url else {
                     observer.on(.error(err ?? NSError(domain: NSURLErrorDomain, code: URLError.badServerResponse.rawValue, userInfo: nil)))
@@ -60,7 +60,6 @@ public extension Network {
                 observer.on(.completed)
             })
 
-            
             return Disposables.create(with: t.cancel)
         }
     }
@@ -71,12 +70,12 @@ public extension Network {
     /// [The FwiCore Library Reference]
     /// (https://github.com/phuc0302/swift-core/blob/master/Sources/Network.swift)
     static func sendRequest(_ r: URLConvertible,
-                                   method m: HTTPMethod = .get,
-                                   params p: [String: Any]? = nil,
-                                   encoding e: ParameterEncoding = URLEncoding.default,
-                                   headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, Data)> {
+                            method m: HTTPMethod = .get,
+                            params p: [String: Any]? = nil,
+                            encoding e: ParameterEncoding = URLEncoding.default,
+                            headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, Data)> {
         return Observable.create { observer in
-            let t = Network.send(request: r, method: m, params: p, encoding: e, headers: h, completion: { d, err, res in
+            let t = Network.send(r, method: m, params: p, paramEncoding: e, headers: h, completion: { d, err, res in
                 /* Condition validation: validate network's status */
                 guard let response = res, let data = d else {
                     observer.on(.error(err ?? NSError(domain: NSURLErrorDomain, code: URLError.badServerResponse.rawValue, userInfo: nil)))
@@ -86,76 +85,73 @@ public extension Network {
                 observer.on(.completed)
             })
 
-            
             return Disposables.create(with: t.cancel)
         }
     }
 }
 
 #if swift(>=5.0)
-public struct Response<T: Decodable> {
-    public let model: T
-    public init(from data: Data?) throws {
-        guard let data = data else {
-            let context = DecodingError.Context.init(codingPath: [], debugDescription: "Missing data.")
-            throw DecodingError.dataCorrupted(context)
-        }
+    public struct Response<T: Decodable> {
+        public let model: T
 
-        let decoder = JSONDecoder()
-        model = try decoder.decode(T.self, from: data)
-    }
-}
+        public init(from data: Data?) throws {
+            guard let data = data else {
+                let context = DecodingError.Context(codingPath: [], debugDescription: "Missing data.")
+                throw DecodingError.dataCorrupted(context)
+            }
 
-
-public extension Network {
-    typealias R = Swift.Result
-    
-    static func download(_ r: URLConvertible,
-                         method m: HTTPMethod = .get,
-                         params p: [String: Any]? = nil,
-                         encoding e: ParameterEncoding = URLEncoding.default,
-                         headers h: [String: String]? = nil,
-                         destination d: URLConvertible? = nil) -> Observable<R<URL, Error>>
-    {
-        return Observable.create { observer in
-            let t = Network.download(resource: r, method: m, params: p, encoding: e, headers: h, destination: d, completion: { url, err, res in
-                defer { observer.onCompleted() }
-                if let err = err {
-                    observer.onNext(.failure(err))
-                    return
-                }
-                
-                if let url = url {
-                    observer.onNext(.success(url))
-                } else {
-                    let e = NSError(domain: NSURLErrorDomain, code: URLError.cannotCreateFile.rawValue, userInfo: nil)
-                    observer.onNext(.failure(e))
-                }
-            })
-            return Disposables.create(with: t.cancel)
+            let decoder = JSONDecoder()
+            model = try decoder.decode(T.self, from: data)
         }
     }
-    
-    static func send<T: Decodable>(_ r: URLConvertible,
-                                   decodeTo type: T.Type,
-                                   method m: HTTPMethod = .get,
-                                   params p: [String: Any]? = nil,
-                                   encoding e: ParameterEncoding = URLEncoding.default,
-                                   headers h: [String: String]? = nil) -> Observable<R<Response<T>, Error>>
-    {
-        return Observable.create { observer in
-            let t = Network.send(request: r, method: m, params: p, encoding: e, headers: h, completion: { d, err, res in
-                /* Condition validation: validate network's status */
-                defer { observer.onCompleted() }
-                if let err = err {
-                    observer.onNext(.failure(err))
-                    return
-                }
-                let result = R { try Response<T>(from: d) }
-                observer.onNext(result)
-            })
-            return Disposables.create(with: t.cancel)
+
+    public extension Network {
+        typealias R = Swift.Result
+
+        static func download(_ r: URLConvertible,
+                             method m: HTTPMethod = .get,
+                             params p: [String: Any]? = nil,
+                             encoding e: ParameterEncoding = URLEncoding.default,
+                             headers h: [String: String]? = nil,
+                             destination d: URLConvertible? = nil) -> Observable<R<URL, Error>> {
+            return Observable.create { observer in
+                let t = Network.download(r, method: m, params: p, paramEncoding: e, headers: h, destinationURL: d, completion: { url, err, res in
+                    defer { observer.onCompleted() }
+                    if let err = err {
+                        observer.onNext(.failure(err))
+                        return
+                    }
+
+                    if let url = url {
+                        observer.onNext(.success(url))
+                    } else {
+                        let e = NSError(domain: NSURLErrorDomain, code: URLError.cannotCreateFile.rawValue, userInfo: nil)
+                        observer.onNext(.failure(e))
+                    }
+                })
+                return Disposables.create(with: t.cancel)
+            }
+        }
+
+        static func send<T: Decodable>(_ r: URLConvertible,
+                                       decodeTo type: T.Type,
+                                       method m: HTTPMethod = .get,
+                                       params p: [String: Any]? = nil,
+                                       encoding e: ParameterEncoding = URLEncoding.default,
+                                       headers h: [String: String]? = nil) -> Observable<R<Response<T>, Error>> {
+            return Observable.create { observer in
+                let t = Network.send(r, method: m, params: p, paramEncoding: e, headers: h, completion: { d, err, res in
+                    /* Condition validation: validate network's status */
+                    defer { observer.onCompleted() }
+                    if let err = err {
+                        observer.onNext(.failure(err))
+                        return
+                    }
+                    let result = R { try Response<T>(from: d) }
+                    observer.onNext(result)
+                })
+                return Disposables.create(with: t.cancel)
+            }
         }
     }
-}
 #endif

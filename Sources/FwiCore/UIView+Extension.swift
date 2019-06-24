@@ -126,10 +126,10 @@
     public extension UIView {
         /// Create image from current view.
         func createImage(_ scaleFactor: CGFloat = UIScreen.main.scale) -> UIImage? {
-            UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, scaleFactor)
             guard let context = UIGraphicsGetCurrentContext() else {
                 return nil
             }
+            UIGraphicsBeginImageContextWithOptions(bounds.size, false, scaleFactor)
 
             // Translate graphic context to offset before render if view is table view
             if let tableView = self as? UITableView {
@@ -145,13 +145,13 @@
         }
 
         /// Create image from region of interest.
-        func createImageWithROI(_ roiRect: CGRect, scaleFactor scale: CGFloat = UIScreen.main.scale) -> UIImage? {
+        func createImageWithROI(_ roiRect: CGRect, scaleFactor: CGFloat = UIScreen.main.scale) -> UIImage? {
             /* Condition validation: Validate ROI */
             if !self.bounds.contains(roiRect) {
                 return nil
             }
 
-            UIGraphicsBeginImageContextWithOptions(roiRect.size, false, scale)
+            UIGraphicsBeginImageContextWithOptions(roiRect.size, false, scaleFactor)
             guard let context = UIGraphicsGetCurrentContext() else {
                 return nil
             }
@@ -167,7 +167,7 @@
         /// Find first responder within tree views.
         func findFirstResponder() -> UIView? {
             /* Condition validation */
-            if self.isFirstResponder {
+            guard !isFirstResponder else {
                 return self
             }
 

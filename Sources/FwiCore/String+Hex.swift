@@ -40,7 +40,7 @@ public extension String {
     // MARK: Validate Hex
 
     var isHex: Bool {
-        return execution { data?.isHex }.orNil(default: false)
+        return execution { data?.isHex }.orNil(false)
     }
 
     // MARK: Decode Hex

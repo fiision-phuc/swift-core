@@ -33,128 +33,129 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-import Alamofire
-import Foundation
+#if canImport(Alamofire)
+    import Alamofire
 
-public typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
-public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
+    public typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
+    public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
 
-public struct Network {
-    public static var manager = SessionManager.default
+    public struct Network {
+        public static var manager = SessionManager.default
 
-    /// Download resource from server.
-    ///
-    /// - parameters:
-    ///   - request {String} (an endpoint)
-    ///   - method {HTTPMethod} (a HTTP method)
-    ///   - params {[String:String]} (a query params)
-    ///   - encoding {ParameterEncoding} (define how to encode query params)
-    ///   - headers {[String: String]} (additional headers)
-    ///   - completion (required): call back function
-    @discardableResult
-    public static func download(resource url: URLConvertible,
-                                method m: HTTPMethod = .get,
-                                params p: [String: Any]? = nil,
-                                encoding e: ParameterEncoding = URLEncoding.default,
-                                headers h: [String: String]? = nil,
-                                destination d: URLConvertible? = nil,
-                                completion c: @escaping DownloadCompletion) -> DownloadRequest {
-        let des = d
-        let destination: DownloadRequest.DownloadFileDestination = { tempURL, response in
-            if let d = des, let destinationURL = try? d.asURL() {
-                return (destinationURL, [DownloadRequest.DownloadOptions.createIntermediateDirectories, DownloadRequest.DownloadOptions.removePreviousFile])
+        /// Download resource from server.
+        ///
+        /// - parameters:
+        ///   - request {String} (an endpoint)
+        ///   - method {HTTPMethod} (a HTTP method)
+        ///   - params {[String:String]} (a query params)
+        ///   - encoding {ParameterEncoding} (define how to encode query params)
+        ///   - headers {[String: String]} (additional headers)
+        ///   - completion (required): call back function
+        @discardableResult
+        public static func download(_ resourceURL: URLConvertible,
+                                    method: HTTPMethod = .get,
+                                    params: [String: Any]? = nil,
+                                    paramEncoding: ParameterEncoding = URLEncoding.default,
+                                    headers: [String: String]? = nil,
+                                    destinationURL: URLConvertible? = nil,
+                                    completion: @escaping DownloadCompletion) -> DownloadRequest {
+            let des = destinationURL
+            let destination: DownloadRequest.DownloadFileDestination = { tempURL, response in
+                if let d = des, let destinationURL = try? d.asURL() {
+                    return (destinationURL, [DownloadRequest.DownloadOptions.createIntermediateDirectories, DownloadRequest.DownloadOptions.removePreviousFile])
+                }
+
+                return (tempURL, [])
             }
-            
-            return (tempURL, [])
-        }
-        
-        let task = manager.download(url, method: m, parameters: p, encoding: e, headers: h) { (tempURL, response) -> (URL, DownloadRequest.DownloadOptions) in
-            return destination(tempURL, response)
-        }
-        task.validate(statusCode: 200..<300)
-        task.response { r in
-            c(r.temporaryURL, r.error, r.response)
-        }
-        return task
-    }
 
-    /// Send request to server.
-    ///
-    /// @params
-    /// - request {String} (an endpoint)
-    /// - method {HTTPMethod} (a HTTP method)
-    /// - params {[String:String]} (a query params)
-    /// - encoding {ParameterEncoding} (define how to encode query params)
-    /// - headers {[String: String]} (additional headers)
-    ///
-    /// - parameter completion (required): call back function
-    @discardableResult
-    public static func send(request r: URLConvertible,
-                            method m: HTTPMethod = .get,
-                            params p: [String: Any]? = nil,
-                            encoding e: ParameterEncoding = URLEncoding.default,
-                            headers h: [String: String]? = nil,
-                            completion c: @escaping RequestCompletion) -> DataRequest {
-        let task = manager.request(r, method: m, parameters: p, encoding: e, headers: h)
-        task.validate(statusCode: 200..<300)
-        task.response { r in
-            if FwiCore.debug,
-                let request = r.request,
-                let url = request.url?.absoluteString,
-                let headers = request.allHTTPHeaderFields {
-                FwiLog.debug(url)
-                FwiLog.debug(headers)
+            let task = manager.download(resourceURL, method: method, parameters: params, encoding: paramEncoding, headers: headers) { (tempURL, response) -> (URL, DownloadRequest.DownloadOptions) in
+                destination(tempURL, response)
             }
-            
-            c(r.data, r.error, r.response)
+            task.validate(statusCode: 200..<300)
+            task.response { r in
+                completion(r.temporaryURL, r.error, r.response)
+            }
+            return task
         }
-        return task
-    }
 
-    /// Cancel all running Tasks.
-    public static func cancelTasks() {
-        let session = manager.session
-        func excutionCancel(_ tasks: [URLSessionTask]) {
-            tasks.forEach { $0.cancel() }
+        /// Send request to server.
+        ///
+        /// @params
+        /// - request {String} (an endpoint)
+        /// - method {HTTPMethod} (a HTTP method)
+        /// - params {[String:String]} (a query params)
+        /// - encoding {ParameterEncoding} (define how to encode query params)
+        /// - headers {[String: String]} (additional headers)
+        ///
+        /// - parameter completion (required): call back function
+        @discardableResult
+        public static func send(_ requestURL: URLConvertible,
+                                method: HTTPMethod = .get,
+                                params: [String: Any]? = nil,
+                                paramEncoding: ParameterEncoding = URLEncoding.default,
+                                headers: [String: String]? = nil,
+                                completion c: @escaping RequestCompletion) -> DataRequest {
+            let task = manager.request(requestURL, method: method, parameters: params, encoding: paramEncoding, headers: headers)
+            task.validate(statusCode: 200..<300)
+            task.response { r in
+                if FwiCore.debug,
+                    let request = r.request,
+                    let url = request.url?.absoluteString,
+                    let headers = request.allHTTPHeaderFields {
+                    Log.debug(url)
+                    Log.debug(headers)
+                }
+
+                c(r.data, r.error, r.response)
+            }
+            return task
         }
-        
-        if #available(OSX 10.11, iOS 9.0, *) {
-            session.getAllTasks (completionHandler: excutionCancel)
-        } else {
-            session.getTasksWithCompletionHandler({ sessionTasks, uploadTasks, downloadTasks in
-                let allTask: [[URLSessionTask]] = [sessionTasks, uploadTasks, downloadTasks]
-                excutionCancel(allTask.flatMap { $0 })
-            })
+
+        /// Cancel all running Tasks.
+        public static func cancelTasks() {
+            let session = manager.session
+            func excutionCancel(_ tasks: [URLSessionTask]) {
+                tasks.forEach { $0.cancel() }
+            }
+
+            if #available(OSX 10.11, iOS 9.0, *) {
+                session.getAllTasks(completionHandler: excutionCancel)
+            } else {
+                session.getTasksWithCompletionHandler { sessionTasks, uploadTasks, downloadTasks in
+                    let allTask: [[URLSessionTask]] = [sessionTasks, uploadTasks, downloadTasks]
+                    excutionCancel(allTask.flatMap { $0 })
+                }
+            }
+        }
+
+        /// Cancel all data Tasks.
+        public static func cancelDataTasks() {
+            let session = manager.session
+            session.getTasksWithCompletionHandler { sessionTasks, _, _ in
+                sessionTasks.forEach {
+                    $0.cancel()
+                }
+            }
+        }
+
+        /// Cancel all download Tasks.
+        public static func cancelDownloadTasks() {
+            let session = manager.session
+            session.getTasksWithCompletionHandler { _, _, downloadTasks in
+                downloadTasks.forEach {
+                    $0.cancel()
+                }
+            }
+        }
+
+        /// Cancel all upload Tasks.
+        public static func cancelUploadTasks() {
+            let session = manager.session
+            session.getTasksWithCompletionHandler { _, uploadTasks, _ in
+                uploadTasks.forEach {
+                    $0.cancel()
+                }
+            }
         }
     }
-
-    /// Cancel all data Tasks.
-    public static func cancelDataTasks() {
-        let session = manager.session
-        session.getTasksWithCompletionHandler({ sessionTasks, _, _ in
-            sessionTasks.forEach({
-                $0.cancel()
-            })
-        })
-    }
-
-    /// Cancel all download Tasks.
-    public static func cancelDownloadTasks() {
-        let session = manager.session
-        session.getTasksWithCompletionHandler({ _, _, downloadTasks in
-            downloadTasks.forEach({
-                $0.cancel()
-            })
-        })
-    }
-
-    /// Cancel all upload Tasks.
-    public static func cancelUploadTasks() {
-        let session = manager.session
-        session.getTasksWithCompletionHandler({ _, uploadTasks, _ in
-            uploadTasks.forEach({
-                $0.cancel()
-            })
-        })
-    }
-}
+#endif

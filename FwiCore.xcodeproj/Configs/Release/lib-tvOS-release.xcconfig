@@ -28,4 +28,4 @@ PRODUCT_NAME = $(TARGET_NAME)
 WRAPPER_EXTENSION = framework
 
 // Search Paths
-FRAMEWORK_SEARCH_PATHS = $(inherited) $(SRCROOT)/Carthage/Build/tvOS
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(PROJECT_DIR)/Carthage/Build/tvOS

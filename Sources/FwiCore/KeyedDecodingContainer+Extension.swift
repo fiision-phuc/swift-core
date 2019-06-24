@@ -38,7 +38,7 @@ import Foundation
 
 public extension KeyedDecodingContainer {
     /// Bool.
-    func decode(key: KeyedDecodingContainer.Key) throws -> Bool {
+    func decode(_ key: KeyedDecodingContainer.Key) throws -> Bool {
         do {
             return try decode(Bool.self, forKey: key)
         } catch DecodingError.typeMismatch(let type, let context) {
@@ -47,9 +47,9 @@ public extension KeyedDecodingContainer {
             case .success(let value):
                 let final = value.lowercased().trim()
                 switch final {
-                    case "false": return false
-                    case "true": return true
-                    default: break
+                case "false": return false
+                case "true": return true
+                default: break
                 }
                 if let n = numberFormatter.number(from: final) {
                     return n.boolValue
@@ -59,13 +59,13 @@ public extension KeyedDecodingContainer {
                     return resInt != 0
                 }
             }
-            
+
             throw DecodingError.typeMismatch(type, context)
         }
     }
 
     /// Float.
-    func decode(key: KeyedDecodingContainer.Key) throws -> Float {
+    func decode(_ key: KeyedDecodingContainer.Key) throws -> Float {
         do {
             return try decode(Float.self, forKey: key)
         } catch DecodingError.typeMismatch(let type, let context) {
@@ -74,7 +74,7 @@ public extension KeyedDecodingContainer {
     }
 
     /// Double.
-    func decode(key: KeyedDecodingContainer.Key) throws -> Double {
+    func decode(_ key: KeyedDecodingContainer.Key) throws -> Double {
         do {
             return try decode(Double.self, forKey: key)
         } catch DecodingError.typeMismatch(let type, let context) {
@@ -83,7 +83,7 @@ public extension KeyedDecodingContainer {
     }
 
     /// Signed/Unsigned integer.
-    func decode<T: Codable & SignedInteger>(key: KeyedDecodingContainer.Key) throws -> T {
+    func decode<T: Codable & SignedInteger>(_ key: KeyedDecodingContainer.Key) throws -> T {
         do {
             return numericCast(try decode(Int64.self, forKey: key))
         } catch DecodingError.typeMismatch(let type, let context) {
@@ -91,7 +91,7 @@ public extension KeyedDecodingContainer {
         }
     }
 
-    func decode<T: Codable & UnsignedInteger>(key: KeyedDecodingContainer.Key) throws -> T {
+    func decode<T: Codable & UnsignedInteger>(_ key: KeyedDecodingContainer.Key) throws -> T {
         do {
             return numericCast(try decode(UInt64.self, forKey: key))
         } catch DecodingError.typeMismatch(let type, let context) {
@@ -100,26 +100,26 @@ public extension KeyedDecodingContainer {
     }
 
     /// Data.
-    func decode(key: KeyedDecodingContainer.Key) throws -> Data {
+    func decode(_ key: KeyedDecodingContainer.Key) throws -> Data {
         do {
             return try decode(Data.self, forKey: key)
         } catch DecodingError.dataCorrupted(let context) {
             let resString = self[key]
             switch resString {
-                case .success(let value) where !value.isEmpty:
-                    if value.isHex, let d = value.decodeHexData() {
-                        return d
-                    } else if let d = value.toData() {
-                        return d
-                    }
-                default: break
+            case .success(let value) where !value.isEmpty:
+                if value.isHex, let d = value.decodeHexData() {
+                    return d
+                } else if let d = value.toData() {
+                    return d
+                }
+            default: break
             }
             throw DecodingError.dataCorrupted(context)
         }
     }
 
     /// Date.
-    func decode(key: KeyedDecodingContainer.Key) throws -> Date {
+    func decode(_ key: KeyedDecodingContainer.Key) throws -> Date {
         do {
             return try decode(Date.self, forKey: key)
         } catch DecodingError.typeMismatch(let type, let context) {
@@ -136,6 +136,16 @@ public extension KeyedDecodingContainer {
             }
             throw DecodingError.typeMismatch(type, context)
         }
+    }
+
+    /// String.
+    func decode(_ key: KeyedDecodingContainer.Key) throws -> String {
+        return try decode(String.self, forKey: key)
+    }
+
+    /// Codable (e.g: enum, Struct, ...).
+    func decode<T: Codable>(_ key: KeyedDecodingContainer.Key) throws -> T {
+        return try decode(T.self, forKey: key)
     }
 }
 

@@ -66,29 +66,28 @@ public extension String {
             return false
         }
 
+        var text1 = self.trim()
+        var text2 = otherString.trim()
+
         if ignoreCase {
-            let text1 = self.lowercased().trim()
-            let text2 = otherString.lowercased().trim()
-            return text1 == text2
-        } else {
-            let text1 = self.trim()
-            let text2 = otherString.trim()
-            return text1 == text2
+            text1 = text1.lowercased()
+            text2 = text2.lowercased()
         }
+        return text1 == text2
     }
 
     /// Validate string.
     ///
     /// - parameter pattern (required): regular expression to validate string
     /// - parameter expressionOption (optional): regular expression searching option
-    func matchPattern(_ pattern: String, expressionOption option: NSRegularExpression.Options = .caseInsensitive) -> Bool {
+    func matchPattern(_ pattern: String, expressionOption: NSRegularExpression.Options = .caseInsensitive) -> Bool {
         /* Condition validation */
         if pattern.count <= 0 {
             return false
         }
 
         return FwiCore.tryOmitsThrow({
-            let regex = try NSRegularExpression(pattern: pattern, options: option)
+            let regex = try NSRegularExpression(pattern: pattern, options: expressionOption)
             let matches = regex.numberOfMatches(in: self, options: .anchored, range: NSMakeRange(0, count))
             return (matches == 1)
         }, default: false)
@@ -105,7 +104,7 @@ public extension String {
     func substring(fromIndex idx: UInt) -> Substring {
         /* Condition validation: Validate end index */
         if idx >= count {
-            FwiLog.debug("Start index must be less than string's length.")
+            Log.debug("Start index must be less than string's length.")
             return ""
         }
 
@@ -117,7 +116,7 @@ public extension String {
     func substring(toIndex idx: UInt) -> Substring {
         /* Condition validation: Validate end index */
         if idx >= count {
-            FwiLog.debug("End index should be a positive number but less than string's length.")
+            Log.debug("End index should be a positive number but less than string's length.")
             return ""
         }
 
@@ -133,13 +132,13 @@ public extension String {
     func substring(fromIndex idx: UInt, length l: UInt) -> Substring {
         /* Condition validation: Validate end index */
         if idx >= count {
-            FwiLog.debug("Start index must be less than string's length.")
+            Log.debug("Start index must be less than string's length.")
             return ""
         }
 
         /* Condition validation: Validate length */
         if (idx + l) < count {
-            FwiLog.debug("Sub string length must less than string's length.")
+            Log.debug("Sub string length must less than string's length.")
             return ""
         }
 
@@ -156,7 +155,7 @@ public extension String {
     }
 
     /// Convert string to data.
-    func toData(dataEncoding encoding: String.Encoding = .utf8) -> Data? {
-        return data(using: encoding, allowLossyConversion: false)
+    func toData(dataEncoding: String.Encoding = .utf8) -> Data? {
+        return data(using: dataEncoding, allowLossyConversion: false)
     }
 }

@@ -29,7 +29,7 @@ PRODUCT_NAME = $(TARGET_NAME)
 WRAPPER_EXTENSION = xctest
 
 // Search Paths
-FRAMEWORK_SEARCH_PATHS = $(inherited) $(SRCROOT)/Carthage/Build/tvOS
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(PROJECT_DIR)/Carthage/Build/tvOS
 
 // Testing
 TEST_HOST = $(TEST_HOST)
