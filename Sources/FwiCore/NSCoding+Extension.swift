@@ -41,8 +41,8 @@ public extension NSCoding {
     /// Unarchive from data.
     ///
     /// - parameter data (required): object's data
-    static func unarchive(fromData d: Data) throws -> Self {
-        guard let object = NSKeyedUnarchiver.unarchiveObject(with: d) as? Self else {
+    static func unarchive(_ fromData: Data) throws -> Self {
+        guard let object = NSKeyedUnarchiver.unarchiveObject(with: fromData) as? Self else {
             let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not decode data into \(String(describing: self))."])
             throw error
         }
@@ -61,15 +61,15 @@ public extension NSCoding {
     /// Unarchive from file.
     ///
     /// - parameter file (required): destination url
-    static func unarchive(fromFile url: URL?) throws -> Self {
-        return try unarchive(fromData: Data.read(fromFile: url))
+    static func unarchive(_ fromFileURL: URL?) throws -> Self {
+        return try unarchive(Data.read(fromFileURL))
     }
 
     /// Archive to file.
     ///
     /// - parameter file (required): source url
-    func archive(toFile url: URL?) throws {
-        try archive().write(toFile: url)
+    func archive(_ toFileURL: URL?) throws {
+        try archive().write(toFileURL)
     }
 }
 
@@ -79,22 +79,22 @@ public extension NSCoding {
     /// Unarchive from UserDefaults.
     ///
     /// - parameter key (required): object's key inside UserDefaults
-    static func unarchive(fromUserDefaults key: String) throws -> Self {
-        guard let data = UserDefaults.standard.value(forKey: key) as? Data, data.count > 0 else {
+    static func unarchive(_ fromUserDefaultsKey: String) throws -> Self {
+        guard let data = UserDefaults.standard.value(forKey: fromUserDefaultsKey) as? Data, data.count > 0 else {
             let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Input data must not be nil."])
             throw error
         }
-        return try unarchive(fromData: data)
+        return try unarchive(data)
     }
 
     /// Archive to UserDefaults.
     ///
     /// - parameter key (required): object's key to store inside UserDefaults
     @discardableResult
-    func archive(toUserDefaults key: String) -> Bool {
+    func archive(_ toUserDefaultsKey: String) -> Bool {
         let userDefault = UserDefaults.standard
 
-        userDefault.set(archive(), forKey: key)
+        userDefault.set(archive(), forKey: toUserDefaultsKey)
         return userDefault.synchronize()
     }
 }

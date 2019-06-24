@@ -53,10 +53,8 @@ public extension URL {
 extension URL: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         guard let new = URL(string: value) else {
-            fatalError("Check URL")
+            fatalError("Invalid URL.")
         }
         self = new
     }
-    
-    
 }

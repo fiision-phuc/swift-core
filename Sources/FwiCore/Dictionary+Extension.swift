@@ -37,17 +37,17 @@
 import Foundation
 
 public extension Dictionary {
+    /// Convert dictionary to data.
+    func toData() throws -> Data {
+        return try JSONSerialization.data(withJSONObject: self, options: [])
+    }
+
     /// Lookup value for specific key. If value is not available, default value will be returned.
     ///
     /// - Parameters:
     ///   - key: a key to lookup
     ///   - defaultValue: default value to be returned
-    func value<E>(for key: Key, defaultValue: @autoclosure () -> E) -> E {
-        return (self[key] as? E).orNil(default: defaultValue())
-    }
-
-    /// Convert dictionary to data.
-    func toData() throws -> Data {
-        return try JSONSerialization.data(withJSONObject: self, options: [])
+    func value<E>(_ key: Key, defaultValue: @autoclosure () -> E) -> E {
+        return (self[key] as? E).orNil(defaultValue())
     }
 }

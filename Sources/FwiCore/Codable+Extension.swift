@@ -38,13 +38,13 @@ import Foundation
 
 public extension Encodable {
     /// Convert a model to JSON.
-    func encodeJSON(format f: JSONEncoder.OutputFormatting? = nil, dateDecoding dt: JSONEncoder.DateEncodingStrategy? = nil, dataDecoding d: JSONEncoder.DataEncodingStrategy = .base64) throws -> Data {
+    func encodeJSON(_ format: JSONEncoder.OutputFormatting? = nil, dateEncoding: JSONEncoder.DateEncodingStrategy? = nil, dataEncoding: JSONEncoder.DataEncodingStrategy = .base64) throws -> Data {
         let encoder = JSONEncoder()
-        encoder.dataEncodingStrategy = d
-        encoder.dateEncodingStrategy = dt ?? .secondsSince1970
+        encoder.dataEncodingStrategy = dataEncoding
+        encoder.dateEncodingStrategy = dateEncoding ?? .secondsSince1970
 
         // Output format
-        if let format = f {
+        if let format = format {
             encoder.outputFormatting = format
         }
         return try encoder.encode(self)
@@ -53,15 +53,15 @@ public extension Encodable {
 
 public extension Decodable {
     /// Map JSON to model.
-    static func decodeJSON(_ json: Data?, dateDecoding dt: JSONDecoder.DateDecodingStrategy? = nil, dataDecoding d: JSONDecoder.DataDecodingStrategy = .base64) throws -> Self {
+    static func decodeJSON(_ json: Data?, dateDecoding: JSONDecoder.DateDecodingStrategy? = nil, dataDecoding: JSONDecoder.DataDecodingStrategy = .base64) throws -> Self {
         guard let json = json else {
             let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Input data must not be nil."])
             throw error
         }
 
         let decoder = JSONDecoder()
-        decoder.dataDecodingStrategy = d
-        decoder.dateDecodingStrategy = dt ?? .secondsSince1970
+        decoder.dataDecodingStrategy = dataDecoding
+        decoder.dateDecodingStrategy = dateDecoding ?? .secondsSince1970
 
         return try decoder.decode(self, from: json)
     }

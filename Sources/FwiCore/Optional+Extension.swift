@@ -1,7 +1,7 @@
-//  File name   : Storyboard.swift
+//  File name   : Optional+Extension.swift
 //
 //  Author      : Dung Vu
-//  Created date: 8/10/16
+//  Created date: 3/21/19
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,38 +33,26 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit) && (os(iOS) || os(tvOS))
-    import UIKit
+import Foundation
 
-    /// Storyboard defines instruction on how to load a storyboard.
-    public protocol Storyboard {
-        /// Storyboard's name
-        static var name: String { get }
+public protocol OptionalProtocol {
+    associatedtype Wrapped
+    var optionalValue: Wrapped? { get }
+}
 
-        /// Which bundle that a storyboard comes from. If nil, default bundle will be used.
-        static var bundle: Bundle? { get }
+extension Swift.Optional: OptionalProtocol {
+    public var optionalValue: Wrapped? {
+        return self
     }
 
-    /// Default implementation for Storyboard.
-    public extension Storyboard {
-        static var bundle: Bundle? {
-            return nil
+    /// Cast instead of `??` operator, make the code cleaner.
+    ///
+    /// - Parameter default: value default if nil
+    /// - Returns: value not optional
+    public func orNil(_ defaultValue: @autoclosure () -> Wrapped) -> Wrapped {
+        if case .some(let value) = self {
+            return value
         }
+        return defaultValue()
     }
-
-    /// Storyboard has addon function only when self is UIViewController.
-    public extension Storyboard where Self: UIViewController {
-        /// Create view controller from storyboard.
-        static func instantiate() -> Self? {
-            let storyboard = UIStoryboard(name: name, bundle: bundle)
-            return instantiate(from: storyboard)
-        }
-
-        /// Create view controller from defined storyboard.
-        ///
-        /// - parameter storyboard (required): storyboard's instance
-        static func instantiate(from storyboard: UIStoryboard) -> Self? {
-            return storyboard.instantiateViewController(withIdentifier: identifier) as? Self
-        }
-    }
-#endif
+}

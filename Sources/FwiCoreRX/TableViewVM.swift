@@ -33,7 +33,7 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(watchOS)
     import FwiCore
     import RxCocoa
     import RxSwift
@@ -66,7 +66,6 @@
         }
 
         // MARK: Class's public methods
-
         open override func setupRX() {
             tableView?.rx
                 .setDataSource(self)
@@ -119,7 +118,7 @@
             }
 
             let count = self.tableView(tableView, numberOfRowsInSection: indexPath.row)
-            guard 0 <= indexPath.row, indexPath.row < count else {
+            guard indexPath.row >= 0, indexPath.row < count else {
                 return
             }
 
@@ -145,7 +144,6 @@
     }
 
     // MARK: UITableViewDataSource's members
-
     extension TableViewVM: UITableViewDataSource {
         open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             fatalError("Child class should override func \(#function)")
@@ -182,7 +180,6 @@
     }
 
     // MARK: UITableViewDelegate's members
-
     extension TableViewVM: UITableViewDelegate {
         /// Display customization.
         open func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {}
@@ -244,8 +241,7 @@
                     return
                 }
                 self?.currentIndexPathSubject.on(.next(nil))
-            })
-                .dispose()
+            }).dispose()
         }
 
         /// Editing.
@@ -264,11 +260,11 @@
         }
 
         #if os(iOS)
-        open func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {}
+            open func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {}
 
-        open func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {}
+            open func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {}
         #endif
-        
+
         /// Copy/Paste. All three methods must be implemented by the delegate.
         open func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
             return false

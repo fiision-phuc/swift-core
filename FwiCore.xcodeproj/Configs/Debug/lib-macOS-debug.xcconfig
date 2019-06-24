@@ -27,4 +27,4 @@ PRODUCT_NAME = $(TARGET_NAME)
 WRAPPER_EXTENSION = framework
 
 // Search Paths
-FRAMEWORK_SEARCH_PATHS = $(inherited) $(SRCROOT)/Carthage/Build/Mac
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(PROJECT_DIR)/Carthage/Build/Mac

@@ -35,9 +35,6 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import Foundation
-func execution<T>(_ block: () throws -> T) rethrows -> T {
-    return try block()
-}
 
 public extension String {
     // MARK: Validate base64
@@ -47,7 +44,7 @@ public extension String {
     }
 
     var isBase64: Bool {
-        return execution { data?.isBase64 }.orNil(default: false)
+        return execution { data?.isBase64 }.orNil(false)
     }
 
     // MARK: Decode base64

@@ -38,11 +38,11 @@
 
     public extension UIButton {
         /// Apply background to button.
-        func applyBackgroundImage(_ imageName: String, withEdgeInsets edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)) {
-            let imageDefault = UIImage(named: "\(imageName)_Default")?.resizableImage(withCapInsets: edgeInsets)
-            let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImage(withCapInsets: edgeInsets)
-            let imageSelected = UIImage(named: "\(imageName)_Selected")?.resizableImage(withCapInsets: edgeInsets)
-            let imageDisabled = UIImage(named: "\(imageName)_Disabled")?.resizableImage(withCapInsets: edgeInsets)
+        func applyBackgroundImage(_ imageName: String, withEdgeInsets: UIEdgeInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)) {
+            let imageDefault = UIImage(named: "\(imageName)_Default")?.resizableImage(withCapInsets: withEdgeInsets)
+            let imageHighlighted = UIImage(named: "\(imageName)_Highlighted")?.resizableImage(withCapInsets: withEdgeInsets)
+            let imageSelected = UIImage(named: "\(imageName)_Selected")?.resizableImage(withCapInsets: withEdgeInsets)
+            let imageDisabled = UIImage(named: "\(imageName)_Disabled")?.resizableImage(withCapInsets: withEdgeInsets)
 
             self.setImage(imageDefault, for: .normal)
             self.setImage(imageHighlighted, for: .highlighted)

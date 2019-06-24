@@ -41,11 +41,11 @@
         ///
         /// - Parameters:
         ///   - size {CGFloat} (the circular image's diameter)
-        func circularImage(withSize size: CGFloat) -> UIImage? {
+        func circularImage(_ size: CGFloat) -> UIImage? {
             UIGraphicsBeginImageContextWithOptions(CGSize(width: size, height: size), false, UIScreen.main.scale)
             let rect = CGRect(x: 0, y: 0, width: size, height: size)
 
-            UIBezierPath(roundedRect: rect, cornerRadius: (rect.width / 2)).addClip()
+            UIBezierPath(roundedRect: rect, cornerRadius: rect.width / 2).addClip()
             draw(in: rect)
 
             let newImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -58,20 +58,20 @@
         ///
         /// - Parameters:
         ///   - size {CGFloat} (the circular image's diameter)
-        func circularImage(withSize size: CGFloat, point p: CGPoint, radius r: CGFloat = 2) -> UIImage? {
+        func circularImage(_ size: CGFloat, point: CGPoint, radius: CGFloat = 2) -> UIImage? {
             UIGraphicsBeginImageContextWithOptions(CGSize(width: size, height: size), false, UIScreen.main.scale)
             let rect = CGRect(x: 0, y: 0, width: size, height: size)
             let ctx = UIGraphicsGetCurrentContext()!
 
             // Draw circular
             ctx.saveGState()
-            UIBezierPath(roundedRect: rect, cornerRadius: (rect.width / 2)).addClip()
+            UIBezierPath(roundedRect: rect, cornerRadius: rect.width / 2).addClip()
             draw(in: rect)
             ctx.restoreGState()
 
             ctx.saveGState()
             UIColor.red.setFill()
-            ctx.fillEllipse(in: CGRect(x: p.x, y: p.y, width: r * 2, height: r * 2))
+            ctx.fillEllipse(in: CGRect(x: point.x, y: point.y, width: radius * 2, height: radius * 2))
             ctx.saveGState()
 
             let newImage = UIGraphicsGetImageFromCurrentImageContext()

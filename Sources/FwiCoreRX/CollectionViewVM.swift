@@ -33,7 +33,7 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(watchOS)
     import FwiCore
     import RxCocoa
     import RxSwift
@@ -42,17 +42,11 @@
     open class CollectionViewVM: ViewModel {
         /// Class's public properties.
         public var currentOptionalIndexPath: Observable<IndexPath?> {
-            return currentIndexPathSubject.asObservable()
+            return currentIndexPathSubject
         }
 
         public var currentIndexPath: Observable<IndexPath> {
-            return currentIndexPathSubject.asObservable()
-                .flatMap { indexPath -> Observable<IndexPath> in
-                    guard let indexPath = indexPath else {
-                        return Observable<IndexPath>.empty()
-                    }
-                    return Observable<IndexPath>.just(indexPath)
-                }
+            return currentIndexPathSubject.filterNil()
         }
 
         public private(set) weak var collectionView: UICollectionView?
@@ -73,7 +67,6 @@
         }
 
         // MARK: Class's public methods
-
         open override func setupRX() {
             collectionView?.rx
                 .setDataSource(self)
@@ -133,7 +126,7 @@
             }
 
             let count = self.collectionView(collectionView, numberOfItemsInSection: indexPath.section)
-            guard 0 <= indexPath.item, indexPath.item < count else {
+            guard indexPath.item >= 0, indexPath.item < count else {
                 return
             }
 
@@ -147,10 +140,10 @@
     }
 
     // MARK: Class's private methods
-
     private extension CollectionViewVM {
         @available(iOS 9.0, *)
-        @objc private func handle(longPressGesture gesture: UILongPressGestureRecognizer) {
+        @objc
+        func handle(longPressGesture gesture: UILongPressGestureRecognizer) {
             let location = gesture.location(in: gesture.view)
 
             switch gesture.state {
@@ -173,7 +166,6 @@
     }
 
     // MARK: UICollectionViewDataSource's members
-
     extension CollectionViewVM: UICollectionViewDataSource {
         open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             fatalError("Child class should override func \(#function)")
@@ -204,7 +196,6 @@
     }
 
     // MARK: UICollectionViewDelegate's members
-
     extension CollectionViewVM: UICollectionViewDelegate {
         /// Display customization.
         open func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {}
@@ -227,6 +218,7 @@
         open func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
             return true
         }
+
         open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             currentIndexPathSubject.on(.next(indexPath))
         }
@@ -234,14 +226,14 @@
         public func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
             return true
         }
+
         public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
             currentIndexPathSubject.bind(onNext: { [weak self] currentIndex in
                 guard let currentIndex = currentIndex, currentIndex == indexPath else {
                     return
                 }
                 self?.currentIndexPathSubject.on(.next(nil))
-            })
-                .dispose()
+            }).dispose()
         }
 
         /// Moving/reordering
@@ -263,7 +255,6 @@
     }
 
     // MARK: UICollectionViewDelegateFlowLayout's members
-
     extension CollectionViewVM: UICollectionViewDelegateFlowLayout {
         open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
             fatalError("Child class should override func \(#function)")

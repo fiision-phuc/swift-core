@@ -34,7 +34,7 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(watchOS)
     import UIKit
 
     open class GenericTableViewCellVM<C: UITableViewCell, M: Equatable>: GenericTableViewVM<M> {
@@ -48,10 +48,9 @@
         }
 
         // MARK: UITableViewDataSource's members
-
         open override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = C.dequeueCell(tableView: tableView)
-            if let item = self[indexPath] {
+            let cell = C.dequeueCell(tableView)
+            if let item = items?[indexPath.row] {
                 configure(forCell: cell, with: item)
             }
             return cell

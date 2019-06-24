@@ -45,11 +45,11 @@ public extension NSNumber {
     ///   - groupingSeparator: grouping's separator (ex. xxx,xxx)
     ///   - usingSymbol: currency display ($100.00 vs. 100.00 USD)
     ///   - placeSymbolFront: currency display ($100.00 vs. 100.00$)
-    func currency(withISO3 iso3: String,
-                         decimalSeparator decimal: String = ".",
-                         groupingSeparator grouping: String = ",",
-                         usingSymbol isSymbol: Bool = true,
-                         placeSymbolFront isFront: Bool = true) -> String? {
+    func currency(_ iso3: String,
+                  decimalSeparator: String = ".",
+                  groupingSeparator: String = ",",
+                  usingSymbol: Bool = true,
+                  placeSymbolInFront: Bool = true) -> String? {
         // Initialize currency format object
         let locale = Locale(identifier: "en_US")
         let currencyFormat = NumberFormatter()
@@ -61,16 +61,11 @@ public extension NSNumber {
         currencyFormat.generatesDecimalNumbers = true
         currencyFormat.locale = locale
 
-        currencyFormat.currencyDecimalSeparator = decimal
-        currencyFormat.currencyGroupingSeparator = grouping
-        if isSymbol {
-            if isFront {
-                currencyFormat.positiveFormat = "\u{00a4}#,##0.00"
-                currencyFormat.negativeFormat = "- \u{00a4}#,##0.00"
-            } else {
-                currencyFormat.positiveFormat = "#,##0.00\u{00a4}"
-                currencyFormat.negativeFormat = "- #,##0.00\u{00a4}"
-            }
+        currencyFormat.currencyDecimalSeparator = decimalSeparator
+        currencyFormat.currencyGroupingSeparator = groupingSeparator
+        if usingSymbol {
+            currencyFormat.positiveFormat = placeSymbolInFront ? "\u{00a4}#,##0.00" : "#,##0.00\u{00a4}"
+            currencyFormat.negativeFormat = placeSymbolInFront ? "- \u{00a4}#,##0.00" : "- #,##0.00\u{00a4}"
         } else {
             currencyFormat.positiveFormat = "#,##0.00 \(iso3)"
             currencyFormat.negativeFormat = "- #,##0.00 \(iso3)"

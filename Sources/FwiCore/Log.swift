@@ -35,21 +35,27 @@
 
 #if canImport(CocoaLumberjackSwift)
     import CocoaLumberjackSwift
-    import Foundation
 
-    public struct FwiLog {
+    public struct Log {
         /// Enable console log.
-        public static func consoleLog(withLevel level: DDLogLevel = .debug) {
+        ///
+        /// - Parameter level: log's level to be outputted
+        public static func consoleLog(_ level: DDLogLevel = .debug) {
             defer { logLevel = level }
             DDLog.add(DDOSLogger.sharedInstance)
         }
 
         /// Enable file log.
-        public static func fileLog(withLevel level: DDLogLevel = .info, rollingFrequency: TimeInterval = 60 * 60 * 24, numberOfLogFiles: UInt = 5) {
-            consoleLog(withLevel: level)
+        ///
+        /// - Parameters:
+        ///   - level: log's level to be outputted
+        ///   - rollingFrequency: Time to split the log file in second
+        ///   - numberOfLogFiles: Limit number of log files
+        public static func fileLog(_ level: DDLogLevel = .info, rollingFrequency: TimeInterval = 60 * 60 * 24, numberOfLogFiles: UInt = 5) {
+            consoleLog(level)
 
             /* Condition validation: validate if logs folder can be created or not */
-            guard let logsDirectory = URL.documentDirectory()?.appendingPathComponent("Logs").path else {
+            guard let logsDirectory = URL.documentDirectory()?.appendingPathComponent("logs").path else {
                 return
             }
             let logFileManager = DDLogFileManagerDefault(logsDirectory: logsDirectory)
@@ -69,7 +75,7 @@
             /* Condition validation: validate debug mode */
             guard
                 isLevelEnabled(.error),
-                let message = formatMessage(at: .error, with: items.map{"\($0)"}, className: className, line: line)
+                let message = formatMessage(.error, with: items.map { "\($0)" }, className: className, line: line)
             else {
                 return
             }
@@ -84,7 +90,7 @@
             /* Condition validation: validate debug mode */
             guard
                 isLevelEnabled(.warning),
-                let message = formatMessage(at: .warning, with: items.map{"\($0)"}, className: className, line: line)
+                let message = formatMessage(.warning, with: items.map { "\($0)" }, className: className, line: line)
             else {
                 return
             }
@@ -99,7 +105,7 @@
             /* Condition validation: validate debug mode */
             guard
                 isLevelEnabled(.info),
-                let message = formatMessage(at: .info, with: items.map{"\($0)"}, className: className, line: line)
+                let message = formatMessage(.info, with: items.map { "\($0)" }, className: className, line: line)
             else {
                 return
             }
@@ -114,7 +120,7 @@
             /* Condition validation: validate debug mode */
             guard
                 isLevelEnabled(.debug),
-                let message = formatMessage(at: .debug, with: items.map{"\($0)"}, className: className, line: line)
+                let message = formatMessage(.debug, with: items.map { "\($0)" }, className: className, line: line)
             else {
                 return
             }
@@ -129,7 +135,7 @@
             /* Condition validation: validate debug mode */
             guard
                 isLevelEnabled(.verbose),
-                let message = formatMessage(at: .verbose, with: items.map{"\($0)"}, className: className, line: line)
+                let message = formatMessage(.verbose, with: items.map { "\($0)" }, className: className, line: line)
             else {
                 return
             }
@@ -142,8 +148,13 @@
     }
 
     // MARK: Struct's private func.
-    private extension FwiLog {
-        private static func formatMessage(at level: DDLogLevel, with items: [String], className: String, line: Int) -> String? {
+    private extension Log {
+        static func isLevelEnabled(_ levelCheck: DDLogLevel) -> Bool {
+            let result = logLevel.rawValue & levelCheck.rawValue
+            return (result == levelCheck.rawValue)
+        }
+
+        static func formatMessage(_ level: DDLogLevel, with items: [String], className: String, line: Int) -> String? {
             /* Condition validation: validate class's name */
             let tokens = className.split("/")
             guard let name = tokens.last, name.count > 0 else {
@@ -164,10 +175,18 @@
                 return String(format: "[DEBUG] <%@ %i>: %@", name, line, message)
             }
         }
+    }
 
-        private static func isLevelEnabled(_ levelCheck: DDLogLevel) -> Bool {
-            let result = logLevel.rawValue & levelCheck.rawValue
-            return (result == levelCheck.rawValue)
+    // MARK: Obsoleted.
+    public extension Log {
+        @available(*, deprecated, renamed: "consoleLog(_:)")
+        static func consoleLog(withLevel level: DDLogLevel) {
+            consoleLog(level)
+        }
+
+        @available(*, deprecated, renamed: "fileLog(_:rollingFrequency:numberOfLogFiles:)")
+        static func fileLog(withLevel level: DDLogLevel = .info, rollingFrequency: TimeInterval, numberOfLogFiles: UInt) {
+            fileLog(level, rollingFrequency: rollingFrequency, numberOfLogFiles: numberOfLogFiles)
         }
     }
 #endif

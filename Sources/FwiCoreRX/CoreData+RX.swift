@@ -34,8 +34,8 @@
 //  caused, directly or indirectly, by the use of this software.
 
 import CoreData
-import RxSwift
 import FwiCore
+import RxSwift
 
 public extension Reactive where Base: NSManagedObject, Base: FwiCoreData {
     /// Reactive wrapper for `allEntities(fromContext:predicate:sortDescriptor:groupBy:limit:)` function.

@@ -46,14 +46,15 @@ public extension Data {
         }
 
         var isBase64 = true
-        withUnsafeBytes { (p) in
-            guard let pointer = p.bindMemory(to: UInt8.self).baseAddress else {
+        withUnsafeBytes { p in
+            let memory = p.bindMemory(to: UInt8.self)
+            guard let pointer = memory.baseAddress else {
                 isBase64 = false
                 return
             }
-            
+
             var p1 = pointer
-            var p2 = pointer.advanced(by: (count - 1))
+            var p2 = pointer.advanced(by: count - 1)
 
             let step = count >> 2
             for _ in 0...step {
@@ -61,9 +62,9 @@ public extension Data {
                 let v2 = p2.pointee
 
                 // Check v1
-                isBase64 = isBase64 && ((48 <= v1 && v1 <= 57) || // '0-9'
-                    (65 <= v1 && v1 <= 90) || // 'A-Z'
-                    (97 <= v1 && v1 <= 122) || // 'a-z'
+                isBase64 = isBase64 && ((v1 >= 48 && v1 <= 57) || // '0-9'
+                    (v1 >= 65 && v1 <= 90) || // 'A-Z'
+                    (v1 >= 97 && v1 <= 122) || // 'a-z'
                     v1 == 9 || // '\t'
                     v1 == 10 || // '\n'
                     v1 == 13 || // '\r'
@@ -73,9 +74,9 @@ public extension Data {
                     v1 == 61) // '='
 
                 // Check v2
-                isBase64 = isBase64 && ((48 <= v2 && v2 <= 57) || // '0-9'
-                    (65 <= v2 && v2 <= 90) || // 'A-Z'
-                    (97 <= v2 && v2 <= 122) || // 'a-z'
+                isBase64 = isBase64 && ((v2 >= 48 && v2 <= 57) || // '0-9'
+                    (v2 >= 65 && v2 <= 90) || // 'A-Z'
+                    (v2 >= 97 && v2 <= 122) || // 'a-z'
                     v2 == 9 || // '\t'
                     v2 == 10 || // '\n'
                     v2 == 13 || // '\r'

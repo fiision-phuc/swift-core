@@ -43,7 +43,7 @@ final class KeyedDecodingContainerFwiExtensionTest: XCTestCase {
     override func setUp() {
         super.setUp()
         FwiCore.debug = true
-        FwiLog.consoleLog()
+        Log.consoleLog()
     }
 
     // MARK: Tear Down

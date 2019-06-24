@@ -34,7 +34,7 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(watchOS)
     import Foundation
     import RxSwift
     import UIKit
@@ -57,7 +57,6 @@
         open var items: ArraySlice<T>?
 
         // MARK: Class's public methods
-
         open override func setupRX() {
             super.setupRX()
 
@@ -65,7 +64,7 @@
                 guard let indexPath = indexPath else {
                     return nil
                 }
-                return self?[indexPath]
+                return self?.items?[indexPath.row] // self?[indexPath]
             }
             .bind(to: currentItemSubject)
             .disposed(by: disposeBag)
@@ -117,21 +116,22 @@
     }
 
     // MARK: Class's subscript
-
     extension GenericTableViewVM {
         open var count: Int {
             return items?.count ?? 0
         }
 
+        @available(*, deprecated, message: "Will be removed in next version.")
         open subscript(index: Int) -> T? {
-            guard 0 <= index, index < count else {
+            guard index >= 0, index < count else {
                 return nil
             }
             return items?[index]
         }
 
+        @available(*, deprecated, message: "Will be removed in next version.")
         open subscript(index: IndexPath) -> T? {
-            guard 0 <= index.row, index.row < count else {
+            guard index.row >= 0, index.row < count else {
                 return nil
             }
             return items?[index.row]

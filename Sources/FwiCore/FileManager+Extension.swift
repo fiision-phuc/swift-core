@@ -41,19 +41,19 @@ public extension FileManager {
     ///
     /// - parameter url (required): destination url to create directory
     /// - parameter intermediateDirectories (optional): should create intermediate directories as well
-    func createDirectory(atURL url: URL?, withIntermediateDirectories intermediate: Bool = true, attributes: [FileAttributeKey: Any]? = nil) throws {
-        guard let url = url, url.isFileURL, url != URL.documentDirectory(), url != URL.cacheDirectory() else {
+    func createDirectory(_ atURL: URL?, intermediateDirectories: Bool = true, attributes: [FileAttributeKey: Any]? = nil) throws {
+        guard let url = atURL, url.isFileURL, url != URL.documentDirectory(), url != URL.cacheDirectory() else {
             let info = [NSLocalizedDescriptionKey: "Invalid directory's URL."]
             throw NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: info)
         }
-        return try createDirectory(at: url, withIntermediateDirectories: intermediate, attributes: attributes)
+        try createDirectory(at: url, withIntermediateDirectories: intermediateDirectories, attributes: attributes)
     }
 
     /// Check if directory is available for a given URL.
     ///
     /// - parameter url (required): destination url
-    func directoryExists(atURL url: URL?) -> Bool {
-        guard let path = url?.path else {
+    func directoryExists(_ atURL: URL?) -> Bool {
+        guard let path = atURL?.path else {
             return false
         }
 
@@ -67,15 +67,15 @@ public extension FileManager {
     ///
     /// - parameter from (required): source url
     /// - parameter to (required): destination url
-    func moveDirectory(from srcURL: URL?, to dstURL: URL?) throws {
-        return try moveFile(from: srcURL, to: dstURL)
+    func moveDirectory(_ from: URL?, to: URL?) throws {
+        return try moveFile(from, to: to)
     }
 
     /// Remove directory for a given URL.
     ///
     /// - parameter url (required): source url
-    func removeDirectory(atURL url: URL?) throws {
-        return try removeFile(atURL: url)
+    func removeDirectory(_ atURL: URL?) throws {
+        return try removeFile(atURL)
     }
 }
 
@@ -84,8 +84,8 @@ public extension FileManager {
     /// Check if file is available for a given URL.
     ///
     /// - parameter url (required): source url
-    func fileExists(atURL url: URL?) -> Bool {
-        guard let path = url?.path else {
+    func fileExists(_ atURL: URL?) -> Bool {
+        guard let path = atURL?.path else {
             return false
         }
         return fileExists(atPath: path)
@@ -95,8 +95,8 @@ public extension FileManager {
     ///
     /// - parameter from (required): source url
     /// - parameter to (required): destination url
-    func moveFile(from srcURL: URL?, to dstURL: URL?) throws {
-        guard let srcURL = srcURL, let dstURL = dstURL else {
+    func moveFile(_ from: URL?, to: URL?) throws {
+        guard let srcURL = from, let dstURL = to else {
             let info = [NSLocalizedDescriptionKey: "Invalid file's source's URL or destination's URL."]
             throw NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: info)
         }
@@ -106,8 +106,8 @@ public extension FileManager {
     /// Remove file for a given URL.
     ///
     /// - parameter url (required): source url
-    func removeFile(atURL url: URL?) throws {
-        guard let url = url, fileExists(atURL: url) else {
+    func removeFile(_ atURL: URL?) throws {
+        guard let url = atURL, fileExists(url) else {
             throw NSError(domain: NSURLErrorKey, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Invalid file's URL."])
         }
         try removeItem(at: url)

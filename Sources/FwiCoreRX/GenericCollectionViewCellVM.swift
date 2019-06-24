@@ -33,12 +33,10 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(watchOS)
     import UIKit
 
     open class GenericCollectionViewCellVM<C: UICollectionViewCell, M: Equatable>: GenericCollectionViewVM<M> {
-        // MARK: Class's public methods
-
         /// Initialize cell at index.
         ///
         /// - Parameters:
@@ -49,8 +47,8 @@
         }
 
         open override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            let cell = C.dequeueCell(collectionView: collectionView, indexPath: indexPath)
-            if let item = self[indexPath] {
+            let cell = C.dequeueCell(collectionView, indexPath: indexPath)
+            if let item = items?[indexPath.item] {
                 configure(forCell: cell, with: item)
             }
             return cell

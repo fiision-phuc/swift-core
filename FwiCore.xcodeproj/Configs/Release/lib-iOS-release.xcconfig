@@ -4,7 +4,7 @@
 // Architectures
 SDKROOT = iphoneos
 SUPPORTED_PLATFORMS = iphoneos iphonesimulator
-VALID_ARCHS = $(ARCHS_STANDARD)
+VALID_ARCHS = arm64 arm64e armv7 armv7s
 
 // Deployment
 INSTALL_PATH = $(LOCAL_LIBRARY_DIR)/Frameworks
@@ -29,4 +29,4 @@ PRODUCT_NAME = $(TARGET_NAME)
 WRAPPER_EXTENSION = framework
 
 // Search Paths
-FRAMEWORK_SEARCH_PATHS = $(inherited) $(SRCROOT)/Carthage/Build/iOS
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(PROJECT_DIR)/Carthage/Build/iOS

@@ -33,34 +33,24 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit) && (os(iOS) || os(tvOS))
+#if canImport(UIKit) && os(iOS)
     import UIKit
 
     extension UITabBarController {
-        // MARK: Class's override methods
-
-        #if !os(tvOS)
         open override var prefersStatusBarHidden: Bool {
             return selectedViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
         }
-        #endif
 
-        #if !os(tvOS)
         open override var preferredStatusBarStyle: UIStatusBarStyle {
             return selectedViewController?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
         }
-        #endif
 
-        #if !os(tvOS)
         open override var shouldAutorotate: Bool {
             return selectedViewController?.shouldAutorotate ?? super.shouldAutorotate
         }
-        #endif
 
-        #if !os(tvOS)
         open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
             return selectedViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
         }
-        #endif
     }
 #endif

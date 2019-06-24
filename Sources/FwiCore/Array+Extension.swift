@@ -43,3 +43,12 @@ public extension Array where Element: Encodable {
         return try encoder.encode(self)
     }
 }
+
+public extension Array {
+    subscript(safe index: Int) -> Element? {
+        guard 0..<count ~= index else {
+            return nil
+        }
+        return self[index]
+    }
+}
