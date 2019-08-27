@@ -58,7 +58,7 @@ private struct ActivityToken<E> : ObservableConvertibleType, Disposable {
 
 public class ActivityIndicator: SharedSequenceConvertibleType {
     public typealias SharingStrategy = DriverSharingStrategy
-    public typealias E = Bool
+    public typealias Element = Bool
 
     /// Class's constructors.
     public init() {
@@ -68,13 +68,13 @@ public class ActivityIndicator: SharedSequenceConvertibleType {
     }
 
     // MARK: Class's public methods
-    public func asSharedSequence() -> SharedSequence<SharingStrategy, E> {
+    public func asSharedSequence() -> SharedSequence<SharingStrategy, Element> {
         return _loading
     }
 
     // MARK: Class's internal methods
-    internal func trackActivityOfObservable<Source: ObservableConvertibleType>(_ source: Source) -> Observable<Source.E> {
-        return Observable.using({ () -> ActivityToken<Source.E> in
+    internal func trackActivityOfObservable<Source: ObservableConvertibleType>(_ source: Source) -> Observable<Source.Element> {
+        return Observable.using({ () -> ActivityToken<Source.Element> in
             self.increment()
             return ActivityToken(source: source.asObservable(), disposeAction: self.decrement)
         }) { t in
