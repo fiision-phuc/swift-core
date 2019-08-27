@@ -28,14 +28,6 @@
 		BE19C3141F77F8F1003DF3D8 /* CoreData+RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30B1F77F8DF003DF3D8 /* CoreData+RX.swift */; };
 		BE19C3171F77F8F1003DF3D8 /* Network+RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30C1F77F8DF003DF3D8 /* Network+RX.swift */; };
 		BE19C3181F77F8F1003DF3D8 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30A1F77F8DE003DF3D8 /* ViewModel.swift */; };
-		BE2059DA2258E4B8002B72D5 /* lib-watchOS-release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BE2059D12258E4B7002B72D5 /* lib-watchOS-release.xcconfig */; };
-		BE2059DB2258E4B8002B72D5 /* lib-macOS-release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BE2059D22258E4B7002B72D5 /* lib-macOS-release.xcconfig */; };
-		BE2059DC2258E4B8002B72D5 /* test-tvOS-release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BE2059D32258E4B7002B72D5 /* test-tvOS-release.xcconfig */; };
-		BE2059DD2258E4B8002B72D5 /* lib-tvOS-release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BE2059D42258E4B8002B72D5 /* lib-tvOS-release.xcconfig */; };
-		BE2059DF2258E4B8002B72D5 /* project-release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BE2059D62258E4B8002B72D5 /* project-release.xcconfig */; };
-		BE2059E02258E4B8002B72D5 /* test-iOS-release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BE2059D72258E4B8002B72D5 /* test-iOS-release.xcconfig */; };
-		BE2059E12258E4B8002B72D5 /* lib-iOS-release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BE2059D82258E4B8002B72D5 /* lib-iOS-release.xcconfig */; };
-		BE2059E22258E4B8002B72D5 /* test-macOS-release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BE2059D92258E4B8002B72D5 /* test-macOS-release.xcconfig */; };
 		BE2059E32259D972002B72D5 /* UINavigationController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE91D8C61F70277C00EEE620 /* UINavigationController+Extension.swift */; };
 		BE2059E42259D97A002B72D5 /* UITableViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE91D8C41F70277C00EEE620 /* UITableViewController+Extension.swift */; };
 		BE2059E72259E2A5002B72D5 /* Operator+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED8D0182207DB5E00E8BE60 /* Operator+iOS.swift */; };
@@ -1359,7 +1351,7 @@
 			attributes = {
 				CLASSPREFIX = "";
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1030;
 				ORGANIZATIONNAME = "Fiision Studio";
 				TargetAttributes = {
 					BE061FD722552E9B00D16CC1 = {
@@ -1413,10 +1405,9 @@
 			};
 			buildConfigurationList = "___RootConfs_" /* Build configuration list for PBXProject "FwiCore" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -1453,14 +1444,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE2059E22258E4B8002B72D5 /* test-macOS-release.xcconfig in Resources */,
-				BE2059DF2258E4B8002B72D5 /* project-release.xcconfig in Resources */,
-				BE2059DB2258E4B8002B72D5 /* lib-macOS-release.xcconfig in Resources */,
-				BE2059DA2258E4B8002B72D5 /* lib-watchOS-release.xcconfig in Resources */,
-				BE2059DD2258E4B8002B72D5 /* lib-tvOS-release.xcconfig in Resources */,
-				BE2059E12258E4B8002B72D5 /* lib-iOS-release.xcconfig in Resources */,
-				BE2059DC2258E4B8002B72D5 /* test-tvOS-release.xcconfig in Resources */,
-				BE2059E02258E4B8002B72D5 /* test-iOS-release.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1947,6 +1930,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE2059CD2258E4A8002B72D5 /* lib-tvOS-debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
@@ -1960,6 +1944,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE2059D42258E4B8002B72D5 /* lib-tvOS-release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
@@ -1993,6 +1978,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE2059C92258E4A8002B72D5 /* lib-watchOS-debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 				PRODUCT_MODULE_NAME = FwiCore;
 				PRODUCT_NAME = FwiCore;
@@ -2003,6 +1989,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE2059D12258E4B7002B72D5 /* lib-watchOS-release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 				PRODUCT_MODULE_NAME = FwiCore;
 				PRODUCT_NAME = FwiCore;
@@ -2013,6 +2000,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE2059C92258E4A8002B72D5 /* lib-watchOS-debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
 				PRODUCT_MODULE_NAME = FwiCoreRX;
 				PRODUCT_NAME = FwiCoreRX;
@@ -2023,6 +2011,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE2059D12258E4B7002B72D5 /* lib-watchOS-release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
 				PRODUCT_MODULE_NAME = FwiCoreRX;
 				PRODUCT_NAME = FwiCoreRX;
@@ -2033,6 +2022,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE2059CD2258E4A8002B72D5 /* lib-tvOS-debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
 				PRODUCT_MODULE_NAME = FwiCoreRX;
 				PRODUCT_NAME = FwiCoreRX;
@@ -2043,6 +2033,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE2059D42258E4B8002B72D5 /* lib-tvOS-release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
 				PRODUCT_MODULE_NAME = FwiCoreRX;
 				PRODUCT_NAME = FwiCoreRX;

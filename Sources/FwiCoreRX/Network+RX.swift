@@ -91,7 +91,7 @@ public extension Network {
 }
 
 #if swift(>=5.0)
-    public struct Response<T: Decodable> {
+    public struct HTTPResponse<T: Decodable> {
         public let model: T
 
         public init(from data: Data?) throws {
@@ -138,7 +138,7 @@ public extension Network {
                                        method m: HTTPMethod = .get,
                                        params p: [String: Any]? = nil,
                                        encoding e: ParameterEncoding = URLEncoding.default,
-                                       headers h: [String: String]? = nil) -> Observable<R<Response<T>, Error>> {
+                                       headers h: [String: String]? = nil) -> Observable<R<HTTPResponse<T>, Error>> {
             return Observable.create { observer in
                 let t = Network.send(r, method: m, params: p, paramEncoding: e, headers: h, completion: { d, err, res in
                     /* Condition validation: validate network's status */
@@ -147,7 +147,7 @@ public extension Network {
                         observer.onNext(.failure(err))
                         return
                     }
-                    let result = R { try Response<T>(from: d) }
+                    let result = R { try HTTPResponse<T>(from: d) }
                     observer.onNext(result)
                 })
                 return Disposables.create(with: t.cancel)

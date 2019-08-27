@@ -1,4 +1,3 @@
-import RxSwift
 //  File name   : KeyboardAnimationProtocol.swift
 //
 //  Author      : Dung Vu
@@ -35,6 +34,7 @@ import RxSwift
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit) && os(iOS)
+    import RxSwift
     import UIKit
 
     public protocol KeyboardAnimationProtocol: AnyObject, DisposableProtocol, ContainerViewProtocol {}
