@@ -33,6 +33,7 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
+import FwiCore
 import RxSwift
 
 public extension ObservableConvertibleType {
@@ -45,24 +46,19 @@ public extension ObservableConvertibleType {
     /// - seealso:
     ///   [The RxSwift Library Reference]
     ///   (https://github.com/ReactiveX/RxSwift/blob/master/RxExample/RxExample/Services/ActivityIndicator.swift)
-    func trackActivity(_ activityIndicator: ActivityIndicator) -> Observable<Element> {
+    func trackActivity(_ activityIndicator: ActivityIndicator) -> Observable<E> {
         return activityIndicator.trackActivityOfObservable(self)
     }
 }
 
-// #if canImport(FwiCore)
-import FwiCore
-
-public extension ObservableType where Element: OptionalProtocol {
+public extension ObservableType where E: OptionalProtocol {
     /// Filter nil value.
-    func filterNil() -> Observable<Element.Wrapped> {
-        return flatMap { element -> Observable<Element.Wrapped> in
+    func filterNil() -> Observable<E.Wrapped> {
+        return flatMap { element -> Observable<E.Wrapped> in
             guard let value = element.optionalValue else {
-                return Observable<Element.Wrapped>.empty()
+                return Observable<E.Wrapped>.empty()
             }
-            return Observable<Element.Wrapped>.just(value)
+            return Observable<E.Wrapped>.just(value)
         }
     }
 }
-
-// #endif

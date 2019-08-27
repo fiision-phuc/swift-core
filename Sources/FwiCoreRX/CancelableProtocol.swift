@@ -1,4 +1,3 @@
-import RxSwift
 //  File name   : CancelableProtocol.swift
 //
 //  Author      : Dung Vu
@@ -35,6 +34,7 @@ import RxSwift
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(UIKit) && os(iOS)
+    import RxSwift
     import UIKit
 
     public protocol CancelableProtocol: AnyObject, DisposableProtocol, DismissProtocol {

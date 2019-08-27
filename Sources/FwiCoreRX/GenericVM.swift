@@ -44,7 +44,7 @@
         associatedtype CellType
         associatedtype ObjectType
 
-        func itemSelected<S: ObserverType>(to obsever: S) -> Disposable where S.Element == IndexPath
+        func itemSelected<S: ObserverType>(to obsever: S) -> Disposable where S.E == IndexPath
         func setup<Element>(from source: Observable<[Element]>, block: @escaping (_ view: ObjectType, _ index: Int, _ item: Element) -> CellType) -> Disposable
     }
 
@@ -62,13 +62,13 @@
     }
 
     extension UITableView: ReuseableProtocol {
-        public func itemSelected<S>(to obsever: S) -> Disposable where S: ObserverType, S.Element == IndexPath {
+        public func itemSelected<S>(to obsever: S) -> Disposable where S: ObserverType, S.E == IndexPath {
             return self.rx.itemSelected.subscribe(obsever)
         }
     }
 
     extension UICollectionView: ReuseableProtocol {
-        public func itemSelected<S>(to obsever: S) -> Disposable where S: ObserverType, S.Element == IndexPath {
+        public func itemSelected<S>(to obsever: S) -> Disposable where S: ObserverType, S.E == IndexPath {
             return self.rx.itemSelected.subscribe(obsever)
         }
     }
