@@ -44,16 +44,16 @@ class NSNumberFwiExtensionTest: XCTestCase {
     func testCurrency() {
         let currencyNumber = NSNumber(value: 2000)
 
-        var currencyString = currencyNumber.currency(withISO3: "USD")
+        var currencyString = currencyNumber.currency("USD")
         XCTAssertEqual(currencyString, "$2,000.00", "Currency string should be: $2,000.00")
 
-        currencyString = currencyNumber.currency(withISO3: "USD", usingSymbol: false)
+        currencyString = currencyNumber.currency("USD", usingSymbol: false)
         XCTAssertEqual(currencyString, "2,000.00 USD", "Currency string should be: 2,000.00 USD")
 
-        currencyString = currencyNumber.currency(withISO3: "USD", decimalSeparator: ",", groupingSeparator: ".")
+        currencyString = currencyNumber.currency("USD", decimalSeparator: ",", groupingSeparator: ".")
         XCTAssertEqual(currencyString, "$2.000,00", "Currency string should be: $2.000,00")
         
-        currencyString = currencyNumber.currency(withISO3: "VND", decimalSeparator: ",", groupingSeparator: ".", placeSymbolFront: false)
+        currencyString = currencyNumber.currency("VND", decimalSeparator: ",", groupingSeparator: ".", placeSymbolInFront: false)
         XCTAssertEqual(currencyString, "2.000₫", "Currency string should be: 2.000₫")
     }
 }

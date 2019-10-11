@@ -66,11 +66,11 @@ class NSCodingFwiExtensionTest: XCTestCase {
         let model1 = TestNSCoding()
         model1.text = "FwiCore"
 
-        model1.archive(toUserDefaults: "sample")
+        model1.archive("sample")
         let data1 = manager.object(forKey: "sample") as? Data
         XCTAssertNotNil(data1, "Expected data existed but found: '\(String(describing: data1))'.")
 
-        let model2 = try? TestNSCoding.unarchive(fromUserDefaults: "sample")
+        let model2 = try? TestNSCoding.unarchive("sample")
         XCTAssertNotNil(model2, "Expected model2 must not be nil.")
         XCTAssertEqual(model2?.text ?? "", "FwiCore", "Expected 'FwiCore' but found: \(String(describing: model2?.text)).")
     }
@@ -83,16 +83,16 @@ class NSCodingFwiExtensionTest: XCTestCase {
 
         let manager = FileManager.`default`
         defer {
-            try? manager.removeFile(atURL: url)
+            try? manager.removeFile(url)
         }
 
         let model1 = TestNSCoding()
         model1.text = "FwiCore"
 
-        try? model1.archive(toFile: url)
-        XCTAssertTrue(manager.fileExists(atURL: url), "Expected file existed at: '\(url.absoluteString)'.")
+        try? model1.archive(url)
+        XCTAssertTrue(manager.fileExists(url), "Expected file existed at: '\(url.absoluteString)'.")
 
-        let model2 = try? TestNSCoding.unarchive(fromFile: url)
+        let model2 = try? TestNSCoding.unarchive(url)
         XCTAssertNotNil(model2, "Expected model2 must not be nil.")
         XCTAssertEqual(model2?.text ?? "", "FwiCore", "Expected 'FwiCore' but found: \(String(describing: model2?.text)).")
     }

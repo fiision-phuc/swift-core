@@ -1,7 +1,8 @@
-//  File name   : Operator+iOS.swift
+//  File name   : EncodeHexData.swift
 //
-//  Author      : Dung Vu
-//  Created date: 2/4/19
+//  Author      : Phuc, Tran Huu
+//  Created date: 10/6/19
+//  Version     : 1.00
 //  --------------------------------------------------------------
 //  Copyright © 2012, 2019 Fiision Studio. All Rights Reserved.
 //  --------------------------------------------------------------
@@ -33,24 +34,21 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
-#if canImport(UIKit) && (os(iOS) || os(tvOS))
-    import UIKit
+import Foundation
 
-    public func >>> <E, F>(lhs: E, rhs: F) -> E where E: UIView, F: UIView {
-        if let stackView = rhs as? UIStackView {
-            stackView.addArrangedSubview(lhs)
-        } else {
-            rhs.addSubview(lhs)
-        }
-        return lhs
+@propertyWrapper
+public struct EncodeHexData {
+    /// Struct's public properties.
+    public var wrappedValue: Data? {
+        get { value }
+        set { value = newValue?.encodeHexData() }
     }
 
-    public func >>> <E, F>(lhs: E, rhs: F?) -> E where E: UIView, F: UIView {
-        if let stackView = rhs as? UIStackView {
-            stackView.addArrangedSubview(lhs)
-        } else {
-            rhs?.addSubview(lhs)
-        }
-        return lhs
+    /// Struct's constructors.
+    public init(wrappedValue: Data?) {
+        self.wrappedValue = wrappedValue
     }
-#endif
+
+    /// Struct's private properties.
+    private var value: Data? = nil
+}

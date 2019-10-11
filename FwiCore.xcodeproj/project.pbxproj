@@ -105,6 +105,14 @@
 		BE205ABB2259FE08002B72D5 /* TableViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154321002ED400C569A6 /* TableViewVM.swift */; };
 		BE205ABC2259FE08002B72D5 /* GenericTableViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154221002ED300C569A6 /* GenericTableViewVM.swift */; };
 		BE205ABD2259FE08002B72D5 /* GenericTableViewCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154521002ED400C569A6 /* GenericTableViewCellVM.swift */; };
+		BE2C6F20234A4F4D0038143D /* DecodeBase64Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2C6F1F234A4F4D0038143D /* DecodeBase64Data.swift */; };
+		BE2C6F22234A4F8C0038143D /* DecodeBase64String.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2C6F21234A4F8C0038143D /* DecodeBase64String.swift */; };
+		BE2C6F24234A4FC70038143D /* EncodeBase64Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2C6F23234A4FC70038143D /* EncodeBase64Data.swift */; };
+		BE2C6F26234A4FFC0038143D /* EncodeBase64String.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2C6F25234A4FFC0038143D /* EncodeBase64String.swift */; };
+		BE2C6F28234A507D0038143D /* DecodeHexData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2C6F27234A507D0038143D /* DecodeHexData.swift */; };
+		BE2C6F2A234A50920038143D /* DecodeHexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2C6F29234A50920038143D /* DecodeHexString.swift */; };
+		BE2C6F2C234A50A60038143D /* EncodeHexData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2C6F2B234A50A60038143D /* EncodeHexData.swift */; };
+		BE2C6F2E234A50C50038143D /* EncodeHexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2C6F2D234A50C50038143D /* EncodeHexString.swift */; };
 		BE6B0A10226DA95800140214 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6B0A0F226DA95800140214 /* Localization.swift */; };
 		BE721AE9228BD52E00F63A36 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE721AE7228BD52200F63A36 /* RxRelay.framework */; };
 		BE721AEB228BD56500F63A36 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE721AEA228BD56500F63A36 /* RxRelay.framework */; };
@@ -117,6 +125,7 @@
 		BE73154C21002ED400C569A6 /* GenericCollectionViewCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154621002ED400C569A6 /* GenericCollectionViewCellVM.swift */; };
 		BE7A1D6D1FEC129F0004B986 /* KeyedDecodingContainer+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7A1D6C1FEC129F0004B986 /* KeyedDecodingContainer+FwiExtensionTest.swift */; };
 		BE7EA4771FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7EA4761FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift */; };
+		BE8757642350E87900C31416 /* Trimmed.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8757632350E87900C31416 /* Trimmed.swift */; };
 		BE8BF1471D8465BC00F710CB /* Data+FwiBase64Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF1461D8465BC00F710CB /* Data+FwiBase64Test.swift */; };
 		BE8BF1491D8465CE00F710CB /* Data+FwiHexTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF1481D8465CE00F710CB /* Data+FwiHexTest.swift */; };
 		BE8BF1501D84661C00F710CB /* Data+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8BF14A1D84661C00F710CB /* Data+FwiExtensionTest.swift */; };
@@ -274,6 +283,13 @@
 			remoteGlobalIDString = "______Target_FwiCore";
 			remoteInfo = FwiCore;
 		};
+		BE9043A02349E5EC005258C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = __RootObject_ /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CF60644422436BD400A8D7CD;
+			remoteInfo = TestApp;
+		};
 		CF60645922436BD500A8D7CD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = __RootObject_ /* Project object */;
@@ -334,6 +350,14 @@
 		BE205A662259FB9A002B72D5 /* FwiCoreRX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FwiCoreRX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE205A732259FBB7002B72D5 /* FwiCoreRX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FwiCoreRX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE205A802259FBDA002B72D5 /* FwiCoreRX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FwiCoreRX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE2C6F1F234A4F4D0038143D /* DecodeBase64Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DecodeBase64Data.swift; path = FwiCore/DecodeBase64Data.swift; sourceTree = "<group>"; };
+		BE2C6F21234A4F8C0038143D /* DecodeBase64String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DecodeBase64String.swift; path = FwiCore/DecodeBase64String.swift; sourceTree = "<group>"; };
+		BE2C6F23234A4FC70038143D /* EncodeBase64Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncodeBase64Data.swift; sourceTree = "<group>"; };
+		BE2C6F25234A4FFC0038143D /* EncodeBase64String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncodeBase64String.swift; sourceTree = "<group>"; };
+		BE2C6F27234A507D0038143D /* DecodeHexData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeHexData.swift; sourceTree = "<group>"; };
+		BE2C6F29234A50920038143D /* DecodeHexString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeHexString.swift; sourceTree = "<group>"; };
+		BE2C6F2B234A50A60038143D /* EncodeHexData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncodeHexData.swift; sourceTree = "<group>"; };
+		BE2C6F2D234A50C50038143D /* EncodeHexString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncodeHexString.swift; sourceTree = "<group>"; };
 		BE6B0A0F226DA95800140214 /* Localization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Localization.swift; path = FwiCore/Localization.swift; sourceTree = "<group>"; };
 		BE721AE7228BD52200F63A36 /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RxRelay.framework; sourceTree = "<group>"; };
 		BE721AEA228BD56500F63A36 /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RxRelay.framework; sourceTree = "<group>"; };
@@ -346,6 +370,7 @@
 		BE73154621002ED400C569A6 /* GenericCollectionViewCellVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericCollectionViewCellVM.swift; sourceTree = "<group>"; };
 		BE7A1D6C1FEC129F0004B986 /* KeyedDecodingContainer+FwiExtensionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeyedDecodingContainer+FwiExtensionTest.swift"; sourceTree = "<group>"; };
 		BE7EA4761FEAB69C00B73ECA /* NSCoding+FwiExtensionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSCoding+FwiExtensionTest.swift"; sourceTree = "<group>"; };
+		BE8757632350E87900C31416 /* Trimmed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trimmed.swift; sourceTree = "<group>"; };
 		BE8BF1461D8465BC00F710CB /* Data+FwiBase64Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiBase64Test.swift"; sourceTree = "<group>"; };
 		BE8BF1481D8465CE00F710CB /* Data+FwiHexTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiHexTest.swift"; sourceTree = "<group>"; };
 		BE8BF14A1D84661C00F710CB /* Data+FwiExtensionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+FwiExtensionTest.swift"; sourceTree = "<group>"; };
@@ -662,6 +687,22 @@
 			children = (
 			);
 			name = macOS;
+			sourceTree = "<group>";
+		};
+		BE2C6F1C234A47560038143D /* Wrapper */ = {
+			isa = PBXGroup;
+			children = (
+				BE2C6F1F234A4F4D0038143D /* DecodeBase64Data.swift */,
+				BE2C6F21234A4F8C0038143D /* DecodeBase64String.swift */,
+				BE2C6F23234A4FC70038143D /* EncodeBase64Data.swift */,
+				BE2C6F25234A4FFC0038143D /* EncodeBase64String.swift */,
+				BE2C6F27234A507D0038143D /* DecodeHexData.swift */,
+				BE2C6F29234A50920038143D /* DecodeHexString.swift */,
+				BE2C6F2B234A50A60038143D /* EncodeHexData.swift */,
+				BE2C6F2D234A50C50038143D /* EncodeHexString.swift */,
+				BE8757632350E87900C31416 /* Trimmed.swift */,
+			);
+			name = Wrapper;
 			sourceTree = "<group>";
 		};
 		BE2E7FA11FA0FAE3008E521F /* Json */ = {
@@ -1047,6 +1088,7 @@
 				BE6B0A0E226DA8FB00140214 /* i18n */,
 				5ECD67C9220BFAF400C318C5 /* Plist */,
 				BE8BF1331D832ED000F710CB /* Network */,
+				BE2C6F1C234A47560038143D /* Wrapper */,
 				BE061FFC225530A300D16CC1 /* Platform */,
 				BE061FFB2255307900D16CC1 /* Deprecated */,
 			);
@@ -1337,6 +1379,7 @@
 			);
 			dependencies = (
 				__Dependency_FwiCore /* PBXTargetDependency */,
+				BE9043A12349E5EC005258C8 /* PBXTargetDependency */,
 			);
 			name = FwiCoreTests;
 			productName = FwiCoreTests;
@@ -1400,6 +1443,9 @@
 						DevelopmentTeam = QN8XC3LEX2;
 						LastSwiftMigration = 1020;
 						ProvisioningStyle = Manual;
+					};
+					"______Target_FwiCoreTests" = {
+						TestTargetID = CF60644422436BD400A8D7CD;
 					};
 				};
 			};
@@ -1529,7 +1575,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjackSwift.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/FwiCore.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/FwiCoreRX.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/RIBs.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxRelay.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
@@ -1543,7 +1588,6 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaLumberjackSwift.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FwiCore.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FwiCoreRX.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RIBs.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxCocoa.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxRelay.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxSwift.framework",
@@ -1561,14 +1605,12 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjack.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjackSwift.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 			);
 			name = Carthage;
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaLumberjack.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaLumberjackSwift.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftProtobuf.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1832,10 +1874,13 @@
 				BE91D8CD1F70277C00EEE620 /* UISplitViewController+Extension.swift in Sources */,
 				BE91D8CB1F70277C00EEE620 /* UIApplication+Extension.swift in Sources */,
 				5ED8D01E2207DD2200E8BE60 /* PluggableApplicationDelegate.swift in Sources */,
+				BE2C6F20234A4F4D0038143D /* DecodeBase64Data.swift in Sources */,
 				BE91D8BB1F70273700EEE620 /* FileManager+Extension.swift in Sources */,
+				BE2C6F22234A4F8C0038143D /* DecodeBase64String.swift in Sources */,
 				BE91D8BC1F70273700EEE620 /* String+Extension.swift in Sources */,
 				BE6B0A10226DA95800140214 /* Localization.swift in Sources */,
 				BE91D8CE1F70277C00EEE620 /* UITableViewController+Extension.swift in Sources */,
+				BE8757642350E87900C31416 /* Trimmed.swift in Sources */,
 				BEDBB4DC1FE9D57B00059325 /* KeyedDecodingContainer+Extension.swift in Sources */,
 				BE91D87F1F701B7900EEE620 /* Data+Base64.swift in Sources */,
 				5ECD67CB220BFB2E00C318C5 /* PlistProtocol.swift in Sources */,
@@ -1857,16 +1902,22 @@
 				5ED8D0232207E09B00E8BE60 /* PluggableServiceProviderProtocol.swift in Sources */,
 				BEDBB4E01FE9DB7900059325 /* UIAlertController+Extension.swift in Sources */,
 				BEC851DA22111ED200C25DA6 /* Core+Deprecated.swift in Sources */,
+				BE2C6F2E234A50C50038143D /* EncodeHexString.swift in Sources */,
 				BE91D8B91F70273700EEE620 /* Codable+Extension.swift in Sources */,
 				BE91D8B81F70273700EEE620 /* NSNumber+Extension.swift in Sources */,
+				BE2C6F28234A507D0038143D /* DecodeHexData.swift in Sources */,
 				BEDBB4DA1FE9D48C00059325 /* Array+Extension.swift in Sources */,
 				5ED8D0192207DB5E00E8BE60 /* Operator+iOS.swift in Sources */,
+				BE2C6F2A234A50920038143D /* DecodeHexString.swift in Sources */,
 				BE91D8B71F70273700EEE620 /* Data+Extension.swift in Sources */,
+				BE2C6F24234A4FC70038143D /* EncodeBase64Data.swift in Sources */,
 				BE91D8D41F7027C300EEE620 /* String+Hex.swift in Sources */,
 				BEF01E7A1F71214800F25389 /* NSManagedObject+Extension.swift in Sources */,
 				BEAE8BCA2265C21400C3380F /* Operator.swift in Sources */,
+				BE2C6F26234A4FFC0038143D /* EncodeBase64String.swift in Sources */,
 				BE91D8CC1F70277C00EEE620 /* Cell.swift in Sources */,
 				5ED8D01D2207DD2200E8BE60 /* PluggableApplicationDelegate+CloudKit.swift in Sources */,
+				BE2C6F2C234A50A60038143D /* EncodeHexData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1889,6 +1940,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		BE9043A12349E5EC005258C8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CF60644422436BD400A8D7CD /* TestApp */;
+			targetProxy = BE9043A02349E5EC005258C8 /* PBXContainerItemProxy */;
+		};
 		CF60645A22436BD500A8D7CD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CF60644422436BD400A8D7CD /* TestApp */;
@@ -2376,12 +2432,9 @@
 		};
 		_ReleaseConf_FwiCoreTests /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE2059D72258E4B8002B72D5 /* test-iOS-release.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				OTHER_LDFLAGS = "$(inherited)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestApp.app/TestApp";
 			};
 			name = Release;
 		};
@@ -2399,11 +2452,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE2059CC2258E4A8002B72D5 /* test-iOS-debug.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				OTHER_LDFLAGS = "$(inherited)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestApp.app/TestApp";
 			};
 			name = Debug;
 		};

@@ -50,7 +50,6 @@
                 if let color = color {
                     layer.borderColor = color.cgColor
                 }
-                layer.borderColor = nil
             }
         }
 
@@ -88,7 +87,6 @@
                 if let color = color {
                     layer.shadowColor = color.cgColor
                 }
-                layer.shadowColor = nil
             }
         }
 

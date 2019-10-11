@@ -190,13 +190,13 @@ private struct BoolModel: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        a = try container.decode(key: .a)
-        b = try container.decode(key: .b)
-        c = try container.decode(key: .c)
+        a = try container.decode(.a)
+        b = try container.decode(.b)
+        c = try container.decode(.c)
 
-        oA = try? container.decode(key: .oA)
-        oB = try? container.decode(key: .oB)
-        oC = try? container.decode(key: .oC)
+        oA = try? container.decode(.oA)
+        oB = try? container.decode(.oB)
+        oC = try? container.decode(.oC)
     }
 }
 //private struct BoolModelPerformance: Codable {
@@ -217,10 +217,10 @@ private struct TestFloatDouble: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        a = try container.decode(key: .a)
-        b = try? container.decode(key: .b)
-        c = try container.decode(key: .c)
-        d = try? container.decode(key: .d)
+        a = try container.decode(.a)
+        b = try? container.decode(.b)
+        c = try container.decode(.c)
+        d = try? container.decode(.d)
     }
 }
 
@@ -239,17 +239,17 @@ private struct TestNumericNumber: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        a = try container.decode(key: .a)
-        b = try container.decode(key: .b)
-        c = try container.decode(key: .c)
-        d = try container.decode(key: .d)
-        e = try container.decode(key: .e)
+        a = try container.decode(.a)
+        b = try container.decode(.b)
+        c = try container.decode(.c)
+        d = try container.decode(.d)
+        e = try container.decode(.e)
 
-        f = try container.decode(key: .f)
-        g = try container.decode(key: .g)
-        h = try container.decode(key: .h)
-        i = try container.decode(key: .i)
-        j = try container.decode(key: .j)
+        f = try container.decode(.f)
+        g = try container.decode(.g)
+        h = try container.decode(.h)
+        i = try container.decode(.i)
+        j = try container.decode(.j)
     }
 }
 
@@ -260,9 +260,9 @@ private struct TestData: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        a = try container.decode(key: .a)
-        b = try container.decode(key: .b)
-        c = try container.decode(key: .c)
+        a = try container.decode(.a)
+        b = try container.decode(.b)
+        c = try container.decode(.c)
     }
 }
 
@@ -273,9 +273,9 @@ private struct TestDate: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        a = try container.decode(key: .a)
-        b = try container.decode(key: .b)
-        c = try container.decode(key: .c)
+        a = try container.decode(.a)
+        b = try container.decode(.b)
+        c = try container.decode(.c)
     }
 }
 
@@ -284,6 +284,6 @@ private struct TestURL: Codable {
 
 //    init(from decoder: Decoder) throws {
 //        let container = try decoder.container(keyedBy: CodingKeys.self)
-////        a = try container.decode(key: .a)
+////        a = try container.decode(.a)
 //    }
 }

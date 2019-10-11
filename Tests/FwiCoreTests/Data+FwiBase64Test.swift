@@ -37,8 +37,9 @@
 import XCTest
 @testable import FwiCore
 
-
 class NSDataFwiBase64Test: XCTestCase {
+
+    @EncodeBase64Data var data: Data?
 
     // MARK: Test Cases
     func testIsBase64() {
@@ -46,6 +47,7 @@ class NSDataFwiBase64Test: XCTestCase {
         XCTAssert(base64Data?.isBase64 == false, "Invalid base64 data should always return false.")
 
         base64Data = "RndpQ29yZQ==".toData()
+        data = "FwiCore".toData()
         XCTAssert(base64Data?.isBase64 == true, "'RndpQ29yZQ==' is a valid base64.")
     }
 
