@@ -38,9 +38,8 @@
 import XCTest
 @testable import FwiCore
 
-
 class DataFwiExtensionTest: XCTestCase {
-    
+
     // MARK: Test Cases
     func testClearBytes() {
         FwiCore.debug = true
@@ -79,13 +78,13 @@ class DataFwiExtensionTest: XCTestCase {
 
         let manager = FileManager.default
         defer {
-            try? manager.removeFile(atURL: url)
+            try? manager.removeFile(url)
         }
 
-        try? data1.write(toFile: url, options: .atomic)
-        XCTAssertTrue(manager.fileExists(atURL: url), "Expected file existed at: '\(url.absoluteString)'.")
+        try? data1.write(url, writingMode: .atomic)
+        XCTAssertTrue(manager.fileExists(url), "Expected file existed at: '\(url.absoluteString)'.")
 
-        let data2 = try? Data.read(fromFile: url)
+        let data2 = try? Data.read(url)
         XCTAssertNotNil(data2, "Expected data2 must not be nil.")
         XCTAssertEqual(data2, data1, "Expected data2 must be equal data1.")
     }

@@ -46,19 +46,19 @@ public extension ObservableConvertibleType {
     /// - seealso:
     ///   [The RxSwift Library Reference]
     ///   (https://github.com/ReactiveX/RxSwift/blob/master/RxExample/RxExample/Services/ActivityIndicator.swift)
-    func trackActivity(_ activityIndicator: ActivityIndicator) -> Observable<E> {
+    func trackActivity(_ activityIndicator: ActivityIndicator) -> Observable<Element> {
         return activityIndicator.trackActivityOfObservable(self)
     }
 }
 
-public extension ObservableType where E: OptionalProtocol {
+public extension ObservableType where Element: OptionalProtocol {
     /// Filter nil value.
-    func filterNil() -> Observable<E.Wrapped> {
-        return flatMap { element -> Observable<E.Wrapped> in
+    func filterNil() -> Observable<Element.Wrapped> {
+        return flatMap { element -> Observable<Element.Wrapped> in
             guard let value = element.optionalValue else {
-                return Observable<E.Wrapped>.empty()
+                return Observable<Element.Wrapped>.empty()
             }
-            return Observable<E.Wrapped>.just(value)
+            return Observable<Element.Wrapped>.just(value)
         }
     }
 }

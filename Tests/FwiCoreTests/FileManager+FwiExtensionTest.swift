@@ -54,7 +54,7 @@ class FileManagerFwiExtensionTest: XCTestCase {
         directoryURL2 = URL.cacheDirectory()?.appendingPathComponent("sample/testDirectory2")
         fileURL = URL.cacheDirectory()?.appendingPathComponent("sample/file")
         
-        try? FileManager.default.createDirectory(atURL: URL.cacheDirectory()?.appendingPathComponent("sample"))
+        try? FileManager.default.createDirectory(URL.cacheDirectory()?.appendingPathComponent("sample"))
         if let url = fileURL {
             do {
                 try "FwiCore".toData()?.write(to: url)
@@ -79,58 +79,58 @@ class FileManagerFwiExtensionTest: XCTestCase {
     // MARK: Test Cases
     func testCreateDirectory() {
         do {
-            try FileManager.default.createDirectory(atURL: nil)
+            try FileManager.default.createDirectory(nil)
         } catch {
             XCTAssertNotNil(error, "FileManager should not allow to create nil directory '\(String(describing: error))'.")
         }
 
         do {
-            try FileManager.default.createDirectory(atURL: URL.cacheDirectory())
+            try FileManager.default.createDirectory(URL.cacheDirectory())
         } catch {
             XCTAssertNotNil(error, "FileManager should not allow to create root cache directory '\(String(describing: error))'.")
         }
 
         do {
-            try FileManager.default.createDirectory(atURL: directoryURL1)
+            try FileManager.default.createDirectory(directoryURL1)
         } catch {
             XCTAssertNil(error, "FileManager should be able to create directory for a given path but found '\(String(describing: error))'.")
         }
     }
     
     func testDirectoryExists() {
-        XCTAssertFalse(FileManager.default.directoryExists(atURL: directoryURL1), "FileManager should return false when directory is not available.")
-        XCTAssertFalse(FileManager.default.directoryExists(atURL: fileURL), "FileManager should return false when given a file URL.")
+        XCTAssertFalse(FileManager.default.directoryExists(directoryURL1), "FileManager should return false when directory is not available.")
+        XCTAssertFalse(FileManager.default.directoryExists(fileURL), "FileManager should return false when given a file URL.")
         
-        try? FileManager.default.createDirectory(atURL: directoryURL1)
-        XCTAssertTrue(FileManager.default.directoryExists(atURL: directoryURL1), "FileManager should return true when directory is available.")
+        try? FileManager.default.createDirectory(directoryURL1)
+        XCTAssertTrue(FileManager.default.directoryExists(directoryURL1), "FileManager should return true when directory is available.")
     }
     
     func testMoveDirectory() {
-        try? FileManager.default.createDirectory(atURL: directoryURL1)
-        XCTAssertTrue(FileManager.default.directoryExists(atURL: directoryURL1), "FileManager should return true when directory is available.")
-        XCTAssertFalse(FileManager.default.directoryExists(atURL: directoryURL2), "FileManager should return false when directory is not available.")
+        try? FileManager.default.createDirectory(directoryURL1)
+        XCTAssertTrue(FileManager.default.directoryExists(directoryURL1), "FileManager should return true when directory is available.")
+        XCTAssertFalse(FileManager.default.directoryExists(directoryURL2), "FileManager should return false when directory is not available.")
 
         do {
-            try FileManager.default.moveDirectory(from: directoryURL1, to: directoryURL2)
+            try FileManager.default.moveDirectory(directoryURL1, to: directoryURL2)
         } catch {
             XCTAssertNil(error, "FileManager should be able to move directory but found '\(String(describing: error))'.")
         }
 
-        XCTAssertFalse(FileManager.default.directoryExists(atURL: directoryURL1), "FileManager should return false when directory is not available.")
-        XCTAssertTrue(FileManager.default.directoryExists(atURL: directoryURL2), "FileManager should return true when directory is available.")
+        XCTAssertFalse(FileManager.default.directoryExists(directoryURL1), "FileManager should return false when directory is not available.")
+        XCTAssertTrue(FileManager.default.directoryExists(directoryURL2), "FileManager should return true when directory is available.")
     }
     
     func testRemoveDirectory() {
-        try? FileManager.default.createDirectory(atURL: directoryURL1)
+        try? FileManager.default.createDirectory(directoryURL1)
         do {
-            try FileManager.default.removeDirectory(atURL: directoryURL1)
+            try FileManager.default.removeDirectory(directoryURL1)
         } catch {
             XCTAssertNil(error, "FileManager should be able to remove directory but found '\(String(describing: error))'.")
         }
-        XCTAssertFalse(FileManager.default.directoryExists(atURL: directoryURL1), "FileManager should return false when directory is not available.")
+        XCTAssertFalse(FileManager.default.directoryExists(directoryURL1), "FileManager should return false when directory is not available.")
     }
     
     func testFileExists() {
-        XCTAssertTrue(FileManager.default.fileExists(atURL: fileURL), "FileManager should return true when file is available.")
+        XCTAssertTrue(FileManager.default.fileExists(fileURL), "FileManager should return true when file is available.")
     }
 }
