@@ -56,9 +56,9 @@ public extension NSNumber {
 
         // Layout currency
         currencyFormat.formatterBehavior = NumberFormatter.Behavior.behavior10_4
-        currencyFormat.roundingMode = NumberFormatter.RoundingMode.halfUp
-        currencyFormat.numberStyle = NumberFormatter.Style.currency
-        currencyFormat.generatesDecimalNumbers = true
+        currencyFormat.generatesDecimalNumbers = false
+        currencyFormat.numberStyle = .currency
+        currencyFormat.roundingMode = .halfUp
         currencyFormat.locale = locale
 
         currencyFormat.currencyDecimalSeparator = decimalSeparator
