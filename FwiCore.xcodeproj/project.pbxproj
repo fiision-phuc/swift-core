@@ -70,6 +70,8 @@
 		BE205ABD2259FE08002B72D5 /* GenericTableViewCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73154521002ED400C569A6 /* GenericTableViewCellVM.swift */; };
 		BE2C6F20234A4F4D0038143D /* DecodeBase64Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2C6F1F234A4F4D0038143D /* DecodeBase64Data.swift */; };
 		BE2C6F22234A4F8C0038143D /* DecodeBase64String.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2C6F21234A4F8C0038143D /* DecodeBase64String.swift */; };
+		BE2CA7642400EC9B00586DFA /* FwiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_FwiCore" /* FwiCore.framework */; };
+		BE2CA7652400EC9B00586DFA /* FwiCoreRX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE91D8861F70239C00EEE620 /* FwiCoreRX.framework */; };
 		BE453942236D341400EDBACE /* DecodeHexData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE45393B236D341300EDBACE /* DecodeHexData.swift */; };
 		BE453944236D341400EDBACE /* DecodeHexData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE45393B236D341300EDBACE /* DecodeHexData.swift */; };
 		BE453945236D341400EDBACE /* DecodeHexData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE45393B236D341300EDBACE /* DecodeHexData.swift */; };
@@ -272,6 +274,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		BE2CA7602400EC9100586DFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = __RootObject_ /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "______Target_FwiCore";
+			remoteInfo = "FwiCore-iOS";
+		};
+		BE2CA7622400EC9100586DFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = __RootObject_ /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BE91D8851F70239C00EEE620;
+			remoteInfo = "FwiCoreRX-iOS";
+		};
 		BE8BF1291D832B3600F710CB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = __RootObject_ /* Project object */;
@@ -495,6 +511,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE2CA7642400EC9B00586DFA /* FwiCore.framework in Frameworks */,
+				BE2CA7652400EC9B00586DFA /* FwiCoreRX.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1213,6 +1231,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				BE2CA7612400EC9100586DFA /* PBXTargetDependency */,
+				BE2CA7632400EC9100586DFA /* PBXTargetDependency */,
 			);
 			name = TestApp;
 			productName = TestApp;
@@ -1452,8 +1472,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjack.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjackSwift.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/FwiCore.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/FwiCoreRX.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxRelay.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
@@ -1462,14 +1480,6 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaLumberjack.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaLumberjackSwift.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FwiCore.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FwiCoreRX.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxCocoa.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxRelay.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1801,6 +1811,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		BE2CA7612400EC9100586DFA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "______Target_FwiCore" /* FwiCore-iOS */;
+			targetProxy = BE2CA7602400EC9100586DFA /* PBXContainerItemProxy */;
+		};
+		BE2CA7632400EC9100586DFA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BE91D8851F70239C00EEE620 /* FwiCoreRX-iOS */;
+			targetProxy = BE2CA7622400EC9100586DFA /* PBXContainerItemProxy */;
+		};
 		CF60645A22436BD500A8D7CD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CF60644422436BD400A8D7CD /* TestApp */;

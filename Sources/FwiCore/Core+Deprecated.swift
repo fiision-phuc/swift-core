@@ -33,6 +33,8 @@
 //  person or entity with respect to any loss or damage caused, or alleged  to  be
 //  caused, directly or indirectly, by the use of this software.
 
+import Foundation
+
 public extension FwiLocale {
     @available(*, deprecated, renamed: "localized(_:)", message: "Will be removed in next version.")
     static func localized(forString s: String?) -> String {
