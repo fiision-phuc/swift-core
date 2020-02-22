@@ -59,8 +59,7 @@ public extension Network {
                 observer.on(.next((response, location)))
                 observer.on(.completed)
             })
-
-            return Disposables.create(with: t.cancel)
+            return Disposables.create { t.cancel() }
         }
     }
 
@@ -84,8 +83,7 @@ public extension Network {
                 observer.on(.next((response, data)))
                 observer.on(.completed)
             })
-
-            return Disposables.create(with: t.cancel)
+            return Disposables.create { t.cancel() }
         }
     }
 }
@@ -99,9 +97,7 @@ public extension Network {
                 let context = DecodingError.Context(codingPath: [], debugDescription: "Missing data.")
                 throw DecodingError.dataCorrupted(context)
             }
-
-            let decoder = JSONDecoder()
-            model = try decoder.decode(T.self, from: data)
+            model = try T.decodeJSON(data)
         }
     }
 
@@ -129,7 +125,7 @@ public extension Network {
                         observer.onNext(.failure(e))
                     }
                 })
-                return Disposables.create(with: t.cancel)
+                return Disposables.create { t.cancel() }
             }
         }
 
@@ -150,7 +146,7 @@ public extension Network {
                     let result = R { try HTTPResponse<T>(from: d) }
                     observer.onNext(result)
                 })
-                return Disposables.create(with: t.cancel)
+                return Disposables.create { t.cancel() }
             }
         }
     }

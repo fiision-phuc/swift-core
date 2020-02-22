@@ -40,7 +40,7 @@
     public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
 
     public struct Network {
-        public static var manager = SessionManager.default
+        public static var manager = Session.default
 
         /// Download resource from server.
         ///
@@ -60,20 +60,25 @@
                                     destinationURL: URLConvertible? = nil,
                                     completion: @escaping DownloadCompletion) -> DownloadRequest {
             let des = destinationURL
-            let destination: DownloadRequest.DownloadFileDestination = { tempURL, response in
+            let destination: DownloadRequest.Destination = { tempURL, response in
                 if let d = des, let destinationURL = try? d.asURL() {
-                    return (destinationURL, [DownloadRequest.DownloadOptions.createIntermediateDirectories, DownloadRequest.DownloadOptions.removePreviousFile])
+                    let options: DownloadRequest.Options = [.createIntermediateDirectories, .removePreviousFile]
+                    return (destinationURL, options)
                 }
-
                 return (tempURL, [])
             }
 
-            let task = manager.download(resourceURL, method: method, parameters: params, encoding: paramEncoding, headers: headers) { (tempURL, response) -> (URL, DownloadRequest.DownloadOptions) in
+            var httpHeaders: HTTPHeaders? = nil
+            if let headers = headers {
+                httpHeaders = HTTPHeaders(headers)
+            }
+
+            let task = manager.download(resourceURL, method: method, parameters: params, encoding: paramEncoding, headers: httpHeaders) { (tempURL, response) -> (URL, DownloadRequest.Options) in
                 destination(tempURL, response)
             }
             task.validate(statusCode: 200..<300)
             task.response { r in
-                completion(r.temporaryURL, r.error, r.response)
+                completion(r.fileURL, r.error, r.response)
             }
             return task
         }
@@ -95,7 +100,13 @@
                                 paramEncoding: ParameterEncoding = URLEncoding.default,
                                 headers: [String: String]? = nil,
                                 completion c: @escaping RequestCompletion) -> DataRequest {
-            let task = manager.request(requestURL, method: method, parameters: params, encoding: paramEncoding, headers: headers)
+
+            var httpHeaders: HTTPHeaders? = nil
+            if let headers = headers {
+                httpHeaders = HTTPHeaders(headers)
+            }
+
+            let task = manager.request(requestURL, method: method, parameters: params, encoding: paramEncoding, headers: httpHeaders)
             task.validate(statusCode: 200..<300)
             task.response { r in
                 if FwiCore.debug,

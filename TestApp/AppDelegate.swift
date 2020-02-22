@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FwiCore
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
