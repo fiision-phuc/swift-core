@@ -40,19 +40,32 @@ public final class Localization {
     /// Class's public properties.
     var locale: String? {
         didSet {
+            guard
+                let locale = self.locale,
+                let path = Bundle.main.path(forResource: locale, ofType: "lproj"),
+                let bundle = Bundle(path: path)
+                else { return }
+
+            // Update bundle's prefer language for next time usage
             let userDefaults = UserDefaults.standard
-            userDefaults.set([locale.orNil("en")], forKey: "AppleLanguages")
+            userDefaults.set([locale], forKey: "AppleLanguages")
             userDefaults.synchronize()
+
+            self.bundle = bundle
         }
     }
 
     /// Class's constructors.
-    init(_ fromBundle: Bundle = Bundle.main, locale: String = "en") {
-        self.bundle = fromBundle
+    public init(_ locale: String = "en") {
         self.locale = locale
     }
 
-    // MARK: Struct's public methods
+    /// Class's private properties.
+    private var bundle: Bundle = .main
+}
+
+// MARK: - Struct's public methods
+public extension Localization {
     func localized(_ text: String) -> String {
         return bundle.localizedString(forKey: text, value: text, table: nil)
     }
@@ -62,13 +75,9 @@ public final class Localization {
         let languages = bundle.preferredLocalizations
         let next = languages.first.orNil("en")
 
-        Log.info("Current Language: \(next).")
         guard locale != next else {
             return
         }
         locale = next
     }
-
-    /// Struct's private properties.
-    private var bundle: Bundle
 }

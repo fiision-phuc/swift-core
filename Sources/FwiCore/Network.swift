@@ -109,14 +109,13 @@
             let task = manager.request(requestURL, method: method, parameters: params, encoding: paramEncoding, headers: httpHeaders)
             task.validate(statusCode: 200..<300)
             task.response { r in
-                if FwiCore.debug,
-                    let request = r.request,
-                    let url = request.url?.absoluteString,
-                    let headers = request.allHTTPHeaderFields {
-                    Log.debug(url)
-                    Log.debug(headers)
+                if FwiCore.debug {
+                    task.cURLDescription { (curlString) in
+                        let separator = "--------------------------------------------------------------------------------"
+                        let string = "\n\(separator)\n\(curlString)\n\n[RESPONSE]\n\(r.data?.toString() ?? "")\n\(separator)"
+                        Log.debug(string)
+                    }
                 }
-
                 c(r.data, r.error, r.response)
             }
             return task
