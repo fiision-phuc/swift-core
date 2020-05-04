@@ -37,7 +37,7 @@
     import RxSwift
     import UIKit
 
-    public protocol KeyboardAnimationProtocol: AnyObject, DisposableProtocol, ContainerViewProtocol {}
+    public protocol KeyboardAnimationProtocol: class, DisposableProtocol, ContainerViewProtocol {}
 
     public extension KeyboardAnimationProtocol {
         /// Setup animation for container view base on keyboard's present/dismiss events.

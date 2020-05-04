@@ -60,14 +60,15 @@
         open override func setupRX() {
             super.setupRX()
 
-            currentOptionalIndexPath.map { [weak self] (indexPath) -> T? in
-                guard let indexPath = indexPath else {
-                    return nil
+            disposeBag?.insert(
+                currentOptionalIndexPath.map { [weak self] (indexPath) -> T? in
+                    guard let indexPath = indexPath else {
+                        return nil
+                    }
+                    return self?.items?[indexPath.row]
                 }
-                return self?.items?[indexPath.row] // self?[indexPath]
-            }
-            .bind(to: currentItemSubject)
-            .disposed(by: disposeBag)
+                .bind(onNext: currentItemSubject.onNext)
+            )
         }
 
         open func deselect(item: T?) {
