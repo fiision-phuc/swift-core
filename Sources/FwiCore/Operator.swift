@@ -43,13 +43,13 @@ precedencegroup Display {
 }
 
 @discardableResult
-public func >>> <E: AnyObject>(lhs: E, block: (E) -> Void) -> E {
+public func >>> <E: Any>(lhs: E, block: (E) -> Void) -> E {
     block(lhs)
     return lhs
 }
 
 @discardableResult
-public func >>> <E: AnyObject>(lhs: E?, block: (E?) -> Void) -> E? {
+public func >>> <E: Any>(lhs: E?, block: (E?) -> Void) -> E? {
     block(lhs)
     return lhs
 }

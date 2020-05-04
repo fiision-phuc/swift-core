@@ -38,7 +38,7 @@ import RxSwift
 
 open class ViewModel: NSObject {
     /// Class's public properties.
-    public private(set) var disposeBag: DisposeBag! = DisposeBag()
+    public internal(set) var disposeBag: DisposeBag? = DisposeBag()
 
     /// Class's constructors.
     public override init() {
