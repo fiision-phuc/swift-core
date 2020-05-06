@@ -38,17 +38,20 @@ import Foundation
 
 public final class Localization {
     /// Class's public properties.
-    var locale: String? {
+    var locale: String {
         didSet {
+            let currentLocale = self.locale
             guard
-                let locale = self.locale,
-                let path = Bundle.main.path(forResource: locale, ofType: "lproj"),
+                let path = Bundle.main.path(forResource: currentLocale, ofType: "lproj"),
                 let bundle = Bundle(path: path)
-                else { return }
+            else {
+                reset()
+                return
+            }
 
             // Update bundle's prefer language for next time usage
             let userDefaults = UserDefaults.standard
-            userDefaults.set([locale], forKey: "AppleLanguages")
+            userDefaults.set([currentLocale], forKey: "AppleLanguages")
             userDefaults.synchronize()
 
             self.bundle = bundle
@@ -56,8 +59,11 @@ public final class Localization {
     }
 
     /// Class's constructors.
-    public init(_ locale: String = "en") {
-        self.locale = locale
+    public init() {
+        let preferredLocalizations = Bundle.main.preferredLocalizations
+        let mostPreferable = execution { preferredLocalizations.first }.orNil("en")
+
+        self.locale = mostPreferable
     }
 
     /// Class's private properties.
@@ -75,9 +81,7 @@ public extension Localization {
         let languages = bundle.preferredLocalizations
         let next = languages.first.orNil("en")
 
-        guard locale != next else {
-            return
-        }
+        guard locale != next else { return }
         locale = next
     }
 }

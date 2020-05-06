@@ -35,19 +35,59 @@
 
 import Foundation
 
+public typealias ExecutingBlock = () -> Void
+public typealias OmitBlock = (Error) -> Void
+
 public struct FwiCore {
     public static let domain = "com.fiision.lib.FwiCore"
+
+    /// Custom error handler for tryOmitsThrow function.
+    public static var omitBlock: OmitBlock?
+
+    /// Enable /Disable error output into console.
     public static var debug = false {
         didSet {
-            guard debug else {
-                return
-            }
+            guard debug else { return }
             Log.consoleLog()
         }
     }
 
-    /// Custom error handler for tryOmitsThrow function.
-    public static var omitBlock: ((Error) -> Void)?
+    public static var currentLocale: String {
+        get {
+            return shared.locale
+        }
+        set(newLocale) {
+            shared.locale = newLocale
+        }
+    }
+
+    /// Execute functions in sequence.
+    ///
+    /// - Parameter functions: list of functions
+    public static func executeFunctions(_ functions: ExecutingBlock...) {
+        functions.forEach { $0() }
+    }
+
+    /// Localize string for string. The original string will be returned if a localized string could
+    /// not be found.
+    ///
+    /// - Parameter string: an original string
+    public static func localized(_ text: String?) -> String {
+        guard let text = text, text.count > 0 else { return "" }
+        return shared.localized(text)
+    }
+
+    /// Calculate execution time.
+    ///
+    /// - Parameter block: execution block
+    @discardableResult
+    public static func time<T>(_ block: () -> T) -> T {
+        let date = Date()
+        defer {
+            print("Time interval: \(abs(date.timeIntervalSinceNow))")
+        }
+        return block()
+    }
 
     /// Perform try and omits throws.
     ///
@@ -63,51 +103,15 @@ public struct FwiCore {
             return `default`()
         }
     }
-}
-
-public struct FwiLocale {
-    /// Struct's public static properties.
-    public static var currentLocale: String {
-        get {
-            return shared.locale.orNil("")
-        }
-        set(newLocale) {
-            shared.locale = newLocale
-        }
-    }
-
-    /// Localize string for string. The original string will be returned if a localized string could
-    /// not be found.
-    ///
-    /// - Parameter string: an original string
-    public static func localized(_ text: String?) -> String {
-        guard let text = text, text.count > 0 else { return "" }
-        return shared.localized(text)
-    }
-
-    /// Reset locale to most prefer localization.
-    public static func reset() {
-        shared.reset()
-    }
 
     /// Struct's private static properties.
     private static var shared = Localization()
 }
 
-public struct FwiMeasure {
-    /// Calculate execution time.
-    ///
-    /// - Parameter block: execution block
-    @discardableResult
-    public static func time<T>(_ block: () -> T) -> T {
-        let date = Date()
-        defer {
-            print("Time interval: \(abs(date.timeIntervalSinceNow))")
-        }
-        return block()
-    }
-}
 
-public func execution<T>(_ block: () throws -> T) rethrows -> T {
+/// Internal usage.
+///
+/// - Parameter block: execution block
+func execution<T>(_ block: () throws -> T) rethrows -> T {
     return try block()
 }
