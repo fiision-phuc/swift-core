@@ -128,5 +128,4 @@
         private lazy var _items: BehaviorRelay<[E]> = BehaviorRelay(value: [])
         private lazy var replaySelectItem: ReplaySubject<IndexPath> = ReplaySubject.create(bufferSize: 1)
     }
-
 #endif

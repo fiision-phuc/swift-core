@@ -25,7 +25,6 @@
 		5ED8D0212207DDD000E8BE60 /* PluggableApplicationDelegateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED8D0202207DDCF00E8BE60 /* PluggableApplicationDelegateService.swift */; };
 		5ED8D0232207E09B00E8BE60 /* PluggableServiceProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED8D0222207E09B00E8BE60 /* PluggableServiceProviderProtocol.swift */; };
 		B6075A25226ECADC004578D8 /* GenericVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6075A24226ECADC004578D8 /* GenericVM.swift */; };
-		BE19C3141F77F8F1003DF3D8 /* CoreData+RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30B1F77F8DF003DF3D8 /* CoreData+RX.swift */; };
 		BE19C3171F77F8F1003DF3D8 /* Network+RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30C1F77F8DF003DF3D8 /* Network+RX.swift */; };
 		BE19C3181F77F8F1003DF3D8 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE19C30A1F77F8DE003DF3D8 /* ViewModel.swift */; };
 		BE2059E32259D972002B72D5 /* UINavigationController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE91D8C61F70277C00EEE620 /* UINavigationController+Extension.swift */; };
@@ -157,14 +156,8 @@
 		BE91D9311F703E2C00EEE620 /* FwiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_FwiCore" /* FwiCore.framework */; };
 		BE9C3158226E30C900DE6EE9 /* Operator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAE8BC92265C21400C3380F /* Operator.swift */; };
 		BE9C3159226E30C900DE6EE9 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6B0A0F226DA95800140214 /* Localization.swift */; };
-		BE9C315A226E30C900DE6EE9 /* Core+Deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC851D922111ED200C25DA6 /* Core+Deprecated.swift */; };
-		BE9C315B226E30C900DE6EE9 /* NSManagedObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF01E791F71214700F25389 /* NSManagedObject+Extension.swift */; };
-		BE9C315C226E30C900DE6EE9 /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9F61FA1F7183C300BE4B0B /* CoreData.swift */; };
 		BE9C315D226E30CA00DE6EE9 /* Operator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAE8BC92265C21400C3380F /* Operator.swift */; };
 		BE9C315E226E30CA00DE6EE9 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6B0A0F226DA95800140214 /* Localization.swift */; };
-		BE9C315F226E30CA00DE6EE9 /* Core+Deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC851D922111ED200C25DA6 /* Core+Deprecated.swift */; };
-		BE9C3160226E30CA00DE6EE9 /* NSManagedObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF01E791F71214700F25389 /* NSManagedObject+Extension.swift */; };
-		BE9C3161226E30CA00DE6EE9 /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9F61FA1F7183C300BE4B0B /* CoreData.swift */; };
 		BE9C3162226E311E00DE6EE9 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE91D8C21F70277C00EEE620 /* Cell.swift */; };
 		BE9C3163226E311E00DE6EE9 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE91D8BE1F70277C00EEE620 /* UIButton+Extension.swift */; };
 		BE9C3164226E311E00DE6EE9 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA89C4A1F9A6DAF0099413F /* UIImage+Extension.swift */; };
@@ -179,7 +172,6 @@
 		BE9C316F226E317600DE6EE9 /* PluggableApplicationDelegateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED8D0202207DDCF00E8BE60 /* PluggableApplicationDelegateService.swift */; };
 		BE9C3170226E317600DE6EE9 /* PluggableApplicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED8D01C2207DD2200E8BE60 /* PluggableApplicationDelegate.swift */; };
 		BE9C3171226E317600DE6EE9 /* PluggableApplicationDelegate+CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED8D01B2207DD2200E8BE60 /* PluggableApplicationDelegate+CloudKit.swift */; };
-		BE9F61FB1F7183C300BE4B0B /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9F61FA1F7183C300BE4B0B /* CoreData.swift */; };
 		BEA415E12256EE8B00FEC4CC /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECD67C7220BF87400C318C5 /* Log.swift */; };
 		BEA415E22256EE8B00FEC4CC /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE91D84A1F7019C300EEE620 /* Core.swift */; };
 		BEA415E52256EEBB00FEC4CC /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDBB4BC1FE9D48B00059325 /* Array+Extension.swift */; };
@@ -257,11 +249,9 @@
 		BEAE8CBD2265D8B000C3380F /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEAE8C682265D2DC00C3380F /* CocoaLumberjack.framework */; };
 		BEAE8CBE2265D8B000C3380F /* CocoaLumberjackSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEAE8C692265D2DC00C3380F /* CocoaLumberjackSwift.framework */; };
 		BEB230B221FC0B20008ED2C7 /* Codable+FwiExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB230B121FC0B20008ED2C7 /* Codable+FwiExtensionTest.swift */; };
-		BEC851DA22111ED200C25DA6 /* Core+Deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC851D922111ED200C25DA6 /* Core+Deprecated.swift */; };
 		BEDBB4DA1FE9D48C00059325 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDBB4BC1FE9D48B00059325 /* Array+Extension.swift */; };
 		BEDBB4DC1FE9D57B00059325 /* KeyedDecodingContainer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDBB4DB1FE9D57B00059325 /* KeyedDecodingContainer+Extension.swift */; };
 		BEDBB4E01FE9DB7900059325 /* UIAlertController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDBB4DF1FE9DB7900059325 /* UIAlertController+Extension.swift */; };
-		BEF01E7A1F71214800F25389 /* NSManagedObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF01E791F71214700F25389 /* NSManagedObject+Extension.swift */; };
 		CF60643F224359BC00A8D7CD /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF60643E224359BC00A8D7CD /* Optional+Extension.swift */; };
 		CF60644822436BD400A8D7CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF60644722436BD400A8D7CD /* AppDelegate.swift */; };
 		CF60644A22436BD400A8D7CD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF60644922436BD400A8D7CD /* ViewController.swift */; };
@@ -333,7 +323,6 @@
 		BE061FD822552E9B00D16CC1 /* FwiCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FwiCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE061FF222552F0700D16CC1 /* FwiCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FwiCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE19C30A1F77F8DE003DF3D8 /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
-		BE19C30B1F77F8DF003DF3D8 /* CoreData+RX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CoreData+RX.swift"; sourceTree = "<group>"; };
 		BE19C30C1F77F8DF003DF3D8 /* Network+RX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Network+RX.swift"; sourceTree = "<group>"; };
 		BE2059C82258E4A7002B72D5 /* project-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "project-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/Debug/project-debug.xcconfig"; sourceTree = "<group>"; };
 		BE2059C92258E4A8002B72D5 /* lib-watchOS-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "lib-watchOS-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/Debug/lib-watchOS-debug.xcconfig"; sourceTree = "<group>"; };
@@ -403,7 +392,6 @@
 		BE91D8D11F7027C300EEE620 /* Data+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Data+Hex.swift"; path = "FwiCore/Data+Hex.swift"; sourceTree = "<group>"; };
 		BE91D8D21F7027C300EEE620 /* String+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Hex.swift"; path = "FwiCore/String+Hex.swift"; sourceTree = "<group>"; };
 		BE91D8D61F7027EA00EEE620 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Network.swift; path = FwiCore/Network.swift; sourceTree = "<group>"; };
-		BE9F61FA1F7183C300BE4B0B /* CoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreData.swift; path = FwiCore/CoreData.swift; sourceTree = "<group>"; };
 		BEA89C4A1F9A6DAF0099413F /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+Extension.swift"; path = "FwiCore/UIImage+Extension.swift"; sourceTree = "<group>"; };
 		BEAE8BC92265C21400C3380F /* Operator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Operator.swift; path = FwiCore/Operator.swift; sourceTree = "<group>"; };
 		BEAE8C532265D2DC00C3380F /* CocoaLumberjack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CocoaLumberjack.framework; sourceTree = "<group>"; };
@@ -422,13 +410,11 @@
 		BEAE8C6C2265D2DC00C3380F /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RxCocoa.framework; sourceTree = "<group>"; };
 		BEAE8C6D2265D2DC00C3380F /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RxSwift.framework; sourceTree = "<group>"; };
 		BEB230B121FC0B20008ED2C7 /* Codable+FwiExtensionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+FwiExtensionTest.swift"; sourceTree = "<group>"; };
-		BEC851D922111ED200C25DA6 /* Core+Deprecated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Core+Deprecated.swift"; path = "FwiCore/Core+Deprecated.swift"; sourceTree = "<group>"; };
 		BECAB5ED228E9A59002BDDE6 /* app-iOS-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "app-iOS-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/Release/app-iOS-release.xcconfig"; sourceTree = "<group>"; };
 		BECAB5EE228E9A66002BDDE6 /* app-iOS-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "app-iOS-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/Debug/app-iOS-debug.xcconfig"; sourceTree = "<group>"; };
 		BEDBB4BC1FE9D48B00059325 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+Extension.swift"; path = "FwiCore/Array+Extension.swift"; sourceTree = "<group>"; };
 		BEDBB4DB1FE9D57B00059325 /* KeyedDecodingContainer+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "KeyedDecodingContainer+Extension.swift"; path = "FwiCore/KeyedDecodingContainer+Extension.swift"; sourceTree = "<group>"; };
 		BEDBB4DF1FE9DB7900059325 /* UIAlertController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIAlertController+Extension.swift"; path = "FwiCore/UIAlertController+Extension.swift"; sourceTree = "<group>"; };
-		BEF01E791F71214700F25389 /* NSManagedObject+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSManagedObject+Extension.swift"; path = "FwiCore/NSManagedObject+Extension.swift"; sourceTree = "<group>"; };
 		CF60643E224359BC00A8D7CD /* Optional+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Optional+Extension.swift"; path = "FwiCore/Optional+Extension.swift"; sourceTree = "<group>"; };
 		CF60644522436BD400A8D7CD /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF60644722436BD400A8D7CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -622,38 +608,12 @@
 			name = Service;
 			sourceTree = "<group>";
 		};
-		BE061FFB2255307900D16CC1 /* Deprecated */ = {
-			isa = PBXGroup;
-			children = (
-				BEC851D922111ED200C25DA6 /* Core+Deprecated.swift */,
-				BEA756EC2257CB4E00048314 /* Extension */,
-				BEF01E7B1F71219B00F25389 /* CoreData */,
-			);
-			name = Deprecated;
-			sourceTree = "<group>";
-		};
 		BE061FFC225530A300D16CC1 /* Platform */ = {
 			isa = PBXGroup;
 			children = (
 				BE8BF12E1D832CE900F710CB /* iOS */,
 			);
 			name = Platform;
-			sourceTree = "<group>";
-		};
-		BE19C3191F77F920003DF3D8 /* CoreData */ = {
-			isa = PBXGroup;
-			children = (
-				BE19C30B1F77F8DF003DF3D8 /* CoreData+RX.swift */,
-			);
-			name = CoreData;
-			sourceTree = "<group>";
-		};
-		BE205A5E2259FAFE002B72D5 /* Deprecated */ = {
-			isa = PBXGroup;
-			children = (
-				BE19C3191F77F920003DF3D8 /* CoreData */,
-			);
-			name = Deprecated;
 			sourceTree = "<group>";
 		};
 		BE205A5F2259FB58002B72D5 /* Platform */ = {
@@ -871,18 +831,9 @@
 				BEF3EBBC1F77FDB100EE8F44 /* Network */,
 				BEA89C491F9A6C610099413F /* ViewModel */,
 				BE205A5F2259FB58002B72D5 /* Platform */,
-				BE205A5E2259FAFE002B72D5 /* Deprecated */,
 			);
 			name = FwiCoreRX;
 			path = Sources/FwiCoreRX;
-			sourceTree = "<group>";
-		};
-		BEA756EC2257CB4E00048314 /* Extension */ = {
-			isa = PBXGroup;
-			children = (
-				BEF01E791F71214700F25389 /* NSManagedObject+Extension.swift */,
-			);
-			name = Extension;
 			sourceTree = "<group>";
 		};
 		BEA89C491F9A6C610099413F /* ViewModel */ = {
@@ -944,14 +895,6 @@
 				BEAE8C672265D2DC00C3380F /* watchOS */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		BEF01E7B1F71219B00F25389 /* CoreData */ = {
-			isa = PBXGroup;
-			children = (
-				BE9F61FA1F7183C300BE4B0B /* CoreData.swift */,
-			);
-			name = CoreData;
 			sourceTree = "<group>";
 		};
 		BEF3EBBC1F77FDB100EE8F44 /* Network */ = {
@@ -1063,7 +1006,6 @@
 				BE8BF1331D832ED000F710CB /* Network */,
 				BE2C6F1C234A47560038143D /* Wrapper */,
 				BE061FFC225530A300D16CC1 /* Platform */,
-				BE061FFB2255307900D16CC1 /* Deprecated */,
 			);
 			name = FwiCore;
 			path = Sources;
@@ -1513,7 +1455,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BEA416052256EF1800FEC4CC /* PluggableApplicationDelegate.swift in Sources */,
-				BE9C315C226E30C900DE6EE9 /* CoreData.swift in Sources */,
 				BE453974236D341400EDBACE /* DecodeHexString.swift in Sources */,
 				BE45394C236D341400EDBACE /* EncodeHexString.swift in Sources */,
 				BEA415F42256EEEF00FEC4CC /* Codable+Extension.swift in Sources */,
@@ -1524,12 +1465,10 @@
 				BEA415FD2256EF0800FEC4CC /* UIApplication+Extension.swift in Sources */,
 				BE45396C236D341400EDBACE /* EncodeBase64Data.swift in Sources */,
 				BEA415EB2256EEBB00FEC4CC /* NSNumber+Extension.swift in Sources */,
-				BE9C315B226E30C900DE6EE9 /* NSManagedObject+Extension.swift in Sources */,
 				BEA416042256EF1400FEC4CC /* PluggableApplicationDelegateService.swift in Sources */,
 				BEA415EE2256EEBB00FEC4CC /* Optional+Extension.swift in Sources */,
 				BEA416022256EF0800FEC4CC /* UIViewController+Extension.swift in Sources */,
 				BE453964236D341400EDBACE /* Trimmed.swift in Sources */,
-				BE9C315A226E30C900DE6EE9 /* Core+Deprecated.swift in Sources */,
 				BEA415ED2256EEBB00FEC4CC /* URL+Extension.swift in Sources */,
 				BEA415FB2256EF0800FEC4CC /* UIImage+Extension.swift in Sources */,
 				BEA415E82256EEBB00FEC4CC /* FileManager+Extension.swift in Sources */,
@@ -1565,7 +1504,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE9C3161226E30CA00DE6EE9 /* CoreData.swift in Sources */,
 				BE9C3165226E311E00DE6EE9 /* UIView+Extension.swift in Sources */,
 				BE453975236D341400EDBACE /* DecodeHexString.swift in Sources */,
 				BE45394D236D341400EDBACE /* EncodeHexString.swift in Sources */,
@@ -1577,9 +1515,7 @@
 				BE9C3162226E311E00DE6EE9 /* Cell.swift in Sources */,
 				BE45396D236D341400EDBACE /* EncodeBase64Data.swift in Sources */,
 				BE9C3167226E311E00DE6EE9 /* UIAlertController+Extension.swift in Sources */,
-				BE9C3160226E30CA00DE6EE9 /* NSManagedObject+Extension.swift in Sources */,
 				BEA75700225849C300048314 /* String+Base64.swift in Sources */,
-				BE9C315F226E30CA00DE6EE9 /* Core+Deprecated.swift in Sources */,
 				BE2059E72259E2A5002B72D5 /* Operator+iOS.swift in Sources */,
 				BE453965236D341400EDBACE /* Trimmed.swift in Sources */,
 				BEA756FA225849BD00048314 /* NSCoding+Extension.swift in Sources */,
@@ -1692,7 +1628,6 @@
 				BE453966236D341400EDBACE /* Trimmed.swift in Sources */,
 				BE73154B21002ED400C569A6 /* GenericTableViewCellVM.swift in Sources */,
 				BE453976236D341400EDBACE /* DecodeHexString.swift in Sources */,
-				BE19C3141F77F8F1003DF3D8 /* CoreData+RX.swift in Sources */,
 				5ECD67D6220C02D100C318C5 /* KeyboardAnimationProtocol.swift in Sources */,
 				5ECD67D9220C046B00C318C5 /* KeyboardInfo.swift in Sources */,
 				5ECD67E6220C20AE00C318C5 /* ActivityIndicator.swift in Sources */,
@@ -1769,21 +1704,18 @@
 				BE91D8D31F7027C300EEE620 /* Data+Hex.swift in Sources */,
 				BE91D8B51F70273700EEE620 /* URL+Extension.swift in Sources */,
 				BE91D8801F701B7900EEE620 /* String+Base64.swift in Sources */,
-				BE9F61FB1F7183C300BE4B0B /* CoreData.swift in Sources */,
 				BE91D8CA1F70277C00EEE620 /* UIView+Extension.swift in Sources */,
 				BE45395A236D341400EDBACE /* EncodeBase64String.swift in Sources */,
 				BE91D8B61F70273700EEE620 /* NSCoding+Extension.swift in Sources */,
 				BE91D8D01F70277C00EEE620 /* UINavigationController+Extension.swift in Sources */,
 				5ED8D0232207E09B00E8BE60 /* PluggableServiceProviderProtocol.swift in Sources */,
 				BEDBB4E01FE9DB7900059325 /* UIAlertController+Extension.swift in Sources */,
-				BEC851DA22111ED200C25DA6 /* Core+Deprecated.swift in Sources */,
 				BE91D8B91F70273700EEE620 /* Codable+Extension.swift in Sources */,
 				BE91D8B81F70273700EEE620 /* NSNumber+Extension.swift in Sources */,
 				BEDBB4DA1FE9D48C00059325 /* Array+Extension.swift in Sources */,
 				5ED8D0192207DB5E00E8BE60 /* Operator+iOS.swift in Sources */,
 				BE91D8B71F70273700EEE620 /* Data+Extension.swift in Sources */,
 				BE91D8D41F7027C300EEE620 /* String+Hex.swift in Sources */,
-				BEF01E7A1F71214800F25389 /* NSManagedObject+Extension.swift in Sources */,
 				BEAE8BCA2265C21400C3380F /* Operator.swift in Sources */,
 				BE91D8CC1F70277C00EEE620 /* Cell.swift in Sources */,
 				5ED8D01D2207DD2200E8BE60 /* PluggableApplicationDelegate+CloudKit.swift in Sources */,
