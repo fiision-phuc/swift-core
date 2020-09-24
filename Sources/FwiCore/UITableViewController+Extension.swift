@@ -37,19 +37,19 @@
     import UIKit
 
     extension UITabBarController {
-        open override var prefersStatusBarHidden: Bool {
+        override open var prefersStatusBarHidden: Bool {
             return selectedViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
         }
 
-        open override var preferredStatusBarStyle: UIStatusBarStyle {
+        override open var preferredStatusBarStyle: UIStatusBarStyle {
             return selectedViewController?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
         }
 
-        open override var shouldAutorotate: Bool {
+        override open var shouldAutorotate: Bool {
             return selectedViewController?.shouldAutorotate ?? super.shouldAutorotate
         }
 
-        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
             return selectedViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
         }
     }

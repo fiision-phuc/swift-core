@@ -37,28 +37,28 @@
     import UIKit
 
     extension UISplitViewController {
-        open override var prefersStatusBarHidden: Bool {
+        override open var prefersStatusBarHidden: Bool {
             if UIApplication.iPhone {
                 return viewControllers.first?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
             }
             return super.prefersStatusBarHidden
         }
 
-        open override var preferredStatusBarStyle: UIStatusBarStyle {
+        override open var preferredStatusBarStyle: UIStatusBarStyle {
             if UIApplication.iPhone {
                 return viewControllers.first?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
             }
             return super.preferredStatusBarStyle
         }
 
-        open override var shouldAutorotate: Bool {
+        override open var shouldAutorotate: Bool {
             if UIApplication.iPhone {
                 return viewControllers.first?.shouldAutorotate ?? super.shouldAutorotate
             }
             return super.shouldAutorotate
         }
 
-        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
             if UIApplication.iPhone {
                 return viewControllers.first?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
             }

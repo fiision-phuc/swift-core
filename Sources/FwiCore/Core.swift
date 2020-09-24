@@ -108,7 +108,6 @@ public struct FwiCore {
     private static var shared = Localization()
 }
 
-
 /// Internal usage.
 ///
 /// - Parameter block: execution block

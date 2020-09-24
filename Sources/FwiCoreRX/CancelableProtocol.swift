@@ -37,7 +37,7 @@
     import RxSwift
     import UIKit
 
-    public protocol CancelableProtocol: class, DisposableProtocol, DismissProtocol {
+    public protocol CancelableProtocol: AnyObject, DisposableProtocol, DismissProtocol {
         var cancelButton: UIButton? { get }
     }
 

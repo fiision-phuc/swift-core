@@ -46,7 +46,7 @@
             fatalError("Child class should override func \(#function)")
         }
 
-        open override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        override open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             let cell = C.dequeueCell(collectionView, indexPath: indexPath)
             if let item = items?[indexPath.item] {
                 configure(forCell: cell, with: item)

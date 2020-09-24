@@ -67,12 +67,10 @@
         }
 
         // MARK: Class's public methods
-        open override func setupRX() {
+        override open func setupRX() {
             guard let collectionView = collectionView else { return }
-            disposeBag?.insert(
-                collectionView.rx.setDataSource(self),
-                collectionView.rx.setDelegate(self)
-            )
+            disposeBag?.insert(collectionView.rx.setDataSource(self),
+                               collectionView.rx.setDelegate(self))
 
             if #available(iOS 9.0, *) {
                 longPressGesture?.isEnabled = isEnableOrdering

@@ -38,7 +38,7 @@
 import RxCocoa
 import RxSwift
 
-private struct ActivityToken<E> : ObservableConvertibleType, Disposable {
+private struct ActivityToken<E>: ObservableConvertibleType, Disposable {
     private let _source: Observable<E>
     private let _dispose: Cancelable
 
@@ -78,7 +78,7 @@ public class ActivityIndicator: SharedSequenceConvertibleType {
             self.increment()
             return ActivityToken(source: source.asObservable(), disposeAction: self.decrement)
         }) { t in
-            return t.asObservable()
+            t.asObservable()
         }
     }
 

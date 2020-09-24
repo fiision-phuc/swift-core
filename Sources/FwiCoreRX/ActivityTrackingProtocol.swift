@@ -35,7 +35,7 @@
 
 import Foundation
 
-public protocol ActivityTrackingProtocol: class {
+public protocol ActivityTrackingProtocol: AnyObject {
     var indicator: ActivityIndicator! { get set }
 }
 
