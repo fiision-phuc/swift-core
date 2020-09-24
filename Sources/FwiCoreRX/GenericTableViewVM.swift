@@ -57,7 +57,7 @@
         open var items: ArraySlice<T>?
 
         // MARK: Class's public methods
-        open override func setupRX() {
+        override open func setupRX() {
             super.setupRX()
 
             disposeBag?.insert(
@@ -97,15 +97,15 @@
 
         // MARK: UITableViewDataSource's members
 
-        open override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        override open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             return count
         }
 
-        open override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        override open func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
             items?.swapAt(sourceIndexPath.row, destinationIndexPath.row)
         }
 
-        open override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        override open func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
             if editingStyle == .delete {
                 items?.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .left)

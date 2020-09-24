@@ -55,7 +55,7 @@
         open var items: ArraySlice<T>?
 
         // MARK: Class's public methods
-        open override func setupRX() {
+        override open func setupRX() {
             super.setupRX()
 
             disposeBag?.insert(
@@ -94,11 +94,11 @@
         }
 
         // MARK: UICollectionViewDataSource's members
-        open override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        override open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             return count
         }
 
-        open override func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        override open func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
             items?.swapAt(sourceIndexPath.row, destinationIndexPath.row)
         }
 

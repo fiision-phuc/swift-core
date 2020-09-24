@@ -42,7 +42,7 @@
         case left
     }
 
-    public protocol DraggableViewProtocol: class, DisposableProtocol, ContainerViewProtocol, DismissProtocol {
+    public protocol DraggableViewProtocol: AnyObject, DisposableProtocol, ContainerViewProtocol, DismissProtocol {
         var panGesture: UIPanGestureRecognizer? { get }
     }
 

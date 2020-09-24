@@ -66,12 +66,10 @@
         }
 
         // MARK: Class's public methods
-        open override func setupRX() {
+        override open func setupRX() {
             guard let tableView = tableView else { return }
-            disposeBag?.insert(
-                tableView.rx.setDataSource(self),
-                tableView.rx.setDelegate(self)
-            )
+            disposeBag?.insert(tableView.rx.setDataSource(self),
+                               tableView.rx.setDelegate(self))
         }
 
         /// Deselect item at index

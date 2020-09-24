@@ -38,7 +38,7 @@
     import UIKit
 
     extension UIAlertController {
-        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
             return .all
         }
     }

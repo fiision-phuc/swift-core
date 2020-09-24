@@ -49,5 +49,5 @@ public struct DecodeHexData {
     }
 
     /// Struct's private properties.
-    private var value: Data? = nil
+    private var value: Data?
 }

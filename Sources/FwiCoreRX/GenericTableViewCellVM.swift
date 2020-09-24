@@ -48,7 +48,7 @@
         }
 
         // MARK: UITableViewDataSource's members
-        open override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        override open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = C.dequeueCell(tableView)
             if let item = items?[indexPath.row] {
                 configure(forCell: cell, with: item)

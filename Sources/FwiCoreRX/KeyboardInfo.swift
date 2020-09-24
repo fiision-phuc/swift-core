@@ -38,9 +38,10 @@
 
     public struct KeyboardInfo {
         /// Struct's public properties.
-        public let duration: TimeInterval
-        public let height: CGFloat
         public let hidden: Bool
+        public let height: CGFloat
+        public let remainHeight: CGFloat
+        public let animationDuration: TimeInterval
 
         /// Struct's constructors.
         public init?(_ notification: Notification) {
@@ -48,23 +49,58 @@
                 return nil
             }
 
-            duration = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval) ?? 0
+            animationDuration = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval) ?? 0
             hidden = (notification.name == UIResponder.keyboardWillHideNotification)
+
             height = hidden ? 0 : ((userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height ?? 0)
+            remainHeight = UIScreen.main.bounds.height - height
         }
 
         // MARK: Struct's public methods
 
         public func animate(view: UIView?) {
-            let transfrom = CGAffineTransform(translationX: 0, y: -height)
-
-            UIView.animate(withDuration: duration) {
-                /* Condition validation: check if it is scrollview, then we only need to change inset, otherwise we apply transform */
-                guard let scrollView = view as? UIScrollView else {
-                    view?.transform = transfrom
-                    return
+            if hidden {
+                UIView.animate(withDuration: animationDuration) {
+                    /* Condition validation: check if it is scrollview, then we only need to change inset, otherwise we apply transform */
+                    guard let scrollView = view as? UIScrollView else {
+                        view?.transform = CGAffineTransform.identity
+                        return
+                    }
+                    scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 }
-                scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: self.height, right: 0)
+            } else {
+                guard
+                    let containerView = view,
+                    let firstResponderView = containerView.findFirstResponder()
+                else { return }
+
+                let firstResponderViewCenterY = firstResponderView.frame.midY
+                let remainCenterY = round(remainHeight / 2)
+
+                // Calculate adjustment height
+                var h = firstResponderViewCenterY - remainCenterY
+                var containerViewFrame = containerView.frame
+                containerViewFrame.origin.y -= h
+
+                /* Condition validation: validate container view's top margin */
+                if containerViewFrame.minY > 0 {
+                    h += (containerViewFrame.minY - 0)
+                }
+
+                /* Condition validation: validate container view's bottom margin */
+                if containerViewFrame.maxY < remainHeight {
+                    h -= (remainHeight - containerViewFrame.maxY)
+                }
+
+                let transfrom = CGAffineTransform(translationX: 0, y: -h)
+                UIView.animate(withDuration: animationDuration) {
+                    /* Condition validation: check if it is scrollview, then we only need to change inset, otherwise we apply transform */
+                    guard let scrollView = view as? UIScrollView else {
+                        view?.transform = transfrom
+                        return
+                    }
+                    scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: h, right: 0)
+                }
             }
         }
     }

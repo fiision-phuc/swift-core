@@ -68,7 +68,7 @@
                 return (tempURL, [])
             }
 
-            var httpHeaders: HTTPHeaders? = nil
+            var httpHeaders: HTTPHeaders?
             if let headers = headers {
                 httpHeaders = HTTPHeaders(headers)
             }
@@ -100,8 +100,7 @@
                                 paramEncoding: ParameterEncoding = URLEncoding.default,
                                 headers: [String: String]? = nil,
                                 completion c: @escaping RequestCompletion) -> DataRequest {
-
-            var httpHeaders: HTTPHeaders? = nil
+            var httpHeaders: HTTPHeaders?
             if let headers = headers {
                 httpHeaders = HTTPHeaders(headers)
             }
@@ -110,7 +109,7 @@
             task.validate(statusCode: 200..<300)
             task.response { r in
                 if FwiCore.debug {
-                    task.cURLDescription { (curlString) in
+                    task.cURLDescription { curlString in
                         let separator = "--------------------------------------------------------------------------------"
                         let string = "\n\(separator)\n\(curlString)\n\n[RESPONSE]\n\(r.data?.toString() ?? "")\n\(separator)"
                         Log.debug(string)

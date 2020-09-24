@@ -62,6 +62,7 @@ public extension KeyedDecodingContainer {
             throw DecodingError.typeMismatch(type, context)
         }
     }
+
     func decode(_ key: KeyedDecodingContainer.Key) -> Bool? {
         do {
             let value: Bool = try self.decode(key)
@@ -79,6 +80,7 @@ public extension KeyedDecodingContainer {
             return try numberCast(by: key, get: .typeMismatch(type, context), transform: { $0.floatValue })
         }
     }
+
     func decode(_ key: KeyedDecodingContainer.Key) -> Float? {
         do {
             let value: Float = try self.decode(key)
@@ -96,6 +98,7 @@ public extension KeyedDecodingContainer {
             return try numberCast(by: key, get: .typeMismatch(type, context), transform: { $0.doubleValue })
         }
     }
+
     func decode(_ key: KeyedDecodingContainer.Key) -> Double? {
         do {
             let value: Double = try self.decode(key)
@@ -113,6 +116,7 @@ public extension KeyedDecodingContainer {
             return try numberCast(by: key, get: .typeMismatch(type, context), transform: { numericCast($0.int64Value) })
         }
     }
+
     func decode<T>(_ key: KeyedDecodingContainer.Key) -> T? where T: Codable, T: SignedInteger {
         do {
             let value: T = try self.decode(key)
@@ -129,6 +133,7 @@ public extension KeyedDecodingContainer {
             return try numberCast(by: key, get: .typeMismatch(type, context), transform: { numericCast($0.uint64Value) })
         }
     }
+
     func decode<T>(_ key: KeyedDecodingContainer.Key) -> T? where T: Codable, T: UnsignedInteger {
         do {
             let value: T = try self.decode(key)
@@ -156,6 +161,7 @@ public extension KeyedDecodingContainer {
             throw DecodingError.dataCorrupted(context)
         }
     }
+
     func decode(_ key: KeyedDecodingContainer.Key) -> Data? {
         do {
             let value: Data = try self.decode(key)
@@ -184,6 +190,7 @@ public extension KeyedDecodingContainer {
             throw DecodingError.typeMismatch(type, context)
         }
     }
+
     func decode(_ key: KeyedDecodingContainer.Key) -> Date? {
         do {
             let value: Date = try self.decode(key)
@@ -197,6 +204,7 @@ public extension KeyedDecodingContainer {
     func decode(_ key: KeyedDecodingContainer.Key) throws -> String {
         return try decode(String.self, forKey: key)
     }
+
     func decode(_ key: KeyedDecodingContainer.Key) -> String? {
         do {
             let value: String = try self.decode(key)
@@ -210,6 +218,7 @@ public extension KeyedDecodingContainer {
     func decode<T: Codable>(_ key: KeyedDecodingContainer.Key) throws -> T {
         return try decode(T.self, forKey: key)
     }
+
     func decode<T: Codable>(_ key: KeyedDecodingContainer.Key) -> T? {
         do {
             let value: T = try self.decode(key)

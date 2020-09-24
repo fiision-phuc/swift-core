@@ -41,7 +41,7 @@ open class ViewModel: NSObject {
     public internal(set) var disposeBag: DisposeBag? = DisposeBag()
 
     /// Class's constructors.
-    public override init() {
+    override public init() {
         super.init()
     }
 

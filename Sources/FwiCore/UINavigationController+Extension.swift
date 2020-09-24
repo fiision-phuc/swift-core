@@ -37,19 +37,19 @@
     import UIKit
 
     extension UINavigationController {
-        open override var prefersStatusBarHidden: Bool {
+        override open var prefersStatusBarHidden: Bool {
             return visibleViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
         }
 
-        open override var preferredStatusBarStyle: UIStatusBarStyle {
+        override open var preferredStatusBarStyle: UIStatusBarStyle {
             return visibleViewController?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
         }
 
-        open override var shouldAutorotate: Bool {
+        override open var shouldAutorotate: Bool {
             return visibleViewController?.shouldAutorotate ?? super.shouldAutorotate
         }
 
-        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
             return visibleViewController?.supportedInterfaceOrientations ?? super.supportedInterfaceOrientations
         }
     }

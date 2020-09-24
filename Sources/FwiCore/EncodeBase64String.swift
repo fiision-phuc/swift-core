@@ -49,5 +49,5 @@ public struct EncodeBase64String {
     }
 
     /// Struct's private properties.
-    private var value: String? = nil
+    private var value: String?
 }
