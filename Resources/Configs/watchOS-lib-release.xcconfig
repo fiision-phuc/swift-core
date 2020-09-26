@@ -3,7 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Architectures
 SDKROOT = watchos
-SUPPORTED_PLATFORMS = watchos watchsimulator
+SUPPORTED_PLATFORMS = watchsimulator watchos
 
 // Build Options
 APPLICATION_EXTENSION_API_ONLY = YES

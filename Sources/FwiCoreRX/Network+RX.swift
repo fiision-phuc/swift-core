@@ -48,7 +48,8 @@ public extension Network {
                                  params p: [String: Any]? = nil,
                                  encoding e: ParameterEncoding = URLEncoding.default,
                                  headers h: [String: String]? = nil,
-                                 destination d: URLConvertible? = nil) -> Observable<(HTTPURLResponse, URL)> {
+                                 destination d: URLConvertible? = nil) -> Observable<(HTTPURLResponse, URL)>
+    {
         return Observable.create { observer in
             let t = Network.download(r, method: m, params: p, paramEncoding: e, headers: h, destinationURL: d, completion: { url, err, res in
                 /* Condition validation: validate network's status */
@@ -72,7 +73,8 @@ public extension Network {
                             method m: HTTPMethod = .get,
                             params p: [String: Any]? = nil,
                             encoding e: ParameterEncoding = URLEncoding.default,
-                            headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, Data)> {
+                            headers h: [String: String]? = nil) -> Observable<(HTTPURLResponse, Data)>
+    {
         return Observable.create { observer in
             let t = Network.send(r, method: m, params: p, paramEncoding: e, headers: h, completion: { d, err, res in
                 /* Condition validation: validate network's status */
@@ -109,7 +111,8 @@ public extension Network {
                              params p: [String: Any]? = nil,
                              encoding e: ParameterEncoding = URLEncoding.default,
                              headers h: [String: String]? = nil,
-                             destination d: URLConvertible? = nil) -> Observable<R<URL, Error>> {
+                             destination d: URLConvertible? = nil) -> Observable<R<URL, Error>>
+        {
             return Observable.create { observer in
                 let t = Network.download(r, method: m, params: p, paramEncoding: e, headers: h, destinationURL: d, completion: { url, err, res in
                     defer { observer.onCompleted() }
@@ -134,7 +137,8 @@ public extension Network {
                                        method m: HTTPMethod = .get,
                                        params p: [String: Any]? = nil,
                                        encoding e: ParameterEncoding = URLEncoding.default,
-                                       headers h: [String: String]? = nil) -> Observable<R<HTTPResponse<T>, Error>> {
+                                       headers h: [String: String]? = nil) -> Observable<R<HTTPResponse<T>, Error>>
+        {
             return Observable.create { observer in
                 let t = Network.send(r, method: m, params: p, paramEncoding: e, headers: h, completion: { d, err, res in
                     /* Condition validation: validate network's status */

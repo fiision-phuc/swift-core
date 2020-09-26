@@ -58,7 +58,8 @@
                                     paramEncoding: ParameterEncoding = URLEncoding.default,
                                     headers: [String: String]? = nil,
                                     destinationURL: URLConvertible? = nil,
-                                    completion: @escaping DownloadCompletion) -> DownloadRequest {
+                                    completion: @escaping DownloadCompletion) -> DownloadRequest
+        {
             let des = destinationURL
             let destination: DownloadRequest.Destination = { tempURL, response in
                 if let d = des, let destinationURL = try? d.asURL() {
@@ -73,9 +74,9 @@
                 httpHeaders = HTTPHeaders(headers)
             }
 
-            let task = manager.download(resourceURL, method: method, parameters: params, encoding: paramEncoding, headers: httpHeaders) { (tempURL, response) -> (URL, DownloadRequest.Options) in
+            let task = manager.download(resourceURL, method: method, parameters: params, encoding: paramEncoding, headers: httpHeaders, to:  { (tempURL, response) -> (URL, DownloadRequest.Options) in
                 destination(tempURL, response)
-            }
+            })
             task.validate(statusCode: 200..<300)
             task.response { r in
                 completion(r.fileURL, r.error, r.response)
@@ -99,7 +100,8 @@
                                 params: [String: Any]? = nil,
                                 paramEncoding: ParameterEncoding = URLEncoding.default,
                                 headers: [String: String]? = nil,
-                                completion c: @escaping RequestCompletion) -> DataRequest {
+                                completion c: @escaping RequestCompletion) -> DataRequest
+        {
             var httpHeaders: HTTPHeaders?
             if let headers = headers {
                 httpHeaders = HTTPHeaders(headers)

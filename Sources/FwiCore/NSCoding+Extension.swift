@@ -46,6 +46,7 @@ public extension NSCoding {
             let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not decode data into \(String(describing: self))."])
             throw error
         }
+
         return object
     }
 
