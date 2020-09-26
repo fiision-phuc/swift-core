@@ -41,18 +41,30 @@ public extension NSCoding {
     /// Unarchive from data.
     ///
     /// - parameter data (required): object's data
-    static func unarchive(_ fromData: Data) throws -> Self {
-        guard let object = NSKeyedUnarchiver.unarchiveObject(with: fromData) as? Self else {
-            let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not decode data into \(String(describing: self))."])
-            throw error
-        }
+    static func unarchive<T>(_ fromData: Data) throws -> T where T: NSObject, T: NSCoding {
+        if #available(iOS 12, *) {
+            guard let object = try NSKeyedUnarchiver.unarchivedObject(ofClass: T.self, from: fromData) else {
+                let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not decode data into \(String(describing: self))."])
+                throw error
+            }
+            return object
+        } else {
+            guard let object = NSKeyedUnarchiver.unarchiveObject(with: fromData) as? T else {
+                let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not decode data into \(String(describing: self))."])
+                throw error
+            }
 
-        return object
+            return object
+        }
     }
 
     /// Archive to data.
-    func archive() -> Data {
-        return NSKeyedArchiver.archivedData(withRootObject: self)
+    func archive() throws -> Data {
+        if #available(iOS 12, *) {
+            return try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: true)
+        } else {
+            return NSKeyedArchiver.archivedData(withRootObject: self)
+        }
     }
 }
 
@@ -62,7 +74,7 @@ public extension NSCoding {
     /// Unarchive from file.
     ///
     /// - parameter file (required): destination url
-    static func unarchive(_ fromFileURL: URL?) throws -> Self {
+    static func unarchive<T>(_ fromFileURL: URL?) throws -> T where T: NSObject, T: NSCoding {
         return try unarchive(Data.read(fromFileURL))
     }
 
@@ -80,7 +92,7 @@ public extension NSCoding {
     /// Unarchive from UserDefaults.
     ///
     /// - parameter key (required): object's key inside UserDefaults
-    static func unarchive(_ fromUserDefaultsKey: String) throws -> Self {
+    static func unarchive<T>(_ fromUserDefaultsKey: String) throws -> T where T: NSObject, T: NSCoding {
         guard let data = UserDefaults.standard.value(forKey: fromUserDefaultsKey) as? Data, data.count > 0 else {
             let error = NSError(domain: FwiCore.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Input data must not be nil."])
             throw error
@@ -92,10 +104,10 @@ public extension NSCoding {
     ///
     /// - parameter key (required): object's key to store inside UserDefaults
     @discardableResult
-    func archive(_ toUserDefaultsKey: String) -> Bool {
+    func archive(_ toUserDefaultsKey: String) throws -> Bool {
         let userDefault = UserDefaults.standard
 
-        userDefault.set(archive(), forKey: toUserDefaultsKey)
+        userDefault.set(try archive(), forKey: toUserDefaultsKey)
         return userDefault.synchronize()
     }
 }
