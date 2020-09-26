@@ -49,7 +49,8 @@ public extension NSNumber {
                   decimalSeparator: String = ".",
                   groupingSeparator: String = ",",
                   usingSymbol: Bool = true,
-                  placeSymbolInFront: Bool = true) -> String? {
+                  placeSymbolInFront: Bool = true) -> String?
+    {
         // Initialize currency format object
         let locale = Locale(identifier: "en_US")
         let currencyFormat = NumberFormatter()

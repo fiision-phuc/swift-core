@@ -1,8 +1,8 @@
 // Signing
-CODE_SIGN_IDENTITY = iPhone Distribution
+CODE_SIGN_IDENTITY = iPhone Developer
 CODE_SIGN_STYLE = Automatic
 DEVELOPMENT_TEAM = P8DTFY4SKV
-//PROVISIONING_PROFILE_SPECIFIER = co.vulcanlabs.ipoly AppStore
+//PROVISIONING_PROFILE_SPECIFIER =
 
 
 
@@ -12,8 +12,7 @@ DEVELOPMENT_TEAM = P8DTFY4SKV
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Architectures
 SDKROOT = iphoneos
-SUPPORTED_PLATFORMS = iphoneos iphonesimulator
-VALID_ARCHS = arm64 arm64e armv7 armv7s
+SUPPORTED_PLATFORMS = iphonesimulator iphoneos
 
 // Build Options
 ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
@@ -22,7 +21,7 @@ ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
 TARGETED_DEVICE_FAMILY = 1,2
 
 // Apple LLVM - Preprocessing
-GCC_PREPROCESSOR_DEFINITIONS =
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) TRACE_RESOURCES=1
 
 // Linking
 MACH_O_TYPE = mh_execute

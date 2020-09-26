@@ -2,16 +2,19 @@
 // TARGET CONFIG
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Architectures
-SDKROOT = appletvos
-SUPPORTED_PLATFORMS = appletvos appletvsimulator
+SDKROOT = watchos
+SUPPORTED_PLATFORMS = watchsimulator watchos
+
+// Build Options
+APPLICATION_EXTENSION_API_ONLY = YES
 
 // Deployment
 INSTALL_PATH = $(LOCAL_LIBRARY_DIR)/Frameworks
 SKIP_INSTALL = YES
-TARGETED_DEVICE_FAMILY = 3
+TARGETED_DEVICE_FAMILY = 4
 
 // Apple LLVM - Preprocessing
-GCC_PREPROCESSOR_DEFINITIONS =
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) TRACE_RESOURCES=1
 
 // Linking
 DYLIB_COMPATIBILITY = 1.0.0
@@ -28,4 +31,4 @@ PRODUCT_NAME = $(TARGET_NAME)
 WRAPPER_EXTENSION = framework
 
 // Search Paths
-FRAMEWORK_SEARCH_PATHS = $(inherited) $(PROJECT_DIR)/Carthage/Build/tvOS
+FRAMEWORK_SEARCH_PATHS = $(PROJECT_DIR)/Carthage/Build/watchOS

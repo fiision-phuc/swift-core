@@ -324,24 +324,26 @@
 		BE061FF222552F0700D16CC1 /* FwiCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FwiCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE19C30A1F77F8DE003DF3D8 /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		BE19C30C1F77F8DF003DF3D8 /* Network+RX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Network+RX.swift"; sourceTree = "<group>"; };
-		BE2059C82258E4A7002B72D5 /* project-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "project-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/Debug/project-debug.xcconfig"; sourceTree = "<group>"; };
-		BE2059C92258E4A8002B72D5 /* lib-watchOS-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "lib-watchOS-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/Debug/lib-watchOS-debug.xcconfig"; sourceTree = "<group>"; };
-		BE2059CA2258E4A8002B72D5 /* lib-iOS-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "lib-iOS-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/Debug/lib-iOS-debug.xcconfig"; sourceTree = "<group>"; };
-		BE2059CB2258E4A8002B72D5 /* test-tvOS-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "test-tvOS-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/Debug/test-tvOS-debug.xcconfig"; sourceTree = "<group>"; };
-		BE2059CC2258E4A8002B72D5 /* test-iOS-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "test-iOS-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/Debug/test-iOS-debug.xcconfig"; sourceTree = "<group>"; };
-		BE2059CD2258E4A8002B72D5 /* lib-tvOS-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "lib-tvOS-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/Debug/lib-tvOS-debug.xcconfig"; sourceTree = "<group>"; };
-		BE2059CF2258E4A8002B72D5 /* test-macOS-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "test-macOS-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/Debug/test-macOS-debug.xcconfig"; sourceTree = "<group>"; };
-		BE2059D02258E4A8002B72D5 /* lib-macOS-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "lib-macOS-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/Debug/lib-macOS-debug.xcconfig"; sourceTree = "<group>"; };
-		BE2059D12258E4B7002B72D5 /* lib-watchOS-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "lib-watchOS-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/Release/lib-watchOS-release.xcconfig"; sourceTree = "<group>"; };
-		BE2059D22258E4B7002B72D5 /* lib-macOS-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "lib-macOS-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/Release/lib-macOS-release.xcconfig"; sourceTree = "<group>"; };
-		BE2059D32258E4B7002B72D5 /* test-tvOS-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "test-tvOS-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/Release/test-tvOS-release.xcconfig"; sourceTree = "<group>"; };
-		BE2059D42258E4B8002B72D5 /* lib-tvOS-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "lib-tvOS-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/Release/lib-tvOS-release.xcconfig"; sourceTree = "<group>"; };
-		BE2059D62258E4B8002B72D5 /* project-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "project-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/Release/project-release.xcconfig"; sourceTree = "<group>"; };
-		BE2059D72258E4B8002B72D5 /* test-iOS-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "test-iOS-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/Release/test-iOS-release.xcconfig"; sourceTree = "<group>"; };
-		BE2059D82258E4B8002B72D5 /* lib-iOS-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "lib-iOS-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/Release/lib-iOS-release.xcconfig"; sourceTree = "<group>"; };
-		BE2059D92258E4B8002B72D5 /* test-macOS-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "test-macOS-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/Release/test-macOS-release.xcconfig"; sourceTree = "<group>"; };
 		BE205A662259FB9A002B72D5 /* FwiCoreRX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FwiCoreRX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE205A732259FBB7002B72D5 /* FwiCoreRX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FwiCoreRX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE2A3FA8251F2A180029DC49 /* watchOS-lib-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "watchOS-lib-debug.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FA9251F2A180029DC49 /* tvOS-test-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "tvOS-test-debug.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FAA251F2A180029DC49 /* iOS-test-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "iOS-test-release.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FAB251F2A180029DC49 /* tvOS-lib-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "tvOS-lib-debug.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FAC251F2A180029DC49 /* tvOS-test-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "tvOS-test-release.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FAD251F2A180029DC49 /* project-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "project-release.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FAE251F2A180029DC49 /* iOS-app-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "iOS-app-debug.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FAF251F2A180029DC49 /* iOS-lib-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "iOS-lib-release.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FB0251F2A180029DC49 /* iOS-test-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "iOS-test-debug.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FB1251F2A180029DC49 /* macOS-lib-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "macOS-lib-release.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FB2251F2A180029DC49 /* macOS-test-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "macOS-test-release.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FB3251F2A180029DC49 /* iOS-app-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "iOS-app-release.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FB4251F2A180029DC49 /* watchOS-lib-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "watchOS-lib-release.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FB5251F2A180029DC49 /* macOS-test-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "macOS-test-debug.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FB6251F2A180029DC49 /* iOS-lib-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "iOS-lib-debug.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FB7251F2A180029DC49 /* project-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "project-debug.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FB8251F2A180029DC49 /* macOS-lib-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "macOS-lib-debug.xcconfig"; sourceTree = "<group>"; };
+		BE2A3FB9251F2A180029DC49 /* tvOS-lib-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "tvOS-lib-release.xcconfig"; sourceTree = "<group>"; };
 		BE2C6F1F234A4F4D0038143D /* DecodeBase64Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DecodeBase64Data.swift; path = FwiCore/DecodeBase64Data.swift; sourceTree = "<group>"; };
 		BE2C6F21234A4F8C0038143D /* DecodeBase64String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DecodeBase64String.swift; path = FwiCore/DecodeBase64String.swift; sourceTree = "<group>"; };
 		BE45393B236D341300EDBACE /* DecodeHexData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DecodeHexData.swift; path = FwiCore/DecodeHexData.swift; sourceTree = "<group>"; };
@@ -410,8 +412,6 @@
 		BEAE8C6C2265D2DC00C3380F /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RxCocoa.framework; sourceTree = "<group>"; };
 		BEAE8C6D2265D2DC00C3380F /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RxSwift.framework; sourceTree = "<group>"; };
 		BEB230B121FC0B20008ED2C7 /* Codable+FwiExtensionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+FwiExtensionTest.swift"; sourceTree = "<group>"; };
-		BECAB5ED228E9A59002BDDE6 /* app-iOS-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "app-iOS-release.xcconfig"; path = "FwiCore.xcodeproj/Configs/Release/app-iOS-release.xcconfig"; sourceTree = "<group>"; };
-		BECAB5EE228E9A66002BDDE6 /* app-iOS-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "app-iOS-debug.xcconfig"; path = "FwiCore.xcodeproj/Configs/Debug/app-iOS-debug.xcconfig"; sourceTree = "<group>"; };
 		BEDBB4BC1FE9D48B00059325 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+Extension.swift"; path = "FwiCore/Array+Extension.swift"; sourceTree = "<group>"; };
 		BEDBB4DB1FE9D57B00059325 /* KeyedDecodingContainer+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "KeyedDecodingContainer+Extension.swift"; path = "FwiCore/KeyedDecodingContainer+Extension.swift"; sourceTree = "<group>"; };
 		BEDBB4DF1FE9DB7900059325 /* UIAlertController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIAlertController+Extension.swift"; path = "FwiCore/UIAlertController+Extension.swift"; sourceTree = "<group>"; };
@@ -624,6 +624,32 @@
 			name = Platform;
 			sourceTree = "<group>";
 		};
+		BE2A3FA7251F2A180029DC49 /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				BE2A3FB7251F2A180029DC49 /* project-debug.xcconfig */,
+				BE2A3FAD251F2A180029DC49 /* project-release.xcconfig */,
+				BE2A3FAE251F2A180029DC49 /* iOS-app-debug.xcconfig */,
+				BE2A3FB3251F2A180029DC49 /* iOS-app-release.xcconfig */,
+				BE2A3FB6251F2A180029DC49 /* iOS-lib-debug.xcconfig */,
+				BE2A3FAF251F2A180029DC49 /* iOS-lib-release.xcconfig */,
+				BE2A3FB0251F2A180029DC49 /* iOS-test-debug.xcconfig */,
+				BE2A3FAA251F2A180029DC49 /* iOS-test-release.xcconfig */,
+				BE2A3FB8251F2A180029DC49 /* macOS-lib-debug.xcconfig */,
+				BE2A3FB1251F2A180029DC49 /* macOS-lib-release.xcconfig */,
+				BE2A3FB5251F2A180029DC49 /* macOS-test-debug.xcconfig */,
+				BE2A3FB2251F2A180029DC49 /* macOS-test-release.xcconfig */,
+				BE2A3FAB251F2A180029DC49 /* tvOS-lib-debug.xcconfig */,
+				BE2A3FB9251F2A180029DC49 /* tvOS-lib-release.xcconfig */,
+				BE2A3FA9251F2A180029DC49 /* tvOS-test-debug.xcconfig */,
+				BE2A3FAC251F2A180029DC49 /* tvOS-test-release.xcconfig */,
+				BE2A3FA8251F2A180029DC49 /* watchOS-lib-debug.xcconfig */,
+				BE2A3FB4251F2A180029DC49 /* watchOS-lib-release.xcconfig */,
+			);
+			name = Configs;
+			path = Resources/Configs;
+			sourceTree = "<group>";
+		};
 		BE2C6F1C234A47560038143D /* Wrapper */ = {
 			isa = PBXGroup;
 			children = (
@@ -647,38 +673,6 @@
 				BEDBB4DB1FE9D57B00059325 /* KeyedDecodingContainer+Extension.swift */,
 			);
 			name = Json;
-			sourceTree = "<group>";
-		};
-		BE5574D61F684C7D0022E61C /* Debug */ = {
-			isa = PBXGroup;
-			children = (
-				BE2059C82258E4A7002B72D5 /* project-debug.xcconfig */,
-				BE2059CA2258E4A8002B72D5 /* lib-iOS-debug.xcconfig */,
-				BE2059D02258E4A8002B72D5 /* lib-macOS-debug.xcconfig */,
-				BE2059CD2258E4A8002B72D5 /* lib-tvOS-debug.xcconfig */,
-				BE2059C92258E4A8002B72D5 /* lib-watchOS-debug.xcconfig */,
-				BE2059CC2258E4A8002B72D5 /* test-iOS-debug.xcconfig */,
-				BE2059CF2258E4A8002B72D5 /* test-macOS-debug.xcconfig */,
-				BE2059CB2258E4A8002B72D5 /* test-tvOS-debug.xcconfig */,
-				BECAB5EE228E9A66002BDDE6 /* app-iOS-debug.xcconfig */,
-			);
-			name = Debug;
-			sourceTree = "<group>";
-		};
-		BE5574D71F684C860022E61C /* Release */ = {
-			isa = PBXGroup;
-			children = (
-				BE2059D62258E4B8002B72D5 /* project-release.xcconfig */,
-				BE2059D82258E4B8002B72D5 /* lib-iOS-release.xcconfig */,
-				BE2059D22258E4B7002B72D5 /* lib-macOS-release.xcconfig */,
-				BE2059D42258E4B8002B72D5 /* lib-tvOS-release.xcconfig */,
-				BE2059D12258E4B7002B72D5 /* lib-watchOS-release.xcconfig */,
-				BE2059D72258E4B8002B72D5 /* test-iOS-release.xcconfig */,
-				BE2059D92258E4B8002B72D5 /* test-macOS-release.xcconfig */,
-				BE2059D32258E4B7002B72D5 /* test-tvOS-release.xcconfig */,
-				BECAB5ED228E9A59002BDDE6 /* app-iOS-release.xcconfig */,
-			);
-			name = Release;
 			sourceTree = "<group>";
 		};
 		BE66A7DF220290A300CBFE3C /* iOS */ = {
@@ -948,8 +942,8 @@
 			isa = PBXGroup;
 			children = (
 				"_____Sources_" /* Sources */,
+				BE2A3FA7251F2A180029DC49 /* Configs */,
 				"_______Tests_" /* Tests */,
-				"_____Configs_" /* Configs */,
 				CF60644622436BD400A8D7CD /* TestApp */,
 				CF60645B22436BD500A8D7CD /* TestAppTests */,
 				CF60646622436BD500A8D7CD /* TestAppUITests */,
@@ -975,15 +969,6 @@
 			name = Products;
 			sourceTree = "<group>";
 			wrapsLines = 0;
-		};
-		"_____Configs_" /* Configs */ = {
-			isa = PBXGroup;
-			children = (
-				BE5574D61F684C7D0022E61C /* Debug */,
-				BE5574D71F684C860022E61C /* Release */,
-			);
-			name = Configs;
-			sourceTree = "<group>";
 		};
 		"_____Sources_" /* Sources */ = {
 			isa = PBXGroup;
@@ -1260,7 +1245,7 @@
 			attributes = {
 				CLASSPREFIX = "";
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1030;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Fiision Studio";
 				TargetAttributes = {
 					BE061FD722552E9B00D16CC1 = {
@@ -1792,7 +1777,7 @@
 /* Begin XCBuildConfiguration section */
 		BE061FDE22552E9B00D16CC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059CD2258E4A8002B72D5 /* lib-tvOS-debug.xcconfig */;
+			baseConfigurationReference = BE2A3FAB251F2A180029DC49 /* tvOS-lib-debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
@@ -1806,7 +1791,7 @@
 		};
 		BE061FDF22552E9B00D16CC1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059D42258E4B8002B72D5 /* lib-tvOS-release.xcconfig */;
+			baseConfigurationReference = BE2A3FB9251F2A180029DC49 /* tvOS-lib-release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
@@ -1820,7 +1805,7 @@
 		};
 		BE061FF822552F0700D16CC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059C92258E4A8002B72D5 /* lib-watchOS-debug.xcconfig */;
+			baseConfigurationReference = BE2A3FA8251F2A180029DC49 /* watchOS-lib-debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
@@ -1831,7 +1816,7 @@
 		};
 		BE061FF922552F0700D16CC1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059D12258E4B7002B72D5 /* lib-watchOS-release.xcconfig */;
+			baseConfigurationReference = BE2A3FB4251F2A180029DC49 /* watchOS-lib-release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
@@ -1842,7 +1827,7 @@
 		};
 		BE205A6C2259FB9A002B72D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059C92258E4A8002B72D5 /* lib-watchOS-debug.xcconfig */;
+			baseConfigurationReference = BE2A3FA8251F2A180029DC49 /* watchOS-lib-debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
@@ -1853,7 +1838,7 @@
 		};
 		BE205A6D2259FB9A002B72D5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059D12258E4B7002B72D5 /* lib-watchOS-release.xcconfig */;
+			baseConfigurationReference = BE2A3FB4251F2A180029DC49 /* watchOS-lib-release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
@@ -1864,7 +1849,7 @@
 		};
 		BE205A792259FBB8002B72D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059CD2258E4A8002B72D5 /* lib-tvOS-debug.xcconfig */;
+			baseConfigurationReference = BE2A3FAB251F2A180029DC49 /* tvOS-lib-debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
@@ -1875,7 +1860,7 @@
 		};
 		BE205A7A2259FBB8002B72D5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059D42258E4B8002B72D5 /* lib-tvOS-release.xcconfig */;
+			baseConfigurationReference = BE2A3FB9251F2A180029DC49 /* tvOS-lib-release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
@@ -1886,7 +1871,7 @@
 		};
 		BE91D8981F70239D00EEE620 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059CA2258E4A8002B72D5 /* lib-iOS-debug.xcconfig */;
+			baseConfigurationReference = BE2A3FB6251F2A180029DC49 /* iOS-lib-debug.xcconfig */;
 			buildSettings = {
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
 				PRODUCT_MODULE_NAME = FwiCoreRX;
@@ -1896,7 +1881,7 @@
 		};
 		BE91D8991F70239D00EEE620 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059D82258E4B8002B72D5 /* lib-iOS-release.xcconfig */;
+			baseConfigurationReference = BE2A3FAF251F2A180029DC49 /* iOS-lib-release.xcconfig */;
 			buildSettings = {
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCoreRX;
 				PRODUCT_MODULE_NAME = FwiCoreRX;
@@ -1906,8 +1891,8 @@
 		};
 		CF60646B22436BD500A8D7CD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BECAB5EE228E9A66002BDDE6 /* app-iOS-debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib;
 			};
@@ -1915,8 +1900,8 @@
 		};
 		CF60646C22436BD500A8D7CD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BECAB5ED228E9A59002BDDE6 /* app-iOS-release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib;
 			};
@@ -2188,7 +2173,7 @@
 		};
 		_ReleaseConf_FwiCore /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059D82258E4B8002B72D5 /* lib-iOS-release.xcconfig */;
+			baseConfigurationReference = BE2A3FAF251F2A180029DC49 /* iOS-lib-release.xcconfig */;
 			buildSettings = {
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 				PRODUCT_MODULE_NAME = FwiCore;
@@ -2198,14 +2183,13 @@
 		};
 		_ReleaseConf_FwiCoreTests /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059D72258E4B8002B72D5 /* test-iOS-release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		"___DebugConf_FwiCore" /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059CA2258E4A8002B72D5 /* lib-iOS-debug.xcconfig */;
+			baseConfigurationReference = BE2A3FB6251F2A180029DC49 /* iOS-lib-debug.xcconfig */;
 			buildSettings = {
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiision.lib.FwiCore;
 				PRODUCT_MODULE_NAME = FwiCore;
@@ -2215,24 +2199,29 @@
 		};
 		"___DebugConf_FwiCoreTests" /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059CC2258E4A8002B72D5 /* test-iOS-debug.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		"_____Release_" /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059D62258E4B8002B72D5 /* project-release.xcconfig */;
+			baseConfigurationReference = BE2A3FAD251F2A180029DC49 /* project-release.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
 		"_______Debug_" /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE2059C82258E4A7002B72D5 /* project-debug.xcconfig */;
+			baseConfigurationReference = BE2A3FB7251F2A180029DC49 /* project-debug.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
