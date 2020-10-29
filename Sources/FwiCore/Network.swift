@@ -34,6 +34,7 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(Alamofire)
+    import Foundation
     import Alamofire
 
     public typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
