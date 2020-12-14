@@ -47,7 +47,7 @@
             fatalError("Child class should override func \(#function)")
         }
 
-        // MARK: UITableViewDataSource's members
+        // MARK: - UITableViewDataSource's members
         override open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = C.dequeueCell(tableView)
             if let item = items?[indexPath.row] {

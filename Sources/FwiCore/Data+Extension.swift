@@ -50,7 +50,7 @@ public extension Data {
                 return
             }
 
-            for _ in 0..<step {
+            for _ in 0 ..< step {
                 pointer.pointee = 0
                 pointer = pointer.advanced(by: 1)
             }
@@ -72,7 +72,7 @@ public extension Data {
             }
             var p2 = p1.advanced(by: end)
 
-            for _ in 0..<step {
+            for _ in 0 ..< step {
                 swap(&p1.pointee, &p2.pointee)
                 p1 = p1.advanced(by: 1)
                 p2 = p2.advanced(by: -1)

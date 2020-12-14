@@ -34,8 +34,8 @@
 //  caused, directly or indirectly, by the use of this software.
 
 #if canImport(Alamofire)
-    import Foundation
     import Alamofire
+    import Foundation
 
     public typealias DownloadCompletion = (_ location: URL?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
     public typealias RequestCompletion = (_ data: Data?, _ error: Error?, _ response: HTTPURLResponse?) -> Void
@@ -75,10 +75,10 @@
                 httpHeaders = HTTPHeaders(headers)
             }
 
-            let task = manager.download(resourceURL, method: method, parameters: params, encoding: paramEncoding, headers: httpHeaders, to:  { (tempURL, response) -> (URL, DownloadRequest.Options) in
+            let task = manager.download(resourceURL, method: method, parameters: params, encoding: paramEncoding, headers: httpHeaders, to: { (tempURL, response) -> (URL, DownloadRequest.Options) in
                 destination(tempURL, response)
             })
-            task.validate(statusCode: 200..<300)
+            task.validate(statusCode: 200 ..< 300)
             task.response { r in
                 completion(r.fileURL, r.error, r.response)
             }
@@ -109,7 +109,7 @@
             }
 
             let task = manager.request(requestURL, method: method, parameters: params, encoding: paramEncoding, headers: httpHeaders)
-            task.validate(statusCode: 200..<300)
+            task.validate(statusCode: 200 ..< 300)
             task.response { r in
                 if FwiCore.debug {
                     task.cURLDescription { curlString in

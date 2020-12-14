@@ -37,33 +37,24 @@
 import Foundation
 
 public extension String {
-    // MARK: Validate base64
-    var data: Data? {
-        let new = self.toData()
-        return new
-    }
+    // MARK: - Validate base64
+    var isBase64: Bool { execution { self.toData()?.isBase64 }.orNil(false) }
 
-    var isBase64: Bool {
-        return execution { data?.isBase64 }.orNil(false)
-    }
-
-    // MARK: Decode base64
-
+    // MARK: - Decode base64
     func decodeBase64Data() -> Data? {
-        return execution { data?.decodeBase64Data() }
+        return execution { self.toData()?.decodeBase64Data() }
     }
 
     func decodeBase64String() -> String? {
-        return execution { data?.decodeBase64String() }
+        return execution { self.toData()?.decodeBase64String() }
     }
 
-    // MARK: Encode base64
-
+    // MARK: - Encode base64
     func encodeBase64Data() -> Data? {
-        return execution { data?.encodeBase64Data() }
+        return execution { self.toData()?.encodeBase64Data() }
     }
 
     func encodeBase64String() -> String? {
-        return execution { data?.encodeBase64String() }
+        return execution { self.toData()?.encodeBase64String() }
     }
 }

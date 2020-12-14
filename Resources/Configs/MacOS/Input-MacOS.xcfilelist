@@ -1,0 +1,6 @@
+$(SRCROOT)/Carthage/Build/Mac/Alamofire.framework
+$(SRCROOT)/Carthage/Build/Mac/CocoaLumberjack.framework
+$(SRCROOT)/Carthage/Build/Mac/CocoaLumberjackSwift.framework
+$(SRCROOT)/Carthage/Build/Mac/RxCocoa.framework
+$(SRCROOT)/Carthage/Build/Mac/RxRelay.framework
+$(SRCROOT)/Carthage/Build/Mac/RxSwift.framework

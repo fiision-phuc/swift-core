@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BE205A722259FBB7002B72D5"
+               BlueprintIdentifier = "BE2775AD258688CF00D7761F"
                BuildableName = "FwiCoreRX.framework"
-               BlueprintName = "FwiCoreRX-tvOS"
+               BlueprintName = "FwiCoreRX-MacOS"
                ReferencedContainer = "container:FwiCore.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -50,9 +50,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "BE205A722259FBB7002B72D5"
+            BlueprintIdentifier = "BE2775AD258688CF00D7761F"
             BuildableName = "FwiCoreRX.framework"
-            BlueprintName = "FwiCoreRX-tvOS"
+            BlueprintName = "FwiCoreRX-MacOS"
             ReferencedContainer = "container:FwiCore.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

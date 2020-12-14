@@ -46,7 +46,7 @@ public extension Array where Element: Encodable {
 
 public extension Array {
     subscript(safe index: Int) -> Element? {
-        guard 0..<count ~= index else {
+        guard 0 ..< count ~= index else {
             return nil
         }
         return self[index]

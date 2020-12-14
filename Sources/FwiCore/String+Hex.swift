@@ -37,29 +37,16 @@
 import Foundation
 
 public extension String {
-    // MARK: Validate Hex
+    // MARK: - Validate Hex
+    var isHex: Bool { execution { self.toData()?.isHex }.orNil(false) }
 
-    var isHex: Bool {
-        return execution { data?.isHex }.orNil(false)
-    }
+    // MARK: - Decode Hex
+    func decodeHexData() -> Data? { execution { self.toData()?.decodeHexData() } }
 
-    // MARK: Decode Hex
+    func decodeHexString() -> String? { execution { self.toData()?.decodeHexString() } }
 
-    func decodeHexData() -> Data? {
-        return execution { data?.decodeHexData() }
-    }
+    // MARK: - Encode Hex
+    func encodeHexData() -> Data? { execution { self.toData()?.encodeHexData() } }
 
-    func decodeHexString() -> String? {
-        return execution { data?.decodeHexString() }
-    }
-
-    // MARK: Encode Hex
-
-    func encodeHexData() -> Data? {
-        return execution { data?.encodeHexData() }
-    }
-
-    func encodeHexString() -> String? {
-        return execution { data?.encodeHexString() }
-    }
+    func encodeHexString() -> String? { execution { self.toData()?.encodeHexString() } }
 }

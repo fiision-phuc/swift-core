@@ -37,82 +37,53 @@
 import Foundation
 
 public extension Data {
-    // MARK: Validate base64
-
+    // MARK: - Validate base64
     var isBase64: Bool {
         /* Condition validation */
-        if count <= 0 || (count % 4) != 0 {
-            return false
-        }
-
+        if count <= 0 || (count % 4) != 0 { return false }
         var isBase64 = true
-        withUnsafeBytes { p in
-            let memory = p.bindMemory(to: UInt8.self)
-            guard let pointer = memory.baseAddress else {
-                isBase64 = false
-                return
-            }
 
-            var p1 = pointer
-            var p2 = pointer.advanced(by: count - 1)
+        let input = [UInt8](self)
+        for index in stride(from: 0, to: count, by: 2) {
+            let b1 = input[index]
+            let b2 = input[index + 1]
 
-            let step = count >> 2
-            for _ in 0...step {
-                let v1 = p1.pointee
-                let v2 = p2.pointee
+            // Check v1
+            isBase64 = isBase64 && ((b1 >= 48 && b1 <= 57) || // '0-9'
+                (b1 >= 65 && b1 <= 90) || // 'A-Z'
+                (b1 >= 97 && b1 <= 122) || // 'a-z'
+                b1 == 9 || // '\t'
+                b1 == 10 || // '\n'
+                b1 == 13 || // '\r'
+                b1 == 32 || // ' '
+                b1 == 43 || // '+'
+                b1 == 47 || // '/'
+                b1 == 61) // '='
 
-                // Check v1
-                isBase64 = isBase64 && ((v1 >= 48 && v1 <= 57) || // '0-9'
-                    (v1 >= 65 && v1 <= 90) || // 'A-Z'
-                    (v1 >= 97 && v1 <= 122) || // 'a-z'
-                    v1 == 9 || // '\t'
-                    v1 == 10 || // '\n'
-                    v1 == 13 || // '\r'
-                    v1 == 32 || // ' '
-                    v1 == 43 || // '+'
-                    v1 == 47 || // '/'
-                    v1 == 61) // '='
+            // Check v2
+            isBase64 = isBase64 && ((b2 >= 48 && b2 <= 57) || // '0-9'
+                (b2 >= 65 && b2 <= 90) || // 'A-Z'
+                (b2 >= 97 && b2 <= 122) || // 'a-z'
+                b2 == 9 || // '\t'
+                b2 == 10 || // '\n'
+                b2 == 13 || // '\r'
+                b2 == 32 || // ' '
+                b2 == 43 || // '+'
+                b2 == 47 || // '/'
+                b2 == 61) // '='
 
-                // Check v2
-                isBase64 = isBase64 && ((v2 >= 48 && v2 <= 57) || // '0-9'
-                    (v2 >= 65 && v2 <= 90) || // 'A-Z'
-                    (v2 >= 97 && v2 <= 122) || // 'a-z'
-                    v2 == 9 || // '\t'
-                    v2 == 10 || // '\n'
-                    v2 == 13 || // '\r'
-                    v2 == 32 || // ' '
-                    v2 == 43 || // '+'
-                    v2 == 47 || // '/'
-                    v2 == 61) // '='
-
-                if isBase64 {
-                    p1 = p1.advanced(by: 1)
-                    p2 = p2.advanced(by: -1)
-                } else {
-                    break
-                }
-            }
+            if !isBase64 { break }
         }
         return isBase64
     }
 
-    // MARK: Decode base64
+    // MARK: - Decode base64
+    func decodeBase64Data() -> Data? { isBase64 ? Data(base64Encoded: self, options: .ignoreUnknownCharacters) : nil }
 
-    func decodeBase64Data() -> Data? {
-        return isBase64 ? Data(base64Encoded: self, options: .ignoreUnknownCharacters) : nil
-    }
+    func decodeBase64String() -> String? { decodeBase64Data()?.toString() }
 
-    func decodeBase64String() -> String? {
-        return decodeBase64Data()?.toString()
-    }
+    // MARK: - Encode base64
+    func encodeBase64Data() -> Data? { count > 0 ? base64EncodedData(options: .endLineWithCarriageReturn) : nil }
 
-    // MARK: Encode base64
-
-    func encodeBase64Data() -> Data? {
-        return count > 0 ? base64EncodedData(options: .endLineWithCarriageReturn) : nil
-    }
-
-    func encodeBase64String() -> String? {
-        return self.encodeBase64Data()?.toString()
-    }
+    func encodeBase64String() -> String? { self.encodeBase64Data()?.toString() }
 }

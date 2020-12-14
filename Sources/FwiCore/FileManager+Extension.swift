@@ -35,7 +35,7 @@
 
 import Foundation
 
-// MARK: Directory manager
+// MARK: - Directory manager
 public extension FileManager {
     /// Create directory for a given URL.
     ///
@@ -79,7 +79,7 @@ public extension FileManager {
     }
 }
 
-// MARK: File manager
+// MARK: - File manager
 public extension FileManager {
     /// Check if file is available for a given URL.
     ///

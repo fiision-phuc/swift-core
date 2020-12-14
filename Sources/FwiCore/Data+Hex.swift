@@ -37,145 +37,102 @@
 import Foundation
 
 public extension Data {
-    // MARK: Validate Hex
-
+    // MARK: - Validate Hex
     var isHex: Bool {
         /* Condition validation */
-        if count <= 0 || (count % 2) != 0 {
-            return false
-        }
-
+        if count <= 0 || (count % 2) != 0 { return false }
         var isHex = true
-        let step = count / 2
-        withUnsafeBytes { p in
-            let memory = p.bindMemory(to: UInt8.self)
-            guard let pointer = memory.baseAddress else {
-                isHex = false
-                return
-            }
 
-            var flag = true
-            var p1 = pointer
-            var p2 = pointer.advanced(by: count - 1)
+        let input = [UInt8](self)
+        for index in stride(from: 0, to: count, by: 2) {
+            let v1 = input[index]
+            let v2 = input[index + 1]
 
-            for _ in 0...step {
-                let v1 = p1.pointee
-                let v2 = p2.pointee
+            // Check v1
+            isHex = isHex && ((v1 >= 48 && v1 <= 57) || // '0-9'
+                (v1 >= 65 && v1 <= 70) || // 'A-F'
+                (v1 >= 97 && v1 <= 102)) // 'a-f'
 
-                // Check v1
-                flag = flag && ((v1 >= 48 && v1 <= 57) || // '0-9'
-                    (v1 >= 65 && v1 <= 70) || // 'A-F'
-                    (v1 >= 97 && v1 <= 102)) // 'a-f'
+            // Check v2
+            isHex = isHex && ((v2 >= 48 && v2 <= 57) || // '0-9'
+                (v2 >= 65 && v2 <= 70) || // 'A-F'
+                (v2 >= 97 && v2 <= 102)) // 'a-f'
 
-                // Check v2
-                flag = flag && ((v2 >= 48 && v2 <= 57) || // '0-9'
-                    (v2 >= 65 && v2 <= 70) || // 'A-F'
-                    (v2 >= 97 && v2 <= 102)) // 'a-f'
-
-                if flag {
-                    p1 = p1.advanced(by: 1)
-                    p2 = p2.advanced(by: -1)
-                } else {
-                    break
-                }
-            }
-
-            isHex = flag
+            if !isHex { break }
         }
         return isHex
     }
 
-    // MARK: Decode Hex
-
+    // MARK: - Decode Hex
     func decodeHexData() -> Data? {
         /* Condition validation */
-        if !isHex {
-            return nil
-        }
+        if !isHex { return nil }
 
         var output = [UInt8](repeating: 0, count: count / 2)
-        let step = count
-        withUnsafeBytes { p in
-            guard let pointer = p.bindMemory(to: UInt8.self).baseAddress else {
-                return
+        let input = [UInt8](self)
+
+        for index in stride(from: 0, to: count, by: 2) {
+            var b1 = input[index]
+            var b2 = input[index + 1]
+
+            if b1 >= 48, b1 <= 57 { // '0-9'
+                b1 -= 48
+            } else if b1 >= 65, b1 <= 70 { // 'A-F'
+                b1 -= 55 // A = 10, 'A' = 65 -> b = 65 - 55
+            } else { // 'a-f'
+                b1 -= 87 // a = 10, 'a' = 97 -> b = 97 - 87
             }
-            var p1 = pointer
-            var p2 = p1.advanced(by: 1)
 
-            for i in stride(from: 0, to: step, by: 2) {
-                var b1 = self[i]
-                var b2 = self[i + 1]
-
-                if b1 >= 48, b1 <= 57 { // '0-9'
-                    b1 -= 48
-                } else if b1 >= 65, b1 <= 70 { // 'A-F'
-                    b1 -= 55 // A = 10, 'A' = 65 -> b = 65 - 55
-                } else { // 'a-f'
-                    b1 -= 87 // a = 10, 'a' = 97 -> b = 97 - 87
-                }
-
-                if b2 >= 48, b2 <= 57 { // '0-9'
-                    b2 -= 48
-                } else if b2 >= 65, b2 <= 70 { // 'A-F'
-                    b2 -= 55 // A = 10, 'A' = 65 -> b = 65 - 55
-                } else { // 'a-f'
-                    b2 -= 87 // a = 10, 'a' = 97 -> b = 97 - 87
-                }
-
-                output[i / 2] = (b1 << 4 | b2)
-                p1 = p2.advanced(by: 1)
-                p2 = p1.advanced(by: 1)
+            if b2 >= 48, b2 <= 57 { // '0-9'
+                b2 -= 48
+            } else if b2 >= 65, b2 <= 70 { // 'A-F'
+                b2 -= 55 // A = 10, 'A' = 65 -> b = 65 - 55
+            } else { // 'a-f'
+                b2 -= 87 // a = 10, 'a' = 97 -> b = 97 - 87
             }
+
+            output[index / 2] = (b1 << 4 | b2)
         }
         return Data(output)
     }
 
-    func decodeHexString() -> String? {
-        return decodeHexData()?.toString()
-    }
+    func decodeHexString() -> String? { decodeHexData()?.toString() }
 
-    // MARK: Encode Hex
-
+    // MARK: - Encode Hex
     func encodeHexData() -> Data? {
         /* Condition validation */
-        if count <= 0 {
-            return nil
-        }
+        if count <= 0 { return nil }
 
-        let l = count * 2
-        var output = [UInt8](repeatElement(0, count: l))
+        let length = count * 2
+        var output = [UInt8](repeatElement(0, count: length))
 
-        withUnsafeBytes { p in
-            guard var pointer = p.bindMemory(to: UInt8.self).baseAddress else {
-                return
+        var offset = 0
+        let input = [UInt8](self)
+
+        for index in stride(from: 0, to: length, by: 2) {
+            let v = input[offset]
+
+            var b1 = (v & 0xf0) >> 4
+            var b2 = v & 0x0f
+
+            if b1 >= 0, b1 <= 9 { // '0-9'
+                b1 += 48
+            } else { // 'a-f'
+                b1 += 87 // a = 10, 'a' = 97 -> b = 10 + 87
             }
 
-            for i in stride(from: 0, to: l, by: 2) {
-                let b = pointer.pointee
-                var v1 = (b & 0xf0) >> 4
-                var v2 = b & 0x0f
-
-                if v1 >= 0, v1 <= 9 { // '0-9'
-                    v1 += 48
-                } else { // 'a-f'
-                    v1 += 87 // a = 10, 'a' = 97 -> b = 10 + 87
-                }
-
-                if v2 >= 0, v2 <= 9 { // '0-9'
-                    v2 += 48
-                } else { // 'a-f'
-                    v2 += 87 // a = 10, 'a' = 97 -> b = 10 + 87
-                }
-
-                output[i] = v1
-                output[i + 1] = v2
-                pointer = pointer.advanced(by: 1)
+            if b2 >= 0, b2 <= 9 { // '0-9'
+                b2 += 48
+            } else { // 'a-f'
+                b2 += 87 // a = 10, 'a' = 97 -> b = 10 + 87
             }
+
+            output[index] = b1
+            output[index + 1] = b2
+            offset += 1
         }
         return Data(output)
     }
 
-    func encodeHexString() -> String? {
-        return encodeHexData()?.toString()
-    }
+    func encodeHexString() -> String? { encodeHexData()?.toString() }
 }

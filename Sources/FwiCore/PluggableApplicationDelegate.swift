@@ -55,8 +55,7 @@
 
         public var window: UIWindow?
 
-        // MARK: UIApplicationDelegate's members
-
+        // MARK: - UIApplicationDelegate's members
         public func applicationDidFinishLaunching(_ application: UIApplication) {
             services_.forEach { $0.applicationDidFinishLaunching?(application) }
         }
@@ -357,8 +356,7 @@
         }()
     }
 
-    // MARK: Class's internal methods
-
+    // MARK: - Class's internal methods
     internal extension PluggableApplicationDelegate {
         @discardableResult
         func apply<T, S>(_ work: (PluggableApplicationDelegateService, @escaping (T) -> Void) -> S?, completionHandler: @escaping ([T]) -> Void) -> [S] {
@@ -390,8 +388,7 @@
         }
     }
 
-    // MARK: ServiceProviderProtocol's members
-
+    // MARK: - ServiceProviderProtocol's members
     extension PluggableApplicationDelegate: PluggableServiceProviderProtocol {
         public func queryService<S>() -> S? {
             guard services_.count > 0 else {
