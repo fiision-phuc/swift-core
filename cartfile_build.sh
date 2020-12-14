@@ -10,4 +10,4 @@ echo 'EXCLUDED_ARCHS = $(inherited) $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_
 
 export XCODE_XCCONFIG_FILE="$xcconfig"
 
-carthage build --platform iOS --no-skip-current --no-use-binaries
+carthage build --no-skip-current --no-use-binaries

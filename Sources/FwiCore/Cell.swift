@@ -38,18 +38,8 @@
 
     /// Cell defines instruction on how to load a cell.
     public protocol Cell {
-        /// Return cell's identifier.
-        static var identifier: String { get }
-
         /// Return cell's nib from main bundle.
         static var nib: UINib { get }
-    }
-
-    /// Default implementation for Cell.
-    public extension Cell {
-        static var identifier: String {
-            return "\(self)"
-        }
     }
 
     /// Default added Cell to UICollection view cell.

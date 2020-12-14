@@ -100,55 +100,6 @@ public extension String {
         return components(separatedBy: separator).compactMap { $0.count > 0 ? $0 : nil }
     }
 
-    /// Sub string to index.
-    func substring(fromIndex idx: UInt) -> Substring {
-        /* Condition validation: Validate end index */
-        if idx >= count {
-            Log.debug("Start index must be less than string's length.")
-            return ""
-        }
-
-        let i = index(startIndex, offsetBy: Int(idx))
-        return self[i...]
-    }
-
-    /// Sub string to index.
-    func substring(toIndex idx: UInt) -> Substring {
-        /* Condition validation: Validate end index */
-        if idx >= count {
-            Log.debug("End index should be a positive number but less than string's length.")
-            return ""
-        }
-
-        let i = index(startIndex, offsetBy: Int(idx))
-        return self[..<i]
-    }
-
-    /// Sub string from index to reverse index.
-    ///
-    /// - Parameters:
-    ///   - startIndex: beginning index
-    /// - parameter reverseIndex (optional): ending index
-    func substring(fromIndex idx: UInt, length l: UInt) -> Substring {
-        /* Condition validation: Validate end index */
-        if idx >= count {
-            Log.debug("Start index must be less than string's length.")
-            return ""
-        }
-
-        /* Condition validation: Validate length */
-        if (idx + l) < count {
-            Log.debug("Sub string length must less than string's length.")
-            return ""
-        }
-
-        let start = index(startIndex, offsetBy: Int(idx))
-        let end = index(start, offsetBy: Int(l))
-
-        let range = start..<end
-        return self[range]
-    }
-
     /// Trim all spaces before and after a string.
     func trim() -> String {
         return trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)

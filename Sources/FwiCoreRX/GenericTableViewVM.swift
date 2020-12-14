@@ -56,7 +56,7 @@
 
         open var items: ArraySlice<T>?
 
-        // MARK: Class's public methods
+        // MARK: - Class's public methods
         override open func setupRX() {
             super.setupRX()
 
@@ -95,7 +95,7 @@
             }
         }
 
-        // MARK: UITableViewDataSource's members
+        // MARK: - UITableViewDataSource's members
 
         override open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             return count
@@ -116,7 +116,7 @@
         private let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
     }
 
-    // MARK: Class's subscript
+    // MARK: - Class's subscript
     extension GenericTableViewVM {
         open var count: Int {
             return items?.count ?? 0

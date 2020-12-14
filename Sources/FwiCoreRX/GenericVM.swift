@@ -39,7 +39,7 @@
     import RxSwift
     import UIKit
 
-    // MARK: Protocol
+    // MARK: - Protocol
     public protocol ReuseableProtocol {
         associatedtype CellType
         associatedtype ObjectType
@@ -82,7 +82,7 @@
         var selectedAtIndex: Observable<Index> { get }
     }
 
-    // MARK: Main class
+    // MARK: - Main class
     open class GenericReuseVM<T: ReuseableProtocol, E>: InjectAccessDataSource {
         public typealias GenericCell = (_ view: T.ObjectType, _ index: Int, _ item: E) -> T.CellType
 

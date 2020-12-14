@@ -54,7 +54,7 @@
 
         open var items: ArraySlice<T>?
 
-        // MARK: Class's public methods
+        // MARK: - Class's public methods
         override open func setupRX() {
             super.setupRX()
 
@@ -93,7 +93,7 @@
             }
         }
 
-        // MARK: UICollectionViewDataSource's members
+        // MARK: - UICollectionViewDataSource's members
         override open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             return count
         }
@@ -106,7 +106,7 @@
         private let currentItemSubject = ReplaySubject<T?>.create(bufferSize: 1)
     }
 
-    // MARK: Class's subscript
+    // MARK: - Class's subscript
     extension GenericCollectionViewVM {
         open var count: Int {
             return items?.count ?? 0

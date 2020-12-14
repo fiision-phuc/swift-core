@@ -39,8 +39,7 @@ import XCTest
 @testable import FwiCore
 
 class StringFwiExtensionTest: XCTestCase {
-
-    // MARK: Test Cases
+    // MARK: - Test Cases
     func testRandomIdentifier() {
         let identifier = String.randomIdentifier
         XCTAssertTrue(identifier.matchPattern("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"), "\(identifier) should be in form of UUID.")
@@ -74,18 +73,18 @@ class StringFwiExtensionTest: XCTestCase {
         XCTAssertEqual(text2.split("/"), ["FwiCore", "FWICORE"], "\(text) should become array after split.")
     }
 
-    func testSubstringFromIndex() {
-        let text = "FwiCore"
-        XCTAssertEqual(text.substring(fromIndex: 1), "wiCore", "\(text) should become 'wiCore' after sub string.")
-    }
-    func testSubstringToIndex() {
-        let text = "FwiCore"
-        XCTAssertEqual(text.substring(toIndex: 5), "FwiCo", "\(text) should become 'FwiCo' after sub string.")
-    }
-    func testSubstring() {
-        let text = "FwiCore"
-        XCTAssertEqual(text.substring(fromIndex: 1, length: 3), "", "\(text) should become '' after sub string.")
-    }
+//    func testSubstringFromIndex() {
+//        let text = "FwiCore"
+//        XCTAssertEqual(text.substring(fromIndex: 1), "wiCore", "\(text) should become 'wiCore' after sub string.")
+//    }
+//    func testSubstringToIndex() {
+//        let text = "FwiCore"
+//        XCTAssertEqual(text.substring(toIndex: 5), "FwiCo", "\(text) should become 'FwiCo' after sub string.")
+//    }
+//    func testSubstring() {
+//        let text = "FwiCore"
+//        XCTAssertEqual(text.substring(fromIndex: 1, length: 3), "", "\(text) should become '' after sub string.")
+//    }
     func testTrim() {
         let text = " FwiCore "
         XCTAssertEqual(text.trim(), "FwiCore", "\(text) should become FwiCore after trim.")

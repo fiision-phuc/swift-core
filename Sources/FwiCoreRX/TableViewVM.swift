@@ -65,7 +65,7 @@
             self.tableView = tableView
         }
 
-        // MARK: Class's public methods
+        // MARK: - Class's public methods
         override open func setupRX() {
             guard let tableView = tableView else { return }
             disposeBag?.insert(tableView.rx.setDataSource(self),
@@ -139,7 +139,7 @@
         private let currentIndexPathSubject = ReplaySubject<IndexPath?>.create(bufferSize: 1)
     }
 
-    // MARK: UITableViewDataSource's members
+    // MARK: - UITableViewDataSource's members
     extension TableViewVM: UITableViewDataSource {
         open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             fatalError("Child class should override func \(#function)")
@@ -175,7 +175,7 @@
         open func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {}
     }
 
-    // MARK: UITableViewDelegate's members
+    // MARK: - UITableViewDelegate's members
     extension TableViewVM: UITableViewDelegate {
         /// Display customization.
         open func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {}

@@ -36,7 +36,7 @@
 
 import Foundation
 
-// MARK: IO to Data
+// MARK: - IO to Data
 public extension NSCoding {
     /// Unarchive from data.
     ///
@@ -68,8 +68,7 @@ public extension NSCoding {
     }
 }
 
-// MARK: IO to File
-
+// MARK: - IO to File
 public extension NSCoding {
     /// Unarchive from file.
     ///
@@ -86,8 +85,7 @@ public extension NSCoding {
     }
 }
 
-// MARK: IO to UserDefaults
-
+// MARK: - IO to UserDefaults
 public extension NSCoding {
     /// Unarchive from UserDefaults.
     ///

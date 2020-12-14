@@ -67,12 +67,12 @@ public class ActivityIndicator: SharedSequenceConvertibleType {
             .distinctUntilChanged()
     }
 
-    // MARK: Class's public methods
+    // MARK: - Class's public methods
     public func asSharedSequence() -> SharedSequence<SharingStrategy, Element> {
         return _loading
     }
 
-    // MARK: Class's internal methods
+    // MARK: - Class's internal methods
     internal func trackActivityOfObservable<Source: ObservableConvertibleType>(_ source: Source) -> Observable<Source.Element> {
         return Observable.using({ () -> ActivityToken<Source.Element> in
             self.increment()
@@ -82,7 +82,7 @@ public class ActivityIndicator: SharedSequenceConvertibleType {
         }
     }
 
-    // MARK: Class's private methods
+    // MARK: - Class's private methods
     private func increment() {
         _lock.lock()
         _relay.accept(_relay.value + 1)

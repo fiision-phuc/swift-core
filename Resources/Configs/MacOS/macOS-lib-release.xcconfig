@@ -2,14 +2,15 @@
 // TARGET CONFIG
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Architectures
-SDKROOT = iphoneos
-SUPPORTED_PLATFORMS = iphoneos iphonesimulator
-// Build Options
-ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = $(EMBEDDED_CONTENT_CONTAINS_SWIFT)
+SDKROOT = macosx
+SUPPORTED_PLATFORMS = macosx
+
+
+
 // Deployment
 INSTALL_PATH = $(LOCAL_LIBRARY_DIR)/Frameworks
 SKIP_INSTALL = YES
-TARGETED_DEVICE_FAMILY = 1,2
+
 // Linking
 DYLIB_COMPATIBILITY = 1.0.0
 DYLIB_CURRENT_VERSION = 1.0.0
@@ -20,6 +21,6 @@ LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks @loader_path/
 DEFINES_MODULE = YES
 WRAPPER_EXTENSION = framework
 // Search Paths
-FRAMEWORK_SEARCH_PATHS = $(inherited) $(PROJECT_DIR)/Carthage/Build/iOS
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(PROJECT_DIR)/Carthage/Build/Mac
 // Apple Clang - Preprocessing
 GCC_PREPROCESSOR_DEFINITIONS =

@@ -121,6 +121,13 @@
         }
     }
 
+public extension UIView {
+    /// Return view's identifier.
+    static var identifier: String {
+        return "\(self)"
+    }
+}
+
     public extension UIView {
         /// Create image from current view.
         func createImage(_ scaleFactor: CGFloat = UIScreen.main.scale) -> UIImage? {

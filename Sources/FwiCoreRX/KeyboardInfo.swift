@@ -56,8 +56,7 @@
             remainHeight = UIScreen.main.bounds.height - height
         }
 
-        // MARK: Struct's public methods
-
+        // MARK: - Struct's public methods
         public func animate(view: UIView?) {
             if hidden {
                 UIView.animate(withDuration: animationDuration) {

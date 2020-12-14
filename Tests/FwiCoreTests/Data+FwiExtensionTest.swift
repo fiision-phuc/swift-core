@@ -39,8 +39,6 @@ import XCTest
 @testable import FwiCore
 
 class DataFwiExtensionTest: XCTestCase {
-
-    // MARK: Test Cases
     func testClearBytes() {
         FwiCore.debug = true
         var data1 = Data([0x40, 0x41, 0x42])

@@ -66,7 +66,7 @@
             }
         }
 
-        // MARK: Class's public methods
+        // MARK: - Class's public methods
         override open func setupRX() {
             guard let collectionView = collectionView else { return }
             disposeBag?.insert(collectionView.rx.setDataSource(self),
@@ -135,7 +135,7 @@
         private var longPressGesture: UILongPressGestureRecognizer?
     }
 
-    // MARK: Class's private methods
+    // MARK: - Class's private methods
     private extension CollectionViewVM {
         @available(iOS 9.0, *)
         @objc
@@ -161,7 +161,7 @@
         }
     }
 
-    // MARK: UICollectionViewDataSource's members
+    // MARK: - UICollectionViewDataSource's members
     extension CollectionViewVM: UICollectionViewDataSource {
         open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             fatalError("Child class should override func \(#function)")
@@ -191,7 +191,7 @@
         open func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {}
     }
 
-    // MARK: UICollectionViewDelegate's members
+    // MARK: - UICollectionViewDelegate's members
     extension CollectionViewVM: UICollectionViewDelegate {
         /// Display customization.
         open func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {}
@@ -250,7 +250,7 @@
         open func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {}
     }
 
-    // MARK: UICollectionViewDelegateFlowLayout's members
+    // MARK: - UICollectionViewDelegateFlowLayout's members
     extension CollectionViewVM: UICollectionViewDelegateFlowLayout {
         open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
             fatalError("Child class should override func \(#function)")
